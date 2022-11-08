@@ -157,8 +157,11 @@
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Framework\Utils.cpp" />
     <ClCompile Include="GameObject\TextObj.cpp" />
+    <ClCompile Include="GameObject\VertexArrayObj.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
+    <ClCompile Include="Ui\MapToolUi.cpp" />
+    <ClCompile Include="Scene\MapToolScene.cpp" />
     <ClCompile Include="Scene\PlayScene.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="GameObject\SpriteObj.cpp" />
@@ -183,6 +186,9 @@
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="GameObject\TextObj.h" />
+    <ClInclude Include="GameObject\VertexArrayObj.h" />
+    <ClInclude Include="Ui\MapToolUi.h" />
+    <ClInclude Include="Scene\MapToolScene.h" />
     <ClInclude Include="Scene\PlayScene.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="GameObject\SpriteObj.h" />

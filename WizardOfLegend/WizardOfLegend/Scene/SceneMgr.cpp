@@ -1,10 +1,13 @@
 #include "SceneMgr.h"
 #include "PlayScene.h"
+#include "MapToolScene.h"
+
 
 bool SceneMgr::Init()
 {
     sceneMap[Scenes::Play] = new PlayScene();
-    currScene = Scenes::Play;
+    sceneMap[Scenes::MapTool] = new MapToolScene();
+    currScene = Scenes::MapTool;
 
     for (auto& pair : sceneMap)
     {
