@@ -28,6 +28,11 @@ void Scene::Release()
 
 void Scene::Enter()
 {
+	Vector2f size = (Vector2f)FRAMEWORK->GetWindowSize();
+	worldView.setSize(size * 0.5f);
+	worldView.setCenter(size * 0.25f);
+	uiView.setSize(size * 0.5f);
+	uiView.setCenter(size * 0.25f);
 }
 
 void Scene::Exit()

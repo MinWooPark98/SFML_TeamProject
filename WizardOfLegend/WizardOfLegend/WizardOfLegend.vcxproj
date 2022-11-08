@@ -159,11 +159,13 @@
     <ClCompile Include="GameObject\TextObj.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
+    <ClCompile Include="GameObject\Player.cpp" />
     <ClCompile Include="Scene\PlayScene.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="GameObject\SpriteObj.cpp" />
     <ClCompile Include="Framework\SoundMgr.cpp" />
     <ClCompile Include="Scene\SceneMgr.cpp" />
+    <ClCompile Include="GameObject\Skill.cpp" />
     <ClCompile Include="Ui\UiMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -183,11 +185,13 @@
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="GameObject\TextObj.h" />
+    <ClInclude Include="GameObject\Player.h" />
     <ClInclude Include="Scene\PlayScene.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="GameObject\SpriteObj.h" />
     <ClInclude Include="Framework\SoundMgr.h" />
     <ClInclude Include="Scene\SceneMgr.h" />
+    <ClInclude Include="GameObject\Skill.h" />
     <ClInclude Include="Ui\UiMgr.h" />
   </ItemGroup>
   <ItemGroup>
