@@ -2,6 +2,7 @@
 #include "../GameObject/VertexArrayObj.h"
 #include "../Framework/Framework.h"
 #include "../Framework/InputMgr.h"
+#include <math.h>
 //#include "../SFML-2.5.1/include/SFML/Graphics.hpp"
 
 MapToolScene::MapToolScene()
@@ -21,6 +22,10 @@ void MapToolScene::Init()
 	tileMap->SetPos({ 0, 0 });
 	tileMap->Init();
 
+	boldTile.setSize({ 64,64 });
+	boldTile.setOutlineThickness(3);
+	boldTile.setOutlineColor(Color::Magenta);
+	boldTile.setFillColor({0, 0, 0,0});
 
 
 }
@@ -35,10 +40,12 @@ void MapToolScene::Reset()
 
 void MapToolScene::Enter()
 {
-	Vector2i size = FRAMEWORK->GetWindowSize();
-	worldView.setSize(1980, 1080);
+	Vector2f size = (Vector2f)FRAMEWORK->GetWindowSize();
+	worldView.setSize(size);
 	worldView.setCenter(size.x * 0.5f, size.y * 0.5f);
+	uiView.setSize(size);
 	
+
 }
 
 void MapToolScene::Exit()
@@ -66,7 +73,11 @@ void MapToolScene::Update(float dt)
 		worldView.move(-75.f, 0.f);
 	if (InputMgr::GetKeyDown(Keyboard::D))
 		worldView.move(75.f, 0.f);
-	
+
+	float boldTilePosX = floor(objMousePos.x / 64) * 64;
+	float boldTilePosY = floor(objMousePos.y / 64) * 64;
+	boldTile.setPosition({ boldTilePosX,boldTilePosY });
+	//0~63을 0으로 강제한다.
 	Scene::Update(dt);	
 
 }
@@ -75,6 +86,7 @@ void MapToolScene::Draw(RenderWindow& window)
 {
 	Scene::Draw(window);
 	tileMap->Draw(window);
+	window.draw(boldTile);
 }
 
 void MapToolScene::CreateTileMap(int rows, int cols)

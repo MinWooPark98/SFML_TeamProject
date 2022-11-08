@@ -8,21 +8,22 @@ class MapToolScene :  public Scene
 protected:
 	
 	VertexArrayObj* tileMap;
+	RectangleShape boldTile;
 public:
 	MapToolScene();
 	virtual ~MapToolScene();
 
 
-	virtual void Init(); //积己
-	virtual void Release();	 //秦力
+	virtual void Init() override; //积己
+	virtual void Release() override;	 //秦力
 
-	virtual void Reset();
+	virtual void Reset() override;
 
-	virtual void Enter();
-	virtual void Exit();
+	virtual void Enter() override;
+	virtual void Exit() override;
 
-	virtual void Update(float dt);
-	virtual void Draw(RenderWindow& window);
+	virtual void Update(float dt) override;
+	virtual void Draw(RenderWindow& window) override;
 
 	void CreateTileMap(int rows, int cols);
 
