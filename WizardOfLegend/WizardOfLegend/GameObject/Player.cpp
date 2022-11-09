@@ -6,7 +6,8 @@
 #include "../Framework/Framework.h"
 
 Player::Player()
-	:currState(States::None), isBackHand(false), animator(nullptr), walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f)
+	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64),
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f)
 {
 }
 
@@ -110,6 +111,10 @@ void Player::Init()
 
 	lastDir = { 0.f, 1.f };
 	skills.assign(6, nullptr);
+
+	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
+	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
+	playerShader.setUniform("paletteIndex", (float)paletteIdx / paletteSize);	// index 바꿔주어 색 변경 -> 속성 변경 추후 추가
 }
 
 void Player::Update(float dt)
@@ -197,6 +202,12 @@ void Player::Update(float dt)
 			// 스킬 업데이트 -> 투사체 발사 후 player 상태 돌아와도 스킬은 업데이트 될 수 있도록
 		}
 	}
+}
+
+void Player::Draw(RenderWindow& window)
+{
+	Object::Draw(window);
+	window.draw(sprite, &playerShader);
 }
 
 void Player::UpdateIdle(float dt)

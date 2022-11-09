@@ -1,7 +1,9 @@
 #pragma once
 class Skill
 {
-protected:
+private:
+
+
 public:
 	Skill();
 	~Skill();

@@ -20,6 +20,9 @@ protected:
 	States currState;
 
 	Animator* animator;
+	Shader playerShader;
+	int paletteIdx;
+	int paletteSize;
 	
 	float walkingSpeed;
 	float runningSpeed;
@@ -39,6 +42,7 @@ public:
 
 	virtual void Init() override;
 	virtual void Update(float dt) override;
+	virtual void Draw(RenderWindow& window) override;
 
 	void UpdateIdle(float dt);
 	void UpdateRun(float dt);
