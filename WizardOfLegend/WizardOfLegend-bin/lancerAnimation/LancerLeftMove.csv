@@ -1,0 +1,11 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+LancerLeftMove,1,7,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/LancerRun0.png,0,0,48,48,24,24,1,0
+graphics/LancerRun1.png,0,0,48,48,24,24,1,0
+graphics/LancerRun2.png,0,0,48,48,24,24,1,0
+graphics/LancerRun3.png,0,0,48,48,24,24,1,0
+graphics/LancerRun4.png,0,0,48,48,24,24,1,0
+graphics/LancerRun3.png,0,0,48,48,24,24,1,0
+graphics/LancerRun2.png,0,0,48,48,24,24,1,0

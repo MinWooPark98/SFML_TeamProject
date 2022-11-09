@@ -1,0 +1,10 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+LancerRightDie,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/LancerDead0.png,0,0,48,72,24,48,0,0
+graphics/LancerDead1.png,0,0,48,72,24,48,0,0
+graphics/LancerDead2.png,0,0,48,72,24,48,0,0
+graphics/LancerDead3.png,0,0,48,72,24,48,0,0
+graphics/LancerDead4.png,0,0,48,72,24,48,0,0
+graphics/LancerDead5.png,0,0,48,72,24,48,0,0
