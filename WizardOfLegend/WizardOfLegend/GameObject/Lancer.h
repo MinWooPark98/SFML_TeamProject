@@ -31,6 +31,11 @@ protected:
 
 	int attackPos = 0;
 
+	Shader shader;
+	Texture texColorTable;
+	int paletteIndex = 59;
+	int paletteSize = 9;
+
 public:
 	Lancer();
 	virtual ~Lancer() {};
@@ -47,5 +52,6 @@ public:
 	void Move(float dt); // 플레이어 매개변수로 받기
 
 	void SpearPos(const Vector2f& lancerPos);
+	void SetColor(int index);
 };
 

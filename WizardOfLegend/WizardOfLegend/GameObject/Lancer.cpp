@@ -3,7 +3,7 @@
 #include "../Framework/InputMgr.h"
 
 Lancer::Lancer()
-	: curState(States::None), speed(200.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
+	: curState(States::None), speed(0.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
 {
 }
 
@@ -33,7 +33,11 @@ void Lancer::Init()
 
 	SetPos({ 500.f, 500.f });
 	SetScale({ 3, 3 });
-	SetState(States::Move);
+	SetState(States::Idle);
+
+	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
+	texColorTable.loadFromFile("graphics/LancerColorIndex.png");
+	SetColor(3);
 	SpriteObj::Init();
 }
 
@@ -50,6 +54,7 @@ void Lancer::Reset()
 void Lancer::Update(float dt)
 {
 	SpriteObj::Update(dt);
+	Move(dt);
 	
 	if (curHp > 0)
 	{
@@ -64,7 +69,6 @@ void Lancer::Update(float dt)
 		if (InputMgr::GetKeyDown(Keyboard::Key::S))
 		{
 			SetState(States::Move);
-			Move(dt);
 		}
 		if (InputMgr::GetKeyDown(Keyboard::Key::F))
 		{
@@ -75,48 +79,13 @@ void Lancer::Update(float dt)
 			SetState(States::Die);
 		}
 	}
-
-	if (InputMgr::GetKeyDown(Keyboard::Key::Left))
-	{
-		attackPos = 1;
-		lastDir.x = -1;
-		lastDir.y = 0;
-		SetState(States::None);
-		SetState(States::Move);
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Key::Right))
-	{
-		attackPos = 2;
-		lastDir.x = 1;
-		lastDir.y = 0;
-		SetState(States::None);
-		SetState(States::Move);
-	}
-
-	if (InputMgr::GetKeyDown(Keyboard::Key::Up))
-	{
-		attackPos = 3;
-		lastDir.x = 0;
-		lastDir.y = -1;
-		SetState(States::None);
-		SetState(States::Move);
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Key::Down))
-	{
-		attackPos = 4;
-		lastDir.x = 0;
-		lastDir.y = 1;
-		SetState(States::None);
-		SetState(States::Move);
-	}
-
-	Translate({dt * speed * lastDir.x, dt * speed * lastDir.y});
 	animation.Update(dt);
 }
 
 void Lancer::Draw(RenderWindow& window)
 {
-	SpriteObj::Draw(window);
+	Object::Draw(window);
+	window.draw(sprite, &shader);
 }
 
 void Lancer::Die()
@@ -158,16 +127,10 @@ void Lancer::SetState(States newState) // 플레이어 매개변수로 받기, 플레이어 위�
 		}
 		break;
 	case Lancer::States::Hit:
-		//if (testX == false)
-		//	animation.Play("LancerLeftHit");
-		//else
-		//	animation.Play("LancerRightHit");
+		lastDir.x < 0.f ? animation.Play("LancerLeftHit") : animation.Play("LancerRightHit");
 		break;
 	case Lancer::States::Die:
-		//if (testX == false)
-		//	animation.Play("LancerLeftDie");
-		//else
-		//	animation.Play("LancerRightDie");
+		lastDir.x < 0.f ? animation.Play("LancerLeftDie") : animation.Play("LancerRightDie");
 		break;
 	}
 }
@@ -177,9 +140,55 @@ void Lancer::Move(float dt)
 	//vector2f pos = player.GetPos();
 	//movedir = player.dir - GetDirection();
 	//SetPos(movedir * dt * speed);
+
+
+	if (InputMgr::GetKeyDown(Keyboard::Key::Left))
+	{
+		attackPos = 1;
+		lastDir.x = -1;
+		lastDir.y = 0;
+		SetState(States::None);
+		SetState(States::Move);
+	}
+	else if (InputMgr::GetKeyDown(Keyboard::Key::Right))
+	{
+		attackPos = 2;
+		lastDir.x = 1;
+		lastDir.y = 0;
+		SetState(States::None);
+		SetState(States::Move);
+	}
+
+	else if (InputMgr::GetKeyDown(Keyboard::Key::Up))
+	{
+		attackPos = 3;
+		//lastDir.x = 0;
+		lastDir.y = -1;
+		SetState(States::None);
+		SetState(States::Move);
+	}
+	else if (InputMgr::GetKeyDown(Keyboard::Key::Down))
+	{
+		attackPos = 4;
+		//lastDir.x = 0;
+		lastDir.y = 1;
+		SetState(States::None);
+		SetState(States::Move);
+	}
+	else
+		speed = 100.f;
+
+	Translate({ dt * speed * lastDir.x, dt * speed * lastDir.y });
 }
 
 void Lancer::SpearPos(const Vector2f& lancerPos)
 {
 	spear->SetPos(lancerPos);
+}
+
+void Lancer::SetColor(int index)
+{
+	paletteIndex = (paletteIndex - index) % paletteSize;
+	shader.setUniform("colorTable", texColorTable);
+	shader.setUniform("paletteIndex", (float)paletteIndex / paletteSize);
 }
