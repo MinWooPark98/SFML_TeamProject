@@ -3,7 +3,7 @@
 #include "../Framework/InputMgr.h"
 
 Lancer::Lancer()
-	: curState(States::None), speed(0.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
+	: curState(States::None), speed(100.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
 {
 }
 
@@ -33,11 +33,26 @@ void Lancer::Init()
 
 	SetPos({ 500.f, 500.f });
 	SetScale({ 3, 3 });
-	SetState(States::Idle);
+	SetState(States::LeftIdle);
 
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	texColorTable.loadFromFile("graphics/LancerColorIndex.png");
 	SetColor(3);
+
+
+	// temp player
+	player = new Object();
+	player->SetHitBox(FloatRect(0, 0, 50, 50));
+	playerRec.setFillColor(Color::White);
+	playerRec.setSize({50, 50});
+
+	this->SetHitBox(this->GetGlobalBounds());
+	this->SetHitBoxOrigin(Origins::MC);
+
+	attackScale.setFillColor(Color::Red);
+	attackScale.setRadius(this->GetSize().x * 3);
+	attackScale.setOrigin(this->GetPos() / 3.5f);
+	
 	SpriteObj::Init();
 }
 
@@ -54,36 +69,44 @@ void Lancer::Reset()
 void Lancer::Update(float dt)
 {
 	SpriteObj::Update(dt);
-	Move(dt);
-	
-	if (curHp > 0)
+
+	DevPlayerMove(dt);
+	Move(dt, player);
+	attackScale.setPosition(this->GetPos());
+
+	switch (curState)
 	{
-		if (InputMgr::GetKeyDown(Keyboard::Key::G))
-		{
-			SetState(States::Idle);
-		}
-		if (InputMgr::GetKeyDown(Keyboard::Key::A))
-		{
-			SetState(States::Attack);
-		}
-		if (InputMgr::GetKeyDown(Keyboard::Key::S))
-		{
-			SetState(States::Move);
-		}
-		if (InputMgr::GetKeyDown(Keyboard::Key::F))
-		{
-			SetState(States::Hit);
-		}
-		if (InputMgr::GetKeyDown(Keyboard::Key::D))
-		{
-			SetState(States::Die);
-		}
+	case Lancer::States::LeftIdle: case Lancer::States::RightIdle:
+		UpdateIdle();
+		break;
+	case Lancer::States::LeftMove: case Lancer::States::RightMove:
+		UpdateMove();
+		break;
+	case Lancer::States::Attack:
+		UpdateAttack();
+		break;
+	case Lancer::States::Hit:
+		SetState(States::Hit);
+		break;
+	case Lancer::States::Die:
+		SetState(States::Die);
+		break;
 	}
+
+	if (!Utils::EqualFloat(direction.x, 0.f))
+	{
+		lastDir = direction;
+	}
+
+	player->Update(dt);
 	animation.Update(dt);
 }
 
 void Lancer::Draw(RenderWindow& window)
 {
+	window.draw(attackScale);
+	window.draw(playerRec);
+	player->Draw(window);
 	Object::Draw(window);
 	window.draw(sprite, &shader);
 }
@@ -93,7 +116,7 @@ void Lancer::Die()
 	this->SetActive(false);
 }
 
-void Lancer::SetState(States newState) // 플레이어 매개변수로 받기, 플레이어 위치에 따라서 공격 방향 달라짐
+void Lancer::SetState(States newState)
 {
 	if (curState == newState)
 		return;
@@ -102,14 +125,19 @@ void Lancer::SetState(States newState) // 플레이어 매개변수로 받기, 플레이어 위�
 	
 	switch (curState)
 	{
-	case Lancer::States::Idle:
-		lastDir.x < 0.f ? animation.Play("LancerLeftIdle") : animation.Play("LancerRightIdle");
+	case Lancer::States::LeftIdle:
+		animation.Play("LancerLeftIdle");
 		break;
-	case Lancer::States::Move:
-		lastDir.x < 0.f ? animation.Play("LancerLeftMove") : animation.Play("LancerRightMove");
+	case Lancer::States::RightIdle:
+		animation.Play("LancerRightIdle");
+		break;
+	case Lancer::States::LeftMove:
+		animation.Play("LancerLeftMove");
+		break;
+	case Lancer::States::RightMove:
+		animation.Play("LancerRightMove");
 		break;
 	case Lancer::States::Attack:
-		// 플레이어 벡터, 렌서 벡터 비교해서 공격 위치 잡기
 		switch (attackPos)
 		{
 		case 1:
@@ -135,50 +163,13 @@ void Lancer::SetState(States newState) // 플레이어 매개변수로 받기, 플레이어 위�
 	}
 }
 
-void Lancer::Move(float dt)
+void Lancer::Move(float dt, Object* player)
 {
-	//vector2f pos = player.GetPos();
-	//movedir = player.dir - GetDirection();
-	//SetPos(movedir * dt * speed);
+	player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
+	player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
 
-
-	if (InputMgr::GetKeyDown(Keyboard::Key::Left))
-	{
-		attackPos = 1;
-		lastDir.x = -1;
-		lastDir.y = 0;
-		SetState(States::None);
-		SetState(States::Move);
-	}
-	else if (InputMgr::GetKeyDown(Keyboard::Key::Right))
-	{
-		attackPos = 2;
-		lastDir.x = 1;
-		lastDir.y = 0;
-		SetState(States::None);
-		SetState(States::Move);
-	}
-
-	else if (InputMgr::GetKeyDown(Keyboard::Key::Up))
-	{
-		attackPos = 3;
-		//lastDir.x = 0;
-		lastDir.y = -1;
-		SetState(States::None);
-		SetState(States::Move);
-	}
-	else if (InputMgr::GetKeyDown(Keyboard::Key::Down))
-	{
-		attackPos = 4;
-		//lastDir.x = 0;
-		lastDir.y = 1;
-		SetState(States::None);
-		SetState(States::Move);
-	}
-	else
-		speed = 100.f;
-
-	Translate({ dt * speed * lastDir.x, dt * speed * lastDir.y });
+	auto move = player->GetPos() - GetPos();
+	Translate({ dt * speed * move.x * 0.01f, dt * speed * move.y * 0.01f});	
 }
 
 void Lancer::SpearPos(const Vector2f& lancerPos)
@@ -191,4 +182,83 @@ void Lancer::SetColor(int index)
 	paletteIndex = (paletteIndex - index) % paletteSize;
 	shader.setUniform("colorTable", texColorTable);
 	shader.setUniform("paletteIndex", (float)paletteIndex / paletteSize);
+}
+
+void Lancer::DevPlayerMove(float dt)
+{
+	if (InputMgr::GetKeyDown(Keyboard::Left))
+	{
+		playerDir.x = -1;
+		playerDir.y = 0;
+		playerSpeed = 500.f;
+	}
+	else if (InputMgr::GetKeyDown(Keyboard::Right))
+	{
+		playerDir.x = 1;
+		playerDir.y = 0;
+		playerSpeed = 500.f;
+	}
+	else
+		direction.x = 0;
+
+	if (InputMgr::GetKeyDown(Keyboard::Up))
+	{
+		playerDir.y = -1;
+		playerDir.x = 0;
+		playerSpeed = 500.f;
+	}
+	if (InputMgr::GetKeyDown(Keyboard::Down))
+	{
+		playerDir.y = 1;
+		playerDir.x = 0;
+		playerSpeed = 500.f;
+	}
+
+	if (InputMgr::GetKeyUp(Keyboard::Left) ||
+		InputMgr::GetKeyUp(Keyboard::Right) ||
+		InputMgr::GetKeyUp(Keyboard::Up) ||
+		InputMgr::GetKeyUp(Keyboard::Down))
+	{
+		playerSpeed = 0.f;
+	}
+
+	player->SetDirection(playerDir);
+	player->Translate({ dt * playerSpeed * playerDir.x, dt * playerSpeed * playerDir.y });
+	playerRec.setPosition(player->GetPos());
+}
+
+void Lancer::UpdateIdle()
+{
+	if (!Utils::EqualFloat(direction.x, 0.f))
+	{
+		if (lastDir.x > 0.f)
+			SetState(States::LeftMove);
+		if (lastDir.x < 0.f)
+			SetState(States::RightMove);
+		return;
+	}
+}
+
+void Lancer::UpdateMove()
+{
+	if (Utils::EqualFloat(direction.x, 0.f))
+	{
+		if (lastDir.x > 0.f)
+			SetState(States::LeftIdle);
+		if (lastDir.x < 0.f)
+			SetState(States::RightIdle);
+		return;
+	}
+
+	if (!Utils::EqualFloat(direction.x, lastDir.x))
+	{
+		if (lastDir.x > 0.f)
+			SetState(States::LeftMove);
+		if (lastDir.x < 0.f)
+			SetState(States::RightMove);
+	}
+}
+void Lancer::UpdateAttack()
+{
+	// 공격 가능 범위랑 플레이어 위치 비교 어케함?
 }

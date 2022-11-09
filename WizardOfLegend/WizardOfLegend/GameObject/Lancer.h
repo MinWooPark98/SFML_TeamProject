@@ -8,8 +8,10 @@ public:
 	enum class States
 	{
 		None = -1,
-		Idle,
-		Move,
+		LeftIdle,
+		RightIdle,
+		LeftMove,
+		RightMove,
 		Attack,
 		Hit,
 		Die,
@@ -36,6 +38,13 @@ protected:
 	int paletteIndex = 59;
 	int paletteSize = 9;
 
+	Object* player;
+	Vector2f playerDir;
+	RectangleShape playerRec;
+	float playerSpeed = 500.f;
+
+	CircleShape attackScale;
+
 public:
 	Lancer();
 	virtual ~Lancer() {};
@@ -49,9 +58,14 @@ public:
 
 	void Die();
 	void SetState(States newState);
-	void Move(float dt); // 플레이어 매개변수로 받기
+	void Move(float dt, Object* player); // 플레이어 매개변수로 받기
 
 	void SpearPos(const Vector2f& lancerPos);
 	void SetColor(int index);
+	void DevPlayerMove(float dt);
+
+	void UpdateIdle();
+	void UpdateMove();
+	void UpdateAttack();
 };
 
