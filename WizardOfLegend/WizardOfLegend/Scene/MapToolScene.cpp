@@ -23,9 +23,9 @@ void MapToolScene::Init()
 	tileMap->Init();
 
 	boldTile.setSize({ 64,64 });
-	boldTile.setOutlineThickness(3);
+	boldTile.setOutlineThickness(4);
 	boldTile.setOutlineColor(Color::Magenta);
-	boldTile.setFillColor({0, 0, 0,0});
+	boldTile.setFillColor({0, 0, 0, 0});
 
 
 }
