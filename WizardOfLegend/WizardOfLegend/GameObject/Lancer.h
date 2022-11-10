@@ -22,7 +22,6 @@ protected:
 	States curState;
 	Vector2f lastDir;
 	Vector2f SpireDir;
-	CircleShape attackScale;
 
 	float speed;
 	float maxHp;
@@ -44,8 +43,10 @@ protected:
 	RectangleShape playerRec;
 	float playerSpeed = 500.f;
 
-	bool spearActive = false;
 	float attackDelay = 2.f;
+	bool spearWait = false;
+	Vector2f playerLastPos;
+	int spearPos;
 
 public:
 	Lancer();
@@ -68,6 +69,5 @@ public:
 	void UpdateIdle();
 	void UpdateMove();
 	void UpdateAttack();
-	void SpearSet(float dt, Object* player);
 };
 

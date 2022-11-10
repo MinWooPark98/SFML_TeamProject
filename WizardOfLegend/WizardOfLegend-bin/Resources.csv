@@ -32,3 +32,11 @@ graphics/LancerIdleDown.png,0
 lancerAnimation/LancerLeftIdle.csv,3
 lancerAnimation/LancerRightIdle.csv,3
 graphics/LancerColorIndex.png,0
+graphics/LancerAttackEffect0.png,0
+graphics/LancerAttackEffect1.png,0
+graphics/LancerAttackEffect2.png,0
+graphics/LancerAttackEffect3.png,0
+graphics/LancerAttackEffect4.png,0
+graphics/LancerAttackEffect5.png,0
+graphics/LancerSpear.png,0
+lancerAnimation/SpearMotion.csv,3
