@@ -1,0 +1,2 @@
+SkillName,"Element(Fire: 0, Air: 1, Earth: 2, Lightning: 3, Water: 4, Chaos: 5)","AttackType(Single: 0, Multiple: 1, SaveAttacks: 2)",AttackCntLim,AttackInterval,Distance,"AttackShape(Range: 0, Rotate: 1, Wave: 3)",Amplitude,"SkillReturn(false: 0, true: 1)","PlayerAction(PBAoE: 0, JumpSlash: 1)","Movable(false: 0, true: 1)",SkillDelay,DmgRatio(damage = Subject_damage * DmgRatio),"DmgOnce(false: 0, true: 1)",DmgDelay,Duration,Speed,animClipName
+DragonArc,0,2,10,0.5,0,3,20,0,0,0,7,1.2,1,0,3,100,animations/skill/DragonArc/Right.csv

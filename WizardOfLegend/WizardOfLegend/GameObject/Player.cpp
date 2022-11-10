@@ -6,8 +6,8 @@
 #include "../Framework/Framework.h"
 
 Player::Player()
-	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f)
+	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), currSkill(nullptr)
 {
 }
 
@@ -39,25 +39,6 @@ void Player::SetState(States state)
 			lastDir.y > 0.f ? animator->Play("SlideDown") : animator->Play("SlideUp");
 		else
 			lastDir.x > 0.f ? animator->Play("SlideRight") : animator->Play("SlideLeft");
-		break;
-	case Player::States::Skill:
-		/*if (skills[0] == nullptr)
-			return;*/
-		// 일반적인 스킬 사용 시 캐스팅 모션 / 점프 슬램이나 다른 동작 조건 스킬 툴에서 설정해서 해당 애니메이션 및 동작 재생하도록 해야 함
-		if (Utils::EqualFloat(lastDir.x, 0.f))
-		{
-			if(isBackHand)
-				lastDir.y > 0.f ? animator->Play("BackHandDown") : animator->Play("BackHandUp");
-			else
-				lastDir.y > 0.f ? animator->Play("ForeHandDown") : animator->Play("ForeHandUp");
-		}
-		else
-		{
-			if (isBackHand)
-				lastDir.x > 0.f ? animator->Play("BackHandRight") : animator->Play("BackHandLeft");
-			else
-				lastDir.x > 0.f ? animator->Play("ForeHandRight") : animator->Play("ForeHandLeft");
-		}
 		break;
 	default:
 		break;
@@ -106,11 +87,23 @@ void Player::Init()
 			animator->AddEvent(ev);
 		}
 	}
+	{
+		vector<string> clipIds = { "PBAoEDown", "PBAoELeft", "PBAoERight", "PBAoEUp" };
+		for (int i = 0; i < clipIds.size(); ++i)
+		{
+			AnimationEvent ev;
+			ev.clipId = clipIds[i];
+			ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
+			ev.onEvent = bind(&Player::SetState, this, States::Idle);
+			animator->AddEvent(ev);
+		}
+	}
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
 
 	lastDir = { 0.f, 1.f };
-	skills.assign(6, nullptr);
+	skills.assign(6, new Skill());
+	skills[5]->SetSkill("DragonArc");
 
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
@@ -136,12 +129,12 @@ void Player::Update(float dt)
 			switch (mouseDown)
 			{
 			case Mouse::Left:
+				SetCurrSkill(skills[0]);
 				skills[0]->Do();
-				SetState(States::Skill);
 				break;
 			case Mouse::Right:
+				SetCurrSkill(skills[1]);
 				skills[1]->Do();
-				SetState(States::Skill);
 				break;
 			default:
 				break;
@@ -155,20 +148,20 @@ void Player::Update(float dt)
 			switch (keyDown)
 			{
 			case Keyboard::Space:
+				SetCurrSkill(skills[2]);
 				skills[2]->Do();
-				SetState(States::Skill);
 				break;
 			case Keyboard::Q:
+				SetCurrSkill(skills[3]);
 				skills[3]->Do();
-				SetState(States::Skill);
 				break;
 			case Keyboard::E:
+				SetCurrSkill(skills[4]);
 				skills[4]->Do();
-				SetState(States::Skill);
 				break;
 			case Keyboard::F:
+				SetCurrSkill(skills[5]);
 				skills[5]->Do();
-				SetState(States::Skill);
 				break;
 			default:
 				break;
@@ -196,10 +189,9 @@ void Player::Update(float dt)
 
 	for (auto skill : skills)
 	{
-		// 조건 추가
 		if (skill != nullptr)
 		{
-			// 스킬 업데이트 -> 투사체 발사 후 player 상태 돌아와도 스킬은 업데이트 될 수 있도록
+			skill->Update(dt);
 		}
 	}
 }
@@ -244,5 +236,33 @@ void Player::UpdateRun(float dt)
 
 void Player::UpdateSkill(float dt)
 {
-	// skill 사용 끝난 거 확인 후 SetState(States::Idle);
+
+}
+
+void Player::Action()
+{
+	SetState(States::Skill);
+
+	switch (currSkill->GetSetting()->playerAction)
+	{
+	case Player::SkillAction::PBAoE:
+		if (Utils::EqualFloat(lastDir.x, 0.f))
+		{
+			if (isBackHand)
+				lastDir.y > 0.f ? animator->Play("BackHandDown") : animator->Play("BackHandUp");
+			else
+				lastDir.y > 0.f ? animator->Play("ForeHandDown") : animator->Play("ForeHandUp");
+		}
+		else
+		{
+			if (isBackHand)
+				lastDir.x > 0.f ? animator->Play("BackHandRight") : animator->Play("BackHandLeft");
+			else
+				lastDir.x > 0.f ? animator->Play("ForeHandRight") : animator->Play("ForeHandLeft");
+		}
+		break;
+	case Player::SkillAction::JumpSlash:
+		// 애니메이션 재생 및 이동
+		break;
+	}
 }

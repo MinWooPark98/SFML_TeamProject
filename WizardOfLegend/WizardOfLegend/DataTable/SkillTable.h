@@ -2,19 +2,22 @@
 #include "DataTable.h"
 #include <map>
 #include <vector>
+#include "../GameObject/Skill.h"
 
 class SkillTable : public DataTable
 {
-public:
-	struct Set
-	{
-		int attackType;
-		float playerDelay;
-		int continualAttackLim;
-		
-	};
 protected:
-public:
+	map<string, Skill::Set> table;
 
+public:
+	SkillTable();
+	virtual ~SkillTable();
+
+	const Skill::Set& Get(const string& skillName);
+
+	virtual void Release() override;
+	virtual bool Load() override;
+
+	string fileName;
 };
 

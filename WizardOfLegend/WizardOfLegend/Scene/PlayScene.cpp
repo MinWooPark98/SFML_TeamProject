@@ -14,11 +14,11 @@ PlayScene::~PlayScene()
 
 void PlayScene::Init()
 {
+	Scene::Init();
+
 	Player* player = new Player();
 	player->Init();
 	objList.push_back(player);
-
-	projectiles.Init(20);
 }
 
 void PlayScene::Release()

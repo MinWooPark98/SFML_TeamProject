@@ -15,6 +15,11 @@ public:
 		Slide,
 		Skill,
 	};
+	enum class SkillAction
+	{
+		PBAoE,
+		JumpSlash,
+	};
 
 protected:
 	States currState;
@@ -24,6 +29,8 @@ protected:
 	int paletteIdx;
 	int paletteSize;
 	
+	int attackDmg;
+
 	float walkingSpeed;
 	float runningSpeed;
 	float accelTime;
@@ -33,6 +40,7 @@ protected:
 	bool isBackHand;	// true일 시 Backhand, false일 시 Forehand
 
 	vector<Skill*> skills;
+	Skill* currSkill;
 
 public:
 	Player();
@@ -47,5 +55,11 @@ public:
 	void UpdateIdle(float dt);
 	void UpdateRun(float dt);
 	void UpdateSkill(float dt);
+
+	void SetAtkDmg(int dmg) { attackDmg = dmg; }
+	int GetAtkDmg() const { return attackDmg; }
+
+	void Action();
+	void SetCurrSkill(Skill* skill) { currSkill = skill; }
 };
 

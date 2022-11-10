@@ -1,14 +1,10 @@
 #pragma once
 #include "Scene.h"
-#include "../Framework/ObjectPool.h"
 
 class Projectile;
 
 class PlayScene : public Scene
 {
-protected:
-	ObjectPool<Projectile> projectiles;
-
 public:
 	PlayScene();
 	virtual ~PlayScene();

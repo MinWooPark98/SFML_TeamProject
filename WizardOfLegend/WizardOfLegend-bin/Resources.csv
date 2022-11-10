@@ -155,3 +155,6 @@ animations/player/IdleUp.csv,3
 animations/player/SlideDown.csv,3
 animations/player/SlideUp.csv,3
 graphics/WizardPalette.png,0
+graphics/DragonArcRight.png,0
+animations/skill/DragonArc/Right.csv,3
+animations/skill/DragonArc/Left.csv,3

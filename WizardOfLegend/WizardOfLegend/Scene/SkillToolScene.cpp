@@ -13,6 +13,8 @@ SkillToolScene::~SkillToolScene()
 
 void SkillToolScene::Init()
 {
+	Scene::Init();
+
 	Player* player = new Player();
 	player->Init();
 	objList.push_back(player);
