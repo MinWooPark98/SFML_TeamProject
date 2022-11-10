@@ -24,17 +24,26 @@ void Lancer::Init()
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerRightHit"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerLeftIdle"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerRightIdle"));
-	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
 
 
 	spear = new SpriteObj();
 	spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
 	spear->SetOrigin(Origins::MC);
 	spear->SetScale({2.5, 2.5});
-	// LancerSpearWithArm
 
 	SetScale({ 3, 3 });
 	SetState(States::RightIdle);
+
+	SpriteObj tempSpearImage;
+	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerAttackEffect2.png"));
+	lancerAttackImage = new SpriteObj();
+	lancerAttackImage->SetOrigin(Origins::MC);
+	lancerAttackImage->SetScale({ 2, 2 });
+	lancerAttackImage->SetHitBox((FloatRect)tempSpearImage.GetTextureRect());
+	spearAnimation.SetTarget(&lancerAttackImage->GetSprite());
+	spearAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
+	
+
 
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	texColorTable.loadFromFile("graphics/LancerColorIndex.png");
@@ -74,10 +83,6 @@ void Lancer::Update(float dt)
 		Move(dt, player);
 
 	attackDelay -= dt;
-	//if (spearWait)
-	//	spear->SetPos({ GetPos().x, GetPos().y });
-	//else
-	//	spear->SetPos(GetPos() + Utils::Normalize((player->GetPos() - GetPos())) * 60.f);
 
 	switch (curState)
 	{
@@ -105,12 +110,18 @@ void Lancer::Update(float dt)
 
 	player->Update(dt);
 	animation.Update(dt);
+	spearAnimation.Update(dt);
 }
 
 void Lancer::Draw(RenderWindow& window)
 {
 	if (curState == States::Attack)
+	{
 		window.draw(spear->GetSprite(), &shader);
+
+		if (attackDelay <= 1.f)
+			window.draw(lancerAttackImage->GetSprite(), &shader);
+	}
 	window.draw(playerRec);
 	player->Draw(window);
 	Object::Draw(window);
@@ -145,6 +156,7 @@ void Lancer::SetState(States newState)
 		break;
 	case Lancer::States::Attack:
 		spear->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
+		lancerAttackImage->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 
 		if (Utils::Angle(player->GetPos(), GetPos()) >= -180 &&
 			Utils::Angle(player->GetPos(), GetPos()) <= -130 ||
@@ -307,7 +319,7 @@ void Lancer::UpdateAttack()
 	if (attackDelay <= 1.f && spearWait)
 	{
 		spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpearWithArm.png"));
-		spear->SetPos(GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 65.f); // ©Л
+		spear->SetPos(GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 65.f);
 		switch (spearPos)
 		{
 		case 1:
@@ -324,6 +336,8 @@ void Lancer::UpdateAttack()
 			break;
 		}
 
+		lancerAttackImage->SetPos(spear->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 100.f);
+		spearAnimation.Play("SpearMotion");
 		spearWait = false;
 	}
 	else if (attackDelay >= 1.f && !spearWait)
@@ -345,10 +359,10 @@ void Lancer::UpdateAttack()
 			spear->SetPos({ GetPos().x + 20.f, GetPos().y }); // го
 			break;
 		}
-
 		playerLastPos = player->GetPos();
 		spearWait = true;
 	}
+
 
 	if (attackDelay <= 0.f)
 	{

@@ -47,6 +47,8 @@ protected:
 	bool spearWait = false;
 	Vector2f playerLastPos;
 	int spearPos;
+	Animator spearAnimation;
+	SpriteObj* lancerAttackImage;
 
 public:
 	Lancer();
