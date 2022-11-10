@@ -3,7 +3,7 @@
 #include "../Framework/InputMgr.h"
 
 Lancer::Lancer()
-	: curState(States::None), speed(100.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
+	: curState(States::None), speed(300.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
 {
 }
 
@@ -31,9 +31,8 @@ void Lancer::Init()
 	spear->SetOrigin(Origins::MC);
 	spear->SetScale({3, 3});
 
-	SetPos({ 500.f, 500.f });
 	SetScale({ 3, 3 });
-	SetState(States::LeftIdle);
+	SetState(States::RightIdle);
 
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	texColorTable.loadFromFile("graphics/LancerColorIndex.png");
@@ -45,13 +44,14 @@ void Lancer::Init()
 	player->SetHitBox(FloatRect(0, 0, 50, 50));
 	playerRec.setFillColor(Color::White);
 	playerRec.setSize({50, 50});
+	player->SetPos({1920 / 2, 1080 / 2});
 
 	this->SetHitBox(this->GetGlobalBounds());
 	this->SetHitBoxOrigin(Origins::MC);
 
 	attackScale.setFillColor(Color::Red);
 	attackScale.setRadius(this->GetSize().x * 3);
-	attackScale.setOrigin(this->GetPos() / 3.5f);
+	attackScale.setOrigin(this->GetSize() * 3.f);
 	
 	SpriteObj::Init();
 }
@@ -71,8 +71,12 @@ void Lancer::Update(float dt)
 	SpriteObj::Update(dt);
 
 	DevPlayerMove(dt);
-	Move(dt, player);
 	attackScale.setPosition(this->GetPos());
+
+	if (Utils::Distance(player->GetPos(), GetPos()) <= 700.f && curState != States::Attack)
+		Move(dt, player);
+
+	attackDelay -= dt;
 
 	switch (curState)
 	{
@@ -109,6 +113,7 @@ void Lancer::Draw(RenderWindow& window)
 	player->Draw(window);
 	Object::Draw(window);
 	window.draw(sprite, &shader);
+	spear->Draw(window);
 }
 
 void Lancer::Die()
@@ -138,20 +143,35 @@ void Lancer::SetState(States newState)
 		animation.Play("LancerRightMove");
 		break;
 	case Lancer::States::Attack:
-		switch (attackPos)
+		if (Utils::Angle(player->GetPos(), GetPos()) >= -180 &&
+			Utils::Angle(player->GetPos(), GetPos()) <= -130 ||
+			Utils::Angle(player->GetPos(), GetPos()) >= 130 &&
+			Utils::Angle(player->GetPos(), GetPos()) <= 180)
 		{
-		case 1:
-			animation.Play("LancerLeftAttack");
-			break;
-		case 2:
 			animation.Play("LancerRightAttack");
-			break;
-		case 3:
-			animation.Play("LancerUpAttack");
-			break;
-		case 4:
+			attackDelay = 2.f;
+			return;
+		}
+		if (Utils::Angle(player->GetPos(), GetPos()) <= -45 &&
+			Utils::Angle(player->GetPos(), GetPos()) >= -129)
+		{
 			animation.Play("LancerDownAttack");
-			break;
+			attackDelay = 2.f;
+			return;
+		}
+		if (Utils::Angle(player->GetPos(), GetPos()) >= -44 &&
+			Utils::Angle(player->GetPos(), GetPos()) <= 45)
+		{
+			animation.Play("LancerLeftAttack");
+			attackDelay = 2.f;
+			return;
+		}
+		if (Utils::Angle(player->GetPos(), GetPos()) >= 46 &&
+			Utils::Angle(player->GetPos(), GetPos()) <= 129)
+		{
+			animation.Play("LancerUpAttack");
+			attackDelay = 2.f;
+			return;
 		}
 		break;
 	case Lancer::States::Hit:
@@ -165,16 +185,27 @@ void Lancer::SetState(States newState)
 
 void Lancer::Move(float dt, Object* player)
 {
-	player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
-	player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
+	if (Utils::EqualFloat(direction.x, 0.f))
+	{
+		player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
+		player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
 
-	auto move = player->GetPos() - GetPos();
-	Translate({ dt * speed * move.x * 0.01f, dt * speed * move.y * 0.01f});	
-}
+		auto move = Utils::Normalize(player->GetPos() - GetPos());
+		Translate({ dt * speed * move });
 
-void Lancer::SpearPos(const Vector2f& lancerPos)
-{
-	spear->SetPos(lancerPos);
+		if (lastDir.x < 0.f)
+			SetState(States::LeftMove);
+		if (lastDir.x > 0.f)
+			SetState(States::RightMove);
+	}
+
+	if (Utils::EqualFloat(direction.x, 0.f))
+	{
+		if (lastDir.x < 0.f)
+			SetState(States::LeftIdle);
+		if (lastDir.x > 0.f)
+			SetState(States::RightIdle);
+	}
 }
 
 void Lancer::SetColor(int index)
@@ -241,24 +272,51 @@ void Lancer::UpdateIdle()
 
 void Lancer::UpdateMove()
 {
+	if (Utils::Distance(player->GetPos(), GetPos()) <= 200.f)
+	{
+		SetState(States::Attack);
+		attackDelay = 2.f;
+	}
+
 	if (Utils::EqualFloat(direction.x, 0.f))
 	{
-		if (lastDir.x > 0.f)
-			SetState(States::LeftIdle);
 		if (lastDir.x < 0.f)
+			SetState(States::LeftIdle);
+		if (lastDir.x > 0.f)
 			SetState(States::RightIdle);
 		return;
 	}
 
 	if (!Utils::EqualFloat(direction.x, lastDir.x))
 	{
-		if (lastDir.x > 0.f)
-			SetState(States::LeftMove);
 		if (lastDir.x < 0.f)
+			SetState(States::LeftMove);
+		if (lastDir.x > 0.f)
 			SetState(States::RightMove);
 	}
 }
 void Lancer::UpdateAttack()
 {
-	// 공격 가능 범위랑 플레이어 위치 비교 어케함?
+	if (attackDelay <= 0.f)
+	{
+		SetState(States::None);
+		SetState(States::Attack);
+		if (Utils::Distance(player->GetPos(), GetPos()) >= 200.f)
+		{
+			if (lastDir.x < 0.f)
+				SetState(States::LeftMove);
+			if (lastDir.x > 0.f)
+				SetState(States::RightMove);
+		}
+	}
+}
+
+void Lancer::SpearSet(float dt, Object* player)
+{
+	spear->SetPos(GetPos());
+
+	if (spearActive)
+		spear->SetActive(true);
+	else
+		spear->SetActive(false);
 }

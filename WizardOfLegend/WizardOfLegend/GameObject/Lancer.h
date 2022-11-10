@@ -22,6 +22,7 @@ protected:
 	States curState;
 	Vector2f lastDir;
 	Vector2f SpireDir;
+	CircleShape attackScale;
 
 	float speed;
 	float maxHp;
@@ -29,7 +30,6 @@ protected:
 	float damage;
 
 	SpriteObj* spear;
-	bool setSpear = false;
 
 	int attackPos = 0;
 
@@ -38,34 +38,36 @@ protected:
 	int paletteIndex = 59;
 	int paletteSize = 9;
 
+	// dev
 	Object* player;
 	Vector2f playerDir;
 	RectangleShape playerRec;
 	float playerSpeed = 500.f;
 
-	CircleShape attackScale;
+	bool spearActive = false;
+	float attackDelay = 2.f;
 
 public:
 	Lancer();
 	virtual ~Lancer() {};
 
-	virtual void Init();
-	virtual void Release();
-	virtual void Reset();
-	virtual void Update(float dt);
-	virtual void Draw(RenderWindow& window);
+	virtual void Init() override;
+	virtual void Release() override;
+	virtual void Reset() override;
+	virtual void Update(float dt) override;
+	virtual void Draw(RenderWindow& window) override;
 
 
 	void Die();
 	void SetState(States newState);
-	void Move(float dt, Object* player); // 플레이어 매개변수로 받기
+	void Move(float dt, Object* player);
 
-	void SpearPos(const Vector2f& lancerPos);
 	void SetColor(int index);
 	void DevPlayerMove(float dt);
 
 	void UpdateIdle();
 	void UpdateMove();
 	void UpdateAttack();
+	void SpearSet(float dt, Object* player);
 };
 
