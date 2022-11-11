@@ -1,0 +1,9 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+ArcherLeftRun,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/ArcherRunRight0.png,0,0,48,48,24,24,0,0
+graphics/ArcherRunRight1.png,0,0,48,48,24,24,0,0
+graphics/ArcherRunRight2.png,0,0,48,48,24,24,0,0
+graphics/ArcherRunRight3.png,0,0,48,48,24,24,0,0
+graphics/ArcherRunRight4.png,0,0,48,48,24,24,0,0

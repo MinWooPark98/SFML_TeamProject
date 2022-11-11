@@ -1,0 +1,11 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+ArcherLeftDie,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/ArcherDeath0.png,0,0,48,48,24,24,1,0
+graphics/ArcherDeath1.png,0,0,48,48,24,24,1,0
+graphics/ArcherDeath2.png,0,0,48,48,24,24,1,0
+graphics/ArcherDeath3.png,0,0,48,48,24,24,1,0
+graphics/ArcherDeath4.png,0,0,48,48,24,24,1,0
+graphics/ArcherDeath5.png,0,0,48,48,24,24,1,0
+graphics/ArcherDeath6.png,0,0,48,48,24,24,1,0
