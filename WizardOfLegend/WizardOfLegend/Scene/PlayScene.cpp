@@ -3,6 +3,7 @@
 #include "../Framework/Framework.h"
 #include "../GameObject/Player.h"
 #include "../GameObject/Projectile.h"
+#include "../GameObject/Archer.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -25,7 +26,12 @@ void PlayScene::Init()
 	lancer->Init();
 	objList.push_back(lancer);
 
+	Archer* archer = new Archer();
+	archer->Init();
+	objList.push_back(archer);
+
 	lancer->SetPlayer(player);
+	archer->SetPlayer(player);
 }
 
 void PlayScene::Update(float dt)

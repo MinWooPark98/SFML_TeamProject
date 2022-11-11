@@ -68,7 +68,7 @@ void Lancer::Update(float dt)
 {
 	SpriteObj::Update(dt);
 	
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 500.f && curState != States::Attack)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= 501.f && curState != States::Attack)
 		Move(dt);
 
 	attackDelay -= dt;
@@ -191,6 +191,8 @@ void Lancer::Move(float dt)
 		player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
 		player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
 	}
+	else
+		direction.x = 0;
 
 	if (!Utils::EqualFloat(direction.x, 0.f))
 	{
@@ -203,8 +205,6 @@ void Lancer::Move(float dt)
 		if (lastDir.x > 0.f)
 			SetState(States::RightMove);
 	}
-
-	cout << direction.x << endl;
 
 	if (Utils::EqualFloat(direction.x, 0.f))
 	{

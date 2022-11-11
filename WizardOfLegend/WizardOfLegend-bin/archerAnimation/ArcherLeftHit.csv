@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-ArcherRightHit,0,1,,,,,,
+ArcherLeftHit,0,1,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/ArcherHurt.png,0,0,48,48,24,24,0,0
