@@ -68,5 +68,17 @@ public:
 	void UpdateAttack();
 
 	void SetPlayer(Player* player);
+
+	float GetSpeed() { return speed; };
+	void SetSpeed(float spd) { speed = spd; };
+
+	float GetMaxHp() { return maxHp; };
+	void SetMaxHp(float hp) { maxHp = hp; };
+
+	float GetCurHp() { return curHp; };
+	void SetCurHp(float hp) { curHp = hp; };
+
+	float GetDamage() { return damage; };
+	void SetDamage(float dmg) { damage = dmg; };
 };
 

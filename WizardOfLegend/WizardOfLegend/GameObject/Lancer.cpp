@@ -4,7 +4,7 @@
 #include "Player.h"
 
 Lancer::Lancer()
-	: curState(States::None), speed(200.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
+	: curState(States::None), speed(0.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
 {
 }
 
@@ -48,6 +48,8 @@ void Lancer::Init()
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	texColorTable.loadFromFile("graphics/LancerColorIndex.png");
 	SetColor(3);
+
+	SetSpeed(200.f);
 
 	SpriteObj::Init();
 }
@@ -234,7 +236,7 @@ void Lancer::UpdateIdle()
 
 void Lancer::UpdateMove()
 {
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 200.f)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= 150.f)
 	{
 		SetState(States::Attack);
 		attackDelay = 2.f;
@@ -277,7 +279,7 @@ void Lancer::UpdateAttack()
 		SetState(States::None);
 		SetState(States::Attack);
 
-		if (Utils::Distance(player->GetPos(), GetPos()) >= 200.f &&
+		if (Utils::Distance(player->GetPos(), GetPos()) > 150.f &&
 			Utils::Distance(player->GetPos(), GetPos()) < 500.f)
 		{
 			if (lastDir.x < 0.f)
