@@ -3,6 +3,8 @@
 #include "../Framework/Framework.h"
 #include "../GameObject/Player.h"
 #include "../GameObject/Projectile.h"
+#include "../Framework/InputMgr.h"
+#include "../Scene/SceneMgr.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -17,29 +19,29 @@ void PlayScene::Init()
 {
 	Scene::Init();
 
+	Player* player = new Player();
+	player->Init();
+	objList.push_back(player);
+
 	lancer = new Lancer();
 	lancer->Init();
 	objList.push_back(lancer);
 
-	Player* player = new Player();
-	player->Init();
-	objList.push_back(player);
+	lancer->SetPlayer(player);
 }
 
 void PlayScene::Update(float dt)
 {
-	for (auto obj : objList)
+	if (InputMgr::GetKeyDown(Keyboard::Space))
 	{
-		obj->Update(dt);
+		SCENE_MGR->ChangeScene(Scenes::MapTool);
 	}
+	Scene::Update(dt);
 }
 
 void PlayScene::Draw(RenderWindow& window)
 {
-	for (auto obj : objList)
-	{
-		obj->Draw(window);
-	}
+	Scene::Draw(window);
 }
 
 void PlayScene::Release()

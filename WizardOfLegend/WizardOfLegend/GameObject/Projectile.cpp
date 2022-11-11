@@ -46,15 +46,13 @@ void Projectile::Update(float dt)
 	case Projectile::AttackShape::Wave:
 		{
 			angle += speed * dt;
-			position = startPos;
 			Transform translation;
-			translation.translate({ angle, amplitude * sin(angle) });
+			translation.translate({ angle, amplitude * (float)(sin(angle * M_PI / 180.f)) });
 			Transform rotation;
 			rotation.rotate(Utils::Angle(direction) + 90.f);
 			transform = translation * rotation;
-			position = transform.transformPoint(position);
-			cout << position.x << " " << position.y << endl;
-			SetPos(position);
+			position = transform.transformPoint({ 0.f, 0.f });
+			SetPos(position + startPos);
 		}
 		break;
 	default:

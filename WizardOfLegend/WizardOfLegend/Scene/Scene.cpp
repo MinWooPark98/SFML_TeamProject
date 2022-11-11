@@ -47,7 +47,8 @@ void Scene::Update(float dt)
 	Vector2f mousePos = InputMgr::GetMousePos();
 	Vector2f windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 	objMousePos = ScreenToWorld((Vector2i)mousePos);
-	projectiles->Update(dt);
+	if (projectiles != nullptr)
+		projectiles->Update(dt);
 	for (const auto& obj : objList)
 	{
 		if (obj->GetActive())

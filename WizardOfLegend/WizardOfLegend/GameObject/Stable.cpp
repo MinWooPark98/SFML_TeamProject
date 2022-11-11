@@ -1,4 +1,5 @@
 #include "Stable.h"
+#include "Player.h"
 
 Stable::Stable()
 	: SpriteObj()

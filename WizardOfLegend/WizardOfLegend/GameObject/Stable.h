@@ -1,6 +1,8 @@
 #pragma once
 #include "SpriteObj.h"
 
+class Player;
+
 enum class Interaction_Type
 { 
 	NONE,
@@ -9,7 +11,6 @@ enum class Interaction_Type
 	PORTAL,
 	CHECKPOINT,
 	BENCH,
-	ELEVATOR,
 };
 
 class Stable : public SpriteObj
