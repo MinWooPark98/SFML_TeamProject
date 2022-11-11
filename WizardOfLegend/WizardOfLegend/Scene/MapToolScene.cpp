@@ -115,19 +115,25 @@ void MapToolScene::CreateTileMap(int rows, int cols)
 	va.clear();
 	va.setPrimitiveType(Lines);
 	va.resize(2 * (numLines));
+	
 
 	// row separators
 	for (int i = 0; i < rows + 1; i++) {
 		int r = i;
 		float rowY = 64 * r;
 		va[i * 2].position = { 0, rowY };
+		va[i * 2].color = Color::Black;
 		va[i * 2 + 1].position = { (float)64*cols, rowY };
+		va[i * 2+1].color = Color::Black;
+		
 	}
 	// column separators
 	for (int j =0; j < cols+1; j++) {
 		int c = j;
 		float colX = 64 * c;
 		va[numLines +j * 2].position = { colX, 0 };
+		va[numLines + j * 2].color = Color::Black;
 		va[numLines +j * 2 + 1].position = { colX, (float)64*rows };
+		va[numLines + j * 2+1].color = Color::Black;
 	}
 }
