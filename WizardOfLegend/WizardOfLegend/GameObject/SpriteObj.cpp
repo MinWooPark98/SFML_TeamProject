@@ -2,10 +2,16 @@
 
 SpriteObj::SpriteObj()
 {
+	
 }
 
 SpriteObj::~SpriteObj()
 {
+}
+
+void SpriteObj::Init()
+{
+	DebugCollision();
 }
 
 void SpriteObj::Draw(RenderWindow& window)
@@ -42,6 +48,12 @@ void SpriteObj::SetPos(const Vector2f& pos)
 	sprite.setPosition(position);
 }
 
+void SpriteObj::SetPos(const float& x, const float& y)
+{
+	Object::SetPos(Vector2f(x,y));
+	sprite.setPosition(position);
+}
+
 void SpriteObj::SetTextureRect(const IntRect& rect)
 {
 	sprite.setTextureRect(rect);
@@ -67,4 +79,31 @@ FloatRect SpriteObj::GetGlobalBounds() const
 FloatRect SpriteObj::GetLocalBounds() const
 {
 	return sprite.getLocalBounds();
+}
+
+void SpriteObj::DebugCollision()
+{
+	hitbox.setSize(Vector2f(sprite.getLocalBounds().width, sprite.getLocalBounds().height));
+	hitbox.setPosition(sprite.getPosition());
+	hitbox.setOrigin(sprite.getOrigin());
+
+	hitbox.setOutlineThickness(1.5f);
+	hitbox.setOutlineColor(Color::Red);
+	hitbox.setFillColor(Color::Color(0, 0, 0, 0));
+}
+
+
+bool SpriteObj::CheckCollision(SpriteObj* otherObj)
+{
+	if (otherObj->CompareTag(Tag::COLLIDER))
+	{
+		return this->GetSprite().getGlobalBounds().intersects(otherObj->GetHitBounds());
+	}
+
+	return this->GetSprite().getGlobalBounds().intersects(otherObj->GetSprite().getGlobalBounds());
+}
+
+bool SpriteObj::Collision(SpriteObj* otherObj)
+{
+	return false;
 }
