@@ -1,24 +1,16 @@
 #pragma once
 #include "Scene.h"
 
-class Lancer;
-
-class PlayScene : public Scene
+class SkillToolScene : public Scene
 {
-protected:
-	Lancer* lancer;
-
 public:
-	PlayScene();
-	virtual ~PlayScene();
+	SkillToolScene();
+	virtual ~SkillToolScene();
 
 	virtual void Init() override;
 	virtual void Release() override;
 
 	virtual void Reset() override;
-
-	virtual void Update(float dt) override;
-	virtual void Draw(RenderWindow& window) override;
 
 	virtual void Enter() override;
 	virtual void Exit() override;

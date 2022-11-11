@@ -1,0 +1,14 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+RunDown,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WizardRunDown0.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown1.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown2.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown3.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown4.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown5.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown6.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown7.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown8.png,0,0,48,48,24,24,0,0
+graphics/WizardRunDown9.png,0,0,48,48,24,24,0,0

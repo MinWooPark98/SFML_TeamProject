@@ -1,0 +1,12 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+ForeHandLeft,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WizardForeHandRight0.png,0,0,30,32,15,16,1,0
+graphics/WizardForeHandRight1.png,0,0,32,32,16,16,1,0
+graphics/WizardForeHandRight2.png,0,0,34,30,17,15,1,0
+graphics/WizardForeHandRight3.png,0,0,34,30,17,15,1,0
+graphics/WizardForeHandRight4.png,0,0,32,30,16,15,1,0
+graphics/WizardForeHandRight5.png,0,0,34,30,17,15,1,0
+graphics/WizardForeHandRight6.png,0,0,30,30,15,15,1,0
+graphics/WizardForeHandRight7.png,0,0,26,34,13,17,1,0

@@ -1,5 +1,6 @@
 #include "DataTableMgr.h"
 #include "LanguageTable.h"
+#include "SkillTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -25,6 +26,10 @@ void DataTableMgr::Init()
     DataTable* table = new LanguageTable();
     table->Load();
     tables.insert({ DataTable::Types::Language, table });
+
+    table = new SkillTable();
+    table->Load();
+    tables.insert({ DataTable::Types::Skill, table });
 }
 
 void DataTableMgr::Release()

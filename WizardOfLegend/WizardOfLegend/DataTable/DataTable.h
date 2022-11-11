@@ -10,6 +10,7 @@ public:
 	{
 		None = -1,
 		Language,
+		Skill,
 	};
 private:
 	Types type;

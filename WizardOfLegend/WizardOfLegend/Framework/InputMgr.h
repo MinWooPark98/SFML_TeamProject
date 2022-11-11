@@ -58,6 +58,7 @@ public:
 	static list<Keyboard::Key> GetKeyDownList() { return downList; }
 	static list<Keyboard::Key> GetKeyIngList() { return ingList; }
 
+	static list<Mouse::Button> GetMouseDownList() { return downMouse; }
 	static list<Mouse::Button> GetMouseIngList() { return ingMouse; }
 
 	static const Vector2f& GetMousePos();
