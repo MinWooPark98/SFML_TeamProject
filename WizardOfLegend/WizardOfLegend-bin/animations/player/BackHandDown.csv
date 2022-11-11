@@ -1,0 +1,13 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+BackHandDown,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WizardBackHandDown0.png,0,0,48,48,24,24,0,0
+graphics/WizardBackHandDown1.png,0,0,48,48,24,24,0,0
+graphics/WizardBackHandDown2.png,0,0,48,48,24,24,0,0
+graphics/WizardBackHandDown3.png,0,0,48,48,24,24,0,0
+graphics/WizardBackHandDown4.png,0,0,48,48,24,24,0,0
+graphics/WizardBackHandDown5.png,0,0,48,48,24,24,0,0
+graphics/WizardBackHandDown6.png,0,0,48,48,24,24,0,0
+graphics/WizardBackHandDown7.png,0,0,48,48,24,24,0,0
+graphics/WizardBackHandDown8.png,0,0,48,48,24,24,0,0

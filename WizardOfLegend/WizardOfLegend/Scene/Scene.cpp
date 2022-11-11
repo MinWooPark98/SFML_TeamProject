@@ -5,6 +5,7 @@
 #include "../Framework/InputMgr.h"
 #include "../Scene/SceneMgr.h"
 #include "../Framework/SoundMgr.h"
+#include "../GameObject/Projectile.h"
 
 Scene::Scene(Scenes type)
 	: type(type), uiMgr(nullptr), isPause(false)
@@ -15,6 +16,11 @@ Scene::~Scene()
 {
 	Release();
 	
+}
+void Scene::Init()
+{
+	projectiles = new ObjectPool<Projectile>();
+	projectiles->Init(20);
 }
 void Scene::Release()
 {
@@ -41,7 +47,7 @@ void Scene::Update(float dt)
 	Vector2f mousePos = InputMgr::GetMousePos();
 	Vector2f windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 	objMousePos = ScreenToWorld((Vector2i)mousePos);
-
+	projectiles->Update(dt);
 	for (const auto& obj : objList)
 	{
 		if (obj->GetActive())

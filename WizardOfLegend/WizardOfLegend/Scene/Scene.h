@@ -2,13 +2,17 @@
 #include <SFML/Graphics.hpp>
 #include <list>
 #include "../GameObject/Object.h"
+#include "../Framework/ObjectPool.h"
 
 using namespace sf;
 using namespace std;
 
+class Projectile;
+
 enum class Scenes
 {
 	MapTool,
+	SkillTool,
 	Play,
 };
 
@@ -18,14 +22,16 @@ class Scene
 public:
 	enum class Layer
 	{
-		Count,
 		// 眠啊
+		Count,
 	};
 
 protected:
 	Scenes type;
 	vector<list<Object*>*> layOut;
 	list<Object*> objList;
+
+	ObjectPool<Projectile>* projectiles;
 
 	bool isPause;
 	Vector2f objMousePos;
@@ -38,7 +44,7 @@ public:
 	Scene(Scenes type);
 	virtual ~Scene();
 
-	virtual void Init() = 0; //积己
+	virtual void Init(); //积己
 	virtual void Release();	 //秦力
 
 	virtual void Reset() {}
@@ -67,7 +73,7 @@ public:
 	Object* FindGameObj(string name);
 	UiMgr* GetUiMgr() { return uiMgr; }
 	const Vector2f& GetObjMousePos() const { return objMousePos; }
-
 	vector<list<Object*>*>& GetLayout() { return layOut; }
+	ObjectPool<Projectile>* GetProjectiles() { return projectiles; }
 };
 

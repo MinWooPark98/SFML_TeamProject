@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObject\Collider.cpp" />
+    <ClCompile Include="GameObject\Button.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
     <ClCompile Include="Framework\RayCast.cpp" />
@@ -166,17 +167,24 @@
     <ClCompile Include="GameObject\Stable.cpp" />
     <ClCompile Include="Ui\MapToolUiMgr.cpp" />
     <ClCompile Include="Scene\MapToolScene.cpp" />
+    <ClCompile Include="GameObject\Player.cpp" />
+    <ClCompile Include="GameObject\Projectile.cpp" />
     <ClCompile Include="Scene\PlayScene.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="GameObject\SpriteObj.cpp" />
     <ClCompile Include="Framework\SoundMgr.cpp" />
     <ClCompile Include="Scene\SceneMgr.cpp" />
+    <ClCompile Include="GameObject\Skill.cpp" />
+    <ClCompile Include="Scene\SkillToolScene.cpp" />
+    <ClCompile Include="DataTable\SkillTable.cpp" />
+    <ClCompile Include="Ui\SkillToolUiMgr.cpp" />
     <ClCompile Include="Ui\UiMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
     <ClInclude Include="GameObject\Collider.h" />
+    <ClInclude Include="GameObject\Button.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
     <ClInclude Include="GameObject\DragRectTile.h" />
@@ -197,11 +205,17 @@
     <ClInclude Include="GameObject\Ground.h" />
     <ClInclude Include="Ui\MapToolUiMgr.h" />
     <ClInclude Include="Scene\MapToolScene.h" />
+    <ClInclude Include="GameObject\Player.h" />
+    <ClInclude Include="GameObject\Projectile.h" />
     <ClInclude Include="Scene\PlayScene.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="GameObject\SpriteObj.h" />
     <ClInclude Include="Framework\SoundMgr.h" />
     <ClInclude Include="Scene\SceneMgr.h" />
+    <ClInclude Include="GameObject\Skill.h" />
+    <ClInclude Include="Scene\SkillToolScene.h" />
+    <ClInclude Include="DataTable\SkillTable.h" />
+    <ClInclude Include="Ui\SkillToolUiMgr.h" />
     <ClInclude Include="Ui\UiMgr.h" />
   </ItemGroup>
   <ItemGroup>

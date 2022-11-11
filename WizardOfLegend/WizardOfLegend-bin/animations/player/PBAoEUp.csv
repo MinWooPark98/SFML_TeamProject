@@ -1,0 +1,14 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+PBAoEUp,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WizardPBAoEUp0.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp1.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp2.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp3.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp4.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp5.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp6.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp7.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp8.png,0,0,48,48,24,24,0,0
+graphics/WizardPBAoEUp9.png,0,0,48,48,24,24,0,0
