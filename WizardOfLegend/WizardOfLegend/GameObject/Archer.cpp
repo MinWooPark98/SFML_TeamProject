@@ -39,7 +39,9 @@ void Archer::Init()
 	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Arrow.png"));
 	arrow->SetHitBox((FloatRect)arrow->GetTextureRect());
 	arrow->SetOrigin(Origins::MC);
-
+	SetArrowSpeed(400.f);
+	arrowDir.setFillColor(Color::Red);
+	arrowDir.setSize({2, 1080});
 
 
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
@@ -104,8 +106,8 @@ void Archer::Draw(RenderWindow& window)
 	{
 		window.draw(bow->GetSprite(), &shader);
 
-		if (attackDelay <= 1.f)
-			arrow->Draw(window);
+		if (attackDelay >= 1.f)
+			window.draw(arrowDir);
 	}
 	
 	Object::Draw(window);
@@ -220,8 +222,10 @@ void Archer::UpdateAttack(float dt)
 	{
 		bow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
 		arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
+		arrowDir.setRotation(Utils::Angle(GetPos(), player->GetPos()) - 90);
 		arrow->SetPos(GetPos());
 		bow->SetPos(GetPos());
+		arrowDir.setPosition(GetPos());
 
 		if (player->GetPos().x >= GetPos().x)
 			animation.Play("ArcherRightAttack");
@@ -233,7 +237,7 @@ void Archer::UpdateAttack(float dt)
 	else
 	{
 		auto move = Utils::Normalize(playerLastPos - arrow->GetPos());
-		arrow->Translate({ dt * speed * move * 2.f});
+		arrow->Translate({ dt * arrowSpeed * move * 2.f});
 	}
 
 	if (attackDelay <= 1.f && bowWait)

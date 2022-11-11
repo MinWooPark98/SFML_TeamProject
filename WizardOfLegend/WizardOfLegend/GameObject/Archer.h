@@ -48,6 +48,10 @@ protected:
 
 	Player* player;
 
+	float arrowSpeed;
+
+	RectangleShape arrowDir;
+
 public:
 	Archer();
 	virtual ~Archer() {};
@@ -80,4 +84,7 @@ public:
 
 	float GetDamage() { return damage; };
 	void SetDamage(float dmg) { damage = dmg; };
+
+	float GetArrowSpeed() { return arrowSpeed; };
+	void SetArrowSpeed(float spd) { arrowSpeed = spd; };
 };
