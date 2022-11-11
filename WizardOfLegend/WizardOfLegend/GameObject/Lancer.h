@@ -2,6 +2,7 @@
 #include "SpriteObj.h"
 #include "../Framework/Animator.h"
 
+class Player;
 class Lancer : public SpriteObj
 {
 public:
@@ -37,11 +38,6 @@ protected:
 	int paletteIndex = 59;
 	int paletteSize = 9;
 
-	// dev
-	Object* player;
-	Vector2f playerDir;
-	RectangleShape playerRec;
-	float playerSpeed = 500.f;
 
 	float attackDelay = 2.f;
 	bool spearWait = false;
@@ -49,6 +45,8 @@ protected:
 	int spearPos;
 	Animator spearAnimation;
 	SpriteObj* lancerAttackImage;
+
+	Player* player;
 
 public:
 	Lancer();
@@ -61,13 +59,14 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 
 	void SetState(States newState);
-	void Move(float dt, Object* player);
+	void Move(float dt);
 
 	void SetColor(int index);
-	void DevPlayerMove(float dt);
 
 	void UpdateIdle();
 	void UpdateMove();
 	void UpdateAttack();
+
+	void SetPlayer(Player* player);
 };
 

@@ -1,9 +1,10 @@
 #include "Lancer.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/InputMgr.h"
+#include "Player.h"
 
 Lancer::Lancer()
-	: curState(States::None), speed(300.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
+	: curState(States::None), speed(200.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
 {
 }
 
@@ -29,9 +30,8 @@ void Lancer::Init()
 	spear = new SpriteObj();
 	spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
 	spear->SetOrigin(Origins::MC);
-	spear->SetScale({2.5, 2.5});
 
-	SetScale({ 3, 3 });
+
 	SetState(States::RightIdle);
 
 
@@ -40,7 +40,6 @@ void Lancer::Init()
 	lancerAttackImage = new SpriteObj();
 	lancerAttackImage->SetHitBox((FloatRect)tempSpearImage.GetTextureRect());
 	lancerAttackImage->SetOrigin(Origins::MC);
-	lancerAttackImage->SetScale({ 2, 2 });
 	spearAnimation.SetTarget(&lancerAttackImage->GetSprite());
 	spearAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
 	
@@ -50,17 +49,6 @@ void Lancer::Init()
 	texColorTable.loadFromFile("graphics/LancerColorIndex.png");
 	SetColor(3);
 
-
-	// temp player
-	player = new Object();
-	player->SetHitBox(FloatRect(0, 0, 50, 50));
-	playerRec.setFillColor(Color::White);
-	playerRec.setSize({50, 50});
-	player->SetPos({1920 / 2, 1080 / 2});
-
-	this->SetHitBox(this->GetGlobalBounds());
-	this->SetHitBoxOrigin(Origins::MC);
-	
 	SpriteObj::Init();
 }
 
@@ -77,11 +65,9 @@ void Lancer::Reset()
 void Lancer::Update(float dt)
 {
 	SpriteObj::Update(dt);
-
-	DevPlayerMove(dt);
-
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 700.f && curState != States::Attack)
-		Move(dt, player);
+	
+	if (Utils::Distance(player->GetPos(), GetPos()) <= 500.f && curState != States::Attack)
+		Move(dt);
 
 	attackDelay -= dt;
 
@@ -109,7 +95,6 @@ void Lancer::Update(float dt)
 		lastDir = direction;
 	}
 
-	player->Update(dt);
 	animation.Update(dt);
 	spearAnimation.Update(dt);
 }
@@ -123,8 +108,7 @@ void Lancer::Draw(RenderWindow& window)
 		if (attackDelay <= 1.f)
 			window.draw(lancerAttackImage->GetSprite(), &shader);
 	}
-	window.draw(playerRec);
-	player->Draw(window);
+
 	Object::Draw(window);
 	window.draw(sprite, &shader);
 }
@@ -198,14 +182,18 @@ void Lancer::SetState(States newState)
 	}
 }
 
-void Lancer::Move(float dt, Object* player)
+void Lancer::Move(float dt)
 {
-	if (Utils::EqualFloat(direction.x, 0.f))
+	if (Utils::Distance(player->GetPos(), GetPos()) <= 500.f)
 	{
 		player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
 		player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
+	}
 
+	if (!Utils::EqualFloat(direction.x, 0.f))
+	{
 		auto move = Utils::Normalize(player->GetPos() - GetPos());
+
 		Translate({ dt * speed * move });
 
 		if (lastDir.x < 0.f)
@@ -213,6 +201,8 @@ void Lancer::Move(float dt, Object* player)
 		if (lastDir.x > 0.f)
 			SetState(States::RightMove);
 	}
+
+	cout << direction.x << endl;
 
 	if (Utils::EqualFloat(direction.x, 0.f))
 	{
@@ -228,49 +218,6 @@ void Lancer::SetColor(int index)
 	paletteIndex = (paletteIndex - index) % paletteSize;
 	shader.setUniform("colorTable", texColorTable);
 	shader.setUniform("paletteIndex", (float)paletteIndex / paletteSize);
-}
-
-void Lancer::DevPlayerMove(float dt)
-{
-	if (InputMgr::GetKeyDown(Keyboard::Left))
-	{
-		playerDir.x = -1;
-		playerDir.y = 0;
-		playerSpeed = 500.f;
-	}
-	else if (InputMgr::GetKeyDown(Keyboard::Right))
-	{
-		playerDir.x = 1;
-		playerDir.y = 0;
-		playerSpeed = 500.f;
-	}
-	else
-		direction.x = 0;
-
-	if (InputMgr::GetKeyDown(Keyboard::Up))
-	{
-		playerDir.y = -1;
-		playerDir.x = 0;
-		playerSpeed = 500.f;
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Down))
-	{
-		playerDir.y = 1;
-		playerDir.x = 0;
-		playerSpeed = 500.f;
-	}
-
-	if (InputMgr::GetKeyUp(Keyboard::Left) ||
-		InputMgr::GetKeyUp(Keyboard::Right) ||
-		InputMgr::GetKeyUp(Keyboard::Up) ||
-		InputMgr::GetKeyUp(Keyboard::Down))
-	{
-		playerSpeed = 0.f;
-	}
-
-	player->SetDirection(playerDir);
-	player->Translate({ dt * playerSpeed * playerDir.x, dt * playerSpeed * playerDir.y });
-	playerRec.setPosition(player->GetPos());
 }
 
 void Lancer::UpdateIdle()
@@ -292,24 +239,8 @@ void Lancer::UpdateMove()
 		SetState(States::Attack);
 		attackDelay = 2.f;
 	}
-
-	if (Utils::EqualFloat(direction.x, 0.f))
-	{
-		if (lastDir.x < 0.f)
-			SetState(States::LeftIdle);
-		if (lastDir.x > 0.f)
-			SetState(States::RightIdle);
-		return;
-	}
-
-	if (!Utils::EqualFloat(direction.x, lastDir.x))
-	{
-		if (lastDir.x < 0.f)
-			SetState(States::LeftMove);
-		if (lastDir.x > 0.f)
-			SetState(States::RightMove);
-	}
 }
+
 void Lancer::UpdateAttack()
 {
 	if (attackDelay <= 1.f && spearWait)
@@ -346,14 +277,29 @@ void Lancer::UpdateAttack()
 		SetState(States::None);
 		SetState(States::Attack);
 
-		if (Utils::Distance(player->GetPos(), GetPos()) >= 200.f)
+		if (Utils::Distance(player->GetPos(), GetPos()) >= 200.f &&
+			Utils::Distance(player->GetPos(), GetPos()) < 500.f)
 		{
 			if (lastDir.x < 0.f)
 				SetState(States::LeftMove);
 			if (lastDir.x > 0.f)
 				SetState(States::RightMove);
 		}
+
+		if (Utils::Distance(player->GetPos(), GetPos()) >= 500.f)
+		{
+			direction.x = 0;
+
+			if (lastDir.x < 0.f)
+				SetState(States::LeftIdle);
+			if (lastDir.x > 0.f)
+				SetState(States::RightIdle);
+			return;
+		}
 	}
 }
 
-// test
+void Lancer::SetPlayer(Player* player)
+{
+	this->player = player;
+}
