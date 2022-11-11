@@ -246,14 +246,14 @@ void Lancer::UpdateAttack()
 	if (attackDelay <= 1.f && spearWait)
 	{
 		spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpearWithArm.png"));
-		spear->SetPos(GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 65.f);
+		spear->SetPos(GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 20.f);
 		switch (spearPos)
 		{
 		case 1: case 2:
 			spear->SetPos({ spear->GetPos().x, spear->GetPos().y - 5.f}); // 좌우
 			break;
 		case 3: case 4:
-			spear->SetPos({ spear->GetPos().x + 10.f, spear->GetPos().y - 30.f }); // 상하
+			spear->SetPos({ spear->GetPos().x + 5.f, spear->GetPos().y - 5.f }); // 상하
 			break;
 		}
 
@@ -266,7 +266,7 @@ void Lancer::UpdateAttack()
 		spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
 		spear->SetPos({ GetPos().x, GetPos().y });
 		if (spearPos == 3 || spearPos == 4)
-			spear->SetPos({ spear->GetPos().x + 20.f, spear->GetPos().y });
+			spear->SetPos({ spear->GetPos().x + 7.f, spear->GetPos().y });
 		playerLastPos = player->GetPos();
 		spearWait = true;
 	}
