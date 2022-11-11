@@ -28,6 +28,7 @@ void Scene::Release()
 
 void Scene::Enter()
 {
+
 }
 
 void Scene::Exit()

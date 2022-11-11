@@ -38,6 +38,8 @@ private:
 	static int mouseWheelMoved;
 
 	static Vector2f mousePos;
+	static Vector2f prevMousePos;
+	static Vector2f mousePosDisplacement;
 
 public:
 	static void Init();
@@ -59,6 +61,7 @@ public:
 	static list<Mouse::Button> GetMouseIngList() { return ingMouse; }
 
 	static const Vector2f& GetMousePos();
+	static const Vector2f& GetMousePosDisplacement();
 
 	static float GetAxis(Axis axis);
 	static float GetAxisRaw(Axis axis);

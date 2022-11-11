@@ -9,6 +9,9 @@ protected:
 	
 	VertexArrayObj* tileMap;
 	RectangleShape boldTile;
+
+
+
 public:
 	MapToolScene();
 	virtual ~MapToolScene();

@@ -2,6 +2,7 @@
 #include "../GameObject/VertexArrayObj.h"
 #include "../Framework/Framework.h"
 #include "../Framework/InputMgr.h"
+#include "../Ui/MapToolUiMgr.h"
 #include <math.h>
 //#include "../SFML-2.5.1/include/SFML/Graphics.hpp"
 
@@ -27,15 +28,27 @@ void MapToolScene::Init()
 	boldTile.setOutlineColor(Color::Magenta);
 	boldTile.setFillColor({0, 0, 0, 0});
 
-
+	uiMgr = new MapToolUiMgr();
+	uiMgr->Init();
 }
 
 void MapToolScene::Release()
 {
+	Scene::Release();
+	if (uiMgr != nullptr)
+	{
+		uiMgr->Release();
+		delete uiMgr;
+	}
 }
 
 void MapToolScene::Reset()
 {
+	for (auto& obj : objList)
+	{
+		obj->Reset();
+	}
+	uiMgr->Reset();
 }
 
 void MapToolScene::Enter()
@@ -44,8 +57,7 @@ void MapToolScene::Enter()
 	worldView.setSize(size);
 	worldView.setCenter(size.x * 0.5f, size.y * 0.5f);
 	uiView.setSize(size);
-	
-
+	uiView.setCenter(size.x * 0.5f, size.y * 0.5f);
 }
 
 void MapToolScene::Exit()
@@ -65,20 +77,18 @@ void MapToolScene::Update(float dt)
 		Vector2f size = worldView.getSize();
 		worldView.setSize(size.x * 0.95f, size.y * 0.95f);
 	}
-	if (InputMgr::GetKeyDown(Keyboard::W))
-		worldView.move(0.f, -75.f);
-	if (InputMgr::GetKeyDown(Keyboard::S))
-		worldView.move(0.f, 75.f);
-	if (InputMgr::GetKeyDown(Keyboard::A))
-		worldView.move(-75.f, 0.f);
-	if (InputMgr::GetKeyDown(Keyboard::D))
-		worldView.move(75.f, 0.f);
+	if (InputMgr::GetMouseButton(Mouse::Middle))
+	{
+		Vector2f pos = InputMgr::GetMousePosDisplacement();
+		worldView.setCenter(worldView.getCenter() + pos);
+	}
 
 	float boldTilePosX = floor(objMousePos.x / 64) * 64;
 	float boldTilePosY = floor(objMousePos.y / 64) * 64;
 	boldTile.setPosition({ boldTilePosX,boldTilePosY });
 	//0~63을 0으로 강제한다.
 	Scene::Update(dt);	
+	uiMgr->Update(dt);
 
 }
 
@@ -87,6 +97,9 @@ void MapToolScene::Draw(RenderWindow& window)
 	Scene::Draw(window);
 	tileMap->Draw(window);
 	window.draw(boldTile);
+
+	window.setView(uiView);
+	uiMgr->Draw(window);
 }
 
 void MapToolScene::CreateTileMap(int rows, int cols)

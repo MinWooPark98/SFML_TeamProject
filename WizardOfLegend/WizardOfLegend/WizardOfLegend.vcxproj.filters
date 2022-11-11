@@ -78,7 +78,19 @@
     <ClCompile Include="GameObject\VertexArrayObj.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Ui\MapToolUi.cpp">
+    <ClCompile Include="Ui\MapToolUiMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Tile.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Collider.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Stable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Ground.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -155,7 +167,19 @@
     <ClInclude Include="GameObject\VertexArrayObj.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Ui\MapToolUi.h">
+    <ClInclude Include="Ui\MapToolUiMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Tile.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Collider.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Stable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Ground.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

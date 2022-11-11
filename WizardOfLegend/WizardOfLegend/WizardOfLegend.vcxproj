@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject\Collider.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
     <ClCompile Include="Framework\RayCast.cpp" />
@@ -158,9 +159,12 @@
     <ClCompile Include="Framework\Utils.cpp" />
     <ClCompile Include="GameObject\TextObj.cpp" />
     <ClCompile Include="GameObject\VertexArrayObj.cpp" />
+    <ClCompile Include="GameObject\Ground.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
-    <ClCompile Include="Ui\MapToolUi.cpp" />
+    <ClCompile Include="GameObject\Tile.cpp" />
+    <ClCompile Include="GameObject\Stable.cpp" />
+    <ClCompile Include="Ui\MapToolUiMgr.cpp" />
     <ClCompile Include="Scene\MapToolScene.cpp" />
     <ClCompile Include="Scene\PlayScene.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
@@ -172,6 +176,7 @@
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="GameObject\Collider.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
     <ClInclude Include="GameObject\DragRectTile.h" />
@@ -187,7 +192,10 @@
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="GameObject\TextObj.h" />
     <ClInclude Include="GameObject\VertexArrayObj.h" />
-    <ClInclude Include="Ui\MapToolUi.h" />
+    <ClInclude Include="GameObject\Tile.h" />
+    <ClInclude Include="GameObject\Stable.h" />
+    <ClInclude Include="GameObject\Ground.h" />
+    <ClInclude Include="Ui\MapToolUiMgr.h" />
     <ClInclude Include="Scene\MapToolScene.h" />
     <ClInclude Include="Scene\PlayScene.h" />
     <ClInclude Include="Scene\Scene.h" />
