@@ -43,8 +43,8 @@ protected:
 	bool bowWait = false;
 	Vector2f playerLastPos;
 	int bowPos;
-	//Animator bowAnimation;
-	SpriteObj* AttackImage;
+	Animator bowAnimation;
+	SpriteObj* arrow;
 
 	Player* player;
 
@@ -65,7 +65,7 @@ public:
 
 	void UpdateIdle();
 	void UpdateMove();
-	void UpdateAttack();
+	void UpdateAttack(float dt);
 
 	void SetPlayer(Player* player);
 

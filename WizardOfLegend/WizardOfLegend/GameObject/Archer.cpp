@@ -28,16 +28,17 @@ void Archer::Init()
 	bow = new SpriteObj();
 	bow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ArcherAttackRelease3.png"));
 	bow->SetOrigin(Origins::MC);
-
+	bowAnimation.SetTarget(&bow->GetSprite());
+	bowAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("BowPull"));
+	bowAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("BowShoot"));
 
 	SetState(States::RightIdle);
 
 
-	SpriteObj tempArrowImage;
-	tempArrowImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/Arrow.png"));
-	AttackImage = new SpriteObj();
-	AttackImage->SetHitBox((FloatRect)tempArrowImage.GetTextureRect());
-	AttackImage->SetOrigin(Origins::MC);
+	arrow = new SpriteObj();
+	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Arrow.png"));
+	arrow->SetHitBox((FloatRect)arrow->GetTextureRect());
+	arrow->SetOrigin(Origins::MC);
 
 
 
@@ -78,7 +79,7 @@ void Archer::Update(float dt)
 		UpdateMove();
 		break;
 	case Archer::States::Attack:
-		UpdateAttack();
+		UpdateAttack(dt);
 		break;
 	case Archer::States::Hit:
 		SetState(States::Hit);
@@ -94,7 +95,7 @@ void Archer::Update(float dt)
 	}
 
 	animation.Update(dt);
-	//bowAnimation.Update(dt);
+	bowAnimation.Update(dt);
 }
 
 void Archer::Draw(RenderWindow& window)
@@ -104,11 +105,12 @@ void Archer::Draw(RenderWindow& window)
 		window.draw(bow->GetSprite(), &shader);
 
 		if (attackDelay <= 1.f)
-			window.draw(AttackImage->GetSprite(), &shader);
+			arrow->Draw(window);
 	}
-
+	
 	Object::Draw(window);
 	window.draw(sprite, &shader);
+	arrow->Draw(window);
 }
 
 void Archer::SetState(States newState)
@@ -133,18 +135,13 @@ void Archer::SetState(States newState)
 		animation.Play("ArcherRightRun");
 		break;
 	case Archer::States::Attack:
-		bow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
-		AttackImage->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
-
 		if (player->GetPos().x >= GetPos().x)
 		{
-			animation.Play("ArcherRightAttack");
 			attackDelay = 2.f;
 			return;
 		}
 		if (player->GetPos().x < GetPos().x)
 		{
-			animation.Play("ArcherLeftAttack");
 			attackDelay = 2.f;
 			return;
 		}
@@ -217,17 +214,36 @@ void Archer::UpdateMove()
 	}
 }
 
-void Archer::UpdateAttack()
+void Archer::UpdateAttack(float dt)
 {
-	bow->SetPos(GetPos());
+	if (attackDelay >= 1.f)
+	{
+		bow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
+		arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
+		arrow->SetPos(GetPos());
+		bow->SetPos(GetPos());
+
+		if (player->GetPos().x >= GetPos().x)
+			animation.Play("ArcherRightAttack");
+		if (player->GetPos().x < GetPos().x)
+			animation.Play("ArcherLeftAttack");
+
+		playerLastPos = player->GetPos();
+	}
+	else
+	{
+		auto move = Utils::Normalize(playerLastPos - arrow->GetPos());
+		arrow->Translate({ dt * speed * move * 2.f});
+	}
+
 	if (attackDelay <= 1.f && bowWait)
 	{
+		bowAnimation.Play("BowShoot");
 		bowWait = false;
-
 	}
 	else if (attackDelay >= 1.f && !bowWait)
 	{
-		playerLastPos = player->GetPos();
+		bowAnimation.Play("BowPull");
 		bowWait = true;
 	}
 
@@ -254,6 +270,7 @@ void Archer::UpdateAttack()
 				SetState(States::LeftIdle);
 			if (lastDir.x > 0.f)
 				SetState(States::RightIdle);
+
 			return;
 		}
 	}

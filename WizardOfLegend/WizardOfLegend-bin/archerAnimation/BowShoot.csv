@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-BowShootRight,0,10,,,,,,
+BowShoot,0,10,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/ArcherAttackRelease1.png,0,0,19,29,9.5,14.5,0,0

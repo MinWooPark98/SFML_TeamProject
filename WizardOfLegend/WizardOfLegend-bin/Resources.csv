@@ -69,10 +69,8 @@ archerAnimation/ArcherLeftRun.csv,3
 archerAnimation/ArcherRightAttack.csv,3
 archerAnimation/ArcherRightIdle.csv,3
 archerAnimation/ArcherRightRun.csv,3
-archerAnimation/BowPullLeft.csv,3
-archerAnimation/BowPullRight.csv,3
-archerAnimation/BowShootLeft.csv,3
-archerAnimation/BowShootRight.csv,3
+archerAnimation/BowPull.csv,3
+archerAnimation/BowShoot.csv,3
 archerAnimation/ArcherRightHit.csv,3
 archerAnimation/ArcherLeftHit.csv,3
 archerAnimation/ArcherRightDie.csv,3
