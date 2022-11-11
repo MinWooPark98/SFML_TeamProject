@@ -163,7 +163,6 @@
     <ClCompile Include="GameObject\Ground.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
-    <ClCompile Include="GameObject\Tile.cpp" />
     <ClCompile Include="GameObject\Stable.cpp" />
     <ClCompile Include="Ui\MapToolUiMgr.cpp" />
     <ClCompile Include="Scene\MapToolScene.cpp" />
@@ -194,7 +193,6 @@
     <ClInclude Include="GameObject\TextObj.h" />
     <ClInclude Include="GameObject\Lancer.h" />
     <ClInclude Include="GameObject\VertexArrayObj.h" />
-    <ClInclude Include="GameObject\Tile.h" />
     <ClInclude Include="GameObject\Stable.h" />
     <ClInclude Include="GameObject\Ground.h" />
     <ClInclude Include="Ui\MapToolUiMgr.h" />
