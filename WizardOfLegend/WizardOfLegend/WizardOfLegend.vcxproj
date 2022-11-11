@@ -158,12 +158,9 @@
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Framework\Utils.cpp" />
     <ClCompile Include="GameObject\TextObj.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="GameObject\Lancer.cpp" />
-=======
     <ClCompile Include="GameObject\VertexArrayObj.cpp" />
     <ClCompile Include="GameObject\Ground.cpp" />
->>>>>>> HanSangWoon
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="GameObject\Tile.cpp" />
@@ -195,16 +192,13 @@
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="GameObject\TextObj.h" />
-<<<<<<< HEAD
     <ClInclude Include="GameObject\Lancer.h" />
-=======
     <ClInclude Include="GameObject\VertexArrayObj.h" />
     <ClInclude Include="GameObject\Tile.h" />
     <ClInclude Include="GameObject\Stable.h" />
     <ClInclude Include="GameObject\Ground.h" />
     <ClInclude Include="Ui\MapToolUiMgr.h" />
     <ClInclude Include="Scene\MapToolScene.h" />
->>>>>>> HanSangWoon
     <ClInclude Include="Scene\PlayScene.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="GameObject\SpriteObj.h" />

@@ -72,9 +72,7 @@
     <ClCompile Include="Scene\PlayScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="GameObject\Lancer.cpp">
-=======
     <ClCompile Include="Scene\MapToolScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -94,7 +92,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GameObject\Ground.cpp">
->>>>>>> HanSangWoon
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -165,9 +162,7 @@
     <ClInclude Include="Scene\PlayScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="GameObject\Lancer.h">
-=======
     <ClInclude Include="Scene\MapToolScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -187,7 +182,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\Ground.h">
->>>>>>> HanSangWoon
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
