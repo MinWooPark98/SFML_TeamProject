@@ -60,8 +60,6 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
-
-	void Die();
 	void SetState(States newState);
 	void Move(float dt, Object* player);
 

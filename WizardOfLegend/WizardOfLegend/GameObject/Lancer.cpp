@@ -34,12 +34,13 @@ void Lancer::Init()
 	SetScale({ 3, 3 });
 	SetState(States::RightIdle);
 
+
 	SpriteObj tempSpearImage;
 	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerAttackEffect2.png"));
 	lancerAttackImage = new SpriteObj();
+	lancerAttackImage->SetHitBox((FloatRect)tempSpearImage.GetTextureRect());
 	lancerAttackImage->SetOrigin(Origins::MC);
 	lancerAttackImage->SetScale({ 2, 2 });
-	lancerAttackImage->SetHitBox((FloatRect)tempSpearImage.GetTextureRect());
 	spearAnimation.SetTarget(&lancerAttackImage->GetSprite());
 	spearAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
 	
@@ -126,11 +127,6 @@ void Lancer::Draw(RenderWindow& window)
 	player->Draw(window);
 	Object::Draw(window);
 	window.draw(sprite, &shader);
-}
-
-void Lancer::Die()
-{
-	this->SetActive(false);
 }
 
 void Lancer::SetState(States newState)
@@ -322,17 +318,11 @@ void Lancer::UpdateAttack()
 		spear->SetPos(GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 65.f);
 		switch (spearPos)
 		{
-		case 1:
-			spear->SetPos({ spear->GetPos().x, spear->GetPos().y - 5.f}); // ©Л
+		case 1: case 2:
+			spear->SetPos({ spear->GetPos().x, spear->GetPos().y - 5.f}); // аб©Л
 			break;
-		case 2:
-			spear->SetPos({ spear->GetPos().x, spear->GetPos().y - 5.f }); // аб
-			break;
-		case 3:
-			spear->SetPos({ spear->GetPos().x + 10.f, spear->GetPos().y - 30.f }); // ╩С
-			break;
-		case 4:
-			spear->SetPos({ spear->GetPos().x + 10.f, spear->GetPos().y - 30.f }); // го
+		case 3: case 4:
+			spear->SetPos({ spear->GetPos().x + 10.f, spear->GetPos().y - 30.f }); // ╩Сго
 			break;
 		}
 
@@ -343,22 +333,9 @@ void Lancer::UpdateAttack()
 	else if (attackDelay >= 1.f && !spearWait)
 	{
 		spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
-
-		switch (spearPos)
-		{
-		case 1:
-			spear->SetPos({ GetPos().x, GetPos().y }); // ©Л
-			break;
-		case 2:
-			spear->SetPos({ GetPos().x, GetPos().y }); // аб
-			break;
-		case 3:
-			spear->SetPos({ GetPos().x + 25.f, GetPos().y }); // ╩С
-			break;
-		case 4:
-			spear->SetPos({ GetPos().x + 20.f, GetPos().y }); // го
-			break;
-		}
+		spear->SetPos({ GetPos().x, GetPos().y });
+		if (spearPos == 3 || spearPos == 4)
+			spear->SetPos({ spear->GetPos().x + 20.f, spear->GetPos().y });
 		playerLastPos = player->GetPos();
 		spearWait = true;
 	}
