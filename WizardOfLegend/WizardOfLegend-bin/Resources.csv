@@ -1,4 +1,5 @@
 id,"type(0: Texture, 1: Font, 2: Sound, 3: Animation Clip)"
+<<<<<<< HEAD
 graphics/LancerRun0.png,0
 graphics/LancerRun1.png,0
 graphics/LancerRun2.png,0
@@ -75,3 +76,6 @@ archerAnimation/ArcherRightHit.csv,3
 archerAnimation/ArcherLeftHit.csv,3
 archerAnimation/ArcherRightDie.csv,3
 archerAnimation/ArcherLeftDie.csv,3
+=======
+graphics/Map/MapToolBook.png,0
+>>>>>>> HanSangWoon

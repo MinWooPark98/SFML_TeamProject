@@ -16,6 +16,8 @@ list<Mouse::Button> InputMgr::upMouse;
 int InputMgr::mouseWheelMoved;
 
 Vector2f InputMgr::mousePos;
+Vector2f InputMgr::mousePosDisplacement;
+Vector2f InputMgr::prevMousePos;
 
 void InputMgr::Init()
 {
@@ -79,6 +81,8 @@ void InputMgr::Update(float dt)
 	}
 
 	mousePos = (Vector2f)Mouse::getPosition(FRAMEWORK->GetWindow());
+	mousePosDisplacement = prevMousePos - mousePos;
+	prevMousePos = mousePos;
 }
 
 void InputMgr::ProcessInput(Event& ev)
@@ -186,4 +190,9 @@ float InputMgr::GetAxisRaw(Axis axis)
 	}
 	return 0.f;
 
+}
+
+const Vector2f& InputMgr::GetMousePosDisplacement()
+{
+	return mousePosDisplacement;
 }

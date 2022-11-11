@@ -11,6 +11,7 @@ public:
 	SpriteObj();
 	virtual ~SpriteObj();
 
+	virtual void Init() override;
 	virtual void Draw(RenderWindow& window) override;
 
 	void SetTexture(const Texture& tex);
@@ -20,6 +21,7 @@ public:
 
 	Sprite& GetSprite() { return sprite; }
 	virtual void SetPos(const Vector2f& pos) override;
+	virtual void SetPos(const float& x, const float& y) override;
 	void SetTextureRect(const IntRect& rect);
 	const IntRect& GetTextureRect()const;
 	void SetSize(Vector2f size);
@@ -30,5 +32,9 @@ public:
 
 	FloatRect GetGlobalBounds() const;
 	FloatRect GetLocalBounds() const;
+
+	void DebugCollision();
+	virtual bool CheckCollision(SpriteObj* otherObj);
+	virtual bool Collision(SpriteObj* otherObj);
 };
 

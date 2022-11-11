@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject\Collider.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
     <ClCompile Include="Framework\RayCast.cpp" />
@@ -157,9 +158,18 @@
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Framework\Utils.cpp" />
     <ClCompile Include="GameObject\TextObj.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="GameObject\Lancer.cpp" />
+=======
+    <ClCompile Include="GameObject\VertexArrayObj.cpp" />
+    <ClCompile Include="GameObject\Ground.cpp" />
+>>>>>>> HanSangWoon
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
+    <ClCompile Include="GameObject\Tile.cpp" />
+    <ClCompile Include="GameObject\Stable.cpp" />
+    <ClCompile Include="Ui\MapToolUiMgr.cpp" />
+    <ClCompile Include="Scene\MapToolScene.cpp" />
     <ClCompile Include="Scene\PlayScene.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="GameObject\SpriteObj.cpp" />
@@ -170,6 +180,7 @@
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="GameObject\Collider.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
     <ClInclude Include="GameObject\DragRectTile.h" />
@@ -184,7 +195,16 @@
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="GameObject\TextObj.h" />
+<<<<<<< HEAD
     <ClInclude Include="GameObject\Lancer.h" />
+=======
+    <ClInclude Include="GameObject\VertexArrayObj.h" />
+    <ClInclude Include="GameObject\Tile.h" />
+    <ClInclude Include="GameObject\Stable.h" />
+    <ClInclude Include="GameObject\Ground.h" />
+    <ClInclude Include="Ui\MapToolUiMgr.h" />
+    <ClInclude Include="Scene\MapToolScene.h" />
+>>>>>>> HanSangWoon
     <ClInclude Include="Scene\PlayScene.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="GameObject\SpriteObj.h" />

@@ -6,12 +6,28 @@
 using namespace std;
 using namespace sf;
 
+enum class Tag
+{
+	NONE,
+	PLAYER,
+	MONSTER,
+	COLLIDER,
+	GROUND,
+	BACKGROUND,
+	TRAP,
+	BREAKABLE,
+};
+
 class Object
 {
 protected:
 	int id;
 	string name;
+	int layer;
+	Tag tag;
+
 	bool enabled;
+	bool isVisible;
 
 	Vector2f position;
 	Vector2f direction;
@@ -25,6 +41,7 @@ protected:
 
 	RectangleShape hitbox;
 	bool isDevMode;
+
 public:
 	Object();
 	virtual ~Object();
@@ -40,6 +57,7 @@ public:
 	virtual void Reset();
 
 	virtual void SetPos(const Vector2f& pos);
+	virtual void SetPos(const float& x, const float& y);
 	virtual const Vector2f& GetPos() const;
 	virtual void Translate(const Vector2f& delta);
 
@@ -63,5 +81,19 @@ public:
 	virtual void SwitchDevMode() { isDevMode = !isDevMode; }
 
 	virtual void SetHitBox(const FloatRect rect);
+	virtual RectangleShape GetHitBox();
+
 	FloatRect GetHitBounds() const { return hitbox.getGlobalBounds(); }
+
+	void SetHidden();
+	void SetVisible();
+	bool GetIsVisible();
+
+	void SetLayer(int layer);
+	int Getlayer();
+
+	void SetTag(Tag tag);
+	Tag GetTag();
+	bool CompareTag(Tag tag);
+	
 };
