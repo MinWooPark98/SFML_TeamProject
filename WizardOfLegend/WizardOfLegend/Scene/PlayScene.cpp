@@ -17,29 +17,25 @@ void PlayScene::Init()
 {
 	Scene::Init();
 
+	Player* player = new Player();
+	player->Init();
+	objList.push_back(player);
+
 	lancer = new Lancer();
 	lancer->Init();
 	objList.push_back(lancer);
 
-	Player* player = new Player();
-	player->Init();
-	objList.push_back(player);
+	lancer->SetPlayer(player);
 }
 
 void PlayScene::Update(float dt)
 {
-	for (auto obj : objList)
-	{
-		obj->Update(dt);
-	}
+	Scene::Update(dt);
 }
 
 void PlayScene::Draw(RenderWindow& window)
 {
-	for (auto obj : objList)
-	{
-		obj->Draw(window);
-	}
+	Scene::Draw(window);
 }
 
 void PlayScene::Release()

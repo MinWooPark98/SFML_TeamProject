@@ -250,6 +250,7 @@ void Player::Action()
 {
 	SetState(States::Skill);
 	auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
+	cout << mousePos.x << " " << mousePos.y << endl;
 	auto angle = Utils::Angle(position, mousePos);
 	switch (currSkill->GetSetting()->playerAction)
 	{

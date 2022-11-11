@@ -44,7 +44,8 @@ bool SkillTable::Load()
 	vector<float> dmgDelay = doc.GetColumn<float>(13);
 	vector<float> duration = doc.GetColumn<float>(14);
 	vector<float> speed = doc.GetColumn<float>(15);
-	vector<string> animClipName = doc.GetColumn<string>(16);
+	vector<string> animClipName_1 = doc.GetColumn<string>(16);
+	vector<string> animClipName_2 = doc.GetColumn<string>(17);
 
 	for (int j = 0; j < doc.GetRowCount(); ++j)
 	{
@@ -52,8 +53,8 @@ bool SkillTable::Load()
 		{
 			cout << "duplicate values exist" << endl;
 			return false;
-		} 
-		table.insert({ skillName[j], { skillName[j], (Skill::Element)element[j], (Skill::AttackType)attackType[j], attackCntLim[j], attackInterval[j], distance[j],  (Projectile::AttackShape)attackShape[j], amplitude[j], (Projectile::MoveType)moveType[j], (Player::SkillAction)playerAction[j], skillDelay[j], dmgRatio[j], (Projectile::DamageType)dmgType[j], dmgDelay[j], duration[j], speed[j], animClipName[j] } });
+		}
+		table.insert({ skillName[j], { skillName[j], (Skill::Element)element[j], (Skill::AttackType)attackType[j], attackCntLim[j], attackInterval[j], distance[j],  (Projectile::AttackShape)attackShape[j], amplitude[j], (Projectile::MoveType)moveType[j], (Player::SkillAction)playerAction[j], skillDelay[j], dmgRatio[j], (Projectile::DamageType)dmgType[j], dmgDelay[j], duration[j], speed[j], vector<string>({ animClipName_1[j], animClipName_2[j] }) } });
 	}
 	return true;
 }

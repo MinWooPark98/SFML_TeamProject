@@ -41,10 +41,11 @@ protected:
 	float atkDelay;
 	float atkTimer;
 
-	float angle;	// wave 이동 혹은 원운동 시 사용
-	string clipName;
+	float angle;		// wave 이동 혹은 원운동 시 사용
+	float frequency;	// wave 이동 시 진동수(비율)
+	bool reverse;
+	vector<string> clipName;
 
-	Transform transform;
 	Vector2f startPos;
 	float amplitude;
 
@@ -57,7 +58,7 @@ public:
 	virtual void Update(float dt) override;
 
 	void SetAtkShape(AttackShape shape) { atkShape = shape; }
-	void SetAnimClip(const string& clipName);
+	void SetAnimClip(const vector<string>& clipName);
 	void Fire();
 	void SetMoving(bool moving) { isMoving = moving; }
 	bool GetMoving() const { return isMoving; }
@@ -69,8 +70,8 @@ public:
 	void SetAtkDelay(float delay) { atkDelay = delay; }
 	void SetAngle(float angle) { this->angle = angle; }
 	float GetAngle() const { return angle; }
-	void SetTransform(const Transform& transform) { this->transform = transform; }
 	void SetStartPos(const Vector2f& pos) { startPos = pos; }
 	void SetAmplitude(float amplitude) { this->amplitude = amplitude; }
+	void SetReverse(bool reverse) { this->reverse = reverse; }
 };
 

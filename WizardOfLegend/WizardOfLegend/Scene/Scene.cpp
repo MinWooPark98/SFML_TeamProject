@@ -8,7 +8,7 @@
 #include "../GameObject/Projectile.h"
 
 Scene::Scene(Scenes type)
-	: type(type), uiMgr(nullptr), isPause(false)
+	: type(type), uiMgr(nullptr), isPause(false), projectiles(nullptr)
 {
 }
 

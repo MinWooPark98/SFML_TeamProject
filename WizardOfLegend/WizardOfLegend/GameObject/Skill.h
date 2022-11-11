@@ -43,9 +43,9 @@ public:
 		float dmgDelay;							// 데미지 적용 딜레이
 		float duration;							// 스킬 지속 시간
 		float speed;							// shape_range 는 미적용, 스킬 이동 속도
-		string animClipName;					// 스킬 애니메이션 클립 string
+		vector<string> animClipName;					// 스킬 애니메이션 클립 string
 
-		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, Projectile::AttackShape attackShape, float amplitude, Projectile::MoveType moveType, Player::SkillAction playerAction, float skillDelay, float dmgRatio, Projectile::DamageType dmgType, float dmgDelay, float duration, float speed, string animClipName)
+		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, Projectile::AttackShape attackShape, float amplitude, Projectile::MoveType moveType, Player::SkillAction playerAction, float skillDelay, float dmgRatio, Projectile::DamageType dmgType, float dmgDelay, float duration, float speed, vector<string> animClipName)
 			:skillName(skillName), element(element), attackType(attackType), attackCntLim(attackCntLim), attackInterval(attackInterval), distance(distance), attackShape(attackShape), amplitude(amplitude), moveType(moveType), playerAction(playerAction), skillDelay(skillDelay), dmgRatio(dmgRatio), dmgType(dmgType), dmgDelay(dmgDelay), duration(duration), speed(speed), animClipName(animClipName) {}
 	};
 

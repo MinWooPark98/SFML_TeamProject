@@ -39,9 +39,7 @@ void Skill::Do()
 	obj->SetAnimClip(setting->animClipName);
 	obj->SetAtkShape(setting->attackShape);
 	obj->SetAngle(0.f);
-	obj->Fire();
 	projectiles.push_back(obj);
-	++attackCnt;
 	switch (subType)
 	{
 	case Skill::SubjectType::Player:
@@ -54,6 +52,8 @@ void Skill::Do()
 		case Projectile::AttackShape::Rotate:
 			break;
 		case Projectile::AttackShape::Wave:
+			if (((Player*)subject)->GetBackHand())
+				obj->SetReverse(true);
 			obj->SetDirection(skillDir);
 			obj->SetAmplitude(setting->amplitude);
 			break;
@@ -67,6 +67,8 @@ void Skill::Do()
 	default:
 		break;
 	}
+	obj->Fire();
+	++attackCnt;
 }
 
 void Skill::Update(float dt)

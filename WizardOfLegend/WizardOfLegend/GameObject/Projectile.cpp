@@ -3,7 +3,7 @@
 #include "../Framework/ResourceMgr.h"
 
 Projectile::Projectile()
-	:atkShape(AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), moveType(MoveType::OneWay), attackDmg(0), dmgType(DamageType::Once), isOnDelay(false), atkDelay(0.f), atkTimer(0.f), angle(0.f), amplitude(0.f)
+	:atkShape(AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), moveType(MoveType::OneWay), attackDmg(0), dmgType(DamageType::Once), isOnDelay(false), atkDelay(0.f), atkTimer(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false)
 {
 }
 
@@ -25,6 +25,10 @@ void Projectile::Reset()
 	movingTimer = 0.f;
 	atkTimer = 0.f;
 	isOnDelay = false;
+	angle = 0.f;
+	amplitude = 0.f;
+	frequency = 0.f;
+	reverse = false;
 }
 
 void Projectile::Update(float dt)
@@ -46,15 +50,13 @@ void Projectile::Update(float dt)
 	case Projectile::AttackShape::Wave:
 		{
 			angle += speed * dt;
-			position = startPos;
-			Transform translation;
-			translation.translate({ angle, amplitude * sin(angle) });
-			Transform rotation;
-			rotation.rotate(Utils::Angle(direction) + 90.f);
-			transform = translation * rotation;
-			position = transform.transformPoint(position);
-			cout << position.x << " " << position.y << endl;
-			SetPos(position);
+			sprite.setRotation(Utils::Angle(direction));
+			Transform transform;
+			frequency = 2.f;
+			transform.rotate(Utils::Angle(direction)).translate({ angle, amplitude * (float)(sin((angle) * (M_PI / 180.f) * frequency)) * (reverse ? -1.f : 1.f) });
+			sprite.setRotation(Utils::Angle(direction) + (90.f - fabs(((angle - (((int)(angle / (360.f / frequency))) * (360.f / frequency))) - (180.f / frequency)) * frequency)) * atan2(amplitude, 90.f) * (reverse ? 1.f : - 1.f) + (direction.x > 0.f ? 0.f : 180.f));
+			position = transform.transformPoint({ 0.f, 0.f });
+			SetPos(position + startPos);
 		}
 		break;
 	default:
@@ -81,14 +83,29 @@ void Projectile::Update(float dt)
 	}
 }
 
-void Projectile::SetAnimClip(const string& clipName)
+void Projectile::SetAnimClip(const vector<string>& clipName)
 {
-	animator->AddClip(*RESOURCE_MGR->GetAnimationClip(clipName));
+	for (auto& name : clipName)
+	{
+		animator->AddClip(*RESOURCE_MGR->GetAnimationClip(name));
+	}
 	this->clipName = clipName;
 }
 
 void Projectile::Fire()
 {
 	isMoving = true;
-	animator->Play(clipName);
+	switch (atkShape)
+	{
+	case Projectile::AttackShape::Range:
+		break;
+	case Projectile::AttackShape::Rotate:
+		break;
+	case Projectile::AttackShape::Wave:
+		if(direction.x < 0.f)
+			animator->Play(clipName[0]);
+		else
+			animator->Play(clipName[1]);
+		break;
+	}
 }

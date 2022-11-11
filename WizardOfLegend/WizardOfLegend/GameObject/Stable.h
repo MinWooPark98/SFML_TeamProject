@@ -1,6 +1,8 @@
 #pragma once
 #include "SpriteObj.h"
 
+class Player;
+
 enum class Interaction_Type
 { 
 	NONE,
