@@ -17,6 +17,7 @@ public:
 	};
 	enum class SkillAction
 	{
+		NormalSpell,
 		PBAoE,
 		JumpSlash,
 	};

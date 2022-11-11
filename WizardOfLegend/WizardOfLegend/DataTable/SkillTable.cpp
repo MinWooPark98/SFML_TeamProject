@@ -53,7 +53,7 @@ bool SkillTable::Load()
 			cout << "duplicate values exist" << endl;
 			return false;
 		} 
-		table.insert({ skillName[j], { skillName[j], (Skill::Element)element[j], (Skill::AttackType)attackType[j], attackCntLim[j], attackInterval[j], distance[j],  (Projectile::AttackShape)attackShape[j], amplitude[j], (Skill::MoveType)moveType[j], (Player::SkillAction)playerAction[j], skillDelay[j], dmgRatio[j], (Projectile::DamageType)dmgType[j], dmgDelay[j], duration[j], speed[j], animClipName[j] } });
+		table.insert({ skillName[j], { skillName[j], (Skill::Element)element[j], (Skill::AttackType)attackType[j], attackCntLim[j], attackInterval[j], distance[j],  (Projectile::AttackShape)attackShape[j], amplitude[j], (Projectile::MoveType)moveType[j], (Player::SkillAction)playerAction[j], skillDelay[j], dmgRatio[j], (Projectile::DamageType)dmgType[j], dmgDelay[j], duration[j], speed[j], animClipName[j] } });
 	}
 	return true;
 }

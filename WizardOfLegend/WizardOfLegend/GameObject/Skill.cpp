@@ -31,19 +31,22 @@ void Skill::Do()
 		return;
 	isDoing = true;
 	Projectile* obj = SCENE_MGR->GetCurrentScene()->GetProjectiles()->Get();
-	obj->SetAtkOnce(setting->dmgType);
+	obj->SetMoveType(setting->moveType);
+	obj->SetDmgType(setting->dmgType);
 	obj->SetAtkDelay(setting->dmgDelay);
 	obj->SetMovingDuration(setting->duration);
 	obj->SetSpeed(setting->speed);
 	obj->SetAnimClip(setting->animClipName);
+	obj->SetAtkShape(setting->attackShape);
 	obj->SetAngle(0.f);
+	obj->Fire();
 	projectiles.push_back(obj);
 	++attackCnt;
 	switch (subType)
 	{
 	case Skill::SubjectType::Player:
 		((Player*)subject)->Action();
-		skillDir = SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos();
+		skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
 		switch (setting->attackShape)
 		{
 		case Projectile::AttackShape::Range:
@@ -55,7 +58,7 @@ void Skill::Do()
 			obj->SetAmplitude(setting->amplitude);
 			break;
 		}
-		obj->SetPos(subject->GetPos() + skillDir * setting->distance);
+		obj->SetStartPos(subject->GetPos() + skillDir * setting->distance);
 		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
 		break;
 	case Skill::SubjectType::Enemy:
@@ -68,27 +71,47 @@ void Skill::Do()
 
 void Skill::Update(float dt)
 {
-	if (!isDoing)
-		return;
-	isDoing = false;
-	skillTimer += dt;
+	if (setting == nullptr || subject == nullptr)
+		return; 
+	if(attackCnt != 0)
+		skillTimer += dt;
+
+	switch (setting->attackType)
+	{
+	case AttackType::SaveAttacks:
+		if (attackCnt > 0 && skillTimer >= setting->skillDelay / setting->attackCntLim)
+		{
+			--attackCnt;
+			skillTimer -= setting->skillDelay / setting->attackCntLim;
+		}
+		break;
+	default:
+		if (skillTimer >= setting->skillDelay)
+		{
+			attackCnt = 0;
+			skillTimer = 0.f;
+		}
+		break;
+	}
+
+	if (isDoing)
 	{
 		switch (setting->attackType)
 		{
 		case AttackType::Multiple:
-			if (attackCnt < setting->attackCntLim && attackTimer >= setting->attackInterval)
-				Do();
-			break;
 		case AttackType::SaveAttacks:
 			{
 				attackTimer += dt;
-				if (attackCnt > 0 && skillTimer >= setting->skillDelay)
+				if (attackCnt < setting->attackCntLim)
 				{
-					--attackCnt;
-					skillTimer -= setting->skillDelay;
+					if (attackTimer >= setting->attackInterval)
+					{
+						Do();
+						attackTimer = 0.f;
+					}
 				}
-				if (attackCnt < setting->attackCntLim && attackTimer >= setting->attackInterval)
-					Do();
+				else
+					isDoing = false;
 			}
 			break;
 		default:
@@ -96,27 +119,41 @@ void Skill::Update(float dt)
 		}
 	}
 	auto it = projectiles.begin();
+	if (isDoing && it == projectiles.end())
+		isDoing = false;
 	while(it != projectiles.end())
 	{
+		(*it)->Update(dt);
 		if (!(*it)->GetMoving())
 		{
 			(*it)->SetActive(false);
-			projectiles.erase(it);
+			it = projectiles.erase(it);
 			continue;
 		}
-		(*it)->Update(dt);
-		isDoing = true;
 		++it;
 	}
 
-	if (projectiles.empty())
+	if (isDoing && projectiles.empty())
 	{
 		switch (setting->playerAction)
 		{
+		case Player::SkillAction::PBAoE:
+			// 플레이어 애니메이션 및 상태 종료
+			break;
 		case Player::SkillAction::JumpSlash:
 			// 플레이어 포지션 이동, 종료
+			break;
 		default:
 			break;
 		}
+	}
+}
+
+void Skill::Draw(RenderWindow& window)
+{
+	for (auto projectile : projectiles)
+	{
+		if (projectile->GetActive())
+			projectile->Draw(window);
 	}
 }

@@ -4,6 +4,7 @@
 #include "../Framework/InputMgr.h"
 #include "Skill.h"
 #include "../Framework/Framework.h"
+#include "../Scene/SceneMgr.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
@@ -88,7 +89,7 @@ void Player::Init()
 		}
 	}
 	{
-		vector<string> clipIds = { "PBAoEDown", "PBAoELeft", "PBAoERight", "PBAoEUp" };
+		vector<string> clipIds = { "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp" };
 		for (int i = 0; i < clipIds.size(); ++i)
 		{
 			AnimationEvent ev;
@@ -102,8 +103,13 @@ void Player::Init()
 	SetState(States::Idle);
 
 	lastDir = { 0.f, 1.f };
-	skills.assign(6, new Skill());
+	for (int i = 0; i < 6; ++i)
+	{
+		skills.push_back(new Skill());
+	}
+	skills[5]->GetSetting();
 	skills[5]->SetSkill("DragonArc");
+	skills[5]->SetSubject(this, Skill::SubjectType::Player);
 
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
@@ -148,7 +154,7 @@ void Player::Update(float dt)
 			switch (keyDown)
 			{
 			case Keyboard::Space:
-				SetCurrSkill(skills[2]);
+ 				SetCurrSkill(skills[2]);
 				skills[2]->Do();
 				break;
 			case Keyboard::Q:
@@ -159,7 +165,7 @@ void Player::Update(float dt)
 				SetCurrSkill(skills[4]);
 				skills[4]->Do();
 				break;
-			case Keyboard::F:
+			case Keyboard::R:
 				SetCurrSkill(skills[5]);
 				skills[5]->Do();
 				break;
@@ -189,10 +195,7 @@ void Player::Update(float dt)
 
 	for (auto skill : skills)
 	{
-		if (skill != nullptr)
-		{
-			skill->Update(dt);
-		}
+		skill->Update(dt);
 	}
 }
 
@@ -200,6 +203,10 @@ void Player::Draw(RenderWindow& window)
 {
 	Object::Draw(window);
 	window.draw(sprite, &playerShader);
+	for (auto skill : skills)
+	{
+		skill->Draw(window);
+	}
 }
 
 void Player::UpdateIdle(float dt)
@@ -242,24 +249,23 @@ void Player::UpdateSkill(float dt)
 void Player::Action()
 {
 	SetState(States::Skill);
-
+	auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
+	auto angle = Utils::Angle(position, mousePos);
 	switch (currSkill->GetSetting()->playerAction)
 	{
-	case Player::SkillAction::PBAoE:
-		if (Utils::EqualFloat(lastDir.x, 0.f))
-		{
-			if (isBackHand)
-				lastDir.y > 0.f ? animator->Play("BackHandDown") : animator->Play("BackHandUp");
-			else
-				lastDir.y > 0.f ? animator->Play("ForeHandDown") : animator->Play("ForeHandUp");
-		}
+	case Player::SkillAction::NormalSpell:
+		if (angle > -135.f && angle <= -45.f)
+			isBackHand ? animator->Play("BackHandUp") : animator->Play("ForeHandUp");
+		else if (angle > -45.f && angle <= 45.f)
+			isBackHand ? animator->Play("BackHandRight") : animator->Play("ForeHandRight");
+		else if (angle > 45.f && angle <= 135.f)
+			isBackHand ? animator->Play("BackHandDown") : animator->Play("ForeHandDown");
 		else
-		{
-			if (isBackHand)
-				lastDir.x > 0.f ? animator->Play("BackHandRight") : animator->Play("BackHandLeft");
-			else
-				lastDir.x > 0.f ? animator->Play("ForeHandRight") : animator->Play("ForeHandLeft");
-		}
+			isBackHand ? animator->Play("BackHandLeft") : animator->Play("ForeHandLeft");
+		isBackHand = !isBackHand;
+		break;
+	case Player::SkillAction::PBAoE:
+		// 애니메이션 재생
 		break;
 	case Player::SkillAction::JumpSlash:
 		// 애니메이션 재생 및 이동

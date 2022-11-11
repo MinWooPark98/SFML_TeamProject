@@ -13,6 +13,11 @@ public:
 		Rotate,
 		Wave,
 	};
+	enum class MoveType
+	{
+		OneWay,
+		BackAndForth,
+	};
 	enum class DamageType
 	{
 		Once,
@@ -28,7 +33,7 @@ protected:
 	float movingDuration;
 	float movingTimer;
 	float speed;
-	bool skillReturn;
+	MoveType moveType;
 	int attackDmg;
 
 	DamageType dmgType;
@@ -58,8 +63,9 @@ public:
 	bool GetMoving() const { return isMoving; }
 	void SetMovingDuration(float duration) { movingDuration = duration; }
 	void SetSpeed(float speed) { this->speed = speed; }
+	void SetMoveType(MoveType type) { moveType = type; }
 	void SetAtkDmg(int atkDmg) { attackDmg = atkDmg; }
-	void SetAtkOnce(DamageType dmgtype) { dmgType = dmgtype; }
+	void SetDmgType(DamageType dmgtype) { dmgType = dmgtype; }
 	void SetAtkDelay(float delay) { atkDelay = delay; }
 	void SetAngle(float angle) { this->angle = angle; }
 	float GetAngle() const { return angle; }
