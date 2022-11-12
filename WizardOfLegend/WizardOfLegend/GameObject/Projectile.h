@@ -73,5 +73,6 @@ public:
 	void SetStartPos(const Vector2f& pos) { startPos = pos; }
 	void SetAmplitude(float amplitude) { this->amplitude = amplitude; }
 	void SetReverse(bool reverse) { this->reverse = reverse; }
+	void SetFrequency(float f) { frequency = f; }
 };
 

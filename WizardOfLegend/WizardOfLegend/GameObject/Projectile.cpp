@@ -52,7 +52,6 @@ void Projectile::Update(float dt)
 			angle += speed * dt;
 			sprite.setRotation(Utils::Angle(direction));
 			Transform transform;
-			frequency = 2.f;
 			transform.rotate(Utils::Angle(direction)).translate({ angle, amplitude * (float)(sin((angle) * (M_PI / 180.f) * frequency)) * (reverse ? -1.f : 1.f) });
 			sprite.setRotation(Utils::Angle(direction) + (90.f - fabs(((angle - (((int)(angle / (360.f / frequency))) * (360.f / frequency))) - (180.f / frequency)) * frequency)) * atan2(amplitude, 90.f) * (reverse ? 1.f : - 1.f) + (direction.x > 0.f ? 0.f : 180.f));
 			position = transform.transformPoint({ 0.f, 0.f });

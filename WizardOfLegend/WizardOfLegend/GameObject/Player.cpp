@@ -23,11 +23,23 @@ void Player::SetState(States state)
 	switch (state)
 	{
 	case Player::States::Idle:
-		if (Utils::EqualFloat(lastDir.x, 0.f))
+		{
+			auto angle = Utils::Angle(lastDir);
+			if (angle > -135.f && angle <= -45.f)
+				animator->Play("IdleUp");
+			else if (angle > -45.f && angle <= 45.f)
+				animator->Play("IdleRight");
+			else if (angle > 45.f && angle <= 135.f)
+				animator->Play("IdleDown");
+			else
+				animator->Play("IdleLeft");
+			break;
+		}
+		/*if (Utils::EqualFloat(lastDir.x, 0.f))
 			lastDir.y > 0.f ? animator->Play("IdleDown") : animator->Play("IdleUp");
 		else
 			lastDir.x > 0.f ? animator->Play("IdleRight") : animator->Play("IdleLeft"); 
-		break;
+		break;*/
 	case Player::States::Run:
 		accelTimer = 0.f;
 		if (Utils::EqualFloat(direction.x, 0.f))
@@ -120,13 +132,17 @@ void Player::Update(float dt)
 {
 	SpriteObj::Update(dt);
 	animator->Update(dt);
-	direction.x = 0.f;
-	direction.y = 0.f;
-	direction.x += Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D) ? 1 : 0;
-	direction.x += Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A) ? -1 : 0;
-	direction.y += Keyboard::isKeyPressed(Keyboard::Down) || Keyboard::isKeyPressed(Keyboard::S) ? 1 : 0;
-	direction.y += Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W) ? -1 : 0;
-	direction = Utils::Normalize(direction);
+
+	if (currState != States::Skill)
+	{
+		direction.x = 0.f;
+		direction.y = 0.f;
+		direction.x += Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D) ? 1 : 0;
+		direction.x += Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A) ? -1 : 0;
+		direction.y += Keyboard::isKeyPressed(Keyboard::Down) || Keyboard::isKeyPressed(Keyboard::S) ? 1 : 0;
+		direction.y += Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W) ? -1 : 0;
+		direction = Utils::Normalize(direction);
+	}
 	
 	if (currState == States::Idle || currState == States::Run)
 	{
@@ -250,8 +266,10 @@ void Player::Action()
 {
 	SetState(States::Skill);
 	auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
-	cout << mousePos.x << " " << mousePos.y << endl;
-	auto angle = Utils::Angle(position, mousePos);
+	direction = mousePos - position;
+	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
+		lastDir = direction;
+	auto angle = Utils::Angle(direction);
 	switch (currSkill->GetSetting()->playerAction)
 	{
 	case Player::SkillAction::NormalSpell:
