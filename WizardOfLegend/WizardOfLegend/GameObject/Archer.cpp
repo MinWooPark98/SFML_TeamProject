@@ -111,11 +111,12 @@ void Archer::Draw(RenderWindow& window)
 
 		if (attackDelay >= attackStart)
 			window.draw(arrowDir);
+
+		arrow->Draw(window);
 	}
 	
 	Object::Draw(window);
 	window.draw(sprite, &shader);
-	arrow->Draw(window);
 }
 
 void Archer::SetState(States newState)
