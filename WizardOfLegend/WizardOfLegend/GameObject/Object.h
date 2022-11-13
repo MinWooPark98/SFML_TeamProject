@@ -42,6 +42,13 @@ protected:
 	RectangleShape hitbox;
 	bool isDevMode;
 
+	float attackScale;
+	float moveScale;
+	float speed;
+	float maxHp;
+	float curHp;
+	float damage;
+
 public:
 	Object();
 	virtual ~Object();
@@ -96,4 +103,23 @@ public:
 	Tag GetTag();
 	bool CompareTag(Tag tag);
 	
+
+	// monster
+	float GetSpeed() { return speed; };
+	void SetSpeed(float spd) { speed = spd; };
+
+	float GetMaxHp() { return maxHp; };
+	void SetMaxHp(float hp) { maxHp = hp; };
+
+	float GetCurHp() { return curHp; };
+	void SetCurHp(float hp) { curHp = hp; };
+
+	float GetDamage() { return damage; };
+	void SetDamage(float dmg) { damage = dmg; };
+
+	void SetAttackScale(float scale) { attackScale = scale; };
+	float GetAttackScale() const { return attackScale; };
+
+	void SetMoveScale(float scale) { moveScale = scale; };
+	float GetMoveScale() const { return moveScale; };
 };

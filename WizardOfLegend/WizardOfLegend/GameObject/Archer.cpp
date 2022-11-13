@@ -4,7 +4,7 @@
 #include "Player.h"
 
 Archer::Archer()
-	: curState(States::None), speed(0.f), lastDir(1.f, 0.f), bowDir(0, 0), curHp(100)
+	: curState(States::None), lastDir(1.f, 0.f), bowDir(0, 0)
 {
 }
 
@@ -49,6 +49,8 @@ void Archer::Init()
 	SetColor(3);
 
 	SetSpeed(200.f);
+	SetMoveScale(500.f);
+	SetAttackScale(400.f);
 
 	SpriteObj::Init();
 }
@@ -67,7 +69,7 @@ void Archer::Update(float dt)
 {
 	SpriteObj::Update(dt);
 
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 501.f && curState != States::Attack)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
 		Move(dt);
 
 	attackDelay -= dt;
@@ -159,7 +161,7 @@ void Archer::SetState(States newState)
 
 void Archer::Move(float dt)
 {
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 500.f)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale())
 	{
 		player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
 		player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
@@ -170,7 +172,6 @@ void Archer::Move(float dt)
 	if (!Utils::EqualFloat(direction.x, 0.f))
 	{
 		auto move = Utils::Normalize(player->GetPos() - GetPos());
-
 		Translate({ dt * speed * move });
 
 		if (lastDir.x < 0.f)
@@ -209,7 +210,7 @@ void Archer::UpdateIdle()
 
 void Archer::UpdateMove()
 {
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 400.f)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
 	{
 		SetState(States::Attack);
 		attackDelay = 2.f;
@@ -257,8 +258,8 @@ void Archer::UpdateAttack(float dt)
 		SetState(States::None);
 		SetState(States::Attack);
 
-		if (Utils::Distance(player->GetPos(), GetPos()) > 400.f &&
-			Utils::Distance(player->GetPos(), GetPos()) < 500.f)
+		if (Utils::Distance(player->GetPos(), GetPos()) > GetAttackScale() &&
+			Utils::Distance(player->GetPos(), GetPos()) < GetMoveScale())
 		{
 			if (lastDir.x < 0.f)
 				SetState(States::LeftMove);
@@ -266,7 +267,7 @@ void Archer::UpdateAttack(float dt)
 				SetState(States::RightMove);
 		}
 
-		if (Utils::Distance(player->GetPos(), GetPos()) >= 500.f)
+		if (Utils::Distance(player->GetPos(), GetPos()) >= GetMoveScale())
 		{
 			direction.x = 0;
 

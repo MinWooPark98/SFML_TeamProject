@@ -24,11 +24,6 @@ protected:
 	Vector2f lastDir;
 	Vector2f bowDir;
 
-	float speed;
-	float maxHp;
-	float curHp;
-	float damage;
-
 	int attackPos = 0;
 
 
@@ -72,18 +67,6 @@ public:
 	void UpdateAttack(float dt);
 
 	void SetPlayer(Player* player);
-
-	float GetSpeed() { return speed; };
-	void SetSpeed(float spd) { speed = spd; };
-
-	float GetMaxHp() { return maxHp; };
-	void SetMaxHp(float hp) { maxHp = hp; };
-
-	float GetCurHp() { return curHp; };
-	void SetCurHp(float hp) { curHp = hp; };
-
-	float GetDamage() { return damage; };
-	void SetDamage(float dmg) { damage = dmg; };
 
 	float GetArrowSpeed() { return arrowSpeed; };
 	void SetArrowSpeed(float spd) { arrowSpeed = spd; };

@@ -2,7 +2,7 @@
 #include "Object.h"
 #include "../Framework/Utils.h"
 
-class SpriteObj :public Object
+class SpriteObj : public Object
 {
 protected:
 	Sprite sprite;

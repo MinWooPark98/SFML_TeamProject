@@ -4,7 +4,7 @@
 #include "Player.h"
 
 Lancer::Lancer()
-	: curState(States::None), speed(0.f), lastDir(1.f, 0.f), SpireDir(0, 0), curHp(100)
+	: curState(States::None), lastDir(1.f, 0.f), SpireDir(0, 0)
 {
 }
 
@@ -44,12 +44,13 @@ void Lancer::Init()
 	spearAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
 	
 
-
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	texColorTable.loadFromFile("graphics/LancerColorIndex.png");
 	SetColor(3);
 
 	SetSpeed(200.f);
+	SetMoveScale(500.f);
+	SetAttackScale(150.f);
 
 	SpriteObj::Init();
 }
@@ -68,7 +69,7 @@ void Lancer::Update(float dt)
 {
 	SpriteObj::Update(dt);
 	
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 501.f && curState != States::Attack)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
 		Move(dt);
 
 	attackDelay -= dt;
@@ -186,7 +187,7 @@ void Lancer::SetState(States newState)
 
 void Lancer::Move(float dt)
 {
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 500.f)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale())
 	{
 		player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
 		player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
@@ -197,7 +198,6 @@ void Lancer::Move(float dt)
 	if (!Utils::EqualFloat(direction.x, 0.f))
 	{
 		auto move = Utils::Normalize(player->GetPos() - GetPos());
-
 		Translate({ dt * speed * move });
 
 		if (lastDir.x < 0.f)
@@ -236,7 +236,7 @@ void Lancer::UpdateIdle()
 
 void Lancer::UpdateMove()
 {
-	if (Utils::Distance(player->GetPos(), GetPos()) <= 150.f)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
 	{
 		SetState(States::Attack);
 		attackDelay = 2.f;
@@ -279,8 +279,8 @@ void Lancer::UpdateAttack()
 		SetState(States::None);
 		SetState(States::Attack);
 
-		if (Utils::Distance(player->GetPos(), GetPos()) > 150.f &&
-			Utils::Distance(player->GetPos(), GetPos()) < 500.f)
+		if (Utils::Distance(player->GetPos(), GetPos()) > GetAttackScale() &&
+			Utils::Distance(player->GetPos(), GetPos()) < GetMoveScale())
 		{
 			if (lastDir.x < 0.f)
 				SetState(States::LeftMove);
@@ -288,7 +288,7 @@ void Lancer::UpdateAttack()
 				SetState(States::RightMove);
 		}
 
-		if (Utils::Distance(player->GetPos(), GetPos()) >= 500.f)
+		if (Utils::Distance(player->GetPos(), GetPos()) >= GetMoveScale())
 		{
 			direction.x = 0;
 
