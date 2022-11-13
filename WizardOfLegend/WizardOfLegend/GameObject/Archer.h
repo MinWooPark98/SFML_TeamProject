@@ -19,33 +19,32 @@ public:
 	};
 
 protected:
+	// Monster
 	Animator animation;
 	States curState;
 	Vector2f lastDir;
+
+	// Bow, Arrow
+	SpriteObj* bow;
+	Animator bowAnimation;
 	Vector2f bowDir;
+	SpriteObj* arrow;
+	RectangleShape arrowDir;
+	int bowPos;
+	float arrowSpeed;
+	float attackDelay = 2.f;
+	float attackStart;
+	bool bowWait = false;
 
-	int attackPos = 0;
-
-
+	// Shader
 	Shader shader;
 	Texture texColorTable;
 	int paletteIndex = 44;
 	int paletteSize = 9;
 
-
-	SpriteObj* bow;
-	float attackDelay = 2.f;
-	bool bowWait = false;
-	Vector2f playerLastPos;
-	int bowPos;
-	Animator bowAnimation;
-	SpriteObj* arrow;
-
+	// Player
 	Player* player;
-
-	float arrowSpeed;
-
-	RectangleShape arrowDir;
+	Vector2f playerLastPos;
 
 public:
 	Archer();
@@ -70,4 +69,7 @@ public:
 
 	float GetArrowSpeed() { return arrowSpeed; };
 	void SetArrowSpeed(float spd) { arrowSpeed = spd; };
+
+	void SetAttackStartDelay(float delay) { attackStart = delay; };
+	float GetAttackStartDelay() { return attackStart; };
 };

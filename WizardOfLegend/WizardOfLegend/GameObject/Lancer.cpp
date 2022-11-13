@@ -4,7 +4,7 @@
 #include "Player.h"
 
 Lancer::Lancer()
-	: curState(States::None), lastDir(1.f, 0.f), SpireDir(0, 0)
+	: curState(States::None), lastDir(1.f, 0.f)
 {
 }
 
@@ -37,10 +37,10 @@ void Lancer::Init()
 
 	SpriteObj tempSpearImage;
 	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerAttackEffect2.png"));
-	lancerAttackImage = new SpriteObj();
-	lancerAttackImage->SetHitBox((FloatRect)tempSpearImage.GetTextureRect());
-	lancerAttackImage->SetOrigin(Origins::MC);
-	spearAnimation.SetTarget(&lancerAttackImage->GetSprite());
+	lancerAttackEffect = new SpriteObj();
+	lancerAttackEffect->SetHitBox((FloatRect)tempSpearImage.GetTextureRect());
+	lancerAttackEffect->SetOrigin(Origins::MC);
+	spearAnimation.SetTarget(&lancerAttackEffect->GetSprite());
 	spearAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
 	
 
@@ -109,7 +109,7 @@ void Lancer::Draw(RenderWindow& window)
 		window.draw(spear->GetSprite(), &shader);
 
 		if (attackDelay <= 1.f)
-			window.draw(lancerAttackImage->GetSprite(), &shader);
+			window.draw(lancerAttackEffect->GetSprite(), &shader);
 	}
 
 	Object::Draw(window);
@@ -139,7 +139,7 @@ void Lancer::SetState(States newState)
 		break;
 	case Lancer::States::Attack:
 		spear->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
-		lancerAttackImage->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
+		lancerAttackEffect->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 
 		if (Utils::Angle(player->GetPos(), GetPos()) >= -180 &&
 			Utils::Angle(player->GetPos(), GetPos()) <= -130 ||
@@ -259,7 +259,7 @@ void Lancer::UpdateAttack()
 			break;
 		}
 
-		lancerAttackImage->SetPos(spear->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 100.f);
+		lancerAttackEffect->SetPos(spear->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 100.f);
 		spearAnimation.Play("SpearMotion");
 		spearWait = false;
 	}

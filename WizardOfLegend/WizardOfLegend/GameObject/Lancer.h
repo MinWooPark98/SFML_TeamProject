@@ -19,28 +19,29 @@ public:
 	};
 
 protected:
+	// Monster
 	Animator animation;
 	States curState;
 	Vector2f lastDir;
-	Vector2f SpireDir;
 
+	// Spear
+	Animator spearAnimation;
 	SpriteObj* spear;
-
+	bool spearWait = false;
+	int spearPos;
 	int attackPos = 0;
+	float attackDelay = 2.f;
+	SpriteObj* lancerAttackEffect; // Attack Effect
 
+	// shader
 	Shader shader;
 	Texture texColorTable;
 	int paletteIndex = 59;
 	int paletteSize = 9;
 
-	float attackDelay = 2.f;
-	bool spearWait = false;
-	Vector2f playerLastPos;
-	int spearPos;
-	Animator spearAnimation;
-	SpriteObj* lancerAttackImage;
-
+	// player
 	Player* player;
+	Vector2f playerLastPos;
 
 public:
 	Lancer();

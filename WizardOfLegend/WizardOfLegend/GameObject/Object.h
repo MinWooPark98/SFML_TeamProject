@@ -106,7 +106,7 @@ public:
 
 	// monster
 	float GetSpeed() { return speed; };
-	void SetSpeed(float spd) { speed = spd; };
+	void SetSpeed(float spd) { speed = spd; };	
 
 	float GetMaxHp() { return maxHp; };
 	void SetMaxHp(float hp) { maxHp = hp; };

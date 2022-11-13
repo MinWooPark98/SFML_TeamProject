@@ -51,6 +51,7 @@ void Archer::Init()
 	SetSpeed(200.f);
 	SetMoveScale(500.f);
 	SetAttackScale(400.f);
+	SetAttackStartDelay(1.f);
 
 	SpriteObj::Init();
 }
@@ -108,7 +109,7 @@ void Archer::Draw(RenderWindow& window)
 	{
 		window.draw(bow->GetSprite(), &shader);
 
-		if (attackDelay >= 1.f)
+		if (attackDelay >= attackStart)
 			window.draw(arrowDir);
 	}
 	
@@ -219,7 +220,7 @@ void Archer::UpdateMove()
 
 void Archer::UpdateAttack(float dt)
 {
-	if (attackDelay >= 1.f)
+	if (attackDelay >= attackStart)
 	{
 		bow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
 		arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
@@ -237,16 +238,16 @@ void Archer::UpdateAttack(float dt)
 	}
 	else
 	{
-		auto move = Utils::Normalize(playerLastPos - arrow->GetPos());
-		arrow->Translate({ dt * arrowSpeed * move * 2.f});
+		auto shot = Utils::Normalize(playerLastPos - arrow->GetPos());
+		arrow->Translate({ dt * arrowSpeed * shot * 2.f});
 	}
 
-	if (attackDelay <= 1.f && bowWait)
+	if (attackDelay <= attackStart && bowWait)
 	{
 		bowAnimation.Play("BowShoot");
 		bowWait = false;
 	}
-	else if (attackDelay >= 1.f && !bowWait)
+	else if (attackDelay >= attackStart && !bowWait)
 	{
 		bowAnimation.Play("BowPull");
 		bowWait = true;
