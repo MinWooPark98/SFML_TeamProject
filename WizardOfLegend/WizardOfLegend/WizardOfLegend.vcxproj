@@ -165,6 +165,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="GameObject\Stable.cpp" />
+    <ClCompile Include="GameObject\TextButton.cpp" />
     <ClCompile Include="Ui\MapToolUiMgr.cpp" />
     <ClCompile Include="Scene\MapToolScene.cpp" />
     <ClCompile Include="GameObject\Player.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="GameObject\VertexArrayObj.h" />
     <ClInclude Include="GameObject\Stable.h" />
     <ClInclude Include="GameObject\Ground.h" />
+    <ClInclude Include="GameObject\TextButton.h" />
     <ClInclude Include="Ui\MapToolUiMgr.h" />
     <ClInclude Include="Scene\MapToolScene.h" />
     <ClInclude Include="GameObject\Player.h" />
