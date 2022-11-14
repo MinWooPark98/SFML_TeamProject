@@ -60,25 +60,6 @@ void Lancer::Update(float dt)
 		isAlive = false;
 	}
 
-	switch (curState)
-	{
-	case States::LeftIdle: case Lancer::States::RightIdle:
-		UpdateIdle();
-		break;
-	case States::LeftMove: case Lancer::States::RightMove:
-		UpdateMove(2.f);
-		break;
-	case States::Attack:
-		UpdateAttack(dt);
-		break;
-	case States::Hit:
-		SetState(States::Hit);
-		break;
-	case States::Die:
-		SetState(States::Die);
-		break;
-	}
-
 	if (!Utils::EqualFloat(direction.x, 0.f))
 	{
 		lastDir = direction;

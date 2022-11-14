@@ -25,6 +25,7 @@ public:
 		LeftMove,
 		RightMove,
 		Attack,
+		MoveAttack,
 		Hit,
 		Die,
 	};
@@ -36,7 +37,7 @@ protected:
 
 	SpriteObj* weapon;
 
-	float attackDelay = 2.f;
+	float attackDelay;
 
 	// shader
 	Shader shader;
@@ -45,6 +46,8 @@ protected:
 	int paletteSize;
 
 	float attackScale;
+	float moveAttackScale;
+	float escapeScale;
 	float moveScale;
 	float speed;
 	float maxHp;
@@ -58,8 +61,10 @@ protected:
 	MonsterType type;
 
 	float dieTimer;
-
 	bool isAlive = true;
+
+	// boss
+	bool superArmor = false;
 
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
@@ -84,11 +89,17 @@ public:
 	float GetDamage() { return damage; };
 	void SetDamage(float dmg) { damage = dmg; };
 
+	void SetMoveScale(float scale) { moveScale = scale; };
+	float GetMoveScale() const { return moveScale; };
+
 	void SetAttackScale(float scale) { attackScale = scale; };
 	float GetAttackScale() const { return attackScale; };
 
-	void SetMoveScale(float scale) { moveScale = scale; };
-	float GetMoveScale() const { return moveScale; };
+	void SetMoveAttackScale(float scale) { moveAttackScale = scale; };
+	float GetMoveAttackScale() const { return moveAttackScale; };
+
+	void SetEscapeScale(float scale) { escapeScale = scale; };
+	float GetEscapeScale() const { return escapeScale; };
 
 	void SetPaletteIndex(int index) { paletteIndex = index; };
 	void SetpaletteSize(int size) { paletteSize = size; };
@@ -101,13 +112,16 @@ public:
 	void NormalMonsterMove(float dt);
 
 	void UpdateIdle();
-	void UpdateMove(int attackDelay);
+	virtual void UpdateMove(int attackDelay);
 	virtual void UpdateAttack(float dt) = 0;
 	
 	void SetMonsterType(MonsterType t) { type = t; };
 
 	void SetIsAlive(bool set) { isAlive = set; };
 	bool GetIsAlive() const { return isAlive; };
+
+	void SetSuperArmor(bool set) { superArmor = set; };
+	bool GetSuperArmor() const { return superArmor; };
 
 	void SetStat(float spd, float cHp, float mHp, float dmg)
 	{

@@ -63,6 +63,7 @@ graphics/ArcherDeath5.png,0
 graphics/ArcherDeath6.png,0
 graphics/ArcherColorIndex.png,0
 graphics/Arrow.png,0
+graphics/ArrowLarge.png,0
 archerAnimation/ArcherLeftAttack.csv,3
 archerAnimation/ArcherLeftIdle.csv,3
 archerAnimation/ArcherLeftRun.csv,3

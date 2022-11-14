@@ -4,6 +4,7 @@
 #include "../GameObject/Player.h"
 #include "../GameObject/Projectile.h"
 #include "../GameObject/Archer.h"
+#include "../GameObject/HeavyBombingArcher.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -28,10 +29,17 @@ void PlayScene::Init()
 
 	Archer* archer = new Archer();
 	archer->Init();
+	archer->SetColor(3);
 	objList.push_back(archer);
+
+	HeavyBombingArcher* heavyBombingArcher = new HeavyBombingArcher();
+	heavyBombingArcher->Init();
+	heavyBombingArcher->SetColor(2);
+	objList.push_back(heavyBombingArcher);
 
 	lancer->SetPlayer(player);
 	archer->SetPlayer(player);
+	heavyBombingArcher->SetPlayer(player);
 }
 
 void PlayScene::Update(float dt)

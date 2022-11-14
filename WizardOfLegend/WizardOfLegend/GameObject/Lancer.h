@@ -1,7 +1,6 @@
 #pragma once
 #include "Enemy.h"
 
-class Player;
 class Lancer : public Enemy
 {
 protected:
@@ -21,9 +20,8 @@ public:
 	virtual void Reset() override { Enemy::Reset(); };
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
+	virtual void UpdateAttack(float dt) override;
 
 	void SetState(States newState);
-
-	virtual void UpdateAttack(float dt) override;
 };
 

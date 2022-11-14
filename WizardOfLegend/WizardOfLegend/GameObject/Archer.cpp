@@ -32,12 +32,12 @@ void Archer::Init()
 	arrow->SetOrigin(Origins::MC);
 	SetArrowSpeed(400.f);
 	arrowDir.setFillColor(Color::Red);
+	arrowDir.setOrigin({});
 	arrowDir.setSize({2, 1080});
 
 	SetPaletteIndex(44);
 	SetpaletteSize(9);
 	SetColorTable("graphics/ArcherColorIndex.png");
-	SetColor(3);
 
 	SetSpeed(200.f);
 	SetMoveScale(500.f);
@@ -53,7 +53,7 @@ void Archer::Update(float dt)
 {
 	Enemy::Update(dt);
 
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
+	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack && curState != States::MoveAttack)
 		NormalMonsterMove(dt);
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::L))
@@ -66,25 +66,6 @@ void Archer::Update(float dt)
 		isAlive = false;
 	}
 
-	switch (curState)
-	{
-	case Archer::States::LeftIdle: case Archer::States::RightIdle:
-		UpdateIdle();
-		break;
-	case Archer::States::LeftMove: case Archer::States::RightMove:
-		UpdateMove(2.f);
-		break;
-	case Archer::States::Attack:
-		UpdateAttack(dt);
-		break;
-	case Archer::States::Hit:
-		SetState(States::Hit);
-		break;
-	case Archer::States::Die:
-		SetState(States::Die);
-		break;
-	}
-
 	if (!Utils::EqualFloat(direction.x, 0.f))
 	{
 		lastDir = direction;
@@ -92,20 +73,19 @@ void Archer::Update(float dt)
 
 	animation.Update(dt);
 	bowAnimation.Update(dt);
-
-	cout << dieTimer << endl;
 }
 
 void Archer::Draw(RenderWindow& window)
 {
-	if (curState == States::Attack)
+	if (curState == States::Attack || curState == States::MoveAttack)
 	{
 		window.draw(weapon->GetSprite(), &shader);
 
 		if (attackDelay >= attackStart)
 			window.draw(arrowDir);
 
-		arrow->Draw(window);
+		if (curState == States::Attack)
+			arrow->Draw(window);
 	}
 
 	Object::Draw(window);
@@ -141,16 +121,7 @@ void Archer::SetState(States newState)
 		animation.Play("ArcherRightRun");
 		break;
 	case Archer::States::Attack:
-		if (player->GetPos().x >= GetPos().x)
-		{
-			attackDelay = 2.f;
-			return;
-		}
-		if (player->GetPos().x < GetPos().x)
-		{
-			attackDelay = 2.f;
-			return;
-		}
+		attackDelay = 2.f;
 		break;
 	case Archer::States::Hit:
 		lastDir.x < 0.f ? animation.Play("ArcherLeftHit") : animation.Play("ArcherRightHit");
@@ -169,11 +140,15 @@ void Archer::UpdateAttack(float dt)
 	if (attackDelay >= attackStart)
 	{
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
-		arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
-		arrowDir.setRotation(Utils::Angle(GetPos(), player->GetPos()) - 90);
-		arrow->SetPos(GetPos());
 		weapon->SetPos(GetPos());
 		arrowDir.setPosition(GetPos());
+		arrowDir.setRotation(Utils::Angle(GetPos(), player->GetPos()) - 90);
+
+		if (curState == States::Attack)
+		{
+			arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
+			arrow->SetPos(GetPos());
+		}
 
 		if (player->GetPos().x >= GetPos().x)
 			animation.Play("ArcherRightAttack");
@@ -184,9 +159,14 @@ void Archer::UpdateAttack(float dt)
 	}
 	else
 	{
-		auto shot = Utils::Normalize(playerLastPos - arrow->GetPos());
-		arrow->Translate({ dt * arrowSpeed * shot * 2.f});
+		if (curState == States::Attack)
+		{
+			auto shot = Utils::Normalize(playerLastPos - GetPos());
+			arrow->Translate({ dt * arrowSpeed * shot * 2.f });
+			// 히트박스 구현되면 화살 멈추게 해야함
+		}
 	}
+
 
 	if (attackDelay <= attackStart && bowWait)
 	{
@@ -203,15 +183,23 @@ void Archer::UpdateAttack(float dt)
 	if (attackDelay <= 0.f)
 	{
 		SetState(States::None);
-		SetState(States::Attack);
+
+		if (type == MonsterType::Normal)
+			SetState(States::Attack);
 
 		if (Utils::Distance(player->GetPos(), GetPos()) > GetAttackScale() &&
 			Utils::Distance(player->GetPos(), GetPos()) < GetMoveScale())
 		{
 			if (lastDir.x < 0.f)
+			{
 				SetState(States::LeftMove);
+				return;
+			}
 			if (lastDir.x > 0.f)
+			{
 				SetState(States::RightMove);
+				return;
+			}
 		}
 
 		if (Utils::Distance(player->GetPos(), GetPos()) >= GetMoveScale())
