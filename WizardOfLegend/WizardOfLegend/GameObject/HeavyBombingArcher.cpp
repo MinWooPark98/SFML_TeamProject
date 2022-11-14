@@ -14,6 +14,7 @@ void HeavyBombingArcher::Init()
 	SetPos({100, 100});
 	SetEscapeScale(100.f);
 	SetMoveAttackScale(300.f);
+	SetNormalAttackCount(2);
 	
 	for (int i = 0; i < smollArrowCount; i++)
 		smollArrow.push_back(new SpriteObj());
@@ -48,6 +49,14 @@ void HeavyBombingArcher::Draw(RenderWindow& window)
 
 void HeavyBombingArcher::UpdateAttack(float dt)
 {
+	if (attackDelay <= 0.f)
+	{
+		if (curState == States::Attack)
+			SetNormalAttackCount(GetNormalAttackCount() - 1);
+		else
+			SetNormalAttackCount(2);
+	}
+
 	Archer::UpdateAttack(dt);
 
 	if (curState == States::MoveAttack)

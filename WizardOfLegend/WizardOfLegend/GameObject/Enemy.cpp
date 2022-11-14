@@ -108,16 +108,23 @@ void Enemy::UpdateMove(int attackDelay)
 		return;
 	}
 
-	if (type == MonsterType::StageBoss)
+	if (type == MonsterType::StageBoss)	
 	{
-		if (Utils::Distance(player->GetPos(), GetPos()) <= GetEscapeScale())
-			SetState(States::MoveAttack);
+		if (normalAttackCount <= 0)
+		{
+			if (Utils::Distance(player->GetPos(), GetPos()) <= GetEscapeScale())
+				SetState(States::MoveAttack);
 
-		else if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveAttackScale())
-			SetState(States::MoveAttack);
+			else if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveAttackScale())
+				SetState(States::MoveAttack);
 
-		else if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
+			else if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
+				SetState(States::Attack);
+		}
+		else
+		{
 			SetState(States::Attack);
+		}
 
 		this->attackDelay = attackDelay;
 		return;

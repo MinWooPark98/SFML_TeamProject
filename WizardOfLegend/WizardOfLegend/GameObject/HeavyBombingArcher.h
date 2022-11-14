@@ -8,7 +8,6 @@ protected:
 	int smollArrowCount = 5;
 	float smollArrowDelay = 0.1f;
 	int count = 0;
-	int normalAttackCount = 2;
 
 public:
 	HeavyBombingArcher() {};

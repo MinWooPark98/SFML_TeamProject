@@ -53,6 +53,7 @@ protected:
 	float maxHp;
 	float curHp;
 	float damage;
+	int normalAttackCount;
 
 	// Player
 	Player* player;
@@ -100,6 +101,9 @@ public:
 
 	void SetEscapeScale(float scale) { escapeScale = scale; };
 	float GetEscapeScale() const { return escapeScale; };
+
+	void SetNormalAttackCount(int count) { normalAttackCount = count; };
+	int GetNormalAttackCount() const { return normalAttackCount; };
 
 	void SetPaletteIndex(int index) { paletteIndex = index; };
 	void SetpaletteSize(int size) { paletteSize = size; };
