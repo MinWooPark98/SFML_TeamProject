@@ -39,6 +39,7 @@ void Lancer::Init()
 	SetSpeed(200.f);
 	SetMoveScale(500.f);
 	SetAttackScale(150.f);
+	SetMonsterType(MonsterType::Normal);
 	weapon->SetOrigin(Origins::MC);
 }
 

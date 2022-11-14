@@ -55,6 +55,8 @@ protected:
 	Player* player;
 	Vector2f playerLastPos;
 
+	MonsterType type;
+
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
 	virtual ~Enemy() {};
@@ -97,5 +99,7 @@ public:
 	void UpdateIdle();
 	void UpdateMove(int attackDelay);
 	virtual void UpdateAttack(float dt) = 0;
+	
+	void SetMonsterType(MonsterType t) { type = t; };
 };
 

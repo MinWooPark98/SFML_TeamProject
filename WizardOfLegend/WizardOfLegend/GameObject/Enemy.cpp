@@ -6,6 +6,7 @@ void Enemy::Init()
 	position = { 0, 0 };
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	weapon = new SpriteObj();
+	type = MonsterType::None;
 }
 
 void Enemy::SetColor(int index)
@@ -25,23 +26,26 @@ void Enemy::NormalMonsterMove(float dt)
 	else
 		direction.x = 0;
 
-	if (!Utils::EqualFloat(direction.x, 0.f))
+	if (type == MonsterType::Normal)
 	{
-		auto move = Utils::Normalize(player->GetPos() - GetPos());
-		Translate({ dt * speed * move });
+		if (!Utils::EqualFloat(direction.x, 0.f))
+		{
+			auto move = Utils::Normalize(player->GetPos() - GetPos());
+			Translate({ dt * speed * move });
 
-		if (lastDir.x < 0.f)
-			SetState(States::LeftMove);
-		if (lastDir.x > 0.f)
-			SetState(States::RightMove);
-	}
+			if (lastDir.x < 0.f)
+				SetState(States::LeftMove);
+			if (lastDir.x > 0.f)
+				SetState(States::RightMove);
+		}
 
-	if (Utils::EqualFloat(direction.x, 0.f))
-	{
-		if (lastDir.x < 0.f)
-			SetState(States::LeftIdle);
-		if (lastDir.x > 0.f)
-			SetState(States::RightIdle);
+		if (Utils::EqualFloat(direction.x, 0.f))
+		{
+			if (lastDir.x < 0.f)
+				SetState(States::LeftIdle);
+			if (lastDir.x > 0.f)
+				SetState(States::RightIdle);
+		}
 	}
 }
 

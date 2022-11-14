@@ -45,6 +45,7 @@ void Archer::Init()
 	SetMoveScale(500.f);
 	SetAttackScale(400.f);
 	SetAttackStartDelay(1.f);
+	SetMonsterType(MonsterType::Normal);
 	weapon->SetOrigin(Origins::MC);
 }
 
