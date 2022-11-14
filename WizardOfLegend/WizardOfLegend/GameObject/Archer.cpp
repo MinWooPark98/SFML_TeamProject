@@ -1,17 +1,13 @@
 #include "Archer.h"
-#include "../Framework/ResourceMgr.h"
-#include "../Framework/InputMgr.h"
-#include "Player.h"
 
 Archer::Archer()
-	: curState(States::None), lastDir(1.f, 0.f), bowDir(0, 0)
+	: bowDir(0, 0)
 {
 }
 
 void Archer::Init()
 {
-	animation.SetTarget(&sprite);
-	position = { 0, 0 };
+	Enemy::Init();
 
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("ArcherLeftRun"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("ArcherRightRun"));
@@ -25,15 +21,12 @@ void Archer::Init()
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("ArcherRightIdle"));
 
 
-	bow = new SpriteObj();
-	bow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ArcherAttackRelease3.png"));
-	bow->SetOrigin(Origins::MC);
-	bowAnimation.SetTarget(&bow->GetSprite());
+	SetWeaponImage("graphics/ArcherAttackRelease3.png");
+	bowAnimation.SetTarget(&weapon->GetSprite());
 	bowAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("BowPull"));
 	bowAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("BowShoot"));
 
 	SetState(States::RightIdle);
-
 
 	arrow = new SpriteObj();
 	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Arrow.png"));
@@ -43,35 +36,24 @@ void Archer::Init()
 	arrowDir.setFillColor(Color::Red);
 	arrowDir.setSize({2, 1080});
 
-
-	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
-	texColorTable.loadFromFile("graphics/ArcherColorIndex.png");
+	SetPaletteIndex(44);
+	SetpaletteSize(9);
+	SetColorTable("graphics/ArcherColorIndex.png");
 	SetColor(3);
 
 	SetSpeed(200.f);
 	SetMoveScale(500.f);
 	SetAttackScale(400.f);
 	SetAttackStartDelay(1.f);
-
-	SpriteObj::Init();
-}
-
-void Archer::Release()
-{
-	SpriteObj::Release();
-}
-
-void Archer::Reset()
-{
-	SpriteObj::Reset();
+	weapon->SetOrigin(Origins::MC);
 }
 
 void Archer::Update(float dt)
 {
-	SpriteObj::Update(dt);
+	Enemy::Update(dt);
 
 	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
-		Move(dt);
+		NormalMonsterMove(dt);
 
 	attackDelay -= dt;
 
@@ -81,7 +63,7 @@ void Archer::Update(float dt)
 		UpdateIdle();
 		break;
 	case Archer::States::LeftMove: case Archer::States::RightMove:
-		UpdateMove();
+		UpdateMove(2.f);
 		break;
 	case Archer::States::Attack:
 		UpdateAttack(dt);
@@ -107,7 +89,7 @@ void Archer::Draw(RenderWindow& window)
 {
 	if (curState == States::Attack)
 	{
-		window.draw(bow->GetSprite(), &shader);
+		window.draw(weapon->GetSprite(), &shader);
 
 		if (attackDelay >= attackStart)
 			window.draw(arrowDir);
@@ -161,73 +143,15 @@ void Archer::SetState(States newState)
 	}
 }
 
-void Archer::Move(float dt)
-{
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale())
-	{
-		player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
-		player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
-	}
-	else
-		direction.x = 0;
-
-	if (!Utils::EqualFloat(direction.x, 0.f))
-	{
-		auto move = Utils::Normalize(player->GetPos() - GetPos());
-		Translate({ dt * speed * move });
-
-		if (lastDir.x < 0.f)
-			SetState(States::LeftMove);
-		if (lastDir.x > 0.f)
-			SetState(States::RightMove);
-	}
-
-	if (Utils::EqualFloat(direction.x, 0.f))
-	{
-		if (lastDir.x < 0.f)
-			SetState(States::LeftIdle);
-		if (lastDir.x > 0.f)
-			SetState(States::RightIdle);
-	}
-}
-
-void Archer::SetColor(int index)
-{
-	paletteIndex = (paletteIndex - index) % paletteSize;
-	shader.setUniform("colorTable", texColorTable);
-	shader.setUniform("paletteIndex", (float)paletteIndex / paletteSize);
-}
-
-void Archer::UpdateIdle()
-{
-	if (!Utils::EqualFloat(direction.x, 0.f))
-	{
-		if (lastDir.x > 0.f)
-			SetState(States::LeftMove);
-		if (lastDir.x < 0.f)
-			SetState(States::RightMove);
-		return;
-	}
-}
-
-void Archer::UpdateMove()
-{
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
-	{
-		SetState(States::Attack);
-		attackDelay = 2.f;
-	}
-}
-
 void Archer::UpdateAttack(float dt)
 {
 	if (attackDelay >= attackStart)
 	{
-		bow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
+		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
 		arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 		arrowDir.setRotation(Utils::Angle(GetPos(), player->GetPos()) - 90);
 		arrow->SetPos(GetPos());
-		bow->SetPos(GetPos());
+		weapon->SetPos(GetPos());
 		arrowDir.setPosition(GetPos());
 
 		if (player->GetPos().x >= GetPos().x)
@@ -281,9 +205,4 @@ void Archer::UpdateAttack(float dt)
 			return;
 		}
 	}
-}
-
-void Archer::SetPlayer(Player* player)
-{
-	this->player = player;
 }

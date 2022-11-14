@@ -1,18 +1,9 @@
 #include "Lancer.h"
-#include "../Framework/ResourceMgr.h"
-#include "../Framework/InputMgr.h"
-#include "Player.h"
-
-Lancer::Lancer()
-	: curState(States::None), lastDir(1.f, 0.f)
-{
-}
 
 void Lancer::Init()
 {
-	animation.SetTarget(&sprite);
-	position = { 0, 0 };
-	
+	Enemy::Init();
+
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerLeftMove"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerRightMove"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerLeftAttack"));
@@ -27,9 +18,7 @@ void Lancer::Init()
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerRightIdle"));
 
 
-	spear = new SpriteObj();
-	spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
-	spear->SetOrigin(Origins::MC);
+	SetWeaponImage("graphics/LancerSpear.png");
 
 
 	SetState(States::RightIdle);
@@ -43,34 +32,22 @@ void Lancer::Init()
 	spearAnimation.SetTarget(&lancerAttackEffect->GetSprite());
 	spearAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
 	
-
-	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
-	texColorTable.loadFromFile("graphics/LancerColorIndex.png");
+	SetPaletteIndex(59);
+	SetpaletteSize(9);
+	SetColorTable("graphics/LancerColorIndex.png");
 	SetColor(3);
-
 	SetSpeed(200.f);
 	SetMoveScale(500.f);
 	SetAttackScale(150.f);
-
-	SpriteObj::Init();
-}
-
-void Lancer::Release()
-{
-	SpriteObj::Release();
-}
-
-void Lancer::Reset()
-{
-	SpriteObj::Reset();
+	weapon->SetOrigin(Origins::MC);
 }
 
 void Lancer::Update(float dt)
 {
-	SpriteObj::Update(dt);
+	Enemy::Update(dt);
 	
 	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
-		Move(dt);
+		NormalMonsterMove(dt);
 
 	attackDelay -= dt;
 
@@ -80,10 +57,10 @@ void Lancer::Update(float dt)
 		UpdateIdle();
 		break;
 	case Lancer::States::LeftMove: case Lancer::States::RightMove:
-		UpdateMove();
+		UpdateMove(2.f);
 		break;
 	case Lancer::States::Attack:
-		UpdateAttack();
+		UpdateAttack(dt);
 		break;
 	case Lancer::States::Hit:
 		SetState(States::Hit);
@@ -106,7 +83,7 @@ void Lancer::Draw(RenderWindow& window)
 {
 	if (curState == States::Attack)
 	{
-		window.draw(spear->GetSprite(), &shader);
+		window.draw(weapon->GetSprite(), &shader);
 
 		if (attackDelay <= 1.f)
 			window.draw(lancerAttackEffect->GetSprite(), &shader);
@@ -138,7 +115,7 @@ void Lancer::SetState(States newState)
 		animation.Play("LancerRightMove");
 		break;
 	case Lancer::States::Attack:
-		spear->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
+		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 		lancerAttackEffect->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 
 		if (Utils::Angle(player->GetPos(), GetPos()) >= -180 &&
@@ -185,90 +162,32 @@ void Lancer::SetState(States newState)
 	}
 }
 
-void Lancer::Move(float dt)
-{
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale())
-	{
-		player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
-		player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
-	}
-	else
-		direction.x = 0;
-
-	if (!Utils::EqualFloat(direction.x, 0.f))
-	{
-		auto move = Utils::Normalize(player->GetPos() - GetPos());
-		Translate({ dt * speed * move });
-
-		if (lastDir.x < 0.f)
-			SetState(States::LeftMove);
-		if (lastDir.x > 0.f)
-			SetState(States::RightMove);
-	}
-
-	if (Utils::EqualFloat(direction.x, 0.f))
-	{
-		if (lastDir.x < 0.f)
-			SetState(States::LeftIdle);
-		if (lastDir.x > 0.f)
-			SetState(States::RightIdle);
-	}
-}
-
-void Lancer::SetColor(int index)
-{
-	paletteIndex = (paletteIndex - index) % paletteSize;
-	shader.setUniform("colorTable", texColorTable);
-	shader.setUniform("paletteIndex", (float)paletteIndex / paletteSize);
-}
-
-void Lancer::UpdateIdle()
-{
-	if (!Utils::EqualFloat(direction.x, 0.f))
-	{
-		if (lastDir.x > 0.f)
-			SetState(States::LeftMove);
-		if (lastDir.x < 0.f)
-			SetState(States::RightMove);
-		return;
-	}
-}
-
-void Lancer::UpdateMove()
-{
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
-	{
-		SetState(States::Attack);
-		attackDelay = 2.f;
-	}
-}
-
-void Lancer::UpdateAttack()
+void Lancer::UpdateAttack(float dt)
 {
 	if (attackDelay <= 1.f && spearWait)
 	{
-		spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpearWithArm.png"));
-		spear->SetPos(GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 20.f);
+		weapon->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpearWithArm.png"));
+		weapon->SetPos(GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 20.f);
 		switch (spearPos)
 		{
 		case 1: case 2:
-			spear->SetPos({ spear->GetPos().x, spear->GetPos().y - 5.f}); // ÁÂ¿ì
+			weapon->SetPos({ weapon->GetPos().x, weapon->GetPos().y - 5.f}); // ÁÂ¿ì
 			break;
 		case 3: case 4:
-			spear->SetPos({ spear->GetPos().x + 5.f, spear->GetPos().y - 5.f }); // »óÇÏ
+			weapon->SetPos({ weapon->GetPos().x + 5.f, weapon->GetPos().y - 5.f }); // »óÇÏ
 			break;
 		}
 
-		lancerAttackEffect->SetPos(spear->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 100.f);
+		lancerAttackEffect->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 100.f);
 		spearAnimation.Play("SpearMotion");
 		spearWait = false;
 	}
 	else if (attackDelay >= 1.f && !spearWait)
 	{
-		spear->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
-		spear->SetPos({ GetPos().x, GetPos().y });
+		weapon->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
+		weapon->SetPos({ GetPos().x, GetPos().y });
 		if (spearPos == 3 || spearPos == 4)
-			spear->SetPos({ spear->GetPos().x + 7.f, spear->GetPos().y });
+			weapon->SetPos({ weapon->GetPos().x + 7.f, weapon->GetPos().y });
 		playerLastPos = player->GetPos();
 		spearWait = true;
 	}
@@ -299,9 +218,4 @@ void Lancer::UpdateAttack()
 			return;
 		}
 	}
-}
-
-void Lancer::SetPlayer(Player* player)
-{
-	this->player = player;
 }
