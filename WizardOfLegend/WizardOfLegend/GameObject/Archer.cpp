@@ -26,8 +26,6 @@ void Archer::Init()
 	bowAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("BowPull"));
 	bowAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("BowShoot"));
 
-	SetState(States::RightIdle);
-
 	arrow = new SpriteObj();
 	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Arrow.png"));
 	arrow->SetHitBox((FloatRect)arrow->GetTextureRect());
@@ -46,6 +44,8 @@ void Archer::Init()
 	SetAttackScale(400.f);
 	SetAttackStartDelay(1.f);
 	SetMonsterType(MonsterType::Normal);
+	SetMaxHp(1);
+	SetCurHp(GetMaxHp());
 	weapon->SetOrigin(Origins::MC);
 }
 
@@ -56,7 +56,15 @@ void Archer::Update(float dt)
 	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
 		NormalMonsterMove(dt);
 
-	attackDelay -= dt;
+	if (InputMgr::GetKeyDown(Keyboard::Key::L))
+		SetCurHp(0);
+
+	if (curHp <= 0 && isAlive)
+	{
+		dieTimer = 1.f;
+		SetState(States::Die);
+		isAlive = false;
+	}
 
 	switch (curState)
 	{
@@ -84,6 +92,8 @@ void Archer::Update(float dt)
 
 	animation.Update(dt);
 	bowAnimation.Update(dt);
+
+	cout << dieTimer << endl;
 }
 
 void Archer::Draw(RenderWindow& window)
@@ -97,9 +107,16 @@ void Archer::Draw(RenderWindow& window)
 
 		arrow->Draw(window);
 	}
-	
+
 	Object::Draw(window);
-	window.draw(sprite, &shader);
+
+	if (isAlive)
+		window.draw(sprite, &shader);
+	else
+	{
+		if (dieTimer >= 0.f)
+			window.draw(sprite, &shader);
+	}
 }
 
 void Archer::SetState(States newState)
@@ -146,6 +163,9 @@ void Archer::SetState(States newState)
 
 void Archer::UpdateAttack(float dt)
 {
+	if (curHp <= 0)
+		return;
+
 	if (attackDelay >= attackStart)
 	{
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));

@@ -8,8 +8,8 @@ protected:
 	// Spear
 	Animator spearAnimation;
 	bool spearWait = false;
-	int spearPos;
-	int attackPos = 0;
+	int spearPos = 0;
+	int attackPos;
 	SpriteObj* lancerAttackEffect; // Attack Effect
 
 public:

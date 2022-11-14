@@ -57,14 +57,18 @@ protected:
 
 	MonsterType type;
 
+	float dieTimer;
+
+	bool isAlive = true;
+
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
 	virtual ~Enemy() {};
 
 	virtual void Init() override;
-	virtual void Release() override { SpriteObj::Release(); };
+	virtual void Release() override { SpriteObj::Release(); isAlive = true; };
 	virtual void Reset() override { SpriteObj::Reset(); };
-	virtual void Update(float dt) override { SpriteObj::Update(dt); };
+	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override { SpriteObj::Draw(window); };
 	virtual void SetState(States newState) = 0;
 
@@ -101,5 +105,16 @@ public:
 	virtual void UpdateAttack(float dt) = 0;
 	
 	void SetMonsterType(MonsterType t) { type = t; };
+
+	void SetIsAlive(bool set) { isAlive = set; };
+	bool GetIsAlive() const { return isAlive; };
+
+	void SetStat(float spd, float cHp, float mHp, float dmg)
+	{
+		speed = spd;
+		curHp = cHp;
+		maxHp = mHp;
+		damage = dmg;
+	};
 };
 

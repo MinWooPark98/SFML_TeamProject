@@ -22,7 +22,7 @@ void PlayScene::Init()
 	player->Init();
 	objList.push_back(player);
 
-	lancer = new Lancer();
+	Lancer* lancer = new Lancer();
 	lancer->Init();
 	objList.push_back(lancer);
 

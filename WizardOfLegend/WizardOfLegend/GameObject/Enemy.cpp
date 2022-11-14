@@ -7,6 +7,18 @@ void Enemy::Init()
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	weapon = new SpriteObj();
 	type = MonsterType::None;
+	curState = States::RightIdle;
+}
+
+void Enemy::Update(float dt)
+{ 
+	SpriteObj::Update(dt);
+
+	if (curState == States::Attack)
+		attackDelay -= dt;
+
+	if (curState == States::Die && dieTimer >= 0.f)
+		dieTimer -= dt;
 }
 
 void Enemy::SetColor(int index)
@@ -25,6 +37,9 @@ void Enemy::NormalMonsterMove(float dt)
 	}
 	else
 		direction.x = 0;
+
+	if (curState == States::Die)
+		return;
 
 	if (type == MonsterType::Normal)
 	{

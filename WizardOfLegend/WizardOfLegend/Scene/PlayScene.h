@@ -1,12 +1,9 @@
 #pragma once
 #include "Scene.h"
 
-class Lancer;
-
 class PlayScene : public Scene
 {
 protected:
-	Lancer* lancer;
 
 public:
 	PlayScene();

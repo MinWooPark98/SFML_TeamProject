@@ -21,9 +21,6 @@ void Lancer::Init()
 	SetWeaponImage("graphics/LancerSpear.png");
 
 
-	SetState(States::RightIdle);
-
-
 	SpriteObj tempSpearImage;
 	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerAttackEffect2.png"));
 	lancerAttackEffect = new SpriteObj();
@@ -32,6 +29,7 @@ void Lancer::Init()
 	spearAnimation.SetTarget(&lancerAttackEffect->GetSprite());
 	spearAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
 	
+
 	SetPaletteIndex(59);
 	SetpaletteSize(9);
 	SetColorTable("graphics/LancerColorIndex.png");
@@ -40,6 +38,8 @@ void Lancer::Init()
 	SetMoveScale(500.f);
 	SetAttackScale(150.f);
 	SetMonsterType(MonsterType::Normal);
+	SetMaxHp(1);
+	SetCurHp(GetMaxHp());
 	weapon->SetOrigin(Origins::MC);
 }
 
@@ -50,23 +50,31 @@ void Lancer::Update(float dt)
 	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
 		NormalMonsterMove(dt);
 
-	attackDelay -= dt;
+	if (InputMgr::GetKeyDown(Keyboard::Key::K))
+		SetCurHp(0);
+
+	if (curHp <= 0 && isAlive)
+	{
+		dieTimer = 1.f;
+		SetState(States::Die);
+		isAlive = false;
+	}
 
 	switch (curState)
 	{
-	case Lancer::States::LeftIdle: case Lancer::States::RightIdle:
+	case States::LeftIdle: case Lancer::States::RightIdle:
 		UpdateIdle();
 		break;
-	case Lancer::States::LeftMove: case Lancer::States::RightMove:
+	case States::LeftMove: case Lancer::States::RightMove:
 		UpdateMove(2.f);
 		break;
-	case Lancer::States::Attack:
+	case States::Attack:
 		UpdateAttack(dt);
 		break;
-	case Lancer::States::Hit:
+	case States::Hit:
 		SetState(States::Hit);
 		break;
-	case Lancer::States::Die:
+	case States::Die:
 		SetState(States::Die);
 		break;
 	}
@@ -91,7 +99,14 @@ void Lancer::Draw(RenderWindow& window)
 	}
 
 	Object::Draw(window);
-	window.draw(sprite, &shader);
+
+	if (isAlive)
+		window.draw(sprite, &shader);
+	else
+	{
+		if (dieTimer >= 0.f)
+			window.draw(sprite, &shader);
+	}
 }
 
 void Lancer::SetState(States newState)
@@ -100,22 +115,22 @@ void Lancer::SetState(States newState)
 		return;
 
 	curState = newState;
-	
+
 	switch (curState)
 	{
-	case Lancer::States::LeftIdle:
+	case States::LeftIdle:
 		animation.Play("LancerLeftIdle");
 		break;
-	case Lancer::States::RightIdle:
+	case States::RightIdle:
 		animation.Play("LancerRightIdle");
 		break;
-	case Lancer::States::LeftMove:
+	case States::LeftMove:
 		animation.Play("LancerLeftMove");
 		break;
-	case Lancer::States::RightMove:
+	case States::RightMove:
 		animation.Play("LancerRightMove");
 		break;
-	case Lancer::States::Attack:
+	case States::Attack:
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 		lancerAttackEffect->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 
@@ -154,10 +169,10 @@ void Lancer::SetState(States newState)
 			return;
 		}
 		break;
-	case Lancer::States::Hit:
+	case States::Hit:
 		lastDir.x < 0.f ? animation.Play("LancerLeftHit") : animation.Play("LancerRightHit");
 		break;
-	case Lancer::States::Die:
+	case States::Die:
 		lastDir.x < 0.f ? animation.Play("LancerLeftDie") : animation.Play("LancerRightDie");
 		break;
 	}
@@ -165,6 +180,9 @@ void Lancer::SetState(States newState)
 
 void Lancer::UpdateAttack(float dt)
 {
+	if (curHp <= 0)
+		return;
+
 	if (attackDelay <= 1.f && spearWait)
 	{
 		weapon->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpearWithArm.png"));
