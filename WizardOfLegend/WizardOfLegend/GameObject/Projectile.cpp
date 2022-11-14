@@ -3,7 +3,7 @@
 #include "../Framework/ResourceMgr.h"
 
 Projectile::Projectile()
-	:atkShape(AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), moveType(MoveType::OneWay), attackDmg(0), dmgType(DamageType::Once), isOnDelay(false), atkDelay(0.f), atkTimer(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false)
+	:atkShape(AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), moveType(MoveType::OneWay), isComingBack(false),  attackDmg(0), dmgType(DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0)
 {
 }
 
@@ -24,8 +24,11 @@ void Projectile::Reset()
 	isMoving = false;
 	movingTimer = 0.f;
 	atkTimer = 0.f;
-	isOnDelay = false;
+	isOnDelay = true;
+	timer = 0.f;
+	isOnAtkDelay = false;
 	angle = 0.f;
+	isComingBack = false;
 	amplitude = 0.f;
 	frequency = 0.f;
 	reverse = false;
@@ -35,21 +38,44 @@ void Projectile::Update(float dt)
 {
 	if (!isMoving)
 		return;
-	SpriteObj::Update(dt);
 
-	if (moveType == MoveType::BackAndForth && movingTimer >= movingDuration * 0.5f)
-		direction = -direction;
+	if (isOnDelay)
+	{
+		timer += dt;
+		if (timer >= delay)
+		{
+			isOnDelay = false;
+			Fire();
+		}
+		else
+			return;
+	}
+
+	animator->Update(dt);
+	SpriteObj::Update(dt);
 
 	movingTimer += dt;
 	switch (atkShape)
 	{
-	case Projectile::AttackShape::Range:
-		break;
 	case Projectile::AttackShape::Rotate:
+		{
+			angle += speed * dt;
+			SetPos(startPos.x + distance * cos((angle) * (M_PI / 180.f)), startPos.y + distance * sin((angle) * (M_PI / 180.f)));
+		}
 		break;
 	case Projectile::AttackShape::Wave:
 		{
-			angle += speed * dt;
+			if (moveType == MoveType::BackAndForth && !isComingBack && movingTimer >= movingDuration * 0.5f)
+			{
+				isComingBack = true;
+				animator->Play(clipName[1 - vecIdx]);
+				vecIdx = 1 - vecIdx;
+			}
+
+			if (!isComingBack)
+				angle += speed * dt;
+			else
+				angle -= speed * dt;
 			sprite.setRotation(Utils::Angle(direction));
 			Transform transform;
 			transform.rotate(Utils::Angle(direction)).translate({ angle, amplitude * (float)(sin((angle) * (M_PI / 180.f) * frequency)) * (reverse ? -1.f : 1.f) });
@@ -67,7 +93,7 @@ void Projectile::Update(float dt)
 		movingTimer = 0.f;
 	}
 
-	if (!isOnDelay)
+	if (!isOnAtkDelay)
 	{
 		// 충돌 검사, 공격
 	}
@@ -76,7 +102,7 @@ void Projectile::Update(float dt)
 		atkTimer += dt;
 		if (atkTimer >= atkDelay)
 		{
-			isOnDelay = false;
+			isOnAtkDelay = false;
 			atkTimer = 0.f;
 		}
 	}
@@ -93,18 +119,9 @@ void Projectile::SetAnimClip(const vector<string>& clipName)
 
 void Projectile::Fire()
 {
-	isMoving = true;
-	switch (atkShape)
-	{
-	case Projectile::AttackShape::Range:
-		break;
-	case Projectile::AttackShape::Rotate:
-		break;
-	case Projectile::AttackShape::Wave:
-		if(direction.x < 0.f)
-			animator->Play(clipName[0]);
-		else
-			animator->Play(clipName[1]);
-		break;
-	}
+	if (atkShape == Projectile::AttackShape::Rotate)
+		vecIdx = speed > 0.f ? 0 : 1;
+	else
+		vecIdx = direction.x < 0.f ? 0 : 1;
+	animator->Play(clipName[vecIdx]);
 }

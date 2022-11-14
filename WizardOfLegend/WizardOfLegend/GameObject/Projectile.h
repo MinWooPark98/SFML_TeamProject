@@ -34,17 +34,26 @@ protected:
 	float movingTimer;
 	float speed;
 	MoveType moveType;
+	bool isComingBack;
 	int attackDmg;
 
 	DamageType dmgType;
+
 	bool isOnDelay;
+	float delay;
+	float timer;
+
+	bool isOnAtkDelay;
 	float atkDelay;
 	float atkTimer;
+
+	float distance;		// 주체로부터의 거리
 
 	float angle;		// wave 이동 혹은 원운동 시 사용
 	float frequency;	// wave 이동 시 진동수(비율)
 	bool reverse;
 	vector<string> clipName;
+	int vecIdx;
 
 	Vector2f startPos;
 	float amplitude;
@@ -67,7 +76,9 @@ public:
 	void SetMoveType(MoveType type) { moveType = type; }
 	void SetAtkDmg(int atkDmg) { attackDmg = atkDmg; }
 	void SetDmgType(DamageType dmgtype) { dmgType = dmgtype; }
-	void SetAtkDelay(float delay) { atkDelay = delay; }
+	void SetDelay(float delay) { this->delay = delay; }
+	void SetAtkDelay(float atkDelay) { this->atkDelay = atkDelay; }
+	void SetDistance(float distance) { this->distance = distance; }
 	void SetAngle(float angle) { this->angle = angle; }
 	float GetAngle() const { return angle; }
 	void SetStartPos(const Vector2f& pos) { startPos = pos; }

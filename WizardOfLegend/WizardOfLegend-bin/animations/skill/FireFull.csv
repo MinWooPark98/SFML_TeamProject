@@ -1,0 +1,10 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FireFull,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FireFull.png,0,0,16,16,8,8,0,0
+graphics/FireFull.png,16,0,16,16,8,8,0,0
+graphics/FireFull.png,32,0,16,16,8,8,0,0
+graphics/FireFull.png,48,0,16,16,8,8,0,0
+graphics/FireFull.png,64,0,16,16,8,8,0,0
+graphics/FireFull.png,80,0,16,16,8,8,0,0
