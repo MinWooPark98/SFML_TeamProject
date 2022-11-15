@@ -1,7 +1,6 @@
 #pragma once
 #include "Enemy.h"
 
-class Player;
 class Archer : public Enemy
 {
 protected:

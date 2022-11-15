@@ -1,0 +1,6 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FireBossRightHit,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FireBossHurt0.png,0,0,25,40,12.5,20,0,0
+graphics/FireBossHurt1.png,0,0,25,40,12.5,20,0,0
