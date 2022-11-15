@@ -119,6 +119,10 @@ void Player::Init()
 	{
 		skills.push_back(new Skill());
 	}
+	skills[4]->GetSetting();
+	skills[4]->SetSkill("DragonArc");
+	skills[4]->SetSubject(this, Skill::SubjectType::Player);
+
 	skills[5]->GetSetting();
 	skills[5]->SetSkill("FireFull");
 	skills[5]->SetSubject(this, Skill::SubjectType::Player);
