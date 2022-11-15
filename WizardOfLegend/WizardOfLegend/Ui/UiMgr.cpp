@@ -1,6 +1,8 @@
 #include "UiMgr.h"
+#include "../GameObject/UiObject.h"
+#include <iostream>
 
-UiMgr::UiMgr(Scene* scene) : parentScene(scene)
+UiMgr::UiMgr(Scene* scene) : parentScene(scene), enabled(true)
 {
 }
 
@@ -10,37 +12,36 @@ UiMgr::~UiMgr()
 
 void UiMgr::Init()
 {
-    for (auto uiObj : uiObjList)
-	{
-		uiObj->Init();
-	}
-	Object::Init();
+    for (auto& uiObjs : uiObjList)
+    {
+        for (auto& obj : uiObjs.second)
+            obj->Init();
+    }
+    Object::Init();
 }
 
 void UiMgr::Release()
 {
-	for (auto uiObj : uiObjList)
-	{
-		uiObj->Release();
-	}
-	Object::Release();
-}
-
-void UiMgr::Reset()
-{
-    for (auto uiObj : uiObjList)
+    for (auto& uiObjs : uiObjList)
     {
-        uiObj->Reset();
+        for (auto& obj : uiObjs.second)
+        {
+            if (obj != nullptr)
+                delete obj;
+            obj = nullptr;
+        }
     }
-    Object::Reset();
+    uiObjList.clear();
+    Object::Release();
 }
 
 void UiMgr::SetPos(const Vector2f& pos)
 {
     Vector2f delta = pos - position;
-    for (auto uiObj : uiObjList)
+    for (auto& uiObjs : uiObjList)
     {
-        uiObj->Translate(delta);
+        for (auto& obj : uiObjs.second)
+            obj->Translate(delta);
     }
     position = pos;
     Object::SetPos(pos);
@@ -50,10 +51,65 @@ void UiMgr::Update(float dt)
 {
     if (!enabled)
         return;
-    for (auto uiObj : uiObjList)
+
+    bool isEvent = false;
+
+    if (nowEvObj != nullptr)
     {
-        if(uiObj->GetActive())
-            uiObj->Update(dt);
+        if (nowEvObj->IsMove() && nowEvObj->IsDrag())
+        {
+            nowEvObj->Update(dt);
+            isEvent = true;
+        }
+        else if (nowEvObj->IsMoveRight() && nowEvObj->IsDragRight())
+        {
+            nowEvObj->Update(dt);
+            isEvent = true;
+        }
+    }
+    for (auto uiObjs = uiObjList.rbegin(); uiObjs != uiObjList.rend(); uiObjs++)
+    {
+        for (auto it = (*uiObjs).second.rbegin(); it != (*uiObjs).second.rend(); it++)
+        {
+            if ((*it) != nowEvObj)
+                (*it)->EventClear();
+
+            if (!isEvent)
+            {
+                (*it)->Update(dt);
+            }
+            if ((*it)->GetEvent() && !isEvent)
+            {
+                isEvent = true;
+                nowEvObj = *it;
+            }
+        }
+    }
+
+
+    if (nowEvObj != nullptr && ((nowEvObj->GetState() == UiState::Exit) || (nowEvObj->GetState() == UiState::Enter)))
+    {
+        for (auto uiObjs = uiObjList.rbegin(); uiObjs != uiObjList.rend(); uiObjs++)
+        {
+            for (auto it = (*uiObjs).second.rbegin(); it != (*uiObjs).second.rend(); it++)
+            {
+                if ((*it != nowEvObj))
+                {
+                    if ((*it)->GetState() == UiState::Stay || (*it)->GetState() == UiState::Down)
+                    {
+                        (*it)->SetState(UiState::Exit); //???? ?????? ??????????? ???? Exit
+                        (*it)->SetEvent(true);
+                    }
+                    if ((*it)->GetState() == UiState::Stay || (*it)->GetState() == UiState::DownRight)
+                    {
+                        (*it)->SetState(UiState::Exit); //???? ?????? ??????????? ???? Exit
+                        (*it)->SetEvent(true);
+                    }
+                    (*it)->ColorClear(); // ??? ???? ????
+                }
+            }
+        }
+        nowEvObj = nullptr;
     }
 }
 
@@ -61,21 +117,10 @@ void UiMgr::Draw(RenderWindow& window)
 {
     if (!enabled)
         return;
-    for (auto uiObj : uiObjList)
-    {   
-        if (uiObj->GetActive())
-            uiObj->Draw(window);
+    for (auto& uiObjs : uiObjList)
+    {
+        for (auto& obj : uiObjs.second)
+            obj->Draw(window);
     }
 }
 
-Object* UiMgr::FindUiObj(string name)
-{
-    for (auto* obj : uiObjList)
-    {
-        if (obj->GetName() == name)
-        {
-            return obj;
-        }
-    }
-    return nullptr;
-}

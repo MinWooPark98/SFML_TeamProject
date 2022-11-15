@@ -11,6 +11,7 @@ class Projectile;
 
 enum class Scenes
 {
+	Title,
 	MapTool,
 	SkillTool,
 	Play,
@@ -20,16 +21,20 @@ class UiMgr;
 class Scene
 {
 public:
-	enum class Layer
+	enum class LayerType
 	{
-		// 추가
+		None,
+		Back,
+		Tile,
+		Object,
 		Count,
 	};
 
 protected:
 	Scenes type;
+
 	vector<list<Object*>*> layOut;
-	list<Object*> objList;
+	map<LayerType, map<int, vector<Object*>>> objList;
 
 	ObjectPool<Projectile>* projectiles;
 
@@ -38,7 +43,10 @@ protected:
 
 	View worldView;
 	View uiView;
+
 	UiMgr* uiMgr;
+
+	bool isMap;
 
 public:
 	Scene(Scenes type);
@@ -47,9 +55,8 @@ public:
 	virtual void Init(); //생성
 	virtual void Release();	 //해제
 
-	virtual void Reset() {}
-
-	virtual void Enter();
+	virtual void Reset() = 0;
+	virtual void Enter()=0;
 	virtual void Exit();
 
 	virtual void Update(float dt);
@@ -67,13 +74,10 @@ public:
 	Vector2f ScreenToWorld(Vector2i screenPos);
 	Vector2f ScreenToUiPosition(Vector2i screenPos);
 
-	void AddGameObject(Object* obj);
-	void AddGameObjectFirst(Object* obj);
-	void DelGameObject(Object* obj);
+	void AddGameObject(Object* obj, LayerType type, int num);
 	Object* FindGameObj(string name);
 	UiMgr* GetUiMgr() { return uiMgr; }
 	const Vector2f& GetObjMousePos() const { return objMousePos; }
 	vector<list<Object*>*>& GetLayout() { return layOut; }
 	ObjectPool<Projectile>* GetProjectiles() { return projectiles; }
 };
-

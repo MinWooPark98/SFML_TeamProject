@@ -2,13 +2,16 @@
 #include "../GameObject/Object.h"
 #include <list>
 
+class UiObject;
 class Scene;
 class UiMgr : public Object
 {
 protected:
-	list<Object*> uiObjList;
+	map<int, vector<UiObject*>> uiObjList;
 	Scene* parentScene;
 
+	UiObject* nowEvObj;
+	bool enabled;
 public:
 	UiMgr(Scene* scene);
 	virtual ~UiMgr();
@@ -16,13 +19,9 @@ public:
 	virtual void Init();
 	virtual void Release();
 
-	virtual void Reset();
-
 	virtual void SetPos(const Vector2f& pos);
 
 	virtual void Update(float dt);
 	virtual void Draw(RenderWindow& window);
-
-	Object* FindUiObj(string name);
 };
 

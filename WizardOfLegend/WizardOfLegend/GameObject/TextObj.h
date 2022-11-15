@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
+#include "../Framework/Utils.h"
 
-enum class Origins;
 class TextObj : public Object
 {
 protected:
@@ -23,9 +23,13 @@ public:
 	virtual void SetOutlineThickness(float t) { text.setOutlineThickness(t); }
 	virtual void SetFont(Font& font);
 	virtual void SetText(string text);
+	Text& GetText() { return text; }
+	void SetText(Font& font, int size, Color color, string str);
+	void SetString(string str);
+	string GetString();
 	virtual void SetOrigin(Origins origin);
-	virtual const string GetText() const;
 	virtual void Translate(const Vector2f& pos) override;
+	FloatRect GetGlobalBounds() { return text.getGlobalBounds(); }
 
 	void AsciiToUnicode();	// 한글 깨질 때 사용
 };

@@ -94,7 +94,7 @@ public:
     ////////////////////////////////////////////////////////////
     struct MouseButtonEvent
     {
-        Mouse::Button button; ///< Code of the button that has been pressed
+        Mouse::Button button; ///< Code of the Button that has been pressed
         int           x;      ///< X position of the mouse pointer, relative to the left of the owner window
         int           y;      ///< Y position of the mouse pointer, relative to the top of the owner window
     };
@@ -154,7 +154,7 @@ public:
     struct JoystickButtonEvent
     {
         unsigned int joystickId; ///< Index of the joystick (in range [0 .. Joystick::Count - 1])
-        unsigned int button;     ///< Index of the button that has been pressed (in range [0 .. Joystick::ButtonCount - 1])
+        unsigned int button;     ///< Index of the Button that has been pressed (in range [0 .. Joystick::ButtonCount - 1])
     };
 
     ////////////////////////////////////////////////////////////
@@ -195,13 +195,13 @@ public:
         KeyReleased,            ///< A key was released (data in event.key)
         MouseWheelMoved,        ///< The mouse wheel was scrolled (data in event.mouseWheel) (deprecated)
         MouseWheelScrolled,     ///< The mouse wheel was scrolled (data in event.mouseWheelScroll)
-        MouseButtonPressed,     ///< A mouse button was pressed (data in event.mouseButton)
-        MouseButtonReleased,    ///< A mouse button was released (data in event.mouseButton)
+        MouseButtonPressed,     ///< A mouse Button was pressed (data in event.mouseButton)
+        MouseButtonReleased,    ///< A mouse Button was released (data in event.mouseButton)
         MouseMoved,             ///< The mouse cursor moved (data in event.mouseMove)
         MouseEntered,           ///< The mouse cursor entered the area of the window (no data)
         MouseLeft,              ///< The mouse cursor left the area of the window (no data)
-        JoystickButtonPressed,  ///< A joystick button was pressed (data in event.joystickButton)
-        JoystickButtonReleased, ///< A joystick button was released (data in event.joystickButton)
+        JoystickButtonPressed,  ///< A joystick Button was pressed (data in event.joystickButton)
+        JoystickButtonReleased, ///< A joystick Button was released (data in event.joystickButton)
         JoystickMoved,          ///< The joystick moved along an axis (data in event.joystickMove)
         JoystickConnected,      ///< A joystick was connected (data in event.joystickConnect)
         JoystickDisconnected,   ///< A joystick was disconnected (data in event.joystickConnect)
@@ -224,11 +224,11 @@ public:
         KeyEvent              key;               ///< Key event parameters (Event::KeyPressed, Event::KeyReleased)
         TextEvent             text;              ///< Text event parameters (Event::TextEntered)
         MouseMoveEvent        mouseMove;         ///< Mouse move event parameters (Event::MouseMoved)
-        MouseButtonEvent      mouseButton;       ///< Mouse button event parameters (Event::MouseButtonPressed, Event::MouseButtonReleased)
+        MouseButtonEvent      mouseButton;       ///< Mouse Button event parameters (Event::MouseButtonPressed, Event::MouseButtonReleased)
         MouseWheelEvent       mouseWheel;        ///< Mouse wheel event parameters (Event::MouseWheelMoved) (deprecated)
         MouseWheelScrollEvent mouseWheelScroll;  ///< Mouse wheel event parameters (Event::MouseWheelScrolled)
         JoystickMoveEvent     joystickMove;      ///< Joystick move event parameters (Event::JoystickMoved)
-        JoystickButtonEvent   joystickButton;    ///< Joystick button event parameters (Event::JoystickButtonPressed, Event::JoystickButtonReleased)
+        JoystickButtonEvent   joystickButton;    ///< Joystick Button event parameters (Event::JoystickButtonPressed, Event::JoystickButtonReleased)
         JoystickConnectEvent  joystickConnect;   ///< Joystick (dis)connect event parameters (Event::JoystickConnected, Event::JoystickDisconnected)
         TouchEvent            touch;             ///< Touch events parameters (Event::TouchBegan, Event::TouchMoved, Event::TouchEnded)
         SensorEvent           sensor;            ///< Sensor event parameters (Event::SensorChanged)
