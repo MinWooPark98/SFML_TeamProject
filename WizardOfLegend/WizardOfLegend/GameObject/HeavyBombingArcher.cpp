@@ -11,7 +11,7 @@ void HeavyBombingArcher::Init()
 	arrowSpeed = 700.f;
 	arrowDir.setScale({2, 2});
 	SetMonsterType(MonsterType::StageBoss);
-	SetPos({100, 100});
+	SetPos({200, 200});
 	SetEscapeScale(100.f);
 	SetMoveAttackScale(300.f);
 	SetNormalAttackCount(2);
@@ -59,6 +59,17 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 
 	Archer::UpdateAttack(dt);
 
+	if (attackDelay <= 0.f)
+	{
+		if (Utils::Distance(playerLastPos, GetPos()) <= GetEscapeScale())
+			pattern = Pattern::EscapeAttack;
+
+		else if (Utils::Distance(playerLastPos, GetPos()) <= GetMoveAttackScale())
+			pattern = Pattern::MovingAttack;
+
+		lastPos = GetPos();
+	}
+
 	if (curState == States::MoveAttack)
 	{
 		if (attackDelay >= attackStart)
@@ -71,12 +82,39 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 		}
 		else
 		{
+			if (pattern == Pattern::MovingAttack || pattern == Pattern::EscapeAttack)
+			{
+				for (int i = smollArrow.size() - 1; i > count; i--)
+					smollArrow[i]->SetPos(GetPos());
+
+				weapon->SetPos(GetPos());
+
+				if (pattern == Pattern::EscapeAttack)
+				{
+					move = Utils::Normalize(playerLastPos - lastPos);
+					Translate({ dt * speed * move * -1.f });
+				}
+				else
+				{
+					move = Utils::Normalize(playerLastPos - lastPos);
+
+					// 일자로 안감 ㅎㅎ 무조건 대각선
+					if (playerLastPos.y > lastPos.y)
+						move = { move.x * 1.f, 1 };
+					else
+						move = { move.x * -1.f, -1 };
+
+					Translate({ dt * speed * move });
+				}
+			}
+
 			smollArrowDelay -= dt;
 
-			auto shot = Utils::Normalize(playerLastPos - GetPos());
-
+			auto shot = Utils::Normalize(playerLastPos - lastPos);
 			for (int i = 0; i <= count; ++i)
+			{
 				smollArrow[i]->Translate({ dt * arrowSpeed * shot * 2.f });
+			}
 
 			if (smollArrowDelay <= 0.f && count < 4)
 			{

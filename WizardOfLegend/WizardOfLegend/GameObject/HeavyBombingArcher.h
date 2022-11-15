@@ -3,11 +3,22 @@
 
 class HeavyBombingArcher : public Archer
 {
+public:
+	enum class Pattern
+	{
+		None = -1,
+		EscapeAttack,
+		MovingAttack,
+	};
+
 protected:
 	vector<SpriteObj*> smollArrow;
 	int smollArrowCount = 5;
 	float smollArrowDelay = 0.1f;
 	int count = 0;
+	Pattern pattern;
+	Vector2f move;
+	Vector2f lastPos;
 
 public:
 	HeavyBombingArcher() {};
