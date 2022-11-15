@@ -4,7 +4,6 @@
 class Lancer : public Enemy
 {
 protected:
-	// Spear
 	Animator spearAnimation;
 	bool spearWait = false;
 	int spearPos = 0;
@@ -22,6 +21,6 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 	virtual void UpdateAttack(float dt) override;
 
-	void SetState(States newState);
+	virtual void SetState(States newState) override;
 };
 

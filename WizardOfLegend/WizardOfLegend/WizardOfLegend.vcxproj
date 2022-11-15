@@ -150,7 +150,6 @@
     <ClCompile Include="GameObject\Enemy.cpp" />
     <ClCompile Include="GameObject\Archer.cpp" />
     <ClCompile Include="GameObject\Collider.cpp" />
-    <ClCompile Include="GameObject\Button.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
     <ClCompile Include="Framework\RayCast.cpp" />
@@ -191,7 +190,6 @@
     <ClInclude Include="GameObject\Enemy.h" />
     <ClInclude Include="GameObject\Archer.h" />
     <ClInclude Include="GameObject\Collider.h" />
-    <ClInclude Include="GameObject\Button.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
     <ClInclude Include="GameObject\DragRectTile.h" />

@@ -27,38 +27,47 @@ void Skill::SetSubject(Object* sub, SubjectType type)
 
 void Skill::Do()
 {
-	if (setting == nullptr || subject == nullptr)
+	if (setting == nullptr || subject == nullptr || attackCnt >= setting->attackCntLim)
 		return;
-	isDoing = true;
+
 	Projectile* obj = SCENE_MGR->GetCurrentScene()->GetProjectiles()->Get();
+	obj->SetAtkShape(setting->attackShape);
+	obj->SetFrequency(setting->frequency);
 	obj->SetMoveType(setting->moveType);
+	obj->SetDelay(setting->skillDelay);
 	obj->SetDmgType(setting->dmgType);
 	obj->SetAtkDelay(setting->dmgDelay);
 	obj->SetMovingDuration(setting->duration);
 	obj->SetSpeed(setting->speed);
+	obj->SetDistance(setting->distance);
 	obj->SetAnimClip(setting->animClipName);
-	obj->SetAtkShape(setting->attackShape);
-	obj->SetAngle(0.f);
-	obj->Fire();
-	projectiles.push_back(obj);
-	++attackCnt;
 	switch (subType)
 	{
 	case Skill::SubjectType::Player:
-		((Player*)subject)->Action();
-		skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+		if(!(setting->attackType == AttackType::Multiple && isDoing))
+			((Player*)subject)->Action();
 		switch (setting->attackShape)
 		{
 		case Projectile::AttackShape::Range:
+			skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+			obj->SetDirection(skillDir);
+			obj->SetPos(subject->GetPos() + skillDir * setting->distance);
 			break;
 		case Projectile::AttackShape::Rotate:
+			if (isDoing)
+				obj->SetAngle(projectiles.back()->GetAngle() + 360.f / setting->attackCntLim);
+			obj->SetStartPos(subject->GetPos());
 			break;
 		case Projectile::AttackShape::Wave:
+			if(!(setting->attackType == AttackType::Multiple && isDoing))
+				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+			if (((Player*)subject)->GetBackHand())
+				obj->SetReverse(true);
 			obj->SetDirection(skillDir);
 			obj->SetAmplitude(setting->amplitude);
+			obj->SetStartPos(subject->GetPos() + skillDir * setting->distance);
 			break;
 		}
-		obj->SetStartPos(subject->GetPos() + skillDir * setting->distance);
 		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
 		break;
 	case Skill::SubjectType::Enemy:
@@ -67,26 +76,30 @@ void Skill::Do()
 	default:
 		break;
 	}
+	isDoing = true;
+	obj->SetMoving(true);
+	projectiles.push_back(obj);
+	++attackCnt;
 }
 
 void Skill::Update(float dt)
 {
 	if (setting == nullptr || subject == nullptr)
 		return; 
-	if(attackCnt != 0)
+	if(attackCnt != 0 && !isDoing)
 		skillTimer += dt;
 
 	switch (setting->attackType)
 	{
 	case AttackType::SaveAttacks:
-		if (attackCnt > 0 && skillTimer >= setting->skillDelay / setting->attackCntLim)
+		if (attackCnt > 0 && skillTimer >= setting->skillCoolDown / setting->attackCntLim)
 		{
 			--attackCnt;
-			skillTimer -= setting->skillDelay / setting->attackCntLim;
+			skillTimer -= setting->skillCoolDown / setting->attackCntLim;
 		}
 		break;
 	default:
-		if (skillTimer >= setting->skillDelay)
+		if (skillTimer >= setting->skillCoolDown)
 		{
 			attackCnt = 0;
 			skillTimer = 0.f;
@@ -104,17 +117,17 @@ void Skill::Update(float dt)
 				attackTimer += dt;
 				if (attackCnt < setting->attackCntLim)
 				{
-					if (attackTimer >= setting->attackInterval)
-					{
-						Do();
-						attackTimer = 0.f;
-					}
+					if (setting->attackShape != Projectile::AttackShape::Rotate && attackTimer < setting->attackInterval)
+						break;
+					Do();
+					attackTimer = 0.f;
 				}
 				else
 					isDoing = false;
 			}
 			break;
 		default:
+			isDoing = false;
 			break;
 		}
 	}
@@ -123,6 +136,9 @@ void Skill::Update(float dt)
 		isDoing = false;
 	while(it != projectiles.end())
 	{
+		if (setting->attackShape == Projectile::AttackShape::Rotate)
+			(*it)->SetStartPos(subject->GetPos());
+
 		(*it)->Update(dt);
 		if (!(*it)->GetMoving())
 		{

@@ -35,6 +35,7 @@ protected:
 
 	bool isPause;
 	Vector2f objMousePos;
+	Vector2f uiMousePos;
 
 	View worldView;
 	View uiView;
@@ -73,6 +74,7 @@ public:
 	Object* FindGameObj(string name);
 	UiMgr* GetUiMgr() { return uiMgr; }
 	const Vector2f& GetObjMousePos() const { return objMousePos; }
+	const Vector2f& GetUiMousePos() const { return uiMousePos; }
 	vector<list<Object*>*>& GetLayout() { return layOut; }
 	ObjectPool<Projectile>* GetProjectiles() { return projectiles; }
 };

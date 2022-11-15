@@ -17,7 +17,6 @@ void Lancer::Init()
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerLeftIdle"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerRightIdle"));
 
-
 	SetWeaponImage("graphics/LancerSpear.png");
 
 

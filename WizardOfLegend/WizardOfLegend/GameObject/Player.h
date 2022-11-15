@@ -60,6 +60,8 @@ public:
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
 
+	bool GetBackHand() const { return isBackHand; }
+
 	void Action();
 	void SetCurrSkill(Skill* skill) { currSkill = skill; }
 };

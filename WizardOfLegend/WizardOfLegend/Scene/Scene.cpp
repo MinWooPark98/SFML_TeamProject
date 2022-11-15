@@ -8,7 +8,7 @@
 #include "../GameObject/Projectile.h"
 
 Scene::Scene(Scenes type)
-	: type(type), uiMgr(nullptr), isPause(false)
+	: type(type), uiMgr(nullptr), isPause(false), projectiles(nullptr)
 {
 }
 
@@ -47,6 +47,7 @@ void Scene::Update(float dt)
 	Vector2f mousePos = InputMgr::GetMousePos();
 	Vector2f windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 	objMousePos = ScreenToWorld((Vector2i)mousePos);
+	uiMousePos = ScreenToUiPosition((Vector2i)mousePos);
 	projectiles->Update(dt);
 	for (const auto& obj : objList)
 	{

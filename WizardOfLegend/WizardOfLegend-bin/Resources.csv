@@ -234,8 +234,6 @@ animations/player/SlideDown.csv,3
 animations/player/SlideUp.csv,3
 graphics/WizardPalette.png,0
 graphics/DragonArcRight.png,0
-animations/skill/DragonArc/Right.csv,3
-animations/skill/DragonArc/Left.csv,3
 graphics/FireBossSquat0.png,0
 graphics/FireBossSquat1.png,0
 graphics/FireBossSquat2.png,0
@@ -311,3 +309,7 @@ fireBossAnimation/FireBossUpRun.csv,3
 fireBossAnimation/FireBossUpThirdAttack.csv,3
 fireBossAnimation/FireBossUpThrowing.csv,3
 fireBossAnimation/FireBossDownThirdAttack.csv,3
+animations/skill/DragonArcRight.csv,3
+animations/skill/DragonArcLeft.csv,3
+graphics/FireFull.png,0
+animations/skill/FireFull.csv,3

@@ -1,5 +1,6 @@
 #pragma once
-class SkillToolUiMgr
+#include "UiMgr.h"
+
+class SkillToolUiMgr : public UiMgr
 {
 };
-

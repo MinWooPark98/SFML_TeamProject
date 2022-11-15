@@ -105,9 +105,6 @@
     <ClCompile Include="Ui\SkillToolUiMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\Button.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject\Projectile.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -225,9 +222,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Ui\SkillToolUiMgr.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject\Button.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\Projectile.h">
