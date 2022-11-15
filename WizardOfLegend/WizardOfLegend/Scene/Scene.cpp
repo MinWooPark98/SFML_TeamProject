@@ -34,7 +34,7 @@ void Scene::Release()
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 
 			for (auto& obj : objs)
 			{
@@ -65,7 +65,7 @@ void Scene::Update(float dt)
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 
 			for (auto& obj : objs)
 			{
@@ -90,7 +90,7 @@ void Scene::Draw(RenderWindow& window)
 		{
 			for (auto& obj_pair : layer.second)
 			{
-				auto objs = obj_pair.second;
+				auto& objs = obj_pair.second;
 				for (auto& obj : objs)
 				{
 					if (obj->GetActive())
@@ -151,7 +151,7 @@ Object* Scene::FindGameObj(string name)
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
 				if (obj->GetName() == name)
