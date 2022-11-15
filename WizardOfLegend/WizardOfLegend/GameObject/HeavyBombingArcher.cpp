@@ -7,6 +7,7 @@ void HeavyBombingArcher::Init()
 	arrow->SetScale({1.5, 1.5});
 	weapon->SetScale({2, 2});
 	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ArrowLarge.png"));
+	arrow->SetHitBox((FloatRect)arrow->GetSprite().getTextureRect());
 	arrow->SetOrigin(Origins::MC);
 	arrowSpeed = 700.f;
 	arrowDir.setScale({2, 2});
