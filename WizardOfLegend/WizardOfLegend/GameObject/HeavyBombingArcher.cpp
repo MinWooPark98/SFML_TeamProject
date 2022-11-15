@@ -45,7 +45,11 @@ void HeavyBombingArcher::Draw(RenderWindow& window)
 	{
 		for (auto it : smollArrow)
 			it->Draw(window);
+
+		arrowDir.setScale({ 1, 1 });
 	}
+	else
+		arrowDir.setScale({ 2, 2 });
 }
 
 void HeavyBombingArcher::UpdateAttack(float dt)
