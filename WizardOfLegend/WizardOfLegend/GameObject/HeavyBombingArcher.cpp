@@ -88,21 +88,19 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 					smollArrow[i]->SetPos(GetPos());
 
 				weapon->SetPos(GetPos());
+				move = Utils::Normalize(playerLastPos - lastPos);
 
 				if (pattern == Pattern::EscapeAttack)
 				{
-					move = Utils::Normalize(playerLastPos - lastPos);
 					Translate({ dt * speed * move * -1.f });
 				}
 				else
 				{
-					move = Utils::Normalize(playerLastPos - lastPos);
-
 					// 일자로 안감 ㅎㅎ 무조건 대각선
 					if (playerLastPos.y > lastPos.y)
-						move = { move.x * 1.f, 1 };
+						move = { move.x * 0.7f, 1 };
 					else
-						move = { move.x * -1.f, -1 };
+						move = { move.x * 0.7f, -1 };
 
 					Translate({ dt * speed * move });
 				}
