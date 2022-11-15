@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/Framework.h"
-#include "../Ui/UiMgr.h"
+#include "../Ui/MaptoolUiMgr.h"
 #include "../Framework/InputMgr.h"
 #include "../Scene/SceneMgr.h"
 #include "../Framework/SoundMgr.h"
@@ -24,17 +24,28 @@ void Scene::Init()
 }
 void Scene::Release()
 {
-	for (const auto& obj : objList)
+	if (uiMgr != nullptr)
 	{
-		obj->Release();
-		delete obj;
+		((MapToolUiMgr*)uiMgr)->Release();
+		uiMgr = nullptr;
+	}
+	uiMgr = nullptr;
+	for (auto& layer : objList)
+	{
+		for (auto& obj_pair : layer.second)
+		{
+			auto objs = obj_pair.second;
+
+			for (auto& obj : objs)
+			{
+				if (obj != nullptr)
+					delete obj;
+			}
+			objs.clear();
+		}
+		layer.second.clear();
 	}
 	objList.clear();
-}
-
-void Scene::Enter()
-{
-
 }
 
 void Scene::Exit()
@@ -48,12 +59,21 @@ void Scene::Update(float dt)
 	Vector2f windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 	objMousePos = ScreenToWorld((Vector2i)mousePos);
 	uiMousePos = ScreenToUiPosition((Vector2i)mousePos);
-	projectiles->Update(dt);
-	for (const auto& obj : objList)
+	if (projectiles != nullptr)
+		projectiles->Update(dt);
+	for (auto& layer : objList)
 	{
-		if (obj->GetActive())
+		for (auto& obj_pair : layer.second)
 		{
-			obj->Update(dt);
+			auto objs = obj_pair.second;
+
+			for (auto& obj : objs)
+			{
+				if (obj->GetActive())
+				{
+					obj->Update(dt);
+				}
+			}
 		}
 	}
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
@@ -63,12 +83,44 @@ void Scene::Update(float dt)
 void Scene::Draw(RenderWindow& window)
 {
 	window.setView(worldView);
-	for (const auto& obj : objList)
+
+	if (!isMap)
 	{
-		if (obj->GetActive())
+		for (auto& layer : objList)
 		{
-			obj->Draw(window);
+			for (auto& obj_pair : layer.second)
+			{
+				auto objs = obj_pair.second;
+				for (auto& obj : objs)
+				{
+					if (obj->GetActive())
+					{
+						obj->Draw(window);
+					}
+				}
+			}
 		}
+		if (uiMgr != nullptr)
+			uiMgr->Draw(window);
+	}
+	else
+	{
+		//LayerSort();
+		int i = 0;
+		for (auto& obj : objList[LayerType::Tile])
+		{
+			for (auto& o : obj.second)
+			{
+				o->Draw(window);
+			}
+		}
+		//for (auto& obj : drawObjs)
+		//{
+		//	obj->Draw(window);
+		//}
+
+		if (uiMgr != nullptr)
+			uiMgr->Draw(window);
 	}
 }
 
@@ -89,27 +141,26 @@ Vector2f Scene::ScreenToUiPosition(Vector2i screenPos)
 	return window.mapPixelToCoords(screenPos,uiView);
 }
 
-void Scene::AddGameObject(Object* obj)
+void Scene::AddGameObject(Object* obj, LayerType type, int num)
 {
-	objList.push_back(obj);
+	objList[type][num].push_back(obj);
 }
-void Scene::AddGameObjectFirst(Object* obj)
-{
-	objList.insert(++objList.begin(), obj);
-}
-void Scene::DelGameObject(Object* obj)
-{
-	objList.remove(obj);
-}
-
 Object* Scene::FindGameObj(string name)
 {
-	for (auto *obj : objList)
+	for (auto& layer : objList)
 	{
-		if (obj->GetName() == name)
+		for (auto& obj_pair : layer.second)
 		{
-			return obj;
+			auto objs = obj_pair.second;
+			for (auto& obj : objs)
+			{
+				if (obj->GetName() == name)
+				{
+					return obj;
+				}
+			}
 		}
 	}
-	return nullptr;
 }
+
+

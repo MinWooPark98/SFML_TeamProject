@@ -60,7 +60,7 @@ void Projectile::Update(float dt)
 	case Projectile::AttackShape::Rotate:
 		{
 			angle += speed * dt;
-			SetPos(startPos.x + distance * cos((angle) * (M_PI / 180.f)), startPos.y + distance * sin((angle) * (M_PI / 180.f)));
+			SetPos({ startPos.x + distance * (float)cos((angle) * (M_PI / 180.f)), startPos.y + distance * (float)sin((angle) * (M_PI / 180.f)) });
 		}
 		break;
 	case Projectile::AttackShape::Wave:
@@ -95,7 +95,7 @@ void Projectile::Update(float dt)
 
 	if (!isOnAtkDelay)
 	{
-		// Ãæµ¹ °Ë»ç, °ø°Ý
+		// ï¿½æµ¹ ï¿½Ë»ï¿½, ï¿½ï¿½ï¿½ï¿½
 	}
 	else if (dmgType != DamageType::Once)
 	{

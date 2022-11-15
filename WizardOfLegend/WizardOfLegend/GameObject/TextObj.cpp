@@ -22,6 +22,7 @@ void TextObj::Update(float dt)
 void TextObj::Draw(RenderWindow& window)
 {
 	window.draw(text);
+	Object::Draw(window);
 }
 
 void TextObj::SetPos(Vector2f position)
@@ -44,11 +45,22 @@ void TextObj::SetText(string str)
 {
 	text.setString(str);
 }
+void TextObj::SetText(Font& font, int size, Color color, string str)
+{
+	text.setFont(font);
+	text.setCharacterSize(size);
+	text.setString(str);
+	text.setFillColor(color);
+}
+void TextObj::SetString(string str)
+{
+	text.setString(str);
+}
 void TextObj::SetOrigin(Origins origin)
 {
 	Utils::SetOrigin(text, origin);
 }
-const string TextObj::GetText() const
+string TextObj::GetString()
 {
 	return text.getString();
 }

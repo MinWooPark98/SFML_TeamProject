@@ -1,5 +1,6 @@
 #include "Lancer.h"
 
+
 void Lancer::Init()
 {
 	Enemy::Init();
@@ -17,9 +18,8 @@ void Lancer::Init()
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerLeftIdle"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("LancerRightIdle"));
 
+
 	SetWeaponImage("graphics/LancerSpear.png");
-
-
 	SpriteObj tempSpearImage;
 	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerAttackEffect2.png"));
 	lancerAttackEffect = new SpriteObj();
@@ -170,10 +170,10 @@ void Lancer::UpdateAttack(float dt)
 		switch (spearPos)
 		{
 		case 1: case 2:
-			weapon->SetPos({ weapon->GetPos().x, weapon->GetPos().y - 5.f}); // ÁÂ¿ì
+			weapon->SetPos({ weapon->GetPos().x, weapon->GetPos().y - 5.f}); // ï¿½Â¿ï¿½
 			break;
 		case 3: case 4:
-			weapon->SetPos({ weapon->GetPos().x + 5.f, weapon->GetPos().y - 5.f }); // »óÇÏ
+			weapon->SetPos({ weapon->GetPos().x + 5.f, weapon->GetPos().y - 5.f }); // ï¿½ï¿½ï¿½ï¿½
 			break;
 		}
 

@@ -2,97 +2,74 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "../Framework/FileMgr.h"
+#include <list>
 
 using namespace std;
 using namespace sf;
 
-enum class Tag
-{
-	NONE,
-	PLAYER,
-	MONSTER,
-	COLLIDER,
-	GROUND,
-	BACKGROUND,
-	TRAP,
-	BREAKABLE,
-};
-
 class Object
 {
 protected:
-	int id;
-	string name;
-	int layer;
-	Tag tag;
+    int id;
+    string name;
+    bool enabled;
 
-	bool enabled;
-	bool isVisible;
+    Vector2f position;
+    float rotation;
+    Vector2f direction;
+    Vector2f scale;
 
-	Vector2f position;
-	Vector2f direction;
-	float rotation;
-	Vector2f scale;
-	
-	float gravity;
-	bool gravityApply;
-	
-	static int objCount;
+    float gravity;
+    bool gravityApply;
 
-	RectangleShape hitbox;
-	bool isDevMode;
+    static int objCount;
 
+    RectangleShape hitbox;
+    bool isDevMode;
+
+    bool isUi;
+    bool viewIn;
 public:
-	Object();
-	virtual ~Object();
+    Object();
+    virtual ~Object();
 
-	int GetObjId() const;
 
-	virtual void SetActive(bool active);
-	virtual bool GetActive() const;
+    virtual bool GetActive() const;
+    virtual void SetActive(bool active);
 
-	virtual void Init();
-	virtual void Release();
+    virtual void Init();
+    virtual void Release();
 
-	virtual void Reset();
+    virtual void Reset();
 
-	virtual void SetPos(const Vector2f& pos);
-	virtual void SetPos(const float& x, const float& y);
-	virtual const Vector2f& GetPos() const;
-	virtual void Translate(const Vector2f& delta);
+    virtual void Update(float dt);
+    virtual void Draw(RenderWindow& window);
 
-	void SetGravity(float g) { gravity = g; }
-	void SetGravityApply(bool apply) { gravityApply = apply; }
-	bool GetGravityApply() const { return gravityApply; }
+    virtual void SetPos(const Vector2f& pos);
+    virtual const Vector2f& GetPos() const;
+    virtual void Translate(const Vector2f& delta);
 
-	virtual void SetRotation(float rotation) { this->rotation = rotation; }
+    void SetGravity(float g) { gravity = g; }
+    void SetGravityApply(bool apply) { gravityApply = apply; }
+    bool GetGravityApply() const { return gravityApply; }
 
-	virtual void Update(float dt);
-	virtual void Draw(RenderWindow& window);
+    virtual void SetRotation(float rotation) { this->rotation = rotation; }
 
-	void SetName(string name) { this->name = name; }
-	const string& GetName() const { return name; }
+    void SetUI(bool u) { isUi = u; }
+    bool IsInView();
+    const int& GetObjId() const;
+    void SetId(int id) { this->id = id; }
 
-	void SetDirection(const Vector2f& dir) { direction = dir; }
-	const Vector2f& GetDirection() const { return direction; }
+    void SetName(string name) { this->name = name; }
+    const string& GetName() const { return name; }
 
-	virtual void SetDevMode(bool devMode) { isDevMode = devMode; }
-	virtual bool GetDevMode() const { return isDevMode; }
-	virtual void SwitchDevMode() { isDevMode = !isDevMode; }
+    void SetDirection(const Vector2f& dir) { direction = dir; }
+    const Vector2f& GetDirection() const { return direction; }
 
-	virtual void SetHitBox(const FloatRect rect);
-	virtual RectangleShape GetHitBox();
-
-	FloatRect GetHitBounds() const { return hitbox.getGlobalBounds(); }
-
-	void SetHidden();
-	void SetVisible();
-	bool GetIsVisible();
-
-	void SetLayer(int layer);
-	int Getlayer();
-
-	void SetTag(Tag tag);
-	Tag GetTag();
-	bool CompareTag(Tag tag);
+    virtual void SetDevMode(bool devMode) { isDevMode = devMode; }
+    virtual bool GetDevMode() const { return isDevMode; }
+    virtual void SwitchDevMode() { isDevMode = !isDevMode; }
+    virtual void SetHitBox(const FloatRect rect);
+    FloatRect GetHitBounds() const { return hitbox.getGlobalBounds(); }
 };

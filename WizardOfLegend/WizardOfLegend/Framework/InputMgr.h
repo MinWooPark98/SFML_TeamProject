@@ -40,6 +40,8 @@ private:
 	static Vector2f mousePos;
 	static Vector2f prevMousePos;
 	static Vector2f mousePosDisplacement;
+	static bool wheelUp;
+	static bool wheelDown;
 
 public:
 	static void Init();
@@ -53,8 +55,10 @@ public:
 	static bool GetMouseButtonDown(Mouse::Button key);
 	static bool GetMouseButton(Mouse::Button key);
 	static bool GetMouseButtonUp(Mouse::Button key);
-
 	static float GetMouseWheelMoved();
+	static bool GetMouseWheelUp();
+	static bool GetMouseWheelDown();
+
 	static list<Keyboard::Key> GetKeyDownList() { return downList; }
 	static list<Keyboard::Key> GetKeyIngList() { return ingList; }
 
@@ -66,4 +70,7 @@ public:
 
 	static float GetAxis(Axis axis);
 	static float GetAxisRaw(Axis axis);
+
+	static char GetLastKey();
+	static bool GetKeyDown();
 };

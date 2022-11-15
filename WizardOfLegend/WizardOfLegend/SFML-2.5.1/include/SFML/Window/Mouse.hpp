@@ -50,11 +50,11 @@ public:
     ////////////////////////////////////////////////////////////
     enum Button
     {
-        Left,       ///< The left mouse button
-        Right,      ///< The right mouse button
-        Middle,     ///< The middle (wheel) mouse button
-        XButton1,   ///< The first extra mouse button
-        XButton2,   ///< The second extra mouse button
+        Left,       ///< The left mouse Button
+        Right,      ///< The right mouse Button
+        Middle,     ///< The middle (wheel) mouse Button
+        XButton1,   ///< The first extra mouse Button
+        XButton2,   ///< The second extra mouse Button
 
         ButtonCount ///< Keep last -- the total number of mouse buttons
     };
@@ -70,11 +70,11 @@ public:
     };
 
     ////////////////////////////////////////////////////////////
-    /// \brief Check if a mouse button is pressed
+    /// \brief Check if a mouse Button is pressed
     ///
-    /// \param button Button to check
+    /// \param Button Button to check
     ///
-    /// \return True if the button is pressed, false otherwise
+    /// \return True if the Button is pressed, false otherwise
     ///
     ////////////////////////////////////////////////////////////
     static bool isButtonPressed(Button button);
@@ -147,7 +147,7 @@ public:
 /// and MouseButtonReleased events, sf::Mouse can retrieve the
 /// state of the cursor and the buttons at any time
 /// (you don't need to store and update a boolean on your side
-/// in order to know if a button is pressed or released), and you
+/// in order to know if a Button is pressed or released), and you
 /// always get the real state of the mouse, even if it is
 /// moved, pressed or released when your window is out of focus
 /// and no event is triggered.

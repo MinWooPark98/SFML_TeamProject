@@ -14,6 +14,8 @@ list<Mouse::Button> InputMgr::ingMouse;
 list<Mouse::Button> InputMgr::upMouse;
 
 int InputMgr::mouseWheelMoved;
+bool InputMgr::wheelUp;
+bool InputMgr::wheelDown;
 
 Vector2f InputMgr::mousePos;
 Vector2f InputMgr::mousePosDisplacement;
@@ -158,6 +160,16 @@ float InputMgr::GetMouseWheelMoved()
 	return mouseWheelMoved;
 }
 
+bool InputMgr::GetMouseWheelUp()
+{
+	return wheelUp;
+}
+
+bool InputMgr::GetMouseWheelDown()
+{
+	return wheelDown;
+}
+
 const Vector2f& InputMgr::GetMousePos()
 {
 	return mousePos;
@@ -195,4 +207,17 @@ float InputMgr::GetAxisRaw(Axis axis)
 const Vector2f& InputMgr::GetMousePosDisplacement()
 {
 	return mousePosDisplacement;
+}
+
+
+char InputMgr::GetLastKey()
+{
+	if (downList.empty())
+		return ' ';
+	return downList.front() + 'A';
+}
+
+bool InputMgr::GetKeyDown()
+{
+	return !downList.empty();
 }

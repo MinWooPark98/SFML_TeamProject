@@ -149,7 +149,10 @@
     <ClCompile Include="GameObject\FireBoss.cpp" />
     <ClCompile Include="GameObject\Enemy.cpp" />
     <ClCompile Include="GameObject\Archer.cpp" />
-    <ClCompile Include="GameObject\Collider.cpp" />
+    <ClCompile Include="Ui\DrawSelect.cpp" />
+    <ClCompile Include="Framework\FileData.cpp" />
+    <ClCompile Include="Framework\FileMgr.cpp" />
+    <ClCompile Include="GameObject\Button.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
     <ClCompile Include="Framework\RayCast.cpp" />
@@ -160,16 +163,22 @@
     <ClCompile Include="Framework\InputMgr.cpp" />
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Framework\Utils.cpp" />
+    <ClCompile Include="GameObject\DrawObj.cpp" />
+    <ClCompile Include="GameObject\MoveObj.cpp" />
     <ClCompile Include="GameObject\TextObj.cpp" />
     <ClCompile Include="GameObject\Lancer.cpp" />
+    <ClCompile Include="GameObject\UiObject.cpp" />
     <ClCompile Include="GameObject\VertexArrayObj.cpp" />
-    <ClCompile Include="GameObject\Ground.cpp" />
     <ClCompile Include="GameObject\HeavyBombingArcher.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
-    <ClCompile Include="GameObject\Stable.cpp" />
-    <ClCompile Include="Ui\MapToolUiMgr.cpp" />
-    <ClCompile Include="Scene\MapToolScene.cpp" />
+    <ClCompile Include="Ui\LoadWindowBox.cpp" />
+    <ClCompile Include="Ui\MapToolUiMgr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Scene\MapToolScene.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GameObject\Player.cpp" />
     <ClCompile Include="GameObject\Projectile.cpp" />
     <ClCompile Include="Scene\PlayScene.cpp" />
@@ -180,6 +189,7 @@
     <ClCompile Include="GameObject\Skill.cpp" />
     <ClCompile Include="Scene\SkillToolScene.cpp" />
     <ClCompile Include="DataTable\SkillTable.cpp" />
+    <ClCompile Include="Ui\SaveWindowBox.cpp" />
     <ClCompile Include="Ui\SkillToolUiMgr.cpp" />
     <ClCompile Include="Ui\UiMgr.cpp" />
   </ItemGroup>
@@ -189,7 +199,10 @@
     <ClInclude Include="GameObject\FireBoss.h" />
     <ClInclude Include="GameObject\Enemy.h" />
     <ClInclude Include="GameObject\Archer.h" />
-    <ClInclude Include="GameObject\Collider.h" />
+    <ClInclude Include="Ui\DrawSelect.h" />
+    <ClInclude Include="Framework\FileData.h" />
+    <ClInclude Include="Framework\FileMgr.h" />
+    <ClInclude Include="GameObject\Button.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
     <ClInclude Include="GameObject\DragRectTile.h" />
@@ -202,15 +215,21 @@
     <ClInclude Include="Framework\ObjectPool.h" />
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Framework\Utils.h" />
+    <ClInclude Include="GameObject\DrawObj.h" />
+    <ClInclude Include="GameObject\MoveObj.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="GameObject\TextObj.h" />
     <ClInclude Include="GameObject\Lancer.h" />
+    <ClInclude Include="GameObject\UiObject.h" />
     <ClInclude Include="GameObject\VertexArrayObj.h" />
-    <ClInclude Include="GameObject\Stable.h" />
-    <ClInclude Include="GameObject\Ground.h" />
     <ClInclude Include="GameObject\HeavyBombingArcher.h" />
-    <ClInclude Include="Ui\MapToolUiMgr.h" />
-    <ClInclude Include="Scene\MapToolScene.h" />
+    <ClInclude Include="Ui\LoadWindowBox.h" />
+    <ClInclude Include="Ui\MapToolUiMgr.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Scene\MapToolScene.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="GameObject\Player.h" />
     <ClInclude Include="GameObject\Projectile.h" />
     <ClInclude Include="Scene\PlayScene.h" />
@@ -221,6 +240,7 @@
     <ClInclude Include="GameObject\Skill.h" />
     <ClInclude Include="Scene\SkillToolScene.h" />
     <ClInclude Include="DataTable\SkillTable.h" />
+    <ClInclude Include="Ui\SaveWindowBox.h" />
     <ClInclude Include="Ui\SkillToolUiMgr.h" />
     <ClInclude Include="Ui\UiMgr.h" />
   </ItemGroup>

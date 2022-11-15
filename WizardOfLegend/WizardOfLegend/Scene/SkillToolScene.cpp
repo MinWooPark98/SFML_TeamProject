@@ -17,7 +17,7 @@ void SkillToolScene::Init()
 
 	Player* player = new Player();
 	player->Init();
-	objList.push_back(player);
+	objList[LayerType::Object][0].push_back(player);
 }
 
 void SkillToolScene::Release()

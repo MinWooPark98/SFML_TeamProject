@@ -27,7 +27,7 @@ void RayCast::Update(float dt)
 	Reset();
 	Scene* currScene = SCENE_MGR->GetCurrentScene();
 	auto& layOut = currScene->GetLayout();
-	for (int i = 0; i < (int)Scene::Layer::Count; ++i)
+	for (int i = 0; i < (int)Scene::LayerType::Count; ++i)
 	{
 		if (layerMask != -1 && i != layerMask)
 			continue;

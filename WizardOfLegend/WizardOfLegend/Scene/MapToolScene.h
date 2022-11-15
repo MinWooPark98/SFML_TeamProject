@@ -1,34 +1,40 @@
 #pragma once
-#include "Scene.h"
+#define WIDTHCNT 64
+#define HEIGHTCNT 32
+#include "../Scene/Scene.h"
 
-class VertexArrayObj;
-
-class MapToolScene :  public Scene
+class Button;
+class UiMgr;
+class DrawObj;
+class MapToolScene : public Scene
 {
-protected:
-	
-	VertexArrayObj* tileMap;
-	RectangleShape boldTile;
+private:
 
+	map<int, vector<Button*>> greeds;
+	map<LayerType, map<int, map<int, DrawObj*>>> greedObjs; //Tile, Object, Enermy
+	vector<ObjectData> saveObjs;
+	Vector2f initMousePos;
+	bool isMove;
+	string type;
 
+	LayerType nowType;
+	DrawObj* player;
+	Vector2i playerPos;
 
 public:
 	MapToolScene();
 	virtual ~MapToolScene();
 
-
-	virtual void Init() override; //생성
-	virtual void Release() override;	 //해제
-
+	virtual void Init() override;
 	virtual void Reset() override;
-
-	virtual void Enter() override;
-	virtual void Exit() override;
-
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
+	virtual void Enter() override;
+	virtual void Exit() override;
+	virtual void Release() override;
+	void SetType(string t);
 
-	void CreateTileMap(int rows, int cols);
-
+	void Save();
+	void Load(string path);
 };
 

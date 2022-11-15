@@ -1,72 +1,106 @@
 #include "MapToolScene.h"
-#include "../GameObject/VertexArrayObj.h"
-#include "../Framework/Framework.h"
-#include "../Framework/InputMgr.h"
+#include "../GameObject/Button.h"
+#include "../Framework/ResourceMgr.h"
+#include "../Scene/SceneMgr.h"
 #include "../Ui/MapToolUiMgr.h"
-#include <math.h>
-//#include "../SFML-2.5.1/include/SFML/Graphics.hpp"
+#include "../GameObject/DrawObj.h"
+#include "../Framework/InputMgr.h"
+#include <algorithm>
+#include "../Framework/Framework.h"
 
 MapToolScene::MapToolScene()
-	:Scene(Scenes::MapTool)
-{
-}
-
-MapToolScene::~MapToolScene()
+	: Scene(Scenes::MapTool)
 {
 }
 
 void MapToolScene::Init()
 {
-	Vector2i size = FRAMEWORK->GetWindowSize();
-
-	CreateTileMap(100, 100);
-	tileMap->SetPos({ 0, 0 });
-	tileMap->Init();
-
-	boldTile.setSize({ 64,64 });
-	boldTile.setOutlineThickness(4);
-	boldTile.setOutlineColor(Color::Magenta);
-	boldTile.setFillColor({0, 0, 0, 0});
-
-	uiMgr = new MapToolUiMgr();
-	uiMgr->Init();
-}
-
-void MapToolScene::Release()
-{
-	Scene::Release();
-	if (uiMgr != nullptr)
-	{
-		uiMgr->Release();
-		delete uiMgr;
-	}
+	Reset();
 }
 
 void MapToolScene::Reset()
 {
-	for (auto& obj : objList)
-	{
-		obj->Reset();
-	}
-	uiMgr->Reset();
-}
+	//for (int i = 0; i < HEIGHTCNT; i++)
+	//{
+	//	for (int j = 0; j < WIDTHCNT; j++)
+	//	{
+	//		auto tile = new Button(nullptr);
+	//		greeds[i].push_back(tile);
+	//		tile->SetTexture(*RESOURCE_MGR->GetTexture("graphics/editor/greed.png"), true);
+	//		tile->SetPos({ 60.f * j, 60.f * i });
+	//		objList[LayerType::Back][i].push_back(tile);
+	//		tile->SetUiView(false);
+	//	}
+	//}
+	uiMgr = new MapToolUiMgr(this);
+	uiMgr->Init();
+	nowType = LayerType::Object;
 
-void MapToolScene::Enter()
-{
-	Vector2f size = (Vector2f)FRAMEWORK->GetWindowSize();
-	worldView.setSize(size);
-	worldView.setCenter(size.x * 0.5f, size.y * 0.5f);
-	uiView.setSize(size);
-	uiView.setCenter(size.x * 0.5f, size.y * 0.5f);
-}
+	DrawObj* draw = new DrawObj(uiMgr);
+	auto editorObjs = FILE_MGR->GetEditorObjs();
+	auto playerData = editorObjs["PLAYER"];
+	draw->SetType("PLAYER");
+	draw->SetPath(playerData[0].texPath);
+	draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
+	draw->SetOrigin(Origins::BC);
+	draw->SetMove(false);
+	draw->SetPos(greeds[0][0]->GetPos() + Vector2f{ 30.f, 60.f });
+	draw->SetData(playerData[0]);
+	objList[nowType][0].push_back(draw);
+	greedObjs[nowType][0][0] = draw;
 
-void MapToolScene::Exit()
-{
+	player = draw;
 }
 
 void MapToolScene::Update(float dt)
 {
-	tileMap->Update(dt);
+	Scene::Update(dt);
+
+	auto uimgr = ((MapToolUiMgr*)uiMgr);
+	if (uimgr->IsExit() || InputMgr::GetKeyDown(Keyboard::Escape))
+	{
+		SCENE_MGR->ChangeScene(Scenes::Title);
+		return;
+	}
+	if (uimgr->IsSave())
+	{
+		Save();
+		return;
+	}
+	if (uimgr->IsLoad())
+	{
+		string path = uimgr->loadFile();
+		Load(path);
+
+		return;
+	}
+
+	if (uimgr->IsErase() || InputMgr::GetKeyDown(Keyboard::E))
+	{
+		((MapToolUiMgr*)uiMgr)->DeleteDraw();
+		return;
+
+	}
+	if (InputMgr::GetMouseButtonDown(Mouse::Right))
+	{
+		initMousePos = InputMgr::GetMousePos();
+		isMove = true;
+	}
+	if (isMove)
+	{
+		auto deltaPos = InputMgr::GetMousePos() - initMousePos;
+		initMousePos = InputMgr::GetMousePos();
+		cout << deltaPos.x << endl;
+		cout << deltaPos.y << endl;
+		auto movePos = SCENE_MGR->GetCurrentScene()->GetWorldView().getCenter() - deltaPos;
+		SCENE_MGR->GetCurrentScene()->GetWorldView().setCenter(movePos);
+	}
+	if (InputMgr::GetMouseButtonUp(Mouse::Right))
+	{
+		isMove = false;
+	}
+
+
 	if (InputMgr::GetMouseWheelMoved() < 0)
 	{
 		Vector2f size = worldView.getSize();
@@ -82,52 +116,259 @@ void MapToolScene::Update(float dt)
 		Vector2f pos = InputMgr::GetMousePosDisplacement();
 		worldView.setCenter(worldView.getCenter() + pos);
 	}
+	for (int i = 0; i < HEIGHTCNT; i++)
+	{
+		for (int j = 0; j < WIDTHCNT; j++)
+		{
+			if (greeds[i][j]->IsClick())
+			{
+				if (nowType == LayerType::Object && playerPos == Vector2i{ i,j })
+					return;
 
-	float boldTilePosX = floor(objMousePos.x / 64) * 64;
-	float boldTilePosY = floor(objMousePos.y / 64) * 64;
-	boldTile.setPosition({ boldTilePosX,boldTilePosY });
-	//0~63을 0으로 강제한다.
-	Scene::Update(dt);	
-	uiMgr->Update(dt);
+				DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
+				auto& nowGreedObjs = greedObjs[nowType];
 
+				if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsUnder())
+				{
+					Button* findObj = nullptr;
+					if (nowGreedObjs.find(i) != nowGreedObjs.end())
+					{
+						if (nowGreedObjs[i].find(j) != nowGreedObjs[i].end())
+						{
+							findObj = nowGreedObjs[i][j];
+							auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
+							objList[nowType][i].erase(deleteObj);
+							greedObjs[nowType][i].erase(nowGreedObjs[i].find(j));
+
+							delete findObj;
+						}
+					}
+					return;
+				}
+
+				Button* findObj = nullptr;
+				if (nowGreedObjs.find(i) != nowGreedObjs.end())
+				{
+					if (nowGreedObjs[i].find(j) != nowGreedObjs[i].end())
+					{
+						findObj = nowGreedObjs[i][j];
+
+						if (nowDraw->GetType() == "PLAYER")
+							return;
+
+						auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
+						objList[nowType][i].erase(deleteObj);
+						greedObjs[nowType][i].erase(nowGreedObjs[i].find(j));
+
+						delete findObj;
+					}
+				}
+
+				DrawObj* draw = new DrawObj(uiMgr);
+				draw->SetType(nowDraw->GetType());
+				draw->SetPath(nowDraw->GetPath());
+				draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
+				draw->SetOrigin(Origins::BC);
+				draw->SetMove(false);
+				draw->SetPos(greeds[i][j]->GetPos() + Vector2f{ 30.f, 60.f });
+				draw->SetData(nowDraw->GetData());
+				objList[nowType][i].push_back(draw);
+				greedObjs[nowType][i][j] = draw;
+
+				if (nowDraw->GetType() == "PLAYER")
+				{
+					if (player != nullptr)
+					{
+						int pi = playerPos.x;
+						int pj = playerPos.y;
+						if (nowGreedObjs.find(pi) != nowGreedObjs.end())
+						{
+							if (nowGreedObjs[pi].find(pj) != nowGreedObjs[pi].end())
+							{
+								findObj = nowGreedObjs[pi][pj];
+								auto deleteObj = find(objList[nowType][pi].begin(), objList[nowType][pi].end(), findObj);
+								objList[nowType][pi].erase(deleteObj);
+								greedObjs[nowType][pi].erase(nowGreedObjs[pi].find(pj));
+
+								delete findObj;
+							}
+						}
+					}
+					player = draw;
+					playerPos = { i,j };
+				}
+			}
+		}
+	}
 }
 
 void MapToolScene::Draw(RenderWindow& window)
 {
 	Scene::Draw(window);
-	tileMap->Draw(window);
-	window.draw(boldTile);
-
-	window.setView(uiView);
-	uiMgr->Draw(window);
 }
 
-void MapToolScene::CreateTileMap(int rows, int cols)
-{
-	Vector2i size = FRAMEWORK->GetWindowSize();
-	if (tileMap == nullptr)
-	{
-		tileMap = new VertexArrayObj();
-		objList.push_back(tileMap);
-	}
-	float numLines = rows+ cols + 2;
-	VertexArray& va = tileMap->GetVA();
-	va.clear();
-	va.setPrimitiveType(Lines);
-	va.resize(2 * (numLines));
 
-	// row separators
-	for (int i = 0; i < rows + 1; i++) {
-		int r = i;
-		float rowY = 64 * r;
-		va[i * 2].position = { 0, rowY };
-		va[i * 2 + 1].position = { (float)64*cols, rowY };
+void MapToolScene::Enter()
+{
+	float WindowWidth = FRAMEWORK->GetWindowSize().x;
+	float WindowHeight = FRAMEWORK->GetWindowSize().y;
+	SCENE_MGR->GetCurrentScene()->GetWorldView().setCenter({ WindowWidth / 2.f, WindowHeight / 2.f });
+	SCENE_MGR->GetCurrentScene()->GetWorldView().setSize({ WindowWidth , WindowHeight });
+	SCENE_MGR->GetCurrentScene()->GetUiView().setCenter({ WindowWidth / 2.f, WindowHeight / 2.f });
+	SCENE_MGR->GetCurrentScene()->GetUiView().setSize({ WindowWidth , WindowHeight });
+	Init();
+}
+
+void MapToolScene::Exit()
+{
+	Release();
+}
+
+void MapToolScene::Release()
+{
+	for (auto& objs : objList[LayerType::Object])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
 	}
-	// column separators
-	for (int j =0; j < cols+1; j++) {
-		int c = j;
-		float colX = 64 * c;
-		va[numLines +j * 2].position = { colX, 0 };
-		va[numLines +j * 2 + 1].position = { colX, (float)64*rows };
+
+	for (auto& objs : objList[LayerType::Tile])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
 	}
+	objList[LayerType::Tile].clear();
+	objList[LayerType::Object].clear();
+	greedObjs.clear();
+
+	player = nullptr;
+
+}
+
+MapToolScene::~MapToolScene()
+{
+}
+
+void MapToolScene::SetType(string t)
+{
+	if (t == "TREE" || t == "STONE" || t == "ENEMY" || t == "PLAYER" || t == "BLOCK")
+	{
+		nowType = LayerType::Object;
+	}
+	if (t == "TILE")
+	{
+		nowType = LayerType::Tile;
+	}
+}
+
+void MapToolScene::Save()
+{
+	saveObjs.clear();
+	string path = ((MapToolUiMgr*)(uiMgr))->GetPath();
+	for (auto& layer : greedObjs)
+	{
+		for (auto& objs : layer.second)
+		{
+			for (auto& obj : objs.second)
+			{
+				auto& nowObject = obj.second;
+				ObjectData data;
+				data.type = nowObject->GetType();
+				data.path = nowObject->GetPath();
+				data.position = nowObject->GetPos();
+				saveObjs.push_back(data);
+			}
+		}
+	}
+
+
+	if (path == "")
+		return;
+
+	FILE_MGR->SaveMap(saveObjs, path);
+	((MapToolUiMgr*)uiMgr)->SetLoadInit();
+}
+
+void MapToolScene::Load(string path)
+{
+	for (auto& objs : objList[LayerType::Object])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
+
+	for (auto& objs : objList[LayerType::Tile])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
+	objList[LayerType::Tile].clear();
+	objList[LayerType::Object].clear();
+	greedObjs.clear();
+
+	player = nullptr;
+	auto& data = FILE_MGR->GetMap(path);
+	for (auto& obj : data)
+	{
+		DrawObj* draw = new DrawObj(uiMgr);
+		draw->SetType(obj.type);
+		draw->SetPath(obj.path);
+		draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
+		draw->SetOrigin(Origins::BC);
+		draw->SetMove(false);
+		draw->SetPos(obj.position);
+
+		int i = ((int)obj.position.x - 30) / 60;
+		int j = (int)obj.position.y / 60 - 1;
+		if (obj.type == "TREE" || obj.type == "STONE" || obj.type == "ENEMY" || obj.type == "PLAYER" || obj.type == "BLOCK")
+		{
+			objList[LayerType::Object][j].push_back(draw);
+			greedObjs[LayerType::Object][j][i] = draw;
+
+			if (obj.type == "PLAYER")
+			{
+				player = draw;
+				playerPos = Vector2i{ j,i };
+			}
+		}
+		else if (obj.type == "TILE")
+		{
+			objList[LayerType::Tile][j].push_back(draw);
+			greedObjs[LayerType::Tile][j][i] = draw;
+		}
+	}
+
+	((MapToolUiMgr*)uiMgr)->SetLoadPath(path);
 }

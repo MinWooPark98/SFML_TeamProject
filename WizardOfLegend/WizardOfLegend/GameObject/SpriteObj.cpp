@@ -1,8 +1,8 @@
 #include "SpriteObj.h"
+#include "../Scene/SceneMgr.h"
 
 SpriteObj::SpriteObj()
 {
-	
 }
 
 SpriteObj::~SpriteObj()
@@ -11,99 +11,111 @@ SpriteObj::~SpriteObj()
 
 void SpriteObj::Init()
 {
-	DebugCollision();
+}
+
+void SpriteObj::Update(float dt)
+{
+    Object::Update(dt);
 }
 
 void SpriteObj::Draw(RenderWindow& window)
 {
-	Object::Draw(window);
-	window.draw(sprite);
+    Object::Draw(window);
+    window.draw(sprite);
 }
 
 void SpriteObj::SetTexture(const Texture& tex)
 {
-	sprite.setTexture(tex, true);
+    sprite.setTexture(tex, true);
 }
 
 void SpriteObj::SetOrigin(Origins origin)
 {
-	Utils::SetOrigin(sprite, origin);
-	Utils::SetOrigin(hitbox, origin);
+    Utils::SetOrigin(sprite, origin);
+    Utils::SetOrigin(hitbox, origin);
 }
 
 void SpriteObj::SetColor(Color color)
 {
-	sprite.setColor(color);
+    sprite.setColor(color);
+}
+Color SpriteObj::GetColor()
+{
+    return Color();
 }
 Vector2f SpriteObj::GetSize() const
 {
-	FloatRect rect = sprite.getLocalBounds();
+    FloatRect rect = sprite.getLocalBounds();
 
-	return Vector2f(rect.width, rect.height);
+    return Vector2f(rect.width, rect.height);
 }
 
 void SpriteObj::SetPos(const Vector2f& pos)
 {
-	Object::SetPos(pos);
-	sprite.setPosition(position);
+    Object::SetPos(pos);
+    sprite.setPosition(position);
 }
 
-void SpriteObj::SetPos(const float& x, const float& y)
+bool SpriteObj::IsInView()
 {
-	Object::SetPos(Vector2f(x,y));
-	sprite.setPosition(position);
+    if (isUi)
+    {
+        viewIn = true;
+        return true;
+    }
+
+    auto& view = SCENE_MGR->GetCurrentScene()->GetWorldView();
+    auto& viewSize = view.getSize();
+    auto& viewCenter = view.getCenter();
+    auto bound = GetGlobalBounds();
+
+    if (((bound.left > viewCenter.x + viewSize.x / 2) || (bound.left + bound.width < viewCenter.x - viewSize.x / 2)) ||
+        ((bound.top > viewCenter.y + viewSize.y / 2) || (bound.top + bound.height < viewCenter.y - viewSize.y / 2)))
+    {
+        viewIn = false;
+        return false;
+    }
+    viewIn = true;
+    return true;
 }
 
 void SpriteObj::SetTextureRect(const IntRect& rect)
 {
-	sprite.setTextureRect(rect);
+    sprite.setTextureRect(rect);
 }
 void SpriteObj::SetSize(Vector2f size)
 {
-	auto localSize = sprite.getLocalBounds();
-	sprite.setScale({ size.x / localSize.width, size.y / localSize.height });
+    auto localSize = sprite.getLocalBounds();
+    sprite.setScale({ size.x / localSize.width, size.y / localSize.height });
 }
 void SpriteObj::SetScale(Vector2f scale)
 {
-	sprite.setScale(scale);
+    sprite.setScale(scale);
 }
 const IntRect& SpriteObj::GetTextureRect() const
 {
-	return sprite.getTextureRect();
+    return sprite.getTextureRect();
+}
+
+void SpriteObj::SetFlipX(bool flip)
+{
+    Vector2f scale = sprite.getScale();
+    scale.x = flip ? -abs(scale.x) : abs(scale.x);
+    sprite.setScale(scale);
+}
+
+void SpriteObj::SetFlipY(bool flip)
+{
+    Vector2f scale = sprite.getScale();
+    scale.y = flip ? -abs(scale.y) : abs(scale.y);
+    sprite.setScale(scale);
 }
 
 FloatRect SpriteObj::GetGlobalBounds() const
 {
-	return sprite.getGlobalBounds();
+    return sprite.getGlobalBounds();
 }
 FloatRect SpriteObj::GetLocalBounds() const
 {
-	return sprite.getLocalBounds();
-}
-
-void SpriteObj::DebugCollision()
-{
-	hitbox.setSize(Vector2f(sprite.getLocalBounds().width, sprite.getLocalBounds().height));
-	hitbox.setPosition(sprite.getPosition());
-	hitbox.setOrigin(sprite.getOrigin());
-
-	hitbox.setOutlineThickness(1.5f);
-	hitbox.setOutlineColor(Color::Red);
-	hitbox.setFillColor(Color::Color(0, 0, 0, 0));
-}
-
-
-bool SpriteObj::CheckCollision(SpriteObj* otherObj)
-{
-	if (otherObj->CompareTag(Tag::COLLIDER))
-	{
-		return this->GetSprite().getGlobalBounds().intersects(otherObj->GetHitBounds());
-	}
-
-	return this->GetSprite().getGlobalBounds().intersects(otherObj->GetSprite().getGlobalBounds());
-}
-
-bool SpriteObj::Collision(SpriteObj* otherObj)
-{
-	return false;
+    return sprite.getLocalBounds();
 }
