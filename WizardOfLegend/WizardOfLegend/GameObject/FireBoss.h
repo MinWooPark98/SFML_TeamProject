@@ -15,11 +15,31 @@ public:
 		// 5개는 플레이어 위치 받아서 낙하(착지시 바로, 다음 딜레이 0.5초), 나머지는 랜덤위치
 	};
 
-protected:
+	enum class MoveType
+	{
+		None = -1,
+		LeftAndRight,
+		TopAndBottom,
+	};
 
+protected:
+	AttackType attackType;
+	MoveType moveType;
+	Vector2f lastPos;
+	int thirdAttackCount = 3;
+	int patternCount = 3;
+
+	bool isThirdAttack = false;
+	bool isFireBall = false;
+	bool isThrowingKnife = false;
+	bool isDragonAttack = false;
+	bool isMeteor = false;
+
+	float patternDelay = 0.5f;
+	float nextPatternDelay = 0.5f;
 
 public:
-	FireBoss() {};
+	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};
 	virtual ~FireBoss() {};
 
 	virtual void Release() override { Enemy::Release(); };
@@ -27,7 +47,9 @@ public:
 	virtual void Init() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
-	virtual void SetState(States newState) override;
+	virtual void SetState(States newState) override {};
+	virtual void SetState(BossStates newState);
 	virtual void UpdateAttack(float dt) override;
+	virtual void UpdateMove(int attackDelay) override;
 };
 
