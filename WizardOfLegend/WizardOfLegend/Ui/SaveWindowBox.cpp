@@ -30,12 +30,11 @@ SaveWindowBox::~SaveWindowBox()
 
 void SaveWindowBox::Init()
 {
-	/*SetTexture(*RESOURCE_MGR->GetTexture("graphics/editor/window.png"), true);
 	SetClkColor(false);
 
 	save = new Button(uimgr);
-	save->SetTexture(*RESOURCE_MGR->GetTexture("graphics/editor/button.png"), true);
-	save->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+	save->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/button.png"), true);
+	save->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 		45, Color::White, "SAVE", false);
 	save->SetClkColor(true);
 	save->SetPos(position + Vector2f{ 150, 255 });
@@ -43,8 +42,8 @@ void SaveWindowBox::Init()
 	save->GetTextObj()->SetPos(save->GetPos() + Vector2f{ 0, -15 });
 
 	cancle = new Button(uimgr);
-	cancle->SetTexture(*RESOURCE_MGR->GetTexture("graphics/editor/button.png"), true);
-	cancle->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+	cancle->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/button.png"), true);
+	cancle->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 		38, Color::White, "CANCLE", false);
 	cancle->SetClkColor(true);
 	cancle->SetPos(position + Vector2f{ sprite->GetGlobalBounds().width - 150, 255 });
@@ -52,11 +51,11 @@ void SaveWindowBox::Init()
 	cancle->GetTextObj()->SetPos(cancle->GetPos() + Vector2f{0, -15});
 
 	txt = new TextObj();
-	txt->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+	txt->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 		38, Color::White, "");
 	txt->SetPos(position + Vector2f{ 150, 100 });
 	txt->SetOrigin(Origins::TL);
-	SetActive(false);*/
+	SetActive(false);
 }
 
 void SaveWindowBox::Draw(RenderWindow& window)
@@ -82,7 +81,7 @@ void SaveWindowBox::Update(float dt)
 		if (!InputMgr::GetKeyDown(Keyboard::BackSpace))
 		{
 			path += InputMgr::GetLastKey();
-			txt->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+			txt->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 				38, Color::White, path + "");
 			txt->SetPos(position + Vector2f{ 150, 100 });
 			txt->SetOrigin(Origins::TL);
@@ -90,7 +89,7 @@ void SaveWindowBox::Update(float dt)
 		else if (path != "")
 		{
 			path.erase(path.end() - 1);
-			txt->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+			txt->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 				38, Color::White, path + "");
 		}
 	}
@@ -117,7 +116,7 @@ void SaveWindowBox::Release()
 void SaveWindowBox::SetPath(string path)
 {
 	this->path = path;
-	txt->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+	txt->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 		38, Color::White, path + "");
 }
 bool SaveWindowBox::IsSave()

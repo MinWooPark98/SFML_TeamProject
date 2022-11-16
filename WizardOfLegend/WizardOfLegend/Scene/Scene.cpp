@@ -34,7 +34,7 @@ void Scene::Release()
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 
 			for (auto& obj : objs)
 			{
@@ -65,7 +65,7 @@ void Scene::Update(float dt)
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 
 			for (auto& obj : objs)
 			{
@@ -84,44 +84,23 @@ void Scene::Draw(RenderWindow& window)
 {
 	window.setView(worldView);
 
-	if (!isMap)
+	for (auto& layer : objList)
 	{
-		for (auto& layer : objList)
+		for (auto& obj_pair : layer.second)
 		{
-			for (auto& obj_pair : layer.second)
+			auto& objs = obj_pair.second;
+			for (auto& obj : objs)
 			{
-				auto objs = obj_pair.second;
-				for (auto& obj : objs)
+				if (obj->GetActive())
 				{
-					if (obj->GetActive())
-					{
-						obj->Draw(window);
-					}
+					obj->Draw(window);
 				}
 			}
 		}
-		if (uiMgr != nullptr)
-			uiMgr->Draw(window);
 	}
-	else
-	{
-		//LayerSort();
-		int i = 0;
-		for (auto& obj : objList[LayerType::Tile])
-		{
-			for (auto& o : obj.second)
-			{
-				o->Draw(window);
-			}
-		}
-		//for (auto& obj : drawObjs)
-		//{
-		//	obj->Draw(window);
-		//}
+	if (uiMgr != nullptr)
+		uiMgr->Draw(window);
 
-		if (uiMgr != nullptr)
-			uiMgr->Draw(window);
-	}
 }
 
 Texture* Scene::GetTexture(const string path) const
@@ -151,7 +130,7 @@ Object* Scene::FindGameObj(string name)
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
 				if (obj->GetName() == name)
@@ -162,5 +141,82 @@ Object* Scene::FindGameObj(string name)
 		}
 	}
 }
+//bool sorting(Object* p1, Object* p2)
+//{
+//	return ((HitBoxObject*)p1)->GetBottomPos() < ((HitBoxObject*)p2)->GetBottomPos();
+//}
+//
+//void Scene::LayerSort()
+//{
+//	moves.clear();
+//	drawObjs.clear();
+//	HitBoxObject* player = nullptr;
+//
+//	for (auto& obj : alphaObj)
+//	{
+//		((HitBoxObject*)(obj))->SetHitPlayer(false);
+//	}
+//
+//	alphaObj.clear();
+//
+//	for (auto& objss : objList[LayerType::Object])
+//	{
+//		for (auto& obj : objss.second)
+//		{
+//			if (!(((SpriteObj*)obj)->IsInView()))
+//			{
+//				continue;
+//			}
+//			if (obj->GetName() == "TREE" || obj->GetName() == "STONE" || obj->GetName() == "BLOCK")
+//			{
+//				if (obj->GetName() == "TREE")
+//					alphaObj.push_back((HitBoxObject*)obj);
+//				drawObjs.push_back(obj);
+//			}
+//			else if (obj->GetName() == "ENEMY" || obj->GetName() == "PLAYER")
+//			{
+//				if (obj->GetName() == "PLAYER")
+//					player = ((HitBoxObject*)obj);
+//				moves.push_back(obj);
+//			}
+//		}
+//	}
+//
+//	if (player != nullptr)
+//	{
+//		for (auto& obj : alphaObj)
+//		{
+//			if (Utils::OBB(obj->GetHitBoxs(), player->GetBottom()))
+//			{
+//				obj->SetHitPlayer(true);
+//			}
+//		}
+//	}
+//	sort(moves.begin(), moves.end(), sorting);
+//	auto dit = drawObjs.begin();
+//
+//	for (auto mit = moves.begin(); mit != moves.end();)
+//	{
+//		if (dit == drawObjs.end())
+//		{
+//			while (mit != moves.end())
+//			{
+//				drawObjs.push_back(*mit);
+//				mit++;
+//			}
+//			break;
+//		}
+//		if (((HitBoxObject*)(*mit))->GetBottomPos() < ((HitBoxObject*)(*dit))->GetBottomPos())
+//		{
+//			dit = drawObjs.insert(dit, *mit);
+//			mit++;
+//		}
+//		else
+//		{
+//			dit++;
+//		}
+//	}
+//
+//}
 
 

@@ -2,7 +2,7 @@
 #include "../GameObject/UiObject.h"
 #include <iostream>
 
-UiMgr::UiMgr(Scene* scene) : parentScene(scene), enabled(true)
+UiMgr::UiMgr(Scene* scene) : parentScene(scene)
 {
 }
 
@@ -97,15 +97,15 @@ void UiMgr::Update(float dt)
                 {
                     if ((*it)->GetState() == UiState::Stay || (*it)->GetState() == UiState::Down)
                     {
-                        (*it)->SetState(UiState::Exit); //???? ?????? ??????????? ???? Exit
+                        (*it)->SetState(UiState::Exit); 
                         (*it)->SetEvent(true);
                     }
                     if ((*it)->GetState() == UiState::Stay || (*it)->GetState() == UiState::DownRight)
                     {
-                        (*it)->SetState(UiState::Exit); //???? ?????? ??????????? ???? Exit
+                        (*it)->SetState(UiState::Exit); 
                         (*it)->SetEvent(true);
                     }
-                    (*it)->ColorClear(); // ??? ???? ????
+                    (*it)->ColorClear(); 
                 }
             }
         }

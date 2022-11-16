@@ -1,6 +1,7 @@
 #pragma once
 #include "../GameObject/Button.h"
 
+
 class LoadWindowBox : public Button
 {
 private:
@@ -16,7 +17,7 @@ public:
 	void Init();
 	void Reset();
 	bool IsLoad();
-	string GetLoadPaht() { return loadPath; }
+	string GetLoadPath() { return loadPath; }
 	virtual void Draw(RenderWindow& window);
 	virtual void Update(float dt);
 };

@@ -1,0 +1,12 @@
+{
+  "TILE": [
+    {
+      "texPath": "graphics/Map/Ground/TutorialCourseFloorPlat0.png",
+      "uiPath": "graphics/Map/Ground/TutorialCourseFloorPlat0.png"
+    },
+    {
+      "texPath": "graphics/Map/Ground/TutorialCourseFloorPlat1.png",
+      "uiPath": "graphics/Map/Ground/TutorialCourseFloorPlat1.png"
+    }
+  ],
+}

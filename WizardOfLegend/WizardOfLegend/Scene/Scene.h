@@ -47,6 +47,9 @@ protected:
 
 	UiMgr* uiMgr;
 
+	vector<Object*> moves;
+	vector<Object*> drawObjs;
+	vector<Object*> alphaObj;
 	bool isMap;
 
 public:
@@ -82,4 +85,6 @@ public:
 	const Vector2f& GetUiMousePos() const { return uiMousePos; }
 	vector<list<Object*>*>& GetLayout() { return layOut; }
 	ObjectPool<Projectile>* GetProjectiles() { return projectiles; }
+	//virtual void LayerSort();
 };
+//bool sorting(Object* p1, Object* p2);

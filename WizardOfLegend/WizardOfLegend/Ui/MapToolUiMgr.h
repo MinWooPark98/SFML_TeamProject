@@ -1,5 +1,6 @@
 #pragma once
 #include "UiMgr.h"
+#include "../Framework/FileData.h"
 
 class Button;
 class DrawSelect;
@@ -40,10 +41,9 @@ public:
 	DrawObj* GetDraw() { return nowDraw; }
 	void DeleteDraw();
 	bool IsUnder();
+	
 	void SetLoadPath(string path);
-
 	void SetLoadInit();
-
 	bool IsSave();
 	bool IsLoad();
 	bool LoadActive();

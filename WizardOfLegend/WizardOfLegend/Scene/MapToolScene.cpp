@@ -20,36 +20,36 @@ void MapToolScene::Init()
 
 void MapToolScene::Reset()
 {
-	//for (int i = 0; i < HEIGHTCNT; i++)
-	//{
-	//	for (int j = 0; j < WIDTHCNT; j++)
-	//	{
-	//		auto tile = new Button(nullptr);
-	//		greeds[i].push_back(tile);
-	//		tile->SetTexture(*RESOURCE_MGR->GetTexture("graphics/editor/greed.png"), true);
-	//		tile->SetPos({ 60.f * j, 60.f * i });
-	//		objList[LayerType::Back][i].push_back(tile);
-	//		tile->SetUiView(false);
-	//	}
-	//}
+	for (int i = 0; i < HEIGHTCNT; i++)
+	{
+		for (int j = 0; j < WIDTHCNT; j++)
+		{
+			auto tile = new Button(nullptr);
+			greeds[i].push_back(tile);
+			tile->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/greed.png"), true);
+			tile->SetPos({ 16.f * j, 16.f * i });
+			objList[LayerType::Back][i].push_back(tile);
+			tile->SetUiView(false);
+		}
+	}
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
 	nowType = LayerType::Object;
 
-	DrawObj* draw = new DrawObj(uiMgr);
-	auto editorObjs = FILE_MGR->GetEditorObjs();
-	auto playerData = editorObjs["PLAYER"];
-	draw->SetType("PLAYER");
-	draw->SetPath(playerData[0].texPath);
-	draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
-	draw->SetOrigin(Origins::BC);
-	draw->SetMove(false);
-	draw->SetPos(greeds[0][0]->GetPos() + Vector2f{ 30.f, 60.f });
-	draw->SetData(playerData[0]);
-	objList[nowType][0].push_back(draw);
-	greedObjs[nowType][0][0] = draw;
+	//DrawObj* draw = new DrawObj(uiMgr);
+	//auto editorObjs = FILE_MGR->GetEditorObjs();
+	//auto playerData = editorObjs["PLAYER"];
+	//draw->SetType("PLAYER");
+	//draw->SetPath(playerData[0].texPath);
+	//draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
+	//draw->SetOrigin(Origins::BC);
+	//draw->SetMove(false);
+	//draw->SetPos(greeds[0][0]->GetPos() + Vector2f{ 30.f, 60.f });
+	//draw->SetData(playerData[0]);
+	//objList[nowType][0].push_back(draw);
+	//greedObjs[nowType][0][0] = draw;
 
-	player = draw;
+	//player = draw;
 }
 
 void MapToolScene::Update(float dt)

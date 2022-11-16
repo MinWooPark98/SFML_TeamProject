@@ -150,8 +150,12 @@
     <ClCompile Include="GameObject\Enemy.cpp" />
     <ClCompile Include="GameObject\Archer.cpp" />
     <ClCompile Include="Ui\DrawSelect.cpp" />
-    <ClCompile Include="Framework\FileData.cpp" />
-    <ClCompile Include="Framework\FileMgr.cpp" />
+    <ClCompile Include="Framework\FileData.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Framework\FileMgr.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GameObject\Button.cpp" />
     <ClCompile Include="Framework\AnimationClip.cpp" />
     <ClCompile Include="Framework\Animator.cpp" />
@@ -173,11 +177,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="Ui\LoadWindowBox.cpp" />
-    <ClCompile Include="Ui\MapToolUiMgr.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Scene\MapToolScene.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GameObject\Player.cpp" />
     <ClCompile Include="GameObject\Projectile.cpp" />
@@ -189,6 +190,7 @@
     <ClCompile Include="GameObject\Skill.cpp" />
     <ClCompile Include="Scene\SkillToolScene.cpp" />
     <ClCompile Include="DataTable\SkillTable.cpp" />
+    <ClCompile Include="Ui\MapToolUiMgr.cpp" />
     <ClCompile Include="Ui\SaveWindowBox.cpp" />
     <ClCompile Include="Ui\SkillToolUiMgr.cpp" />
     <ClCompile Include="Ui\UiMgr.cpp" />
@@ -200,8 +202,12 @@
     <ClInclude Include="GameObject\Enemy.h" />
     <ClInclude Include="GameObject\Archer.h" />
     <ClInclude Include="Ui\DrawSelect.h" />
-    <ClInclude Include="Framework\FileData.h" />
-    <ClInclude Include="Framework\FileMgr.h" />
+    <ClInclude Include="Framework\FileData.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Framework\FileMgr.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="GameObject\Button.h" />
     <ClInclude Include="Framework\AnimationClip.h" />
     <ClInclude Include="Framework\Animator.h" />
@@ -224,11 +230,8 @@
     <ClInclude Include="GameObject\VertexArrayObj.h" />
     <ClInclude Include="GameObject\HeavyBombingArcher.h" />
     <ClInclude Include="Ui\LoadWindowBox.h" />
-    <ClInclude Include="Ui\MapToolUiMgr.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Scene\MapToolScene.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="GameObject\Player.h" />
     <ClInclude Include="GameObject\Projectile.h" />
@@ -240,6 +243,7 @@
     <ClInclude Include="GameObject\Skill.h" />
     <ClInclude Include="Scene\SkillToolScene.h" />
     <ClInclude Include="DataTable\SkillTable.h" />
+    <ClInclude Include="Ui\MapToolUiMgr.h" />
     <ClInclude Include="Ui\SaveWindowBox.h" />
     <ClInclude Include="Ui\SkillToolUiMgr.h" />
     <ClInclude Include="Ui\UiMgr.h" />

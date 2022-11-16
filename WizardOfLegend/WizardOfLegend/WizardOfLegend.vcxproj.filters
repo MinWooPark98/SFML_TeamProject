@@ -28,7 +28,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="Ui\LoadWindowBox.cpp" />
-    <ClCompile Include="Ui\MapToolUiMgr.cpp" />
     <ClCompile Include="Scene\MapToolScene.cpp" />
     <ClCompile Include="GameObject\Player.cpp" />
     <ClCompile Include="GameObject\Projectile.cpp" />
@@ -43,6 +42,7 @@
     <ClCompile Include="Ui\SaveWindowBox.cpp" />
     <ClCompile Include="Ui\SkillToolUiMgr.cpp" />
     <ClCompile Include="Ui\UiMgr.cpp" />
+    <ClCompile Include="Ui\MapToolUiMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -75,7 +75,6 @@
     <ClInclude Include="GameObject\VertexArrayObj.h" />
     <ClInclude Include="GameObject\HeavyBombingArcher.h" />
     <ClInclude Include="Ui\LoadWindowBox.h" />
-    <ClInclude Include="Ui\MapToolUiMgr.h" />
     <ClInclude Include="Scene\MapToolScene.h" />
     <ClInclude Include="GameObject\Player.h" />
     <ClInclude Include="GameObject\Projectile.h" />
@@ -90,6 +89,7 @@
     <ClInclude Include="Ui\SaveWindowBox.h" />
     <ClInclude Include="Ui\SkillToolUiMgr.h" />
     <ClInclude Include="Ui\UiMgr.h" />
+    <ClInclude Include="Ui\MapToolUiMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

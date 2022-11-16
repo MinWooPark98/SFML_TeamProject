@@ -43,7 +43,7 @@ void LoadWindowBox::Release()
 
 void LoadWindowBox::Init()
 {
-	SetTexture(*RESOURCE_MGR->GetTexture("graphics/editor/window.png"), true);
+	SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/MapToolBook.png"), true);
 	SetClkColor(false);
 
 	allMaps = FILE_MGR->GetAllMap();
@@ -52,7 +52,7 @@ void LoadWindowBox::Init()
 	{
 		auto* button = new Button(uimgr);
 
-		button->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+		button->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 			45, Color::White, maps.first, true);
 		loadFiles.push_back(button);
 	}
@@ -93,7 +93,7 @@ void LoadWindowBox::Reset()
 	{
 		auto* button = new Button(uimgr);
 
-		button->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+		button->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 			45, Color::White, maps.first, true);
 		loadFiles.push_back(button);
 	}

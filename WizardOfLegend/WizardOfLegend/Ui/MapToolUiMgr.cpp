@@ -23,59 +23,59 @@ MapToolUiMgr::~MapToolUiMgr()
 
 void MapToolUiMgr::Init()
 {
-	//float WindowHeight = FRAMEWORK->GetWindowSize().y;
-	//underUi = new Button(this);
-	//underUi->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Editor/underUi.png"), true);
-	//underUi->SetPos({ 0,WindowHeight - underUi->GetSpriteObj()->GetGlobalBounds().height });
-	//uiObjList[0].push_back(underUi);
+	float WindowHeight = FRAMEWORK->GetWindowSize().y;
+	underUi = new Button(this);
+	underUi->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/MapToolBook.png"), true);
+	underUi->SetPos({ 0,WindowHeight - underUi->GetSpriteObj()->GetGlobalBounds().height });
+	uiObjList[0].push_back(underUi);
 
-	//editorObjs = FILE_MGR->GetEditorObjs();
+	editorObjs = FILE_MGR->GetEditorObjs();
 
-	//saveBtn = new Button(this);
-	//saveBtn->SetClkColor(true);
-	//saveBtn->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
-	//	75, Color::White, "SAVE", true);
-	//saveBtn->SetOrigin(Origins::TL);
-	//saveBtn->SetPos({ 50,50 });
-	//uiObjList[0].push_back(saveBtn);
+	saveBtn = new Button(this);
+	saveBtn->SetClkColor(true);
+	saveBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
+		75, Color::White, "SAVE", true);
+	saveBtn->SetOrigin(Origins::TL);
+	saveBtn->SetPos({ 50,50 });
+	uiObjList[0].push_back(saveBtn);
 
 
-	//loadBtn = new Button(this);
-	//loadBtn->SetClkColor(true);
-	//loadBtn->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
-	//	75, Color::White, "LOAD", true);
-	//loadBtn->SetOrigin(Origins::TL);
-	//loadBtn->SetPos({ 50,120 });
-	//uiObjList[0].push_back(loadBtn);
+	loadBtn = new Button(this);
+	loadBtn->SetClkColor(true);
+	loadBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
+		75, Color::White, "LOAD", true);
+	loadBtn->SetOrigin(Origins::TL);
+	loadBtn->SetPos({ 50,120 });
+	uiObjList[0].push_back(loadBtn);
 
-	//eraseBtn = new Button(this);
-	//eraseBtn->SetClkColor(true);
-	//eraseBtn->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
-	//	75, Color::White, "ERASE", true);
-	//eraseBtn->SetOrigin(Origins::TL);
-	//eraseBtn->SetPos({ 50,190 });
-	//uiObjList[0].push_back(eraseBtn);
+	eraseBtn = new Button(this);
+	eraseBtn->SetClkColor(true);
+	eraseBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
+		75, Color::White, "ERASE", true);
+	eraseBtn->SetOrigin(Origins::TL);
+	eraseBtn->SetPos({ 50,190 });
+	uiObjList[0].push_back(eraseBtn);
 
-	//exitBtn = new Button(this);
-	//exitBtn->SetClkColor(true);
-	//exitBtn->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
-	//	75, Color::White, "EXIT", true);
-	//exitBtn->SetOrigin(Origins::TL);
-	//exitBtn->SetPos({ 50,260 });
-	//uiObjList[0].push_back(exitBtn);
+	exitBtn = new Button(this);
+	exitBtn->SetClkColor(true);
+	exitBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
+		75, Color::White, "EXIT", true);
+	exitBtn->SetOrigin(Origins::TL);
+	exitBtn->SetPos({ 50,260 });
+	uiObjList[0].push_back(exitBtn);
 
-	//selects = { "TILE","TREE","STONE","BLOCK","PLAYER","ENEMY","BOX","ANOTHER" };
-	//selectTxtSize = { 75,75,65,65,55,60,75,40 };
-	//selectPosY = { 54,54,54,54,62,54,54,70 };
+	selects = { "TILE","TREE","STONE","BLOCK","PLAYER","ENEMY","BOX","ANOTHER" };
+	selectTxtSize = { 75,75,65,65,55,60,75,40 };
+	selectPosY = { 54,54,54,54,62,54,54,70 };
 
-	//selIdx = 0;
-	//selectBtn = new Button(this);
-	//selectBtn->SetClkColor(true);
-	//selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
-	//	selectTxtSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
-	//selectBtn->SetOrigin(Origins::MC);
-	//selectBtn->SetPos(underUi->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
-	//uiObjList[0].push_back(selectBtn);
+	selIdx = 0;
+	selectBtn = new Button(this);
+	selectBtn->SetClkColor(true);
+	selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
+		selectTxtSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
+	selectBtn->SetOrigin(Origins::MC);
+	selectBtn->SetPos(underUi->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
+	uiObjList[0].push_back(selectBtn);
 
 	for (auto& type : editorObjs)
 	{
@@ -84,7 +84,7 @@ void MapToolUiMgr::Init()
 		{
 			DrawSelect* draw = new DrawSelect(this);
 			drawObj.push_back(draw);
-			draw->Set(type.first, obj.texPath, obj.uiPaht);
+			draw->Set(type.first, obj.texPath, obj.uiPath);
 			draw->SetPos(underUi->GetPos() + Vector2f{ (float)x, 40.f });
 			x += 100;
 			draw->SetData(obj);
@@ -158,7 +158,7 @@ void MapToolUiMgr::Update(float dt)
 			obj->SetActive(false);
 		}
 		selIdx = (selects.size() + selIdx + 1) % selects.size();
-		selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/6809 chargen.otf"),
+		selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 			selectTxtSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
 		selectBtn->SetOrigin(Origins::MC);
 		selectBtn->SetPos(underUi->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
@@ -234,7 +234,7 @@ bool MapToolUiMgr::LoadActive()
 
 string MapToolUiMgr::loadFile()
 {
-	return loadWindow->GetLoadPaht();
+	return loadWindow->GetLoadPath();
 }
 
 bool MapToolUiMgr::IsErase()

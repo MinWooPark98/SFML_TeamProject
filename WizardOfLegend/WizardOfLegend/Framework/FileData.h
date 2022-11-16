@@ -36,7 +36,7 @@ namespace ns {
 		string type;
 		string path;
 		int pers = 100;
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE(Item, type, path, pers)
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(Item, type, path, pers);
 	};
 	
 	struct ObjectData
@@ -45,12 +45,12 @@ namespace ns {
 		string path; // 스프라이트 파일
 		sf::Vector2f position;
 		vector<Item> item;
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE(ObjectData, type, path, position, item)
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(ObjectData, type, path, position, item);
 	};
 
 	struct EditorObjs
 	{
 		string texPath;
-		string uiPaht;
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE(EditorObjs, texPath, uiPaht)
+		string uiPath;
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(EditorObjs, texPath, uiPath);
 	};
