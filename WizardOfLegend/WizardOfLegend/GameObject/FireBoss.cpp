@@ -35,6 +35,10 @@ void FireBoss::Init()
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossUpThirdAttack"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossUpThrowing"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossDownThirdAttack"));
+	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossDownFireballIdle"));
+	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossUpFireballIdle"));
+	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossLeftFireballIdle"));
+	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossRightFireballIdle"));
 
 	SetPos({200, 200});
 	SetSpeed(700.f);
@@ -45,6 +49,7 @@ void FireBoss::Init()
 	SetCurHp(GetMaxHp());
 	//SetScale({1.5, 1.5});
 
+	//attackType = AttackType::FireBall;
 	attackType = AttackType::ThirdAttack;
 }
 
@@ -52,7 +57,7 @@ void FireBoss::Update(float dt)
 {
 	Enemy::Update(dt);
 
-	if (curBossState == BossStates::Move)
+	if (curBossState == BossStates::Move || attackType != AttackType::ThirdAttack)
 	{
 		float angle = Utils::Angle(player->GetPos(), GetPos());
 
@@ -61,7 +66,8 @@ void FireBoss::Update(float dt)
 		if ((angle > 45 && angle < 130) || (angle <= -45 && angle > -130))
 			moveType = MoveType::TopAndBottom;
 
-		BossMonsterMove(dt);
+		if (curBossState == BossStates::Move)
+			BossMonsterMove(dt);
 	}
 
 	if (attackType == AttackType::ThirdAttack && curBossState == BossStates::Attack && thirdAttackCount > 0 && patternDelay <= 0.f)
@@ -118,30 +124,85 @@ void FireBoss::SetState(BossStates newState)
 		{
 		case FireBoss::AttackType::ThirdAttack:
 			if (patternDelay > 0.f)
-				playerLastPos.x < lastPos.x ? animation.Play("FireBossLeftAttackReady") : animation.Play("FireBossRightAttackReady");
+				animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftLand" : "FireBossRightLand");
 			else
 			{
-				nextPatternDelay = 0.5f;
 				attackDelay = 0.3f;
-
+				nextPatternDelay = 1.5f;
 				switch (moveType)
 				{
 				case FireBoss::MoveType::LeftAndRight:
-					playerLastPos.x < lastPos.x ? animation.Play("FireBossLeftThirdAttack") : animation.Play("FireBossRightThirdAttack");
+					animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftThirdAttack" : "FireBossRightThirdAttack");
 					break;
 				case FireBoss::MoveType::TopAndBottom:
-					playerLastPos.y < lastPos.y ? animation.Play("FireBossUpThirdAttack") : animation.Play("FireBossDownThirdAttack");
+					animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpThirdAttack" : "FireBossDownThirdAttack");
 					break;
 				}
 			}
 			break;
 		case FireBoss::AttackType::FireBall:
+			if (nextPatternDelay > 0.f)
+			{
+				cout << playerLastPos.x << " " << lastPos.x << endl;
+				switch (lastMoveType)
+				{
+				case FireBoss::MoveType::LeftAndRight:
+					animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftFireballIdle" : "FireBossRightFireballIdle");
+					break;
+				case FireBoss::MoveType::TopAndBottom:
+					animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpFireballIdle" : "FireBossDownFireballIdle");
+					break;
+				}
+			}
+			else
+			{
+				cout << playerLastPos.x << " " << lastPos.x << endl;
+
+				attackDelay = 1.f;
+				nextPatternDelay = 1.5f;
+				switch (lastMoveType)
+				{
+				case FireBoss::MoveType::LeftAndRight:
+					animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftFireball" : "FireBossRightFireball");
+					break;
+				case FireBoss::MoveType::TopAndBottom:
+					animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpFireball" : "FireBossDownFireball");
+					break;
+				}
+			}
 			break;
 		case FireBoss::AttackType::ThrowingKnife:
+			switch (moveType)
+			{
+			case FireBoss::MoveType::LeftAndRight:
+				animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftThrowing" : "FireBossRightThrowing");
+				break;
+			case FireBoss::MoveType::TopAndBottom:
+				animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpThrowing" : "FireBossDownThrowing");
+				break;
+			}
 			break;
 		case FireBoss::AttackType::DragonAttack:
+			switch (moveType)
+			{
+			case FireBoss::MoveType::LeftAndRight:
+				animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftThrowing" : "FireBossRightThrowing");
+				break;
+			case FireBoss::MoveType::TopAndBottom:
+				animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpThrowing" : "FireBossDownThrowing");
+				break;
+			}
 			break;
 		case FireBoss::AttackType::Meteor:
+			switch (moveType)
+			{
+			case FireBoss::MoveType::LeftAndRight:
+				animation.Play(player->GetPos().x < GetPos().x ? "FireBossLeftFireball" : "FireBossRightFireball");
+				break;
+			case FireBoss::MoveType::TopAndBottom:
+				animation.Play(player->GetPos().y < GetPos().y ? "FireBossUpFireball" : "FireBossDownFireball");
+				break;
+			}
 			break;
 		}
 		break;
@@ -167,6 +228,7 @@ void FireBoss::UpdateAttack(float dt)
 		switch (attackType)
 		{
 		case FireBoss::AttackType::ThirdAttack:
+
 			if (thirdAttackCount != 0)
 			{
 				SetState(BossStates::None);
@@ -174,23 +236,54 @@ void FireBoss::UpdateAttack(float dt)
 
 				if (patternDelay <= 0.f)
 				{
-					if (thirdAttackCount > 0)
-						attackType = AttackType::ThirdAttack;
-
 					if (thirdAttackCount == 3 && patternCount > 0)
 						patternCount--;
 
 					thirdAttackCount--;
 				}
 			}
+
+			if (thirdAttackCount > 0)
+				attackType = AttackType::ThirdAttack;
+			else if (thirdAttackCount == 0 && patternDelay <= 0.f && attackDelay <= 0.f)
+			{
+				//attackType = (AttackType)Utils::RandomRange(1, 4);
+				playerLastPos = player->GetPos();
+				lastPos = GetPos();
+				lastMoveType = moveType;
+				attackType = AttackType::FireBall;
+				SetState(BossStates::Move);
+			}
+
 			break;
 		case FireBoss::AttackType::FireBall:
+			if (nextPatternDelay <= 0.f)
+			{
+				SetState(BossStates::None);
+				SetState(BossStates::Attack);
+				if (patternDelay <= 0.f)
+				{
+					attackType = AttackType::ThirdAttack;
+
+					if (attackType == AttackType::ThirdAttack)
+					{
+						thirdAttackCount = 3;
+						patternDelay = 0.5f;
+						SetAttackScale(30.f);
+						SetState(BossStates::Move);
+					}
+
+				}
+			}
 			break;
 		case FireBoss::AttackType::ThrowingKnife:
+			SetState(BossStates::Attack);
 			break;
 		case FireBoss::AttackType::DragonAttack:
+			SetState(BossStates::Attack);
 			break;
 		case FireBoss::AttackType::Meteor:
+			SetState(BossStates::Attack);
 			break;
 		}
 
@@ -198,7 +291,7 @@ void FireBoss::UpdateAttack(float dt)
 		{
 			cout << "pattern reset" << endl;
 			SetState(BossStates::Idle);
-			attackType = (AttackType)Utils::RandomRange(0, 5);
+			//attackType = (AttackType)Utils::RandomRange(0, 5);
 			thirdAttackCount = 3;
 			patternCount = 3;
 		}
@@ -218,12 +311,31 @@ void FireBoss::UpdateMove(int attackDelay)
 		this->attackDelay = attackDelay;
 		thirdAttackCount = 3;
 
-		if (thirdAttackCount == 3)
+		if (thirdAttackCount == 3 && attackType == AttackType::ThirdAttack || attackType == AttackType::ThrowingKnife)
 		{
 			playerLastPos = player->GetPos();
 			lastPos = GetPos();
 			patternDelay = 0.5f;
+
+			if (attackType == AttackType::ThrowingKnife)
+				patternDelay = 1.5f;
 		}
+		if (attackType == AttackType::FireBall)
+		{
+			patternDelay = 2.f;
+		}
+		if (attackType == AttackType::DragonAttack)
+		{
+			patternDelay = 1.f; // 5
+		}
+
+		return;
+	}
+
+	if (Utils::Distance(player->GetPos(), GetPos()) >= GetMoveScale())
+	{
+		direction.x = 0;
+		SetState(BossStates::Move);
 
 		return;
 	}

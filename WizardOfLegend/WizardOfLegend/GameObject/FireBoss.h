@@ -38,6 +38,8 @@ protected:
 	float patternDelay = 0.5f;
 	float nextPatternDelay = 0.5f;
 
+	MoveType lastMoveType;
+
 public:
 	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};
 	virtual ~FireBoss() {};

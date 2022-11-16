@@ -458,3 +458,7 @@ lancerAnimation/LancerRightIdle.csv,3
 lancerAnimation/LancerRightMove.csv,3
 lancerAnimation/LancerUpAttack.csv,3
 lancerAnimation/SpearMotion.csv,3
+fireBossAnimation/FireBossRightFireballIdle.csv,3
+fireBossAnimation/FireBossLeftFireballIdle.csv,3
+fireBossAnimation/FireBossUpFireballIdle.csv,3
+fireBossAnimation/FireBossDownFireballIdle.csv,3
