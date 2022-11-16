@@ -23,11 +23,12 @@ MapToolUiMgr::~MapToolUiMgr()
 
 void MapToolUiMgr::Init()
 {
-	float WindowHeight = FRAMEWORK->GetWindowSize().y;
-	underUi = new Button(this);
-	underUi->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/MapToolBook.png"), true);
-	underUi->SetPos({ 0,WindowHeight - underUi->GetSpriteObj()->GetGlobalBounds().height });
-	uiObjList[0].push_back(underUi);
+	Vector2f WindowSize = (Vector2f)FRAMEWORK->GetWindowSize();
+	paletteBook = new Button(this);
+	paletteBook->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/MapToolBook.png"), true);
+	paletteBook->SetPos({ WindowSize.x*0.5f,WindowSize.y *0.5f});
+	paletteBook->SetOrigin(Origins::TC);
+	uiObjList[0].push_back(paletteBook);
 
 	editorObjs = FILE_MGR->GetEditorObjs();
 
@@ -65,32 +66,32 @@ void MapToolUiMgr::Init()
 	uiObjList[0].push_back(exitBtn);
 
 	selects = { "TILE","TREE","STONE","BLOCK","PLAYER","ENEMY","BOX","ANOTHER" };
-	selectTxtSize = { 75,75,65,65,55,60,75,40 };
+	selectTextSize = { 75,75,65,65,55,60,75,40 };
 	selectPosY = { 54,54,54,54,62,54,54,70 };
 
 	selIdx = 0;
 	selectBtn = new Button(this);
 	selectBtn->SetClkColor(true);
 	selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
-		selectTxtSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
+		selectTextSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
 	selectBtn->SetOrigin(Origins::MC);
-	selectBtn->SetPos(underUi->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
+	selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
 	uiObjList[0].push_back(selectBtn);
 
 	for (auto& type : editorObjs)
 	{
-		int x = 450;
+		float offset = 0;
 		for (auto& obj : type.second)
 		{
 			DrawSelect* draw = new DrawSelect(this);
 			drawObj.push_back(draw);
 			draw->Set(type.first, obj.texPath, obj.uiPath);
-			draw->SetPos(underUi->GetPos() + Vector2f{ (float)x, 40.f });
-			x += 100;
+			draw->SetPos({ paletteBook->GetPos().x-340+offset, paletteBook->GetPos().y+120+offset});
+			offset += 50;
 			draw->SetData(obj);
-			uiObjList[0].push_back(draw);
+			uiObjList[1].push_back(draw);
 			type_selects[type.first].push_back(draw);
-			draw->SetActive(false);
+			draw->SetActive(true);
 		}
 	}
 
@@ -107,6 +108,28 @@ void MapToolUiMgr::Init()
 	loadWindow->SetPos({ 350,50 });
 	loadWindow->Init();
 	uiObjList[1].push_back(loadWindow);
+
+	for (auto& uiObjs : uiObjList)
+	{
+		for (auto& obj : uiObjs.second)
+			obj->Init();
+	}
+	Object::Init();
+}
+
+void MapToolUiMgr::Release()
+{
+	for (auto& uiObjs : uiObjList)
+	{
+		for (auto& obj : uiObjs.second)
+		{
+			if (obj != nullptr)
+				delete obj;
+			obj = nullptr;
+		}
+	}
+	uiObjList.clear();
+	Object::Release();
 }
 
 void MapToolUiMgr::Reset()
@@ -133,7 +156,8 @@ void MapToolUiMgr::Update(float dt)
 		loadWindow->Update(dt);
 		return;
 	}
-	UiMgr::Update(dt);
+	
+
 	if (nowDraw != nullptr)
 	{
 		nowDraw->Update(dt);
@@ -159,9 +183,9 @@ void MapToolUiMgr::Update(float dt)
 		}
 		selIdx = (selects.size() + selIdx + 1) % selects.size();
 		selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
-			selectTxtSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
+			selectTextSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
 		selectBtn->SetOrigin(Origins::MC);
-		selectBtn->SetPos(underUi->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
+		selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
 
 		for (auto& obj : type_selects[selects[selIdx]])
 		{
@@ -171,6 +195,68 @@ void MapToolUiMgr::Update(float dt)
 		((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
 	}
 
+	if (!enabled)
+		return;
+	bool isEvent = false;
+
+	if (nowEvObj != nullptr)
+	{
+	    if (nowEvObj->IsMove() && nowEvObj->IsDrag())
+	    {
+	        nowEvObj->Update(dt);
+	        isEvent = true;
+	    }
+	    else if (nowEvObj->IsMoveRight() && nowEvObj->IsDragRight())
+	    {
+	        nowEvObj->Update(dt);
+	        isEvent = true;
+	    }
+	}
+	for (auto uiObjs = uiObjList.rbegin(); uiObjs != uiObjList.rend(); uiObjs++)
+	{
+		for (auto it = (*uiObjs).second.rbegin(); it != (*uiObjs).second.rend(); it++)
+		{
+			if ((*it) != nowEvObj)
+				(*it)->EventClear();
+
+			if (!isEvent)
+			{
+				(*it)->Update(dt);
+			}
+			if ((*it)->GetEvent() && !isEvent)
+			{
+				isEvent = true;
+				nowEvObj = *it;
+			}
+		}
+	}
+
+
+	if (nowEvObj != nullptr && ((nowEvObj->GetState() == UiState::Exit) || (nowEvObj->GetState() == UiState::Enter)))
+	{
+	    for (auto uiObjs = uiObjList.rbegin(); uiObjs != uiObjList.rend(); uiObjs++)
+	    {
+	        for (auto it = (*uiObjs).second.rbegin(); it != (*uiObjs).second.rend(); it++)
+	        {
+	            if ((*it != nowEvObj))
+	            {
+	                if ((*it)->GetState() == UiState::Stay || (*it)->GetState() == UiState::Down)
+	                {
+	                    (*it)->SetState(UiState::Exit); 
+	                    (*it)->SetEvent(true);
+	                }
+	                if ((*it)->GetState() == UiState::Stay || (*it)->GetState() == UiState::DownRight)
+	                {
+	                    (*it)->SetState(UiState::Exit); 
+	                    (*it)->SetEvent(true);
+	                }
+	                (*it)->ColorClear(); 
+	            }
+	        }
+	    }
+	    nowEvObj = nullptr;
+	}
+	UiMgr::Update(dt);
 }
 
 void MapToolUiMgr::Draw(RenderWindow& window)
@@ -179,6 +265,26 @@ void MapToolUiMgr::Draw(RenderWindow& window)
 	UiMgr::Draw(window);
 	if (nowDraw != nullptr)
 		nowDraw->Draw(window);
+
+	if (!enabled)
+		return;
+	for (auto& uiObjs : uiObjList)
+	{
+		for (auto& obj : uiObjs.second)
+			obj->Draw(window);
+	}
+}
+
+void MapToolUiMgr::SetPos(const Vector2f& pos)
+{
+	Vector2f delta = pos - position;
+	for (auto& uiObjs : uiObjList)
+	{
+		for (auto& obj : uiObjs.second)
+			obj->Translate(delta);
+	}
+	position = pos;
+	Object::SetPos(pos);
 }
 
 void MapToolUiMgr::Select(DrawSelect* select)
@@ -203,8 +309,8 @@ bool MapToolUiMgr::IsUnder()
 {
 	auto mousePos = InputMgr::GetMousePos();
 	mousePos = SCENE_MGR->GetCurrentScene()->ScreenToUiPosition((Vector2i)mousePos);
-	cout << Utils::IsRange(underUi->GetSpriteObj()->GetGlobalBounds(), mousePos) << endl;
-	return Utils::IsRange(underUi->GetSpriteObj()->GetGlobalBounds(), mousePos);
+	//cout << Utils::IsRange(paletteBook->GetSpriteObj()->GetGlobalBounds(), mousePos) << endl;
+	return Utils::IsRange(paletteBook->GetSpriteObj()->GetGlobalBounds(), mousePos);
 }
 
 void MapToolUiMgr::SetLoadPath(string path)

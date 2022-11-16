@@ -7,10 +7,9 @@ class Scene;
 class UiMgr : public Object
 {
 protected:
-	map<int, vector<UiObject*>> uiObjList;
+	
 	Scene* parentScene;
 
-	UiObject* nowEvObj;
 public:
 	UiMgr(Scene* scene);
 	virtual ~UiMgr();

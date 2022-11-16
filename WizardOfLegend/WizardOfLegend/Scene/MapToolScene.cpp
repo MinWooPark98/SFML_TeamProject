@@ -32,6 +32,7 @@ void MapToolScene::Reset()
 			tile->SetUiView(false);
 		}
 	}
+	
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
 	nowType = LayerType::Object;
@@ -55,6 +56,7 @@ void MapToolScene::Reset()
 void MapToolScene::Update(float dt)
 {
 	Scene::Update(dt);
+	uiMgr->Update(dt);
 
 	auto uimgr = ((MapToolUiMgr*)uiMgr);
 	if (uimgr->IsExit() || InputMgr::GetKeyDown(Keyboard::Escape))
@@ -77,39 +79,18 @@ void MapToolScene::Update(float dt)
 
 	if (uimgr->IsErase() || InputMgr::GetKeyDown(Keyboard::E))
 	{
-		((MapToolUiMgr*)uiMgr)->DeleteDraw();
+		uimgr->DeleteDraw();
 		return;
-
 	}
-	if (InputMgr::GetMouseButtonDown(Mouse::Right))
-	{
-		initMousePos = InputMgr::GetMousePos();
-		isMove = true;
-	}
-	if (isMove)
-	{
-		auto deltaPos = InputMgr::GetMousePos() - initMousePos;
-		initMousePos = InputMgr::GetMousePos();
-		cout << deltaPos.x << endl;
-		cout << deltaPos.y << endl;
-		auto movePos = SCENE_MGR->GetCurrentScene()->GetWorldView().getCenter() - deltaPos;
-		SCENE_MGR->GetCurrentScene()->GetWorldView().setCenter(movePos);
-	}
-	if (InputMgr::GetMouseButtonUp(Mouse::Right))
-	{
-		isMove = false;
-	}
-
-
 	if (InputMgr::GetMouseWheelMoved() < 0)
 	{
 		Vector2f size = worldView.getSize();
-		worldView.setSize(size.x * 1.05f, size.y * 1.05f);
+		worldView.setSize(size.x * 1.06f, size.y * 1.06f);
 	}
 	if (InputMgr::GetMouseWheelMoved() > 0)
 	{
 		Vector2f size = worldView.getSize();
-		worldView.setSize(size.x * 0.95f, size.y * 0.95f);
+		worldView.setSize(size.x * 0.96f, size.y * 0.96f);
 	}
 	if (InputMgr::GetMouseButton(Mouse::Middle))
 	{
@@ -170,7 +151,7 @@ void MapToolScene::Update(float dt)
 				draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
 				draw->SetOrigin(Origins::BC);
 				draw->SetMove(false);
-				draw->SetPos(greeds[i][j]->GetPos() + Vector2f{ 30.f, 60.f });
+				draw->SetPos(greeds[i][j]->GetPos() + Vector2f{ 8.f, 16.f });
 				draw->SetData(nowDraw->GetData());
 				objList[nowType][i].push_back(draw);
 				greedObjs[nowType][i][j] = draw;
@@ -204,6 +185,7 @@ void MapToolScene::Update(float dt)
 
 void MapToolScene::Draw(RenderWindow& window)
 {
+	uiMgr->Draw(window);
 	Scene::Draw(window);
 }
 

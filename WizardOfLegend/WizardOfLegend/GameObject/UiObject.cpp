@@ -62,13 +62,13 @@ void UiObject::Update(float dt)
 		mousePos = SCENE_MGR->GetCurrentScene()->ScreenToUiPosition((Vector2i)mousePos);
 	else
 		mousePos = SCENE_MGR->GetCurrentScene()->ScreenToWorld((Vector2i)mousePos);
-	auto btnBoudn = bound;
+	auto btnBound = bound;
 	
 
 	switch (btnState)
 	{
 	case UiState::None:
-		if (Utils::IsRange(btnBoudn, mousePos))
+		if (Utils::IsRange(btnBound, mousePos))
 		{
 			btnState = UiState::Enter;
 			isEvent = true;
@@ -76,12 +76,12 @@ void UiObject::Update(float dt)
 		}
 		break;
 	case UiState::Stay:
-		if (!Utils::IsRange(btnBoudn, mousePos))
+		if (!Utils::IsRange(btnBound, mousePos))
 		{
 			btnState = UiState::Exit;
 			isEvent = true;
 		}
-		else if (!Utils::IsRange(btnBoudn, mousePos)) // 프레임 때문에 Exit못했을때
+		else if (!Utils::IsRange(btnBound, mousePos)) // 프레임 때문에 Exit못했을때
 		{
 			btnState = UiState::None;
 			isEvent = false;
@@ -128,7 +128,7 @@ void UiObject::Update(float dt)
 		}
 		break;
 	case UiState::Down:
-		if (InputMgr::GetMouseButton(Mouse::Left) && (Utils::IsRange(btnBoudn, mousePos)))
+		if (InputMgr::GetMouseButton(Mouse::Left) && (Utils::IsRange(btnBound, mousePos)))
 		{
 			if (btnState != UiState::Down)
 			{
@@ -145,13 +145,13 @@ void UiObject::Update(float dt)
 			btnState = UiState::Down;
 			isEvent = true;
 		}
-		else if(InputMgr::GetMouseButtonUp(Mouse::Left) && (Utils::IsRange(btnBoudn, mousePos)))
+		else if(InputMgr::GetMouseButtonUp(Mouse::Left) && (Utils::IsRange(btnBound, mousePos)))
 		{
 			btnState = UiState::Up;
 			isEvent = true;
 			isClick = false;
 		}
-		else if (!Utils::IsRange(btnBoudn, mousePos))
+		else if (!Utils::IsRange(btnBound, mousePos))
 		{
 			btnState = UiState::Exit;
 			isEvent = true;
@@ -159,7 +159,7 @@ void UiObject::Update(float dt)
 		}
 		break;
 	case UiState::Up:
-		if (Utils::IsRange(btnBoudn, mousePos))
+		if (Utils::IsRange(btnBound, mousePos))
 		{
 			btnState = UiState::Stay;
 		}
@@ -170,7 +170,7 @@ void UiObject::Update(float dt)
 		drag = false;
 		break;
 	case UiState::DownRight:
-		if (InputMgr::GetMouseButton(Mouse::Right) && (Utils::IsRange(btnBoudn, mousePos)))
+		if (InputMgr::GetMouseButton(Mouse::Right) && (Utils::IsRange(btnBound, mousePos)))
 		{
 			if (btnState != UiState::DownRight)
 			{
@@ -187,12 +187,12 @@ void UiObject::Update(float dt)
 			btnState = UiState::DownRight;
 			isEvent = true;
 		}
-		else if (InputMgr::GetMouseButtonUp(Mouse::Right) && (Utils::IsRange(btnBoudn, mousePos)))
+		else if (InputMgr::GetMouseButtonUp(Mouse::Right) && (Utils::IsRange(btnBound, mousePos)))
 		{
 			btnState = UiState::UpRight;
 			isEvent = true;
 		}
-		else if (!Utils::IsRange(btnBoudn, mousePos))
+		else if (!Utils::IsRange(btnBound, mousePos))
 		{
 			cout << "This" << endl;
 			btnState = UiState::Exit;
@@ -200,7 +200,7 @@ void UiObject::Update(float dt)
 		}
 		break;
 	case UiState::UpRight:
-		if (Utils::IsRange(btnBoudn, mousePos))
+		if (Utils::IsRange(btnBound, mousePos))
 		{
 			btnState = UiState::Stay;
 		}

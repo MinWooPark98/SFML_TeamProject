@@ -1,6 +1,6 @@
 #pragma once
-#define WIDTHCNT 100
-#define HEIGHTCNT 100
+#define WIDTHCNT 50
+#define HEIGHTCNT 50
 #include "../Scene/Scene.h"
 
 class Button;
@@ -14,7 +14,6 @@ private:
 	map<LayerType, map<int, map<int, DrawObj*>>> greedObjs; //Tile, Object, Enermy
 	vector<ObjectData> saveObjs;
 	Vector2f initMousePos;
-	bool isMove;
 	string type;
 
 	LayerType nowType;

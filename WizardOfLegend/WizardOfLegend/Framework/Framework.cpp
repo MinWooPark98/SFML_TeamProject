@@ -38,6 +38,7 @@ bool Framework::Init(int width, int height)
     RESOURCE_MGR->LoadAll();
     SOUND_MGR->Init();
     DATATABLE_MGR->Init();
+    FILE_MGR->LoadAll();
     SCENE_MGR->Init();
     InputMgr::Init();
 

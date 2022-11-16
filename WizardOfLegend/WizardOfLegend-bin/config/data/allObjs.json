@@ -5,8 +5,8 @@
       "uiPath": "graphics/Map/Ground/TutorialCourseFloorPlat0.png"
     },
     {
-      "texPath": "graphics/Map/Ground/TutorialCourseFloorPlat1.png",
-      "uiPath": "graphics/Map/Ground/TutorialCourseFloorPlat1.png"
+      "texPath": "graphics/Map/Ground/AirPlatformBot0.png",
+      "uiPath": "graphics/Map/Ground/AirPlatformBot0.png"
     }
-  ],
+  ]
 }

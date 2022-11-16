@@ -97,14 +97,16 @@ void FileMgr::LoadAll()
 	}
 
 	ifstream ao("config/data/allObjs.json");
+	if (ao.fail())
+		return;
 	json ao_d = json::parse(ao);
 	editorObjs = ao_d;
 	ao.close();
 
-	ifstream info("config/data/hitBoxs.json");
-	json info_d = json::parse(info);
-	hitBoxData = info_d;
-	info.close();
+	//ifstream info("config/data/hitBoxs.json");
+	//json info_d = json::parse(info);
+	//hitBoxData = info_d;
+	//info.close();
 	//ifstream hitbox("config/data/hitBox.json");
 	//json hit_d = json::parse(hitbox);
 	//hitBoxMap = hit_d;

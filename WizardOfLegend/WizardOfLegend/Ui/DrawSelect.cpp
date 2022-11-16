@@ -23,7 +23,6 @@ void DrawSelect::Update(float dt)
 	Button::Update(dt);
 	if (IsClick())
 	{
-		cout << "Click" << endl;
 		((MapToolUiMgr*)uimgr)->Select(this);
 	}
 }
