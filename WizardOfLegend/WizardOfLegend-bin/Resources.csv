@@ -462,3 +462,7 @@ fireBossAnimation/FireBossRightFireballIdle.csv,3
 fireBossAnimation/FireBossLeftFireballIdle.csv,3
 fireBossAnimation/FireBossUpFireballIdle.csv,3
 fireBossAnimation/FireBossDownFireballIdle.csv,3
+fireBossAnimation/FireBossLeftThrowingIdle.csv,3
+fireBossAnimation/FireBossRightThrowingIdle.csv,3
+fireBossAnimation/FireBossUpThrowingIdle.csv,3
+fireBossAnimation/FireBossDownThrowingIdle.csv,3

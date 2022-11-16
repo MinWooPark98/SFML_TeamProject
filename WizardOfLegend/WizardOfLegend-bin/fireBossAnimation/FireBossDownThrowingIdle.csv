@@ -1,0 +1,5 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FireBossDownThrowingIdle,0,1,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FireBossForehandDown0.png,0,0,34,34,17,17,0,0
