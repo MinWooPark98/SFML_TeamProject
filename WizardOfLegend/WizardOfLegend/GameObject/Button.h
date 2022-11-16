@@ -32,10 +32,15 @@ public:
 	virtual void SetPos(Vector2f pos);
 	virtual void SetClkColor(bool set) { isClickColor = set; }
 	virtual void Release();
+
+	void UseSprite();
+	void UseText();
+
 	void SetTexture(Texture& t, bool isBound);
 	void SetText(Font& font, int size, Color color, string str, bool isBound);
 
 	void SetOrigin(Origins origin);
+	void SetBoundType(BoundType type) { bndType = type; }
 	void ReBound();
 
 	SpriteObj* GetSpriteObj() { return sprite; }

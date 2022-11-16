@@ -8,10 +8,6 @@ using namespace std;
 Button::Button(UiMgr* mgr)
 	: sprite(nullptr), text(nullptr), uimgr(mgr), bndType(BoundType::None), isClickColor(false)
 {
-	Init();
-	sprite = new SpriteObj();
-	sprite->SetUI(true);
-	text = new TextObj();
 }
 
 Button::~Button()
@@ -43,11 +39,11 @@ void Button::ColorClear()
 	UiObject::ColorClear();
 	if (isClickColor)
 	{
-		if (sprite->GetSprite().getTexture() != nullptr)
+		if (sprite != nullptr && sprite->GetSprite().getTexture() != nullptr)
 		{
 			sprite->SetColor(Color::White);
 		}
-		if (text->GetText().getFont() != nullptr)
+		if (text != nullptr && text->GetText().getFont() != nullptr)
 		{
 			text->SetFillColor(Color::White);
 		}
@@ -63,11 +59,11 @@ void Button::Update(float dt)
 	{
 		if (isClickColor)
 		{
-			if (sprite->GetSprite().getTexture() != nullptr)
+			if (sprite != nullptr && sprite->GetSprite().getTexture() != nullptr)
 			{
 				sprite->SetColor(Color(200, 200, 200, 255));
 			}
-			if (text->GetText().getFont() != nullptr)
+			if (text != nullptr && text->GetText().getFont() != nullptr)
 			{
 				text->SetFillColor(Color(200, 200, 200, 255));
 			}
@@ -77,11 +73,11 @@ void Button::Update(float dt)
 	{
 		if (isClickColor)
 		{
-			if (sprite->GetSprite().getTexture() != nullptr)
+			if (sprite != nullptr && sprite->GetSprite().getTexture() != nullptr)
 			{
 				sprite->SetColor(Color::White);
 			}
-			if (text->GetText().getFont() != nullptr)
+			if (text != nullptr && text->GetText().getFont() != nullptr)
 			{
 				text->SetFillColor(Color::White);
 			}
@@ -91,11 +87,11 @@ void Button::Update(float dt)
 	{
 		if (isClickColor)
 		{
-			if (sprite->GetSprite().getTexture() != nullptr)
+			if (sprite != nullptr && sprite->GetSprite().getTexture() != nullptr)
 			{
 				sprite->SetColor(Color(200, 200, 200, 255));
 			}
-			if (text->GetText().getFont() != nullptr)
+			if (text != nullptr && text->GetText().getFont() != nullptr)
 			{
 				text->SetFillColor(Color(200, 200, 200, 255));
 			}
@@ -105,11 +101,11 @@ void Button::Update(float dt)
 	{
 		if (isClickColor)
 		{
-			if (sprite->GetSprite().getTexture() != nullptr)
+			if (sprite != nullptr && sprite->GetSprite().getTexture() != nullptr)
 			{
 				sprite->SetColor(Color::White);
 			}
-			if (text->GetText().getFont() != nullptr)
+			if (text != nullptr && text->GetText().getFont() != nullptr)
 			{
 				text->SetFillColor(Color::White);
 			}
@@ -122,11 +118,11 @@ void Button::Draw(RenderWindow& window)
 	if (!enabled)
 		return;
 	UiObject::Draw(window);
-	if (sprite->GetSprite().getTexture() != nullptr)
+	if (sprite != nullptr && sprite->GetSprite().getTexture() != nullptr)
 	{
 		sprite->Draw(window);
 	}
-	if (text->GetText().getFont() != nullptr)
+	if (text != nullptr && text->GetText().getFont() != nullptr)
 	{
 		text->Draw(window);
 	}
@@ -135,8 +131,10 @@ void Button::Draw(RenderWindow& window)
 void Button::SetPos(Vector2f pos)
 {
 	UiObject::SetPos(pos);
-	sprite->SetPos(pos);
-	text->SetPos(pos);
+	if(sprite != nullptr)
+		sprite->SetPos(pos);
+	if(text != nullptr)
+		text->SetPos(pos);
 	ReBound();
 }
 
@@ -153,6 +151,21 @@ void Button::Release()
 		delete text;
 		text = nullptr;
 	}
+}
+
+void Button::UseSprite()
+{
+	sprite = new SpriteObj();
+	sprite->Init();
+	sprite->SetUI(true);
+	SetBoundType(BoundType::SPRITE);
+}
+
+void Button::UseText()
+{
+	text = new TextObj();
+	text->Init();
+	SetBoundType(BoundType::TEXT);
 }
 
 void Button::SetTexture(Texture& t, bool isBound)
@@ -177,11 +190,11 @@ void Button::SetText(Font& font, int size, Color color, string str, bool isBound
 
 void Button::SetOrigin(Origins origin)
 {
-	if (sprite->GetSprite().getTexture() != nullptr)
+	if (sprite != nullptr && sprite->GetSprite().getTexture() != nullptr)
 	{
 		sprite->SetOrigin(origin);
 	}
-	if (text->GetText().getFont() != nullptr)
+	if (text != nullptr && text->GetText().getFont() != nullptr)
 	{
 		text->SetOrigin(origin);
 	}

@@ -21,8 +21,8 @@ void TextObj::Update(float dt)
 
 void TextObj::Draw(RenderWindow& window)
 {
-	window.draw(text);
 	Object::Draw(window);
+	window.draw(text);
 }
 
 void TextObj::SetPos(Vector2f position)
@@ -58,6 +58,7 @@ void TextObj::SetString(string str)
 }
 void TextObj::SetOrigin(Origins origin)
 {
+	Object::SetOrigin(origin);
 	Utils::SetOrigin(text, origin);
 }
 string TextObj::GetString()

@@ -50,6 +50,11 @@ const Vector2f& Object::GetPos() const
     return position;
 }
 
+void Object::SetOrigin(Origins origin)
+{
+    Utils::SetOrigin(hitbox, origin);
+}
+
 void Object::Update(float dt)
 {
     if (gravityApply)
@@ -66,10 +71,10 @@ void Object::Draw(RenderWindow& window)
     }
 }
 
-void Object::SetHitBox(const FloatRect rect)
+void Object::SetHitBox(const FloatRect& rect, Color color)
 {
     hitbox.setSize({ rect.width,rect.height });
-    hitbox.setFillColor({ 255, 0, 0, 255 });
+    hitbox.setFillColor(color);
 }
 
 void Object::Translate(const Vector2f& delta)

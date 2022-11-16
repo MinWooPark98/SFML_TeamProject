@@ -34,7 +34,7 @@ void Scene::Release()
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 
 			for (auto& obj : objs)
 			{
@@ -65,7 +65,7 @@ void Scene::Update(float dt)
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 
 			for (auto& obj : objs)
 			{
@@ -76,6 +76,8 @@ void Scene::Update(float dt)
 			}
 		}
 	}
+	if (uiMgr != nullptr && uiMgr->GetActive())
+		uiMgr->Update(dt);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
 		exit(1);
 }
@@ -90,7 +92,7 @@ void Scene::Draw(RenderWindow& window)
 		{
 			for (auto& obj_pair : layer.second)
 			{
-				auto objs = obj_pair.second;
+				auto& objs = obj_pair.second;
 				for (auto& obj : objs)
 				{
 					if (obj->GetActive())
@@ -100,8 +102,11 @@ void Scene::Draw(RenderWindow& window)
 				}
 			}
 		}
-		if (uiMgr != nullptr)
+		if (uiMgr != nullptr && uiMgr->GetActive())
+		{
+			window.setView(uiView);
 			uiMgr->Draw(window);
+		}
 	}
 	else
 	{
@@ -119,7 +124,7 @@ void Scene::Draw(RenderWindow& window)
 		//	obj->Draw(window);
 		//}
 
-		if (uiMgr != nullptr)
+		if (uiMgr != nullptr && uiMgr->GetActive())
 			uiMgr->Draw(window);
 	}
 }
@@ -151,7 +156,7 @@ Object* Scene::FindGameObj(string name)
 	{
 		for (auto& obj_pair : layer.second)
 		{
-			auto objs = obj_pair.second;
+			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
 				if (obj->GetName() == name)

@@ -31,8 +31,8 @@ void SpriteObj::SetTexture(const Texture& tex)
 
 void SpriteObj::SetOrigin(Origins origin)
 {
+    Object::SetOrigin(origin);
     Utils::SetOrigin(sprite, origin);
-    Utils::SetOrigin(hitbox, origin);
 }
 
 void SpriteObj::SetColor(Color color)

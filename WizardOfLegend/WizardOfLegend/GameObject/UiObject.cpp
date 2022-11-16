@@ -6,7 +6,7 @@
 
 UiObject::UiObject()
 	: btnState(UiState::None), drag(false), dragR(false),
-	isEvent(false), isClick(false), isClickR(false), isMove(false), isUiView(true)
+	isEvent(false), isClick(false), isClickR(false), isMove(false), isMoveR(false), isUiView(true)
 {
 }
 
@@ -57,11 +57,11 @@ void UiObject::StateClear()
 }
 void UiObject::Update(float dt)
 {
-	auto mousePos = InputMgr::GetMousePos();
+	Vector2f mousePos;
 	if(isUiView)
-		mousePos = SCENE_MGR->GetCurrentScene()->ScreenToUiPosition((Vector2i)mousePos);
+		mousePos = SCENE_MGR->GetCurrentScene()->GetUiMousePos();
 	else
-		mousePos = SCENE_MGR->GetCurrentScene()->ScreenToWorld((Vector2i)mousePos);
+		mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
 	auto btnBoudn = bound;
 	
 
@@ -248,4 +248,5 @@ void UiObject::Update(float dt)
 
 void UiObject::Draw(RenderWindow& window)
 {
+	Object::Draw(window);
 }

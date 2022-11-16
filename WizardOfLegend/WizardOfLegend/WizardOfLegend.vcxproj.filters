@@ -43,6 +43,8 @@
     <ClCompile Include="Ui\SaveWindowBox.cpp" />
     <ClCompile Include="Ui\SkillToolUiMgr.cpp" />
     <ClCompile Include="Ui\UiMgr.cpp" />
+    <ClCompile Include="Ui\SelectOption.cpp" />
+    <ClCompile Include="GameObject\Button2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -90,6 +92,8 @@
     <ClInclude Include="Ui\SaveWindowBox.h" />
     <ClInclude Include="Ui\SkillToolUiMgr.h" />
     <ClInclude Include="Ui\UiMgr.h" />
+    <ClInclude Include="Ui\SelectOption.h" />
+    <ClInclude Include="GameObject\Button2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
