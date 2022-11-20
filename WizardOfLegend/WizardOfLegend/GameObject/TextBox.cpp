@@ -88,15 +88,15 @@ void TextBox::Update(float dt)
 		FinishWrite();
 }
 
-string TextBox::GetString()
-{
-	return str;
-}
-
 void TextBox::SetString(string str)
 {
 	this->str = str;
 	TextObj::SetString(str);
+}
+
+string TextBox::GetString()
+{
+	return str;
 }
 
 void TextBox::FinishWrite()

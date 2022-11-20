@@ -15,8 +15,8 @@ public:
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
 
-	virtual string GetString() override;
 	virtual void SetString(string str) override;
+	virtual string GetString() override;
 	function<void()> SendWritten;
 	void FinishWrite();
 };

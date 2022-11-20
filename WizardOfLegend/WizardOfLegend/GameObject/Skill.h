@@ -17,6 +17,7 @@ public:
 		Lightning,
 		Water,
 		Chaos,
+		Count,
 	};
 	enum class AttackType
 	{

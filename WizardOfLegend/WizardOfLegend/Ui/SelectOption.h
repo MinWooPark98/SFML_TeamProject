@@ -1,9 +1,8 @@
 #pragma once
-#include "../GameObject/UiObject.h"
+#include "../GameObject/Object.h"
 #include "../GameObject/Skill.h"
 #include "../GameObject/TextBox.h"
-
-class Button2;
+#include "OptionButtons.h"
 
 class SelectOption : public Object
 {
@@ -34,7 +33,8 @@ public:
 	};
 
 protected:
-	vector<pair<Button2*, Button2*>> options;
+	pair<OptionButtons*, OptionButtons*> options;
+	list<OptionButtons*> optButtons;
 	list<TextBox*> textBoxs;
 
 	Skill::Set selectedSet;
@@ -49,7 +49,8 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
-	void ApplyOption(Options opt, TextBox* box);
+	void ApplyText(Options opt, TextBox* box);
+	void ApplyOptBtn(Options opt, OptionButtons* opts, Button2* btn);
 	void ConvertVal(string& str, int& opt);
 	void ConvertVal(string& str, float& opt);
 };

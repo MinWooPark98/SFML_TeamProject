@@ -151,6 +151,7 @@
     <ClCompile Include="GameObject\Enemy.cpp" />
     <ClCompile Include="GameObject\Archer.cpp" />
     <ClCompile Include="GameObject\TextBox.cpp" />
+    <ClCompile Include="Ui\OptionButtons.cpp" />
     <ClCompile Include="Ui\SelectOption.cpp" />
     <ClCompile Include="Ui\DrawSelect.cpp" />
     <ClCompile Include="Framework\FileData.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="GameObject\Enemy.h" />
     <ClInclude Include="GameObject\Archer.h" />
     <ClInclude Include="GameObject\TextBox.h" />
+    <ClInclude Include="Ui\OptionButtons.h" />
     <ClInclude Include="Ui\SelectOption.h" />
     <ClInclude Include="Ui\DrawSelect.h" />
     <ClInclude Include="Framework\FileData.h" />
