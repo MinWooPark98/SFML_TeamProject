@@ -94,6 +94,7 @@ void Button2::SetText(const string& fontName, int charSize, Color textColor, Str
     text->SetFont(*RESOURCE_MGR->GetFont(fontName));
     text->SetSize(charSize);
     text->SetFillColor(textColor);
+    textInitColor = textColor;
     text->SetString(string);
     text->SetOrigin(Origins::MC);
     Reposition();
@@ -117,9 +118,15 @@ void Button2::SetOrigin(Origins origin)
 void Button2::Reposition()
 {
     if (sprite != nullptr)
+    {
+        sprite->SetOrigin(Origins::BC);
         sprite->SetPos({ btnBound.left + btnBound.width * 0.5f, btnBound.top + btnBound.height });
+    }
     if (text != nullptr)
+    {
+        text->SetOrigin(Origins::MC);
         text->SetPos({ btnBound.left + btnBound.width * 0.5f, btnBound.top + btnBound.height * 0.5f });
+    }
 }
 
 void Button2::DefaultMouseOn()
@@ -127,7 +134,7 @@ void Button2::DefaultMouseOn()
     if (sprite != nullptr)
         sprite->SetColor({ 255, 255, 255, 153 });
     if (text != nullptr)
-        text->SetFillColor({ 255, 255, 255, 153 });
+        text->SetFillColor(Color(255 - textInitColor.r, 255 - textInitColor.g, 255 - textInitColor.b, 255));
 }
 
 void Button2::DefaultMouseOff()
@@ -135,7 +142,7 @@ void Button2::DefaultMouseOff()
     if (sprite != nullptr)
         sprite->SetColor({ 255, 255, 255, 255 });
     if (text != nullptr)
-        text->SetFillColor({ 255, 255, 255, 255 });
+        text->SetFillColor(textInitColor);
 }
 
 void Button2::MouseOn()

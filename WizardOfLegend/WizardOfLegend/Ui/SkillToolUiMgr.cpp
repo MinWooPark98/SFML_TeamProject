@@ -20,10 +20,10 @@ void SkillToolUiMgr::Init()
 	UiMgr::Init();
 	auto windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 
-	SelectOption* options = new SelectOption(this);
+	SelectOption* options = new SelectOption();
 	options->Init();
-	uiObjList[0].push_back(options)
-		;
+	uiObjList[0].push_back(options);
+
 	/*Button* button = new Button(this);
 	button->Init();
 	button->UseText();
@@ -35,13 +35,6 @@ void SkillToolUiMgr::Init()
 	button->SetPos({ windowSize.x * 0.7f, 0.f });
 	button->SetOrigin(Origins::TL);
 	uiObjList[0].push_back(button);*/
-
-
-	for (auto& uiObjs : uiObjList)
-	{
-		for (auto& obj : uiObjs.second)
-			obj->Init();
-	}
 }
 
 void SkillToolUiMgr::Release()

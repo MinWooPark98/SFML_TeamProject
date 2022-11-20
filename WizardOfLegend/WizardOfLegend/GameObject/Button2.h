@@ -16,6 +16,7 @@ protected:
 	bool isClicked;
 
 	Origins origin;
+	Color textInitColor;
 	FloatRect btnBound;
 
 public:

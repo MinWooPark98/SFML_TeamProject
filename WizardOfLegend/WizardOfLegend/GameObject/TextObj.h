@@ -25,8 +25,8 @@ public:
 	virtual void SetText(string text);
 	Text& GetText() { return text; }
 	void SetText(Font& font, int size, Color color, string str);
-	void SetString(string str);
-	string GetString();
+	virtual void SetString(string str);
+	virtual string GetString();
 	virtual void SetOrigin(Origins origin);
 	virtual void Translate(const Vector2f& pos) override;
 	FloatRect GetGlobalBounds() { return text.getGlobalBounds(); }

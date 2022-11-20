@@ -45,6 +45,7 @@
     <ClCompile Include="Ui\UiMgr.cpp" />
     <ClCompile Include="Ui\SelectOption.cpp" />
     <ClCompile Include="GameObject\Button2.cpp" />
+    <ClCompile Include="GameObject\TextBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Ui\UiMgr.h" />
     <ClInclude Include="Ui\SelectOption.h" />
     <ClInclude Include="GameObject\Button2.h" />
+    <ClInclude Include="GameObject\TextBox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
