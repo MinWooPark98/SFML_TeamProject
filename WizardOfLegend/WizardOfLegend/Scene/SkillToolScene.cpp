@@ -18,6 +18,7 @@ void SkillToolScene::Init()
 
 	Player* player = new Player();
 	player->Init();
+	player->SetSkillToolMode();
 	objList[LayerType::Object][0].push_back(player);
 
 	uiMgr = new SkillToolUiMgr();

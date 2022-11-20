@@ -59,8 +59,6 @@ void Scene::Update(float dt)
 	Vector2f windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 	objMousePos = ScreenToWorld((Vector2i)mousePos);
 	uiMousePos = ScreenToUiPosition((Vector2i)mousePos);
-	if (projectiles != nullptr)
-		projectiles->Update(dt);
 	for (auto& layer : objList)
 	{
 		for (auto& obj_pair : layer.second)

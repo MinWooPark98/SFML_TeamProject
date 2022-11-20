@@ -8,7 +8,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), currSkill(nullptr)
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), currSkill(nullptr), skillToolMode(false)
 {
 }
 
@@ -137,60 +137,70 @@ void Player::Update(float dt)
 	SpriteObj::Update(dt);
 	animator->Update(dt);
 
+	auto& windowSize = FRAMEWORK->GetWindowSize();
 	if (currState != States::Skill)
 	{
 		direction.x = 0.f;
 		direction.y = 0.f;
-		direction.x += Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D) ? 1 : 0;
-		direction.x += Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A) ? -1 : 0;
-		direction.y += Keyboard::isKeyPressed(Keyboard::Down) || Keyboard::isKeyPressed(Keyboard::S) ? 1 : 0;
-		direction.y += Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W) ? -1 : 0;
+		if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
+		{
+			direction.x += Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D) ? 1 : 0;
+			direction.x += Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A) ? -1 : 0;
+			direction.y += Keyboard::isKeyPressed(Keyboard::Down) || Keyboard::isKeyPressed(Keyboard::S) ? 1 : 0;
+			direction.y += Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W) ? -1 : 0;
+		}
 		direction = Utils::Normalize(direction);
 	}
 	
 	if (currState == States::Idle || currState == States::Run)
 	{
-		for (auto mouseDown : InputMgr::GetMouseDownList())
+		if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
 		{
-			switch (mouseDown)
+			for (auto mouseDown : InputMgr::GetMouseDownList())
 			{
-			case Mouse::Left:
-				SetCurrSkill(skills[0]);
-				skills[0]->Do();
-				break;
-			case Mouse::Right:
-				SetCurrSkill(skills[1]);
-				skills[1]->Do();
-				break;
-			default:
-				break;
+				switch (mouseDown)
+				{
+				case Mouse::Left:
+					SetCurrSkill(skills[0]);
+					skills[0]->Do();
+					break;
+				case Mouse::Right:
+					SetCurrSkill(skills[1]);
+					skills[1]->Do();
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}
 	if (currState == States::Idle || currState == States::Run)
 	{
-		for (auto keyDown : InputMgr::GetKeyDownList())
+		if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
 		{
-			switch (keyDown)
+			for (auto keyDown : InputMgr::GetKeyDownList())
 			{
-			case Keyboard::Space:
- 				SetCurrSkill(skills[2]);
-				skills[2]->Do();
-				break;
-			case Keyboard::Q:
-				SetCurrSkill(skills[3]);
-				skills[3]->Do();
-				break;
-			case Keyboard::E:
-				SetCurrSkill(skills[4]);
-				skills[4]->Do();
-				break;
-			case Keyboard::R:
-				SetCurrSkill(skills[5]);
-				skills[5]->Do();
-				break;
-			default:
-				break;
+				switch (keyDown)
+				{
+				case Keyboard::Space:
+					SetCurrSkill(skills[2]);
+					skills[2]->Do();
+					break;
+				case Keyboard::Q:
+					SetCurrSkill(skills[3]);
+					skills[3]->Do();
+					break;
+				case Keyboard::E:
+					SetCurrSkill(skills[4]);
+					skills[4]->Do();
+					break;
+				case Keyboard::R:
+					SetCurrSkill(skills[5]);
+					skills[5]->Do();
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}

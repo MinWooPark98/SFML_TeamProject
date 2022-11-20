@@ -43,6 +43,8 @@ protected:
 	vector<Skill*> skills;
 	Skill* currSkill;
 
+	bool skillToolMode;
+
 public:
 	Player();
 	virtual ~Player();
@@ -64,5 +66,7 @@ public:
 
 	void Action();
 	void SetCurrSkill(Skill* skill) { currSkill = skill; }
+
+	void SetSkillToolMode() { skillToolMode = true; }
 };
 

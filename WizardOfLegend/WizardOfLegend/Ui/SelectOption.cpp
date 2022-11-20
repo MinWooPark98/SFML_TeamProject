@@ -164,6 +164,19 @@ void SelectOption::Release()
 void SelectOption::Reset()
 {
 	Object::Reset();
+	if (options.first != nullptr)
+		options.first->Reset();
+	if (options.second != nullptr)
+		options.second->Reset();
+	for (auto& buttons : optButtons)
+	{
+		buttons->Reset();
+	}
+	for (auto& box : textBoxs)
+	{
+		box->Reset();
+	}
+	selectedSet.Reset();
 }
 
 void SelectOption::Update(float dt)
@@ -185,15 +198,19 @@ void SelectOption::Update(float dt)
 			return;
 		}
 	}
-	options.first->Update(dt);
-	options.second->Update(dt);
+	if (options.first != nullptr)
+		options.first->Update(dt);
+	if (options.second != nullptr)
+		options.second->Update(dt);
 }
 
 void SelectOption::Draw(RenderWindow& window)
 {
 	Object::Draw(window);
-	options.first->Draw(window);
-	options.second->Draw(window);
+	if(options.first != nullptr)
+		options.first->Draw(window);
+	if (options.second != nullptr)
+		options.second->Draw(window);
 	for (auto& buttons : optButtons)
 	{
 		if (buttons->GetActive())

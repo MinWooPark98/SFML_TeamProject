@@ -173,3 +173,29 @@ void Skill::Draw(RenderWindow& window)
 			projectile->Draw(window);
 	}
 }
+
+void Skill::Set::Reset()
+{
+	skillName.clear();
+	element = Element::Fire;
+	attackType = AttackType::Single;
+	attackCntLim = 0;
+	attackInterval = 0.f;
+	distance = 0.f;
+	attackShape = Projectile::AttackShape::None;
+	amplitude = 0.f;
+	frequency = 0.f;
+	moveType = Projectile::MoveType::OneWay;
+	playerAction = Player::SkillAction::NormalSpell;
+	skillDelay = 0.f;
+	skillCoolDown = 0.f;
+	dmgRatio = 0.f;
+	dmgType = Projectile::DamageType::Once;
+	dmgDelay = 0.f;
+	duration = 0.f;
+	speed = 0.f;
+	for (auto& name : animClipName)
+	{
+		name.clear();
+	}
+}
