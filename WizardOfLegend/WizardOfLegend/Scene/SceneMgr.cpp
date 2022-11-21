@@ -9,7 +9,7 @@ bool SceneMgr::Init()
     sceneMap[Scenes::Play] = new PlayScene();
     sceneMap[Scenes::MapTool] = new MapToolScene();
     sceneMap[Scenes::SkillTool] = new SkillToolScene();
-    currScene = Scenes::MapTool;
+    currScene = Scenes::SkillTool;
 
     for (auto& pair : sceneMap)
     {

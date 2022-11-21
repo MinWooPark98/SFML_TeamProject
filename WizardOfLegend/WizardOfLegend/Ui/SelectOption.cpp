@@ -366,13 +366,75 @@ void SelectOption::ConvertVal(string& str, float& opt)
 
 void SelectOption::SaveSetToCSV()
 {
-	fstream fs;
-	fs.open("tables/skillTable.csv", ios::in | ios::out);
-	string str;
-	while (getline(fs, str))
+	rapidcsv::Document doc("tables/skillTable.csv", rapidcsv::LabelParams(0, -1));
+
+	auto skillNames = doc.GetColumn<string>(0);
+	auto row = doc.GetRowCount();
+	bool isExist = false;
+	for (int i = 0; i < row; ++i)
 	{
-		if (str.find(selectedSet.skillName) != string::npos)
-			cout << str.find(selectedSet.skillName) << endl;
+		if (skillNames[i] == selectedSet.skillName)
+		{
+			isExist = true;
+			for (int j = 0; j < (int)Options::Count; ++j)
+			{
+				switch ((Options)j)
+				{
+				case SelectOption::Options::Element:
+					doc.SetCell(j, i, (int)selectedSet.element);
+					break;
+				case SelectOption::Options::AttackType:
+					doc.SetCell(j, i, (int)selectedSet.attackType);
+					break;
+				case SelectOption::Options::AttackShape:
+					doc.SetCell(j, i, (int)selectedSet.attackShape);
+					break;
+				case SelectOption::Options::MoveType:
+					doc.SetCell(j, i, (int)selectedSet.moveType);
+					break;
+				case SelectOption::Options::PlayerAction:
+					doc.SetCell(j, i, (int)selectedSet.playerAction);
+					break;
+				case SelectOption::Options::DmgType:
+					doc.SetCell(j, i, (int)selectedSet.dmgType);
+					break;
+				default:
+					doc.SetCell(j, i, options.second->GetButtons()[j]->GetText()->GetString());
+					break;
+				}
+			}
+			break;
+		}
 	}
-	fs.close();
+	if (!isExist)
+	{
+		for (int j = 0; j < (int)Options::Count; ++j)
+		{
+			switch ((Options)j)
+			{
+			case SelectOption::Options::Element:
+				doc.SetCell(j, row, (int)selectedSet.element);
+				break;
+			case SelectOption::Options::AttackType:
+				doc.SetCell(j, row, (int)selectedSet.attackType);
+				break;
+			case SelectOption::Options::AttackShape:
+				doc.SetCell(j, row, (int)selectedSet.attackShape);
+				break;
+			case SelectOption::Options::MoveType:
+				doc.SetCell(j, row, (int)selectedSet.moveType);
+				break;
+			case SelectOption::Options::PlayerAction:
+				doc.SetCell(j, row, (int)selectedSet.playerAction);
+				break;
+			case SelectOption::Options::DmgType:
+				doc.SetCell(j, row, (int)selectedSet.dmgType);
+				break;
+			default:
+				doc.SetCell(j, row, options.second->GetButtons()[j]->GetText()->GetString());
+				break;
+			}
+		}
+	}
+	doc.Save("tables/skillTable.csv");
 }

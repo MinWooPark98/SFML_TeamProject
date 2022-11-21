@@ -74,8 +74,8 @@ void Skill::Do()
 		case Projectile::AttackShape::Wave:
 			if (!(setting->attackType == AttackType::Multiple && isDoing))
 			{
-				startPos = subject->GetPos() + skillDir * setting->distance;
 				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+				startPos = subject->GetPos() + skillDir * setting->distance;
 			}
 			if (((Player*)subject)->GetBackHand())
 				obj->SetReverse(true);
@@ -139,7 +139,10 @@ void Skill::Update(float dt)
 					attackTimer = 0.f;
 				}
 				else
+				{
 					isDoing = false;
+					cout << " 1" << endl;
+				}
 			}
 			break;
 		default:
@@ -155,7 +158,6 @@ void Skill::Update(float dt)
 		if (setting->attackShape == Projectile::AttackShape::Rotate)
 			(*it)->SetStartPos(subject->GetPos());
 
-		//(*it)->Update(dt);
 		if (!(*it)->GetMoving())
 		{
 			(*it)->SetActive(false);

@@ -121,6 +121,7 @@ void Player::Init()
 		newSkill->SetSubject(this, Skill::SubjectType::Player);
 		skills.push_back(newSkill);
 	}
+	skills[0]->SetSkill("FireBall");
 	skills[4]->SetSkill("DragonArc");
 	skills[5]->SetSkill("FireFull");
 
