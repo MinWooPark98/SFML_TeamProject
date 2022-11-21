@@ -54,6 +54,8 @@ public:
 	void ConvertVal(string& str, int& opt);
 	void ConvertVal(string& str, float& opt);
 
+	void SaveSetToCSV();
+
 	Skill::Set& GetSet() { return selectedSet; }
 };
 

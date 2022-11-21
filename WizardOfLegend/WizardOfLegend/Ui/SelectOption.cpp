@@ -5,6 +5,7 @@
 #include "../Framework/Framework.h"
 #include "../Framework/InputMgr.h"
 #include "../Scene/SceneMgr.h"
+#include <fstream>
 
 SelectOption::SelectOption()
 {
@@ -191,6 +192,9 @@ void SelectOption::Update(float dt)
 		player->GetSkills()[0]->SetSkill(selectedSet);
 	}
 
+	if (InputMgr::GetKeyDown(Keyboard::F2))
+		SaveSetToCSV();
+
 	for (auto& buttons : optButtons)
 	{
 		if (buttons->GetActive())
@@ -358,4 +362,17 @@ void SelectOption::ConvertVal(string& str, float& opt)
 	float f = stof(str);
 	opt = f;
 	str = to_string(f);
+}
+
+void SelectOption::SaveSetToCSV()
+{
+	fstream fs;
+	fs.open("tables/skillTable.csv", ios::in | ios::out);
+	string str;
+	while (getline(fs, str))
+	{
+		if (str.find(selectedSet.skillName) != string::npos)
+			cout << str.find(selectedSet.skillName) << endl;
+	}
+	fs.close();
 }
