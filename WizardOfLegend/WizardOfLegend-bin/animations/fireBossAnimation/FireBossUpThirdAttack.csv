@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-FireBossDownThirdAttack,1,10,,,,,,
+FireBossUpThirdAttack,0,15,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/FireBossRoundhouseKick0.png,0,0,33,39,16.5,19.5,0,0

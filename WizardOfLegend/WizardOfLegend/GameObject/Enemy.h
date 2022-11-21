@@ -30,9 +30,21 @@ public:
 		Die,
 	};
 
+	enum class BossStates
+	{
+		None = -1,
+		Idle,
+		Move,
+		Attack,
+		Hit,
+		Die,
+		Clear,
+	};
+
 protected:
 	Animator animation;
 	States curState;
+	BossStates curBossState;
 	Vector2f lastDir;
 
 	SpriteObj* weapon;
@@ -77,6 +89,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override { SpriteObj::Draw(window); };
 	virtual void SetState(States newState) = 0;
+	virtual void SetState(BossStates newState) {};
 
 	float GetSpeed() { return speed; };
 	void SetSpeed(float spd) { speed = spd; };
@@ -114,6 +127,7 @@ public:
 	void SetPlayer(Player* p) { player = p; };
 
 	void NormalMonsterMove(float dt);
+	void BossMonsterMove(float dt);
 
 	void UpdateIdle();
 	virtual void UpdateMove(int attackDelay);

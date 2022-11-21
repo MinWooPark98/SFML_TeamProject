@@ -14,26 +14,53 @@ void Enemy::Update(float dt)
 { 
 	SpriteObj::Update(dt);
 
-	switch (curState)
+	if (type == MonsterType::Normal || type == MonsterType::StageBoss)
 	{
-	case States::LeftIdle: case States::RightIdle:
-		UpdateIdle();
-		break;
-	case States::LeftMove: case States::RightMove:
-		UpdateMove(2.f);
-		break;
-	case States::Attack: case States::MoveAttack:
-		UpdateAttack(dt);
-		break;
-	case States::Hit:
-		SetState(States::Hit);
-		break;
-	case States::Die:
-		SetState(States::Die);
-		break;
+		switch (curState)
+		{
+		case States::LeftIdle: case States::RightIdle:
+			UpdateIdle();
+			break;
+		case States::LeftMove: case States::RightMove:
+			UpdateMove(2.f);
+			break;
+		case States::Attack: case States::MoveAttack:
+			UpdateAttack(dt);
+			break;
+		case States::Hit:
+			SetState(States::Hit);
+			break;
+		case States::Die:
+			SetState(States::Die);
+			break;
+		}
+	}
+	else if (type == MonsterType::MiddleBoss)
+	{
+		switch (curBossState)
+		{
+		case Enemy::BossStates::Idle:
+			break;
+		case Enemy::BossStates::Move:
+			UpdateMove(0.5f);
+			break;
+		case Enemy::BossStates::Attack:
+			UpdateAttack(dt);
+			break;
+		case Enemy::BossStates::Hit:
+			SetState(BossStates::Hit);
+			break;
+		case Enemy::BossStates::Die:
+			SetState(BossStates::Die);
+			break;
+		case Enemy::BossStates::Clear:
+			SetState(BossStates::Clear);
+			break;
+		}
 	}
 
-	if (curState == States::Attack || curState == States::MoveAttack)
+
+	if (curState == States::Attack || curState == States::MoveAttack || curBossState == BossStates::Attack)
 		attackDelay -= dt;
 
 	if (curState == States::Die && dieTimer >= 0.f)
@@ -84,6 +111,24 @@ void Enemy::NormalMonsterMove(float dt)
 
 			return;
 		}
+	}
+}
+
+void Enemy::BossMonsterMove(float dt)
+{
+	player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
+	player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
+
+	if (curBossState == BossStates::Die || curBossState == BossStates::Clear)
+		return;
+
+	if (!Utils::EqualFloat(direction.x, 0.f))
+	{
+		auto move = Utils::Normalize(player->GetPos() - GetPos());
+		Translate({ dt * speed * move });
+		SetState(BossStates::None);
+		SetState(BossStates::Move);
+		return;
 	}
 }
 

@@ -96,6 +96,8 @@ void Lancer::SetState(States newState)
 
 	curState = newState;
 
+	float angle = 0.f;
+
 	switch (curState)
 	{
 	case States::LeftIdle:
@@ -114,39 +116,28 @@ void Lancer::SetState(States newState)
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 		lancerAttackEffect->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 
-		if (Utils::Angle(player->GetPos(), GetPos()) >= -180 &&
-			Utils::Angle(player->GetPos(), GetPos()) <= -130 ||
-			Utils::Angle(player->GetPos(), GetPos()) >= 130 &&
-			Utils::Angle(player->GetPos(), GetPos()) <= 180)
+		angle = Utils::Angle(player->GetPos(), GetPos());
+		attackDelay = 2.f;
+
+		if (angle >= -180 && angle <= -130 || angle >= 130 && angle <= 180)
 		{
 			animation.Play("LancerRightAttack");
 			spearPos = 1;
-			attackDelay = 2.f;
-			return;
 		}
-		if (Utils::Angle(player->GetPos(), GetPos()) <= -45 &&
-			Utils::Angle(player->GetPos(), GetPos()) >= -129)
+		if (angle <= -45 && angle >= -129)
 		{
 			animation.Play("LancerDownAttack");
 			spearPos = 4;
-			attackDelay = 2.f;
-			return;
 		}
-		if (Utils::Angle(player->GetPos(), GetPos()) >= -44 &&
-			Utils::Angle(player->GetPos(), GetPos()) <= 45)
+		if (angle >= -44 && angle <= 45)
 		{
 			animation.Play("LancerLeftAttack");
 			spearPos = 2;
-			attackDelay = 2.f;
-			return;
 		}
-		if (Utils::Angle(player->GetPos(), GetPos()) >= 46 &&
-			Utils::Angle(player->GetPos(), GetPos()) <= 129)
+		if (angle >= 46 && angle <= 129)
 		{
 			animation.Play("LancerUpAttack");
 			spearPos = 3;
-			attackDelay = 2.f;
-			return;
 		}
 		break;
 	case States::Hit:
