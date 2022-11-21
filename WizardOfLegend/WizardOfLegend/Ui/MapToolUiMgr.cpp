@@ -57,7 +57,7 @@ void MapToolUiMgr::Init()
 	//exitBtn->SetPos({ 50,190 });
 	//uiObjList[0].push_back(exitBtn);
 
-	selects = { "Tile","Wall","Object","PLAYER","ENEMY"};
+	selects = { "Tile","Wall","Object","Player","Enemy"};
 	selectTextSize = { 40,40,40,40,40 };
 	selectPosY = { 54,54,54,54,54 };
 
@@ -141,24 +141,14 @@ void MapToolUiMgr::Update(float dt)
 			saveWindow->SetActive(false);
 		return;
 	}
-	if (loadWindow->GetActive())
-	{
-		loadBtn->Update(dt);
-		if (loadBtn->IsUp())
-		{
-			loadWindow->SetActive(!loadWindow->GetActive());
-			((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
-		}
-		loadWindow->Update(dt);
-		return;
-	}	
+	
 
 	if (nowDraw != nullptr)
 	{
 		nowDraw->Update(dt);
 	}
 
-	cout << (int)saveBtn->GetState() << endl;
+	//cout << (int)saveBtn->GetState() << endl;
 	if (saveBtn->IsUp())
 	{
 		saveWindow->SetActive(true);
@@ -166,9 +156,23 @@ void MapToolUiMgr::Update(float dt)
 	}
 	if (loadBtn->IsUp())
 	{
-		loadWindow->SetActive(!loadWindow->GetActive());
-		((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
+		if (loadWindow->GetActive())
+		{
+			loadBtn->Update(dt);
+			loadWindow->SetActive(false);
+			((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
+			cout << "로드로드1" << endl;
+			cout << loadWindow->GetActive() << endl;
+		}
+		else
+		{
+			loadWindow->SetActive(true);
+			((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
+			cout << "로드로드2" << endl;
+			cout << loadWindow->GetActive() << endl;
+		}
 	}
+	
 	if (selectBtn->IsClick())
 	{
 		for (auto& obj : type_selects[selects[selIdx]])
@@ -335,11 +339,11 @@ string MapToolUiMgr::loadFile()
 {
 	return loadWindow->GetLoadPath();
 }
-//
-//bool MapToolUiMgr::IsExit()
-//{
-//	return exitBtn->IsDown() || exitBtn->IsClick();
-//}
+
+bool MapToolUiMgr::IsExit()
+{
+	return exitBtn->IsDown() || exitBtn->IsClick();
+}
 
 string MapToolUiMgr::GetPath()
 {

@@ -56,7 +56,7 @@ void MapToolScene::Reset()
 void MapToolScene::Update(float dt)
 {
 	Scene::Update(dt);
-	uiMgr->Update(dt);
+	//uiMgr->Update(dt);
 
 	auto uimgr = ((MapToolUiMgr*)uiMgr);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
@@ -185,7 +185,7 @@ void MapToolScene::Update(float dt)
 
 void MapToolScene::Draw(RenderWindow& window)
 {
-	uiMgr->Draw(window);
+	//uiMgr->Draw(window);
 	Scene::Draw(window);
 }
 
@@ -249,11 +249,11 @@ MapToolScene::~MapToolScene()
 
 void MapToolScene::SetType(string t)
 {
-	if (t == "TREE" || t == "STONE" || t == "ENEMY" || t == "PLAYER" || t == "BLOCK")
+	if (t == "Wall" || t == "Object" || t == "Enemy" || t == "Player")
 	{
 		nowType = LayerType::Object;
 	}
-	if (t == "TILE")
+	if (t == "Tile")
 	{
 		nowType = LayerType::Tile;
 	}

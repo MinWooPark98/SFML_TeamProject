@@ -164,7 +164,6 @@ void Skill::Update(float dt)
 				else
 				{
 					isDoing = false;
-					cout << " 1" << endl;
 				}
 			}
 			break;

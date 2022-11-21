@@ -193,7 +193,7 @@ void UiObject::Update(float dt)
 		}
 		else if (!Utils::IsRange(btnBound, mousePos))
 		{
-			cout << "This" << endl;
+			//cout << "This" << endl;
 			btnState = UiState::Exit;
 			isEvent = true;
 		}
