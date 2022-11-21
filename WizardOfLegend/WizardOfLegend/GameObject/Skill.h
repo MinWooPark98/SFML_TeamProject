@@ -69,6 +69,7 @@ private:
 
 	bool isDoing;
 	Vector2f skillDir;
+	Vector2f startPos;
 
 	Set* setting;
 	int attackCnt;
@@ -80,6 +81,7 @@ public:
 	~Skill();
 
 	void SetSkill(const String& skillName);
+	void SetSkill(const Set& set);
 	void SetSubject(Object* sub, SubjectType type);
 	void Do();
 	void Update(float dt);

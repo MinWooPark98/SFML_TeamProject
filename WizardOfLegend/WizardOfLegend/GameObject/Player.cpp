@@ -117,15 +117,12 @@ void Player::Init()
 	lastDir = { 0.f, 1.f };
 	for (int i = 0; i < 6; ++i)
 	{
-		skills.push_back(new Skill());
+		Skill* newSkill = new Skill();
+		newSkill->SetSubject(this, Skill::SubjectType::Player);
+		skills.push_back(newSkill);
 	}
-	skills[4]->GetSetting();
 	skills[4]->SetSkill("DragonArc");
-	skills[4]->SetSubject(this, Skill::SubjectType::Player);
-
-	skills[5]->GetSetting();
 	skills[5]->SetSkill("FireFull");
-	skills[5]->SetSubject(this, Skill::SubjectType::Player);
 
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));

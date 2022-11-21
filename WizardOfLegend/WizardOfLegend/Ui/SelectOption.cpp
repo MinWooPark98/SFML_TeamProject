@@ -3,6 +3,8 @@
 #include "../GameObject/Button2.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/Framework.h"
+#include "../Framework/InputMgr.h"
+#include "../Scene/SceneMgr.h"
 
 SelectOption::SelectOption()
 {
@@ -182,6 +184,13 @@ void SelectOption::Reset()
 void SelectOption::Update(float dt)
 {
 	Object::Update(dt);
+
+	if (InputMgr::GetKeyDown(Keyboard::F1))
+	{
+		Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
+		player->GetSkills()[0]->SetSkill(selectedSet);
+	}
+
 	for (auto& buttons : optButtons)
 	{
 		if (buttons->GetActive())

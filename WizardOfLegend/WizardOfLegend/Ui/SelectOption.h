@@ -53,5 +53,7 @@ public:
 	void ApplyOptBtn(Options opt, OptionButtons* opts, Button2* btn);
 	void ConvertVal(string& str, int& opt);
 	void ConvertVal(string& str, float& opt);
+
+	Skill::Set& GetSet() { return selectedSet; }
 };
 

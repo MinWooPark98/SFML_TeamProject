@@ -16,7 +16,18 @@ Skill::~Skill()
 void Skill::SetSkill(const String& skillName)
 {
 	SkillTable* table = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
-	setting = new Set(table->Get(skillName));
+	if (setting == nullptr)
+		setting = new Set(table->Get(skillName));
+	else
+		*setting = table->Get(skillName);
+}
+
+void Skill::SetSkill(const Set& set)
+{
+	if (setting == nullptr)
+		setting = new Set(set);
+	else
+		*setting = set;
 }
 
 void Skill::SetSubject(Object* sub, SubjectType type)
@@ -51,21 +62,26 @@ void Skill::Do()
 		case Projectile::AttackShape::Range:
 			skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
 			obj->SetDirection(skillDir);
-			obj->SetPos(subject->GetPos() + skillDir * setting->distance);
+			startPos = subject->GetPos() + skillDir * setting->distance;
+			obj->SetPos(startPos);
 			break;
 		case Projectile::AttackShape::Rotate:
 			if (isDoing)
 				obj->SetAngle(projectiles.back()->GetAngle() + 360.f / setting->attackCntLim);
-			obj->SetStartPos(subject->GetPos());
+			startPos = subject->GetPos();
+			obj->SetStartPos(startPos);
 			break;
 		case Projectile::AttackShape::Wave:
-			if(!(setting->attackType == AttackType::Multiple && isDoing))
+			if (!(setting->attackType == AttackType::Multiple && isDoing))
+			{
+				startPos = subject->GetPos() + skillDir * setting->distance;
 				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+			}
 			if (((Player*)subject)->GetBackHand())
 				obj->SetReverse(true);
+			obj->SetStartPos(startPos);
 			obj->SetDirection(skillDir);
 			obj->SetAmplitude(setting->amplitude);
-			obj->SetStartPos(subject->GetPos() + skillDir * setting->distance);
 			break;
 		}
 		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());

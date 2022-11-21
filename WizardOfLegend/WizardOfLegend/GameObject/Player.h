@@ -68,5 +68,6 @@ public:
 	void SetCurrSkill(Skill* skill) { currSkill = skill; }
 
 	void SetSkillToolMode() { skillToolMode = true; }
+	vector<Skill*>& GetSkills() { return skills; }
 };
 
