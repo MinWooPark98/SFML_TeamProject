@@ -81,10 +81,10 @@ protected:
 
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
-	virtual ~Enemy() {};
+	virtual ~Enemy() { Release(); };
 
 	virtual void Init() override;
-	virtual void Release() override { SpriteObj::Release(); isAlive = true; };
+	virtual void Release() override { SpriteObj::Release(); };
 	virtual void Reset() override { SpriteObj::Reset(); };
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override { SpriteObj::Draw(window); };

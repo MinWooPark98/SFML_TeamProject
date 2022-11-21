@@ -67,14 +67,42 @@ void PlayScene::Update(float dt)
 		fireBoss->SetPlayer(player);
 	}
 
-	//if (InputMgr::GetKeyDown(Keyboard::Key::K))
-	//	objList[LayerType::Object][0].clear();
-	//if (InputMgr::GetKeyDown(Keyboard::Key::L))
-	//	objList[LayerType::Object][1].clear();
-	//if (InputMgr::GetKeyDown(Keyboard::Key::J))
-	//	objList[LayerType::Object][2].clear();
-	//if (InputMgr::GetKeyDown(Keyboard::Key::H))
-	//	objList[LayerType::Object][3].clear();
+	if (InputMgr::GetKeyDown(Keyboard::Key::K))
+	{
+		for (auto it : objList[LayerType::Object][0])
+		{
+			if (!objList[LayerType::Object][0].empty())
+				delete it;
+		}
+		objList[LayerType::Object][0].clear();
+	}
+	if (InputMgr::GetKeyDown(Keyboard::Key::L))
+	{
+		for (auto it : objList[LayerType::Object][1])
+		{
+			if (!objList[LayerType::Object][1].empty())
+				delete it;
+		}
+		objList[LayerType::Object][1].clear();
+	}
+	if (InputMgr::GetKeyDown(Keyboard::Key::J))
+	{
+		for (auto it : objList[LayerType::Object][2])
+		{
+			if (!objList[LayerType::Object][2].empty())
+				delete it;
+		}
+		objList[LayerType::Object][2].clear();
+	}
+	if (InputMgr::GetKeyDown(Keyboard::Key::H))
+	{
+		for (auto it : objList[LayerType::Object][3])
+		{
+			if (!objList[LayerType::Object][3].empty())
+				delete it;
+		}
+		objList[LayerType::Object][3].clear();
+	}
 
 	Scene::Update(dt);
 }

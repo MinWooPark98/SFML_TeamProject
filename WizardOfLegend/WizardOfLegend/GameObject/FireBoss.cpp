@@ -3,6 +3,7 @@
 
 void FireBoss::Init()
 {
+	Release();
 	Enemy::Init();
 
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossClear"));
@@ -53,6 +54,7 @@ void FireBoss::Init()
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());
 	RandomPatternSet(AttackType::None);
+	//attackType = AttackType::DragonAttack;
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -108,14 +110,6 @@ void FireBoss::Update(float dt)
 	}
 	if (isThrowingKnife && nextPatternDelay <= 1.3f)
 		isThrowingKnife = false;
-	
-
-	//if (attackType == AttackType::DragonAttack)
-	//{
-	//	auto moving = Utils::Normalize(playerLastPos - lastPos);
-	//	if (GetPos().x <= 1900)
-	//		Translate({ (dt * speed * moving) / 5.f });
-	//}
 
 
 	if (curBossState == BossStates::Idle && patternDelay <= 0.f)
@@ -262,25 +256,25 @@ void FireBoss::SetState(BossStates newState)
 			}
 			break;
 		case FireBoss::AttackType::DragonAttack:
-			/*if (nextPatternDelay > 0.f)
-			{
-				switch (lastMoveType)
-				{
-				case FireBoss::MoveType::LeftAndRight:
-					direction.x < 0.f ? animation.Play("FireBossLeftRun") : animation.Play("FireBossRightRun");
-					break;
-				case FireBoss::MoveType::TopAndBottom:
-					direction.y < 0.f ? animation.Play("FireBossUpRun") : animation.Play("FireBossDownRun");
-					break;
-				}
-				SetPos({0, 0});
-			}
-			else
-			{
-				animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftLand" : "FireBossRightLand");
-				attackDelay = 1.f;
-				nextPatternDelay = 1.5f;
-			}*/
+			//if (nextPatternDelay > 0.f)
+			//{
+			//	switch (lastMoveType)
+			//	{
+			//	case FireBoss::MoveType::LeftAndRight:
+			//		direction.x < 0.f ? animation.Play("FireBossLeftRun") : animation.Play("FireBossRightRun");
+			//		break;
+			//	case FireBoss::MoveType::TopAndBottom:
+			//		direction.y < 0.f ? animation.Play("FireBossUpRun") : animation.Play("FireBossDownRun");
+			//		break;
+			//	}
+			//	SetPos({0, 0});
+			//}
+			//else
+			//{
+			//	animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftLand" : "FireBossRightLand");
+			//	attackDelay = 1.f;
+			//	nextPatternDelay = 1.5f;
+			//}
 			break;
 		case FireBoss::AttackType::Meteor:
 			break;

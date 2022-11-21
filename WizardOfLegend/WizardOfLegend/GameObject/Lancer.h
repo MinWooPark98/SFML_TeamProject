@@ -12,7 +12,7 @@ protected:
 
 public:
 	Lancer() {};
-	virtual ~Lancer() {};
+	virtual ~Lancer() { Release(); };
 
 	virtual void Init() override;
 	virtual void Release() override { Enemy::Release(); };

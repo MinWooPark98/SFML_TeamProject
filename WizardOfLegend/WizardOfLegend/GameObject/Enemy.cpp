@@ -2,6 +2,7 @@
 
 void Enemy::Init()
 {
+	Release();
 	animation.SetTarget(&sprite);
 	position = { 0, 0 };
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);

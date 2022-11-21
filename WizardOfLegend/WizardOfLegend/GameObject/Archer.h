@@ -16,10 +16,10 @@ protected:
 
 public:
 	Archer();
-	virtual ~Archer() {};
+	virtual ~Archer() { Release(); };
 
 	virtual void Init() override;
-	virtual void Release() override { Enemy::Release(); delete this; };
+	virtual void Release() override { Enemy::Release(); };
 	virtual void Reset() override { Enemy::Reset(); };
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;

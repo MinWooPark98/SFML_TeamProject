@@ -42,13 +42,17 @@ protected:
 
 public:
 	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};
-	virtual ~FireBoss() 
-	{ 
-		delete& sprite;
-		Release();
-	};
+	virtual ~FireBoss() { Release(); };
 
-	virtual void Release() override { Enemy::Release();};
+	virtual void Release() override 
+	{ 
+		Enemy::Release(); 
+		for (auto& it : skills)
+		{
+			delete it;
+		}
+		skills.clear();
+	};
 	virtual void Reset() override { Enemy::Reset(); };
 	virtual void Init() override;
 	virtual void Update(float dt) override;

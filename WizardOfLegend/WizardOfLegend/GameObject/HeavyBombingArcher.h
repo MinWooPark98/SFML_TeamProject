@@ -22,7 +22,7 @@ protected:
 
 public:
 	HeavyBombingArcher() {};
-	virtual ~HeavyBombingArcher() {};
+	virtual ~HeavyBombingArcher() { Release(); };
 
 	virtual void Init() override;
 	virtual void Release() override { Archer::Release(); };
