@@ -30,6 +30,7 @@ SaveWindowBox::~SaveWindowBox()
 
 void SaveWindowBox::Init()
 {
+	SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/window.png"), true);
 	SetClkColor(false);
 
 	save = new Button(uimgr);

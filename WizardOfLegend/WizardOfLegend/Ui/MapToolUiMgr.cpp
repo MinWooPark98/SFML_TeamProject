@@ -49,20 +49,12 @@ void MapToolUiMgr::Init()
 	loadBtn->SetPos({ 50,120 });
 	uiObjList[0].push_back(loadBtn);
 
-	eraseBtn = new Button(this);
-	eraseBtn->SetClkColor(true);
-	eraseBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
-		75, Color::White, "ERASE", true);
-	eraseBtn->SetOrigin(Origins::TL);
-	eraseBtn->SetPos({ 50,190 });
-	uiObjList[0].push_back(eraseBtn);
-
 	exitBtn = new Button(this);
 	exitBtn->SetClkColor(true);
 	exitBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 		75, Color::White, "EXIT", true);
 	exitBtn->SetOrigin(Origins::TL);
-	exitBtn->SetPos({ 50,260 });
+	exitBtn->SetPos({ 50,190 });
 	uiObjList[0].push_back(exitBtn);
 
 	selects = { "Tile","Wall","Object","PLAYER","ENEMY"};
@@ -185,7 +177,7 @@ void MapToolUiMgr::Update(float dt)
 		loadWindow->SetActive(!loadWindow->GetActive());
 		((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
 	}
-
+	UiMgr::Update(dt);
 	if (selectBtn->IsClick())
 	{
 		for (auto& obj : type_selects[selects[selIdx]])
@@ -267,7 +259,7 @@ void MapToolUiMgr::Update(float dt)
 	    }
 	    nowEvObj = nullptr;
 	}
-	UiMgr::Update(dt);
+	
 }
 
 void MapToolUiMgr::Draw(RenderWindow& window)
@@ -352,11 +344,6 @@ bool MapToolUiMgr::LoadActive()
 string MapToolUiMgr::loadFile()
 {
 	return loadWindow->GetLoadPath();
-}
-
-bool MapToolUiMgr::IsErase()
-{
-	return eraseBtn->IsDown() || eraseBtn->IsClick();
 }
 
 bool MapToolUiMgr::IsExit()

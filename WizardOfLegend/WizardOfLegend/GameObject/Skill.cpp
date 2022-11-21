@@ -74,8 +74,8 @@ void Skill::Do()
 		case Projectile::AttackShape::Wave:
 			if (!(setting->attackType == AttackType::Multiple && isDoing))
 			{
-				startPos = subject->GetPos() + skillDir * setting->distance;
 				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+				startPos = subject->GetPos() + skillDir * setting->distance;
 			}
 			if (((Player*)subject)->GetBackHand())
 				obj->SetReverse(true);
