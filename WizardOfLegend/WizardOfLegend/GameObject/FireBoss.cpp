@@ -53,7 +53,6 @@ void FireBoss::Init()
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());
 	RandomPatternSet(AttackType::None);
-	attackType = AttackType::ThrowingKnife;
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -71,6 +70,13 @@ void FireBoss::Update(float dt)
 {
 	Enemy::Update(dt);
 
+	if (InputMgr::GetKeyDown(Keyboard::Key::H))
+		SetCurHp(0);
+
+	if (curHp <= 0 && isAlive)
+	{
+		isAlive = false;
+	}
 
 	if (curBossState == BossStates::Move || attackType != AttackType::ThirdAttack)
 	{
@@ -100,16 +106,19 @@ void FireBoss::Update(float dt)
 	}
 	if (isThrowingKnife && nextPatternDelay <= 1.3f)
 		isThrowingKnife = false;
+	
+
+	//if (attackType == AttackType::DragonAttack)
+	//{
+	//	auto moving = Utils::Normalize(playerLastPos - lastPos);
+	//	if (GetPos().x <= 1900)
+	//		Translate({ (dt * speed * moving) / 5.f });
+	//}
 
 
 	if (curBossState == BossStates::Idle && patternDelay <= 0.f)
 		curBossState = BossStates::Move;
-	
 
-	if (attackType == AttackType::DragonAttack)
-		speed = 2000.f;
-	else
-		speed = 700.f;
 
 	if (curBossState != BossStates::Idle)
 		nextPatternDelay -= dt;
@@ -124,11 +133,14 @@ void FireBoss::Update(float dt)
 
 void FireBoss::Draw(RenderWindow& window)
 {
-	Enemy::Draw(window);
-	window.draw(sprite);
-	for (auto skill : skills)
+	if (isAlive)
 	{
-		skill->Draw(window);
+		Enemy::Draw(window);
+		window.draw(sprite);
+		for (auto skill : skills)
+		{
+			skill->Draw(window);
+		}
 	}
 }
 
@@ -233,7 +245,6 @@ void FireBoss::SetState(BossStates newState)
 				}
 				skills[0]->Do();
 
-
 				attackDelay = 1.f;
 				nextPatternDelay = 1.5f;
 				switch (lastMoveType)
@@ -249,7 +260,7 @@ void FireBoss::SetState(BossStates newState)
 			}
 			break;
 		case FireBoss::AttackType::DragonAttack:
-			if (nextPatternDelay > 0.f)
+			/*if (nextPatternDelay > 0.f)
 			{
 				switch (lastMoveType)
 				{
@@ -260,24 +271,16 @@ void FireBoss::SetState(BossStates newState)
 					direction.y < 0.f ? animation.Play("FireBossUpRun") : animation.Play("FireBossDownRun");
 					break;
 				}
+				SetPos({0, 0});
 			}
 			else
 			{
 				animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftLand" : "FireBossRightLand");
 				attackDelay = 1.f;
 				nextPatternDelay = 1.5f;
-			}
+			}*/
 			break;
 		case FireBoss::AttackType::Meteor:
-			switch (moveType)
-			{
-			case FireBoss::MoveType::LeftAndRight:
-				animation.Play(player->GetPos().x < GetPos().x ? "FireBossLeftFireball" : "FireBossRightFireball");
-				break;
-			case FireBoss::MoveType::TopAndBottom:
-				animation.Play(player->GetPos().y < GetPos().y ? "FireBossUpFireball" : "FireBossDownFireball");
-				break;
-			}
 			break;
 		}
 		break;
@@ -311,12 +314,12 @@ void FireBoss::UpdateAttack(float dt)
 		case FireBoss::AttackType::ThrowingKnife:
 			UpdateThrowingKnife(dt);
 			break;
-		case FireBoss::AttackType::DragonAttack:
-			UpdateDragonAttack(dt);
-			break;
-		case FireBoss::AttackType::Meteor:
-			SetState(BossStates::Attack);
-			break;
+		//case FireBoss::AttackType::DragonAttack:
+		//	UpdateDragonAttack(dt);
+		//	break;
+		//case FireBoss::AttackType::Meteor:
+		//	SetState(BossStates::Attack);
+			//break;
 		}
 
 		if (patternCount == 0 && attackDelay <= 0.f)
@@ -337,8 +340,8 @@ void FireBoss::UpdateMove(int attackDelay)
 {
 	if (attackType == AttackType::ThirdAttack)
 		SetAttackScale(30.f);
-	else if (attackType == AttackType::DragonAttack)
-		SetAttackScale(30.f);
+	//else if (attackType == AttackType::DragonAttack)
+	//	SetAttackScale(30.f);
 	else
 		SetAttackScale(10000.f);
 
@@ -470,20 +473,38 @@ void FireBoss::UpdateThrowingKnife(float dt)
 	}
 }
 
-void FireBoss::UpdateDragonAttack(float dt)
-{
-	if (nextPatternDelay <= 0.f)
-	{
-		SetState(BossStates::None);
-		SetState(BossStates::Attack);
-
-		if (patternDelay <= 0.f)
-		{
-			RandomPatternSet(AttackType::DragonAttack);
-			PatternOptionSet();
-
-			patternCount--;
-			SetState(BossStates::Move);
-		}
-	}
-}
+//void FireBoss::UpdateDragonAttack(float dt)
+//{
+//	if (nextPatternDelay <= 0.f)
+//	{
+//		SetState(BossStates::None);
+//		SetState(BossStates::Attack);
+//
+//		if (patternDelay <= 0.f)
+//		{
+//			RandomPatternSet(AttackType::DragonAttack);
+//			PatternOptionSet();
+//
+//			patternCount--;
+//			SetState(BossStates::Move);
+//		}
+//	}
+//}
+//
+//void FireBoss::UpdateMeteor(float dt)
+//{
+//	if (nextPatternDelay <= 0.f)
+//	{
+//		SetState(BossStates::None);
+//		SetState(BossStates::Attack);
+//
+//		if (patternDelay <= 0.f)
+//		{
+//			RandomPatternSet(AttackType::Meteor);
+//			PatternOptionSet();
+//
+//			patternCount--;
+//			SetState(BossStates::Move);
+//		}
+//	}
+//}

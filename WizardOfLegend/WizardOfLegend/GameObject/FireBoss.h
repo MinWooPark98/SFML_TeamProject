@@ -34,6 +34,7 @@ protected:
 
 	float patternDelay = 0.5f;
 	float nextPatternDelay = 0.5f;
+	float angles = 0.f;
 
 	MoveType lastMoveType;
 
@@ -60,6 +61,7 @@ public:
 	void UpdateFireball(float dt);
 	void UpdateThrowingKnife(float dt);
 	void UpdateDragonAttack(float dt);
+	void UpdateMeteor(float dt);
 
 	void SetPlayerLastPos(Vector2f playerPos) { playerLastPos = playerPos; };
 };

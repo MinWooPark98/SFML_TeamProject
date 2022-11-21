@@ -56,7 +56,7 @@ void Archer::Update(float dt)
 	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack && curState != States::MoveAttack)
 		NormalMonsterMove(dt);
 
-	if (InputMgr::GetKeyDown(Keyboard::Key::L))
+	if (InputMgr::GetKeyDown(Keyboard::Key::L) && type == MonsterType::Normal)
 		SetCurHp(0);
 
 	if (curHp <= 0 && isAlive)

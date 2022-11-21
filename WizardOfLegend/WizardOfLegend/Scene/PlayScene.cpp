@@ -26,30 +26,6 @@ void PlayScene::Init()
 	player = new Player();
 	player->Init();
 	objList[LayerType::Object][0].push_back(player);
-
-	Lancer* lancer = new Lancer();
-	lancer->Init();
-	objList[LayerType::Object][0].push_back(lancer);
-
-	Archer* archer = new Archer();
-	archer->Init();
-	archer->SetColor(3);
-	objList[LayerType::Object][0].push_back(archer);
-	
-	HeavyBombingArcher* heavyBombingArcher = new HeavyBombingArcher();
-	heavyBombingArcher->Init();
-	heavyBombingArcher->SetColor(2);
-	objList[LayerType::Object][0].push_back(heavyBombingArcher);
-	
-	fireBoss = new FireBoss();
-	fireBoss->Init();
-	fireBoss->SetPlayerLastPos(player->GetPos());
-	objList[LayerType::Object][0].push_back(fireBoss);
-	
-	lancer->SetPlayer(player);
-	archer->SetPlayer(player);
-	heavyBombingArcher->SetPlayer(player);
-	fireBoss->SetPlayer(player);
 }
 
 void PlayScene::Update(float dt)
@@ -58,6 +34,39 @@ void PlayScene::Update(float dt)
 	{
 		SCENE_MGR->ChangeScene(Scenes::MapTool);
 	}
+
+	if (InputMgr::GetKeyDown(Keyboard::Key::Num1))
+	{
+		Lancer* lancer = new Lancer();
+		lancer->Init();
+		objList[LayerType::Object][0].push_back(lancer);
+		lancer->SetPlayer(player);
+	}
+	if (InputMgr::GetKeyDown(Keyboard::Key::Num2))
+	{
+		Archer* archer = new Archer();
+		archer->Init();
+		archer->SetColor(3);
+		objList[LayerType::Object][0].push_back(archer);
+		archer->SetPlayer(player);
+	}
+	if (InputMgr::GetKeyDown(Keyboard::Key::Num3))
+	{
+		HeavyBombingArcher* heavyBombingArcher = new HeavyBombingArcher();
+		heavyBombingArcher->Init();
+		heavyBombingArcher->SetColor(2);
+		objList[LayerType::Object][0].push_back(heavyBombingArcher);
+		heavyBombingArcher->SetPlayer(player);
+	}
+	if (InputMgr::GetKeyDown(Keyboard::Key::Num4))
+	{
+		fireBoss = new FireBoss();
+		fireBoss->Init();
+		fireBoss->SetPlayerLastPos(player->GetPos());
+		objList[LayerType::Object][0].push_back(fireBoss);
+		fireBoss->SetPlayer(player);
+	}
+
 	Scene::Update(dt);
 }
 
