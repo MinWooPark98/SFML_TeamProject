@@ -65,9 +65,9 @@ void MapToolUiMgr::Init()
 	exitBtn->SetPos({ 50,260 });
 	uiObjList[0].push_back(exitBtn);
 
-	selects = { "TILE","TREE","STONE","BLOCK","PLAYER","ENEMY","BOX","ANOTHER" };
-	selectTextSize = { 75,75,65,65,55,60,75,40 };
-	selectPosY = { 54,54,54,54,62,54,54,70 };
+	selects = { "Tile","Wall","Object","PLAYER","ENEMY"};
+	selectTextSize = { 40,40,40,40,40 };
+	selectPosY = { 54,54,54,54,54 };
 
 	selIdx = 0;
 	selectBtn = new Button(this);
@@ -75,19 +75,30 @@ void MapToolUiMgr::Init()
 	selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 		selectTextSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
 	selectBtn->SetOrigin(Origins::MC);
-	selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
+	selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ -paletteBook->GetHitBounds().width*0.5f, selectPosY[selIdx]});
 	uiObjList[0].push_back(selectBtn);
 
 	for (auto& type : editorObjs)
 	{
-		float offset = 0;
+		float offsetX = 0;
+		float offsetY = 0;
 		for (auto& obj : type.second)
 		{
 			DrawSelect* draw = new DrawSelect(this);
 			drawObj.push_back(draw);
 			draw->Set(type.first, obj.texPath, obj.uiPath);
-			draw->SetPos({ paletteBook->GetPos().x-340+offset, paletteBook->GetPos().y+120+offset});
-			offset += 50;
+			draw->SetPos({ paletteBook->GetPos().x-340+offsetX, paletteBook->GetPos().y+120+offsetY});
+			offsetX += 50;
+			if (offsetX == 300)
+			{
+				offsetX = 0;
+				offsetY += 50;
+
+				if (offsetY == 300)
+				{
+					offsetY = 0;
+				}
+			}
 			draw->SetData(obj);
 			uiObjList[1].push_back(draw);
 			type_selects[type.first].push_back(draw);
@@ -185,7 +196,7 @@ void MapToolUiMgr::Update(float dt)
 		selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 			selectTextSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
 		selectBtn->SetOrigin(Origins::MC);
-		selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ 205, selectPosY[selIdx] });
+		selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ -paletteBook->GetHitBounds().width*0.5f, selectPosY[selIdx]});
 
 		for (auto& obj : type_selects[selects[selIdx]])
 		{
