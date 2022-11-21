@@ -16,7 +16,7 @@ private:
 
 	Button* saveBtn;
 	Button* loadBtn;
-	Button* exitBtn;
+	//Button* exitBtn;
 	Button* paletteBook;
 
 	Button* selectBtn;

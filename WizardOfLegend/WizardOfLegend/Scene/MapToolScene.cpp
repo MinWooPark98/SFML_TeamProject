@@ -59,7 +59,7 @@ void MapToolScene::Update(float dt)
 	uiMgr->Update(dt);
 
 	auto uimgr = ((MapToolUiMgr*)uiMgr);
-	if (uimgr->IsExit() || InputMgr::GetKeyDown(Keyboard::Escape))
+	if (InputMgr::GetKeyDown(Keyboard::Escape))
 	{
 		SCENE_MGR->ChangeScene(Scenes::Title);
 		return;
@@ -152,7 +152,6 @@ void MapToolScene::Update(float dt)
 				draw->SetOrigin(Origins::BC);
 				draw->SetMove(false);
 				draw->SetPos(greeds[i][j]->GetPos() + Vector2f{ 8.f, 16.f });
-				cout << greeds[0][0]->GetPos().x << "," << greeds[0][0]->GetPos().y << endl;
 				draw->SetData(nowDraw->GetData());
 				objList[nowType][i].push_back(draw);
 				greedObjs[nowType][i][j] = draw;

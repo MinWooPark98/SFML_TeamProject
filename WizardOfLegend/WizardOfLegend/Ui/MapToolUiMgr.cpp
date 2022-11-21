@@ -49,13 +49,13 @@ void MapToolUiMgr::Init()
 	loadBtn->SetPos({ 50,120 });
 	uiObjList[0].push_back(loadBtn);
 
-	exitBtn = new Button(this);
-	exitBtn->SetClkColor(true);
-	exitBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
-		75, Color::White, "EXIT", true);
-	exitBtn->SetOrigin(Origins::TL);
-	exitBtn->SetPos({ 50,190 });
-	uiObjList[0].push_back(exitBtn);
+	//exitBtn = new Button(this);
+	//exitBtn->SetClkColor(true);
+	//exitBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
+	//	75, Color::White, "EXIT", true);
+	//exitBtn->SetOrigin(Origins::TL);
+	//exitBtn->SetPos({ 50,190 });
+	//uiObjList[0].push_back(exitBtn);
 
 	selects = { "Tile","Wall","Object","PLAYER","ENEMY"};
 	selectTextSize = { 40,40,40,40,40 };
@@ -111,13 +111,6 @@ void MapToolUiMgr::Init()
 	loadWindow->SetPos({ 350,50 });
 	loadWindow->Init();
 	uiObjList[1].push_back(loadWindow);
-
-	for (auto& uiObjs : uiObjList)
-	{
-		for (auto& obj : uiObjs.second)
-			obj->Init();
-	}
-	Object::Init();
 }
 
 void MapToolUiMgr::Release()
@@ -158,8 +151,7 @@ void MapToolUiMgr::Update(float dt)
 		}
 		loadWindow->Update(dt);
 		return;
-	}
-	
+	}	
 
 	if (nowDraw != nullptr)
 	{
@@ -177,7 +169,6 @@ void MapToolUiMgr::Update(float dt)
 		loadWindow->SetActive(!loadWindow->GetActive());
 		((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
 	}
-	UiMgr::Update(dt);
 	if (selectBtn->IsClick())
 	{
 		for (auto& obj : type_selects[selects[selIdx]])
@@ -265,7 +256,6 @@ void MapToolUiMgr::Update(float dt)
 void MapToolUiMgr::Draw(RenderWindow& window)
 {
 	window.setView(parentScene->GetUiView());
-	UiMgr::Draw(window);
 	if (nowDraw != nullptr)
 		nowDraw->Draw(window);
 
@@ -345,11 +335,11 @@ string MapToolUiMgr::loadFile()
 {
 	return loadWindow->GetLoadPath();
 }
-
-bool MapToolUiMgr::IsExit()
-{
-	return exitBtn->IsDown() || exitBtn->IsClick();
-}
+//
+//bool MapToolUiMgr::IsExit()
+//{
+//	return exitBtn->IsDown() || exitBtn->IsClick();
+//}
 
 string MapToolUiMgr::GetPath()
 {

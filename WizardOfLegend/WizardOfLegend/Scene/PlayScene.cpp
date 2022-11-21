@@ -23,6 +23,25 @@ void PlayScene::Init()
 {
 	Scene::Init();
 
+	isMap = true;
+	auto& data = FILE_MGR->GetMap("TUTORIAL");
+
+	for (auto& obj : data)
+	{
+		if (obj.type == "TILE")
+		{
+		SpriteObj* draw = new SpriteObj();
+		draw->SetName(obj.type);
+		draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
+		draw->SetOrigin(Origins::BC);
+		draw->SetPos(obj.position);
+		//draw->SetHitBox(obj.path);
+
+		int i = ((int)obj.position.x - 30) / 60;
+		int j = (int)obj.position.y / 60 - 1;
+		objList[LayerType::Tile][0].push_back(draw);
+		}
+	}
 	Player* player = new Player();
 	player->Init();
 	objList[LayerType::Object][0].push_back(player);
@@ -49,6 +68,12 @@ void PlayScene::Init()
 	archer->SetPlayer(player);
 	heavyBombingArcher->SetPlayer(player);
 	fireBoss->SetPlayer(player);
+
+	auto& tiles = objList[LayerType::Tile][0];
+	mapSize.left = 0;
+	mapSize.top = 0;
+	mapSize.width = (tiles.back())->GetPos().x + 30;
+	mapSize.height = (tiles.back())->GetPos().y;
 }
 
 void PlayScene::Update(float dt)

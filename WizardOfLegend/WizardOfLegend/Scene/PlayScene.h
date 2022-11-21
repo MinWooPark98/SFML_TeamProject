@@ -1,9 +1,11 @@
 #pragma once
 #include "Scene.h"
+#include "../GameObject/Button.h"
 
 class PlayScene : public Scene
 {
 protected:
+	IntRect mapSize;
 
 public:
 	PlayScene();
