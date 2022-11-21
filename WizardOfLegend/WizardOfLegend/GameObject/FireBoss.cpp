@@ -71,7 +71,9 @@ void FireBoss::Update(float dt)
 	Enemy::Update(dt);
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::H))
+	{
 		SetCurHp(0);
+	}
 
 	if (curHp <= 0 && isAlive)
 	{

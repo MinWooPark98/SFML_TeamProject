@@ -25,7 +25,7 @@ void PlayScene::Init()
 
 	player = new Player();
 	player->Init();
-	objList[LayerType::Object][0].push_back(player);
+	objList[LayerType::Object][5].push_back(player);
 }
 
 void PlayScene::Update(float dt)
@@ -47,7 +47,7 @@ void PlayScene::Update(float dt)
 		Archer* archer = new Archer();
 		archer->Init();
 		archer->SetColor(3);
-		objList[LayerType::Object][0].push_back(archer);
+		objList[LayerType::Object][1].push_back(archer);
 		archer->SetPlayer(player);
 	}
 	if (InputMgr::GetKeyDown(Keyboard::Key::Num3))
@@ -55,7 +55,7 @@ void PlayScene::Update(float dt)
 		HeavyBombingArcher* heavyBombingArcher = new HeavyBombingArcher();
 		heavyBombingArcher->Init();
 		heavyBombingArcher->SetColor(2);
-		objList[LayerType::Object][0].push_back(heavyBombingArcher);
+		objList[LayerType::Object][2].push_back(heavyBombingArcher);
 		heavyBombingArcher->SetPlayer(player);
 	}
 	if (InputMgr::GetKeyDown(Keyboard::Key::Num4))
@@ -63,9 +63,18 @@ void PlayScene::Update(float dt)
 		fireBoss = new FireBoss();
 		fireBoss->Init();
 		fireBoss->SetPlayerLastPos(player->GetPos());
-		objList[LayerType::Object][0].push_back(fireBoss);
+		objList[LayerType::Object][3].push_back(fireBoss);
 		fireBoss->SetPlayer(player);
 	}
+
+	//if (InputMgr::GetKeyDown(Keyboard::Key::K))
+	//	objList[LayerType::Object][0].clear();
+	//if (InputMgr::GetKeyDown(Keyboard::Key::L))
+	//	objList[LayerType::Object][1].clear();
+	//if (InputMgr::GetKeyDown(Keyboard::Key::J))
+	//	objList[LayerType::Object][2].clear();
+	//if (InputMgr::GetKeyDown(Keyboard::Key::H))
+	//	objList[LayerType::Object][3].clear();
 
 	Scene::Update(dt);
 }

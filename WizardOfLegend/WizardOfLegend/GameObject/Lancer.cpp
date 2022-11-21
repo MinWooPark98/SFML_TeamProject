@@ -50,7 +50,9 @@ void Lancer::Update(float dt)
 		NormalMonsterMove(dt);
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::K))
+	{
 		SetCurHp(0);
+	}
 
 	if (curHp <= 0 && isAlive)
 	{
