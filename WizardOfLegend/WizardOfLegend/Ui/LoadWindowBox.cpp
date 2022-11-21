@@ -43,7 +43,7 @@ void LoadWindowBox::Release()
 
 void LoadWindowBox::Init()
 {
-	SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/MapToolBook.png"), true);
+	SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/window.png"), true);
 	SetClkColor(false);
 
 	allMaps = FILE_MGR->GetAllMap();
