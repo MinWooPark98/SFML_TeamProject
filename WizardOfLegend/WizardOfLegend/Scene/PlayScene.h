@@ -1,9 +1,12 @@
 #pragma once
 #include "Scene.h"
-
+class FireBoss;
+class Player;
 class PlayScene : public Scene
 {
 protected:
+	FireBoss* fireBoss;
+	Player* player;
 
 public:
 	PlayScene();

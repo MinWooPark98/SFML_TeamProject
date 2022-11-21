@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
+class Skill;
 class FireBoss : public Enemy
 {
 public:
@@ -29,16 +30,14 @@ protected:
 	int thirdAttackCount = 3;
 	int patternCount = 3;
 
-	//bool isThirdAttack = false;
-	//bool isFireBall = false;
 	bool isThrowingKnife = false;
-	//bool isDragonAttack = false;
-	//bool isMeteor = false;
 
 	float patternDelay = 0.5f;
 	float nextPatternDelay = 0.5f;
 
 	MoveType lastMoveType;
+
+	vector<Skill*> skills;
 
 public:
 	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};
@@ -61,5 +60,7 @@ public:
 	void UpdateFireball(float dt);
 	void UpdateThrowingKnife(float dt);
 	void UpdateDragonAttack(float dt);
+
+	void SetPlayerLastPos(Vector2f playerPos) { playerLastPos = playerPos; };
 };
 

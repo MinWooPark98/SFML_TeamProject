@@ -3,7 +3,7 @@
 #include <list>
 #include "Projectile.h"
 #include "Player.h"
-
+#include "Enemy.h"
 class Projectile;
 
 class Skill
@@ -88,4 +88,7 @@ public:
 	void Draw(RenderWindow& window);
 
 	Set* GetSetting() { return setting; }
+
+	Vector2f GetSkillDir() const { return skillDir; };
+	void SetSkillDir(const Vector2f& dir) { skillDir = dir; };
 };

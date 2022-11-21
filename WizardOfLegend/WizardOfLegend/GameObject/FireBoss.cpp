@@ -1,4 +1,5 @@
 #include "FireBoss.h"
+#include "Skill.h"
 
 void FireBoss::Init()
 {
@@ -45,21 +46,31 @@ void FireBoss::Init()
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossUpThrowingIdle"));
 
 	SetPos({200, 200});
-	//SetSpeed(700.f);
-	SetSpeed(200.f);
+	SetSpeed(700.f);
 	SetMoveScale(10000.f);
 	SetAttackScale(0.f);
 	SetMonsterType(MonsterType::MiddleBoss);
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());
-	//SetScale({1.5, 1.5});
-	//attackType = AttackType::DragonAttack;
 	RandomPatternSet(AttackType::None);
+	attackType = AttackType::ThrowingKnife;
+
+	for (int i = 0; i < 6; ++i)
+	{
+		Skill* newSkill = new Skill();
+		newSkill->SetSubject(this, Skill::SubjectType::Enemy);
+		skills.push_back(newSkill);
+	}
+	skills[0]->SetSkill("DragonArc");
+	skills[1]->SetSkill("FireFull");
+
+	lastPos = GetPos();
 }
 
 void FireBoss::Update(float dt)
 {
 	Enemy::Update(dt);
+
 
 	if (curBossState == BossStates::Move || attackType != AttackType::ThirdAttack)
 	{
@@ -104,14 +115,21 @@ void FireBoss::Update(float dt)
 		nextPatternDelay -= dt;
 
 	patternDelay -= dt;
-	cout << patternDelay << endl;
 	animation.Update(dt);
+	for (auto skill : skills)
+	{
+		skill->Update(dt);
+	}
 }
 
 void FireBoss::Draw(RenderWindow& window)
 {
 	Enemy::Draw(window);
 	window.draw(sprite);
+	for (auto skill : skills)
+	{
+		skill->Draw(window);
+	}
 }
 
 void FireBoss::SetState(BossStates newState)
@@ -173,6 +191,8 @@ void FireBoss::SetState(BossStates newState)
 			}
 			else
 			{
+				skills[1]->Do();
+
 				attackDelay = 1.f;
 				nextPatternDelay = 1.5f;
 				switch (lastMoveType)
@@ -202,6 +222,18 @@ void FireBoss::SetState(BossStates newState)
 			}
 			else
 			{
+				switch (skills[0]->GetSetting()->attackShape)
+				{
+				case Projectile::AttackShape::Range:
+					skills[0]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
+					break;
+				case Projectile::AttackShape::Wave:
+					skills[0]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
+					break;
+				}
+				skills[0]->Do();
+
+
 				attackDelay = 1.f;
 				nextPatternDelay = 1.5f;
 				switch (lastMoveType)
@@ -373,10 +405,6 @@ void FireBoss::PatternOptionSet()
 
 void FireBoss::UpdateThirdAttack(float dt)
 {
-	if (nextPatternDelay <= 0.f)
-	{
-	}
-
 	if (thirdAttackCount != 0)
 	{
 		SetState(BossStates::None);

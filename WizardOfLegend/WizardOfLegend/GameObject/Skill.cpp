@@ -74,8 +74,8 @@ void Skill::Do()
 		case Projectile::AttackShape::Wave:
 			if (!(setting->attackType == AttackType::Multiple && isDoing))
 			{
-				startPos = subject->GetPos() + skillDir * setting->distance;
 				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+				startPos = subject->GetPos() + skillDir * setting->distance;
 			}
 			if (((Player*)subject)->GetBackHand())
 				obj->SetReverse(true);
@@ -87,7 +87,30 @@ void Skill::Do()
 		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
 		break;
 	case Skill::SubjectType::Enemy:
-		// 추후 추가
+		switch (setting->attackShape)
+		{
+		case Projectile::AttackShape::Range:
+			obj->SetDirection(skillDir);
+			startPos = subject->GetPos() + skillDir * setting->distance;
+			obj->SetPos(startPos);
+			break;
+		case Projectile::AttackShape::Rotate:
+			if (isDoing)
+				obj->SetAngle(projectiles.back()->GetAngle() + 360.f / setting->attackCntLim);
+			startPos = subject->GetPos();
+			obj->SetStartPos(startPos);
+			break;
+		case Projectile::AttackShape::Wave:
+			if (!(setting->attackType == AttackType::Multiple && isDoing))
+			{
+				startPos = subject->GetPos() + skillDir * setting->distance;
+			}
+			obj->SetStartPos(startPos);
+			obj->SetDirection(skillDir);
+			obj->SetAmplitude(setting->amplitude);
+			break;
+		}
+		obj->SetAtkDmg(setting->dmgRatio * ((Enemy*)subject)->GetDamage());
 		break;
 	default:
 		break;
