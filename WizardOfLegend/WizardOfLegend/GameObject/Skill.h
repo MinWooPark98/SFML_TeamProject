@@ -17,6 +17,7 @@ public:
 		Lightning,
 		Water,
 		Chaos,
+		Count,
 	};
 	enum class AttackType
 	{
@@ -47,8 +48,10 @@ public:
 		float speed;							// shape_range 는 미적용, shpae_rotate일 때 음수면 반시계 방향, 스킬 이동 속도
 		vector<string> animClipName;			// 스킬 애니메이션 클립 string
 
+		Set(){}
 		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, Projectile::AttackShape attackShape, float amplitude, float frequency, Projectile::MoveType moveType, Player::SkillAction playerAction, float skillDelay, float skillCoolDown, float dmgRatio, Projectile::DamageType dmgType, float dmgDelay, float duration, float speed, vector<string> animClipName)
 			:skillName(skillName), element(element), attackType(attackType), attackCntLim(attackCntLim), attackInterval(attackInterval), distance(distance), attackShape(attackShape), amplitude(amplitude), frequency(frequency), moveType(moveType), playerAction(playerAction), skillDelay(skillDelay), skillCoolDown(skillCoolDown), dmgRatio(dmgRatio), dmgType(dmgType), dmgDelay(dmgDelay), duration(duration), speed(speed), animClipName(animClipName) {}
+		void Reset();
 	};
 
 	enum class SubjectType
@@ -66,6 +69,7 @@ private:
 
 	bool isDoing;
 	Vector2f skillDir;
+	Vector2f startPos;
 
 	Set* setting;
 	int attackCnt;
@@ -77,6 +81,7 @@ public:
 	~Skill();
 
 	void SetSkill(const String& skillName);
+	void SetSkill(const Set& set);
 	void SetSubject(Object* sub, SubjectType type);
 	void Do();
 	void Update(float dt);

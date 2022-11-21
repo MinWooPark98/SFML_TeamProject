@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../Framework/FileMgr.h"
 #include <list>
+#include "../Framework/Utils.h"
 
 using namespace std;
 using namespace sf;
@@ -48,6 +49,7 @@ public:
 
     virtual void SetPos(const Vector2f& pos);
     virtual const Vector2f& GetPos() const;
+    virtual void SetOrigin(Origins origin);
     virtual void Translate(const Vector2f& delta);
 
     void SetGravity(float g) { gravity = g; }
@@ -70,6 +72,7 @@ public:
     virtual void SetDevMode(bool devMode) { isDevMode = devMode; }
     virtual bool GetDevMode() const { return isDevMode; }
     virtual void SwitchDevMode() { isDevMode = !isDevMode; }
-    virtual void SetHitBox(const FloatRect rect);
+    virtual void SetHitBox(const FloatRect& rect, Color color = Color::Red);
+    RectangleShape& GetHitBox() { return hitbox; }
     FloatRect GetHitBounds() const { return hitbox.getGlobalBounds(); }
 };

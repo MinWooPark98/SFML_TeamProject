@@ -59,8 +59,10 @@ void Scene::Update(float dt)
 	Vector2f windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 	objMousePos = ScreenToWorld((Vector2i)mousePos);
 	uiMousePos = ScreenToUiPosition((Vector2i)mousePos);
+
 	if (projectiles != nullptr)
 		projectiles->Update(dt);
+
 	for (auto& layer : objList)
 	{
 		for (auto& obj_pair : layer.second)
@@ -76,6 +78,8 @@ void Scene::Update(float dt)
 			}
 		}
 	}
+	if (uiMgr != nullptr && uiMgr->GetActive())
+		uiMgr->Update(dt);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
 		exit(1);
 }
@@ -97,10 +101,12 @@ void Scene::Draw(RenderWindow& window)
 				}
 			}
 		}
+		if (uiMgr != nullptr && uiMgr->GetActive())
+		{
+			window.setView(uiView);
+			uiMgr->Draw(window);
+		}
 	}
-	if (uiMgr != nullptr)
-		uiMgr->Draw(window);
-
 }
 
 Texture* Scene::GetTexture(const string path) const

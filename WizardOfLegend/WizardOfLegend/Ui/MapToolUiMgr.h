@@ -7,6 +7,8 @@ class DrawSelect;
 class DrawObj;
 class SaveWindowBox;
 class LoadWindowBox;
+class UiObject;
+
 class MapToolUiMgr : public UiMgr
 {
 private:
