@@ -16,8 +16,7 @@ private:
 
 	Button* saveBtn;
 	Button* loadBtn;
-	Button* eraseBtn;
-	Button* exitBtn;
+	//Button* exitBtn;
 	Button* paletteBook;
 
 	Button* selectBtn;
@@ -57,7 +56,6 @@ public:
 	bool IsLoad();
 	bool LoadActive();
 	string loadFile();
-	bool IsErase();
 
 	bool IsExit();
 

@@ -1,12 +1,17 @@
 #pragma once
 #include "Scene.h"
+#include "../GameObject/Button.h"
+
 class FireBoss;
 class Player;
+
+
 class PlayScene : public Scene
 {
 protected:
 	FireBoss* fireBoss;
 	Player* player;
+	IntRect mapSize;
 
 public:
 	PlayScene();

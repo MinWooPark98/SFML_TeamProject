@@ -11,5 +11,7 @@ protected:
 public:
 	UiMgr(Scene* scene);
 	virtual ~UiMgr();
+
+	void SetPos(const Vector2f& pos) {};
 };
 

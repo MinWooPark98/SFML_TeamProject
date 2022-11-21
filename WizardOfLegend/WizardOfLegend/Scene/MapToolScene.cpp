@@ -59,7 +59,7 @@ void MapToolScene::Update(float dt)
 	uiMgr->Update(dt);
 
 	auto uimgr = ((MapToolUiMgr*)uiMgr);
-	if (uimgr->IsExit() || InputMgr::GetKeyDown(Keyboard::Escape))
+	if (InputMgr::GetKeyDown(Keyboard::Escape))
 	{
 		SCENE_MGR->ChangeScene(Scenes::Title);
 		return;
@@ -77,7 +77,7 @@ void MapToolScene::Update(float dt)
 		return;
 	}
 
-	if (uimgr->IsErase() || InputMgr::GetKeyDown(Keyboard::E))
+	if (InputMgr::GetMouseButton(Mouse::Right))
 	{
 		uimgr->DeleteDraw();
 		return;
