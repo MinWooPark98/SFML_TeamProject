@@ -482,6 +482,7 @@ void SelectOption::SetPlayer1stSkill()
 void SelectOption::Load(const string& skillName)
 {
 	SkillTable* table = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
+	table->Load();
 	selectedSet = table->Get(skillName);
 	for (int i = 0; i < (int)SelectOption::Options::Count; ++i)
 	{

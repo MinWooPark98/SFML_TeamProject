@@ -21,6 +21,7 @@ const Skill::Set& SkillTable::Get(const string& skillName)
 
 void SkillTable::Release()
 {
+	table.clear();
 }
 
 bool SkillTable::Load()

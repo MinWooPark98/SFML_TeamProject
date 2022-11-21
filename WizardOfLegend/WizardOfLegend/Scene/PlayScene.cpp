@@ -61,11 +61,6 @@ void PlayScene::Init()
 
 void PlayScene::Update(float dt)
 {
-	if (InputMgr::GetKeyDown(Keyboard::Space))
-	{
-		SCENE_MGR->ChangeScene(Scenes::MapTool);
-	}
-
 	if (InputMgr::GetKeyDown(Keyboard::Key::Num1))
 	{
 		Lancer* lancer = new Lancer();
