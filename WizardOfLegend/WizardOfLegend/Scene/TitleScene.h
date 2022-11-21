@@ -1,11 +1,11 @@
 #pragma once
 #include "Scene.h"
 
-class SkillToolScene : public Scene
+class TitleScene : public Scene
 {
 public:
-	SkillToolScene();
-	virtual ~SkillToolScene();
+	TitleScene();
+	virtual ~TitleScene();
 
 	virtual void Init() override;
 	virtual void Release() override;
@@ -13,8 +13,8 @@ public:
 	virtual void Reset() override;
 
 	virtual void Update(float dt) override;
+	virtual void Draw(RenderWindow& window) override;
 
 	virtual void Enter() override;
 	virtual void Exit() override;
 };
-

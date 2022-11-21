@@ -34,8 +34,9 @@ public:
 
 protected:
 	pair<OptionButtons*, OptionButtons*> options;
-	list<OptionButtons*> optButtons;
-	list<TextBox*> textBoxs;
+	vector<OptionButtons*> optButtons;
+	vector<OptionButtons*> menuButtons;
+	vector<TextBox*> textBoxs;
 
 	Skill::Set selectedSet;
 
@@ -55,6 +56,9 @@ public:
 	void ConvertVal(string& str, float& opt);
 
 	void SaveSetToCSV();
+	void SetPlayer1stSkill();
+
+	void Load(const string& skillName);
 
 	Skill::Set& GetSet() { return selectedSet; }
 };

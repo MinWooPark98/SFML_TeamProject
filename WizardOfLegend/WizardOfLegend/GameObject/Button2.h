@@ -45,6 +45,7 @@ public:
 
 	void DefaultMouseOn();
 	void DefaultMouseOff();
+	void ChangeFillColor();
 
 	function<void()> MousePointerOn;
 	function<void()> MousePointerOff;

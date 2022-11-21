@@ -1,20 +1,17 @@
 #pragma once
 #include "UiMgr.h"
 
-class SkillToolUiMgr : public UiMgr
+class TitleUiMgr : public UiMgr
 {
 protected:
 	map<int, vector<Object*>> uiObjList;
 
 public:
-	SkillToolUiMgr();
-	virtual ~SkillToolUiMgr();
+	TitleUiMgr();
+	virtual ~TitleUiMgr();
 
 	virtual void Init() override;
 	virtual void Release() override;
-
-	virtual void Reset() override;
-
 	virtual void SetPos(const Vector2f& pos) override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;

@@ -25,6 +25,7 @@ void TextBox::Reset()
 {
 	enabled = false;
 	str.clear();
+	text.setString("");
 }
 
 void TextBox::Update(float dt)

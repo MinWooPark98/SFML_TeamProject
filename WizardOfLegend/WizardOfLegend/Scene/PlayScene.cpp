@@ -2,6 +2,7 @@
 #include "../GameObject/Lancer.h"
 #include "../Framework/Framework.h"
 #include "../GameObject/Player.h"
+#include "../GameObject/Skill.h"
 #include "../GameObject/Projectile.h"
 #include "../GameObject/Archer.h"
 #include "../GameObject/HeavyBombingArcher.h"
@@ -27,6 +28,10 @@ void PlayScene::Init()
 	player = new Player();
 	player->Init();
 	objList[LayerType::Object][5].push_back(player);
+	auto& skills = player->GetSkills();
+	skills[0]->SetSkill("FireBall");
+	skills[4]->SetSkill("DragonArc");
+	skills[5]->SetSkill("FireFull");
 
 	isMap = true;
 	auto& data = FILE_MGR->GetMap("TUTORIAL");
@@ -129,8 +134,12 @@ void PlayScene::Update(float dt)
 		}
 		objList[LayerType::Object][3].clear();
 	}
-
 	Scene::Update(dt);
+	if (InputMgr::GetKeyDown(Keyboard::Escape))
+	{
+		SCENE_MGR->ChangeScene(Scenes::Title);
+		return;
+	}
 }
 
 void PlayScene::Draw(RenderWindow& window)

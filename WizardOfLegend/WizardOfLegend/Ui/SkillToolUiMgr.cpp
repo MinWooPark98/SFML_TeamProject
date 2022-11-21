@@ -1,6 +1,6 @@
 #include "SkillToolUiMgr.h"
 #include "../Scene/SceneMgr.h"
-#include "../GameObject/Button.h"
+#include "../GameObject/Button2.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/Framework.h"
 #include "../GameObject/TextObj.h"
@@ -23,18 +23,6 @@ void SkillToolUiMgr::Init()
 	SelectOption* options = new SelectOption();
 	options->Init();
 	uiObjList[0].push_back(options);
-
-	/*Button* button = new Button(this);
-	button->Init();
-	button->UseText();
-	button->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"), 20, Color::White, "SkillName", true);
-	button->SetHitBox({ 0.f, 0.f, 200.f, 30.f }, Color(150, 150, 150, 255));
-	button->GetHitBox().setOutlineThickness(2.f);
-	button->SetDevMode(true);
-	button->SetClkColor(true);
-	button->SetPos({ windowSize.x * 0.7f, 0.f });
-	button->SetOrigin(Origins::TL);
-	uiObjList[0].push_back(button);*/
 }
 
 void SkillToolUiMgr::Release()
@@ -50,6 +38,18 @@ void SkillToolUiMgr::Release()
 		}
 	}
 	uiObjList.clear();
+}
+
+void SkillToolUiMgr::Reset()
+{
+	UiMgr::Reset();
+	for (auto& uiObjs : uiObjList)
+	{
+		for (auto& obj : uiObjs.second)
+		{
+			obj->Reset();
+		}
+	}
 }
 
 void SkillToolUiMgr::SetPos(const Vector2f& pos)

@@ -3,6 +3,7 @@
 #include "../GameObject/TextObj.h"
 
 OptionButtons::OptionButtons()
+	:axis(Axis::Vertical)
 {
 }
 
@@ -13,6 +14,15 @@ OptionButtons::~OptionButtons()
 void OptionButtons::Init()
 {
 	Object::Init();
+}
+
+void OptionButtons::Reset()
+{
+	Object::Reset();
+	for (auto button : buttons)
+	{
+		button->Reset();
+	}
 }
 
 void OptionButtons::Update(float dt)
@@ -43,7 +53,17 @@ void OptionButtons::SetPos(const Vector2f& pos)
 			buttons[i]->SetPos(pos);
 			continue;
 		}
-		buttons[i]->SetPos(pos + Vector2f(0.f, buttons[i - 1]->GetHitBounds().height + 4.f));
+		switch (axis)
+		{
+		case OptionButtons::Axis::Horizontal:
+			buttons[i]->SetPos(pos + Vector2f(buttons[i - 1]->GetHitBounds().width, 0.f));
+			break;
+		case OptionButtons::Axis::Vertical:
+			buttons[i]->SetPos(pos + Vector2f(0.f, buttons[i - 1]->GetHitBounds().height));
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -60,7 +80,17 @@ void OptionButtons::AddButton(Button2* button, const string& str, const FloatRec
 	if (!buttons.empty())
 	{
 		Button2* lastButton = buttons.back();
-		button->SetPos(lastButton->GetPos() + Vector2f(0.f, lastButton->GetHitBounds().height));
+		switch (axis)
+		{
+		case OptionButtons::Axis::Horizontal:
+			button->SetPos(lastButton->GetPos() + Vector2f(lastButton->GetHitBounds().width, 0.f));
+			break;
+		case OptionButtons::Axis::Vertical:
+			button->SetPos(lastButton->GetPos() + Vector2f(0.f, lastButton->GetHitBounds().height));
+			break;
+		default:
+			break;
+		}
 	}
 	else
 		button->SetPos(position);
