@@ -27,6 +27,13 @@ void Button2::Release()
 void Button2::Reset()
 {
     Object::Reset();
+    if (sprite != nullptr)
+    {
+        delete sprite;
+        sprite = nullptr;
+    }
+    if (text != nullptr)
+        text->SetString("");
 }
 
 void Button2::Update(float dt)
@@ -143,6 +150,12 @@ void Button2::DefaultMouseOff()
         sprite->SetColor({ 255, 255, 255, 255 });
     if (text != nullptr)
         text->SetFillColor(textInitColor);
+}
+
+void Button2::ChangeFillColor()
+{
+    Color originalColor = hitbox.getFillColor();
+    hitbox.setFillColor(Color(255 - originalColor.r, 255 - originalColor.g, 255 - originalColor.b, 255));
 }
 
 void Button2::MouseOn()

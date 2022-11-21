@@ -63,21 +63,25 @@ void Scene::Update(float dt)
 	if (projectiles != nullptr)
 		projectiles->Update(dt);
 
-	for (auto& layer : objList)
+	if (!isPause)
 	{
-		for (auto& obj_pair : layer.second)
+		for (auto& layer : objList)
 		{
-			auto& objs = obj_pair.second;
-
-			for (auto& obj : objs)
+			for (auto& obj_pair : layer.second)
 			{
-				if (obj->GetActive())
+				auto& objs = obj_pair.second;
+
+				for (auto& obj : objs)
 				{
-					obj->Update(dt);
+					if (obj->GetActive())
+					{
+						obj->Update(dt);
+					}
 				}
 			}
 		}
 	}
+
 	if (uiMgr != nullptr && uiMgr->GetActive())
 		uiMgr->Update(dt);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
@@ -101,11 +105,11 @@ void Scene::Draw(RenderWindow& window)
 				}
 			}
 		}
-		if (uiMgr != nullptr && uiMgr->GetActive())
-		{
-			window.setView(uiView);
-			uiMgr->Draw(window);
-		}
+	}
+	if (uiMgr != nullptr && uiMgr->GetActive())
+	{
+		window.setView(uiView);
+		uiMgr->Draw(window);
 	}
 }
 
