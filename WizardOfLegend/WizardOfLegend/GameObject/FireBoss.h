@@ -29,11 +29,11 @@ protected:
 	int thirdAttackCount = 3;
 	int patternCount = 3;
 
-	bool isThirdAttack = false;
-	bool isFireBall = false;
+	//bool isThirdAttack = false;
+	//bool isFireBall = false;
 	bool isThrowingKnife = false;
-	bool isDragonAttack = false;
-	bool isMeteor = false;
+	//bool isDragonAttack = false;
+	//bool isMeteor = false;
 
 	float patternDelay = 0.5f;
 	float nextPatternDelay = 0.5f;
@@ -53,5 +53,13 @@ public:
 	virtual void SetState(BossStates newState);
 	virtual void UpdateAttack(float dt) override;
 	virtual void UpdateMove(int attackDelay) override;
+
+	void RandomPatternSet(AttackType type);
+	void PatternOptionSet();
+
+	void UpdateThirdAttack(float dt);
+	void UpdateFireball(float dt);
+	void UpdateThrowingKnife(float dt);
+	void UpdateDragonAttack(float dt);
 };
 

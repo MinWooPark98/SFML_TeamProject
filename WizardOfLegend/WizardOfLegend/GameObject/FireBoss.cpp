@@ -70,8 +70,13 @@ void FireBoss::Update(float dt)
 		if ((angle > 45 && angle < 130) || (angle <= -45 && angle > -130))
 			moveType = MoveType::TopAndBottom;
 
-		if (curBossState == BossStates::Move)
-			BossMonsterMove(dt);
+		if (curBossState == BossStates::Move && patternCount != 0)
+		{
+			if (attackType == AttackType::ThirdAttack && nextPatternDelay >= 0.f)
+				BossMonsterMove(dt);
+			else
+				BossMonsterMove(dt);
+		}
 	}
 
 	if (attackType == AttackType::ThirdAttack && curBossState == BossStates::Attack && thirdAttackCount > 0 && patternDelay <= 0.f)
@@ -80,11 +85,13 @@ void FireBoss::Update(float dt)
 		Translate({ (dt * speed * kick) / 5.f });
 	}
 
-	if (attackType == AttackType::ThrowingKnife && patternDelay < 0.3f && patternDelay > 0.f)
+	if (attackType == AttackType::ThrowingKnife && isThrowingKnife)
 	{
-		auto kick = Utils::Normalize(playerLastPos - lastPos);
-		Translate({ (dt * speed * kick) / 4.f * -1.f });
+		auto throwing = Utils::Normalize(playerLastPos - lastPos);
+		Translate({ (dt * speed * throwing) / 4.f * -1.f });
 	}
+	if (isThrowingKnife && nextPatternDelay <= 1.3f)
+		isThrowingKnife = false;
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::L))
 	{
@@ -95,8 +102,11 @@ void FireBoss::Update(float dt)
 		SetState(BossStates::Move);
 	}
 
-	nextPatternDelay -= dt;
+	if (curBossState != BossStates::Idle)
+		nextPatternDelay -= dt;
+
 	patternDelay -= dt;
+
 	animation.Update(dt);
 }
 
@@ -165,8 +175,6 @@ void FireBoss::SetState(BossStates newState)
 			}
 			else
 			{
-				cout << playerLastPos.x << " " << lastPos.x << endl;
-
 				attackDelay = 1.f;
 				nextPatternDelay = 1.5f;
 				switch (lastMoveType)
@@ -192,6 +200,7 @@ void FireBoss::SetState(BossStates newState)
 					animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpThrowingIdle" : "FireBossDownThrowingIdle");
 					break;
 				}
+				isThrowingKnife = false;
 			}
 			else
 			{
@@ -206,6 +215,7 @@ void FireBoss::SetState(BossStates newState)
 					animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpThrowing" : "FireBossDownThrowing");
 					break;
 				}
+				isThrowingKnife = true;
 			}
 			break;
 		case FireBoss::AttackType::DragonAttack:
@@ -254,83 +264,13 @@ void FireBoss::UpdateAttack(float dt)
 		switch (attackType)
 		{
 		case FireBoss::AttackType::ThirdAttack:
-
-			if (thirdAttackCount != 0)
-			{
-				SetState(BossStates::None);
-				SetState(BossStates::Attack);
-
-				if (patternDelay <= 0.f)
-				{
-					if (thirdAttackCount == 3 && patternCount > 0)
-						patternCount--;
-
-					thirdAttackCount--;
-				}
-			}
-
-			if (thirdAttackCount > 0)
-				attackType = AttackType::ThirdAttack;
-			else if (thirdAttackCount == 0 && patternDelay <= 0.f && attackDelay <= 0.f)
-			{
-				attackType = (AttackType)Utils::RandomRange(1, 3);
-
-				if (attackType == AttackType::FireBall || attackType == AttackType::ThrowingKnife)
-				{
-					playerLastPos = player->GetPos();
-					lastPos = GetPos();
-					lastMoveType = moveType;
-				}
-
-				SetState(BossStates::Move);
-			}
-
+			UpdateThirdAttack(dt);
 			break;
 		case FireBoss::AttackType::FireBall:
-			if (nextPatternDelay <= 0.f)
-			{
-				SetState(BossStates::None);
-				SetState(BossStates::Attack);
-				if (patternDelay <= 0.f)
-				{
-					attackType = (AttackType)Utils::RandomRange(1, 3);
-
-					if (attackType == AttackType::ThirdAttack)
-					{
-						thirdAttackCount = 3;
-						patternDelay = 0.5f;
-						SetAttackScale(30.f);
-					}
-					else if (attackType == AttackType::ThrowingKnife)
-					{
-						playerLastPos = player->GetPos();
-						lastPos = GetPos();
-						lastMoveType = moveType;
-					}
-
-					SetState(BossStates::Move);
-				}
-			}
+			UpdateFireball(dt);
 			break;
 		case FireBoss::AttackType::ThrowingKnife:
-			if (nextPatternDelay <= 0.f)
-			{
-				SetState(BossStates::None);
-				SetState(BossStates::Attack);
-
-				if (patternDelay <= 0.f)
-				{
-					attackType = AttackType::ThirdAttack;
-
-					if (attackType == AttackType::ThirdAttack)
-					{
-						thirdAttackCount = 3;
-						patternDelay = 0.5f;
-						SetAttackScale(30.f);
-						SetState(BossStates::Move);
-					}
-				}
-			}
+			UpdateThrowingKnife(dt);
 			break;
 		case FireBoss::AttackType::DragonAttack:
 			SetState(BossStates::Attack);
@@ -340,13 +280,15 @@ void FireBoss::UpdateAttack(float dt)
 			break;
 		}
 
-		if (patternCount == 0 && nextPatternDelay <= 0.f)
+		if (patternCount == 0 && attackDelay <= 0.f)
 		{
 			cout << "pattern reset" << endl;
 			SetState(BossStates::Idle);
-			//attackType = (AttackType)Utils::RandomRange(0, 5);
+			RandomPatternSet(AttackType::Meteor); // 처음부터 메테오 패턴 안 나오게
 			thirdAttackCount = 3;
 			patternCount = 3;
+			nextPatternDelay = 1.5f;
+			isThrowingKnife = false;
 		}
 	}
 }
@@ -357,6 +299,9 @@ void FireBoss::UpdateMove(int attackDelay)
 		SetAttackScale(30.f);
 	else
 		SetAttackScale(10000.f);
+
+	if (patternCount == 0)
+		SetAttackScale(10000.f); // 3번공격 패턴에서 끝났을 때 근접해야 Idle로 바뀌던 오류 때문에 해둠
 
 	if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
 	{
@@ -371,19 +316,9 @@ void FireBoss::UpdateMove(int attackDelay)
 			patternDelay = 0.5f;
 		}
 		else
+		{
 			patternDelay = 1.5f;
-		//if (attackType == AttackType::FireBall)
-		//{
-		//	patternDelay = 1.5f;
-		//}
-		//if (attackType == AttackType::DragonAttack)
-		//{
-		//	patternDelay = 1.5f; // 5
-		//}
-		//if (attackType == AttackType::ThrowingKnife)
-		//{
-		//	patternDelay = 1.5f;
-		//}
+		}
 
 		return;
 	}
@@ -394,5 +329,117 @@ void FireBoss::UpdateMove(int attackDelay)
 		SetState(BossStates::Move);
 
 		return;
+	}
+}
+
+void FireBoss::RandomPatternSet(AttackType type)
+{
+	int randomPattern = 0;
+
+	do
+	{
+		randomPattern = Utils::RandomRange(0, 3); // 여기 변경
+	} while (randomPattern == (int)type);
+
+	attackType = (AttackType)randomPattern;
+	cout << randomPattern << endl;
+}
+
+void FireBoss::PatternOptionSet()
+{
+	if (attackType == AttackType::ThirdAttack)
+	{
+		thirdAttackCount = 3;
+		patternDelay = 0.5f;
+		SetAttackScale(30.f);
+		SetState(BossStates::Move);
+	}
+
+	if (attackType == AttackType::FireBall || attackType == AttackType::ThrowingKnife)
+	{
+		playerLastPos = player->GetPos();
+		lastPos = GetPos();
+		lastMoveType = moveType;
+	}
+}
+
+void FireBoss::UpdateThirdAttack(float dt)
+{
+	if (thirdAttackCount != 0)
+	{
+		SetState(BossStates::None);
+		SetState(BossStates::Attack);
+
+		if (patternDelay <= 0.f)
+		{
+			if (thirdAttackCount == 3 && patternCount > 0)
+				patternCount--;
+
+			thirdAttackCount--;
+		}
+	}
+
+	if (thirdAttackCount > 0)
+		attackType = AttackType::ThirdAttack;
+
+	else if (thirdAttackCount == 0 && patternDelay <= 0.f && attackDelay <= 0.f)
+	{
+		RandomPatternSet(AttackType::ThirdAttack);
+		PatternOptionSet();
+
+		SetState(BossStates::Move);
+	}
+}
+
+void FireBoss::UpdateFireball(float dt)
+{
+	if (nextPatternDelay <= 0.f)
+	{
+		SetState(BossStates::None);
+		SetState(BossStates::Attack);
+		if (patternDelay <= 0.f)
+		{
+			RandomPatternSet(AttackType::FireBall);
+			PatternOptionSet();
+
+			patternCount--;
+			SetState(BossStates::Move);
+		}
+	}
+}
+
+void FireBoss::UpdateThrowingKnife(float dt)
+{
+	if (nextPatternDelay <= 0.f)
+	{
+		SetState(BossStates::None);
+		SetState(BossStates::Attack);
+
+		if (patternDelay <= 0.f)
+		{
+			RandomPatternSet(AttackType::ThrowingKnife);
+			PatternOptionSet();
+
+			patternCount--;
+			SetState(BossStates::Move);
+		}
+	}
+}
+
+void FireBoss::UpdateDragonAttack(float dt)
+{
+	if (nextPatternDelay <= 0.f)
+	{
+		SetState(BossStates::None);
+		SetState(BossStates::Attack);
+
+		if (patternDelay <= 0.f)
+		{
+			RandomPatternSet(AttackType::DragonAttack);
+			PatternOptionSet();
+
+			patternCount--;
+			SetState(BossStates::Move);
+		}
 	}
 }
