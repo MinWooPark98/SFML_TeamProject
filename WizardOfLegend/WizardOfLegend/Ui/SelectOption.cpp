@@ -6,6 +6,8 @@
 #include "../Framework/InputMgr.h"
 #include "../Scene/SceneMgr.h"
 #include <fstream>
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/SkillTable.h"
 
 SelectOption::SelectOption()
 {
@@ -207,6 +209,13 @@ void SelectOption::Reset()
 void SelectOption::Update(float dt)
 {
 	Object::Update(dt);
+
+	if (InputMgr::GetKeyDown(Keyboard::F5))
+		Load("DragonArc");
+	else if (InputMgr::GetKeyDown(Keyboard::F6))
+		Load("FireFull");
+	else if (InputMgr::GetKeyDown(Keyboard::F7))
+		Load("FireBall");
 
 	for (auto& buttons : menuButtons)
 	{
@@ -468,4 +477,96 @@ void SelectOption::SetPlayer1stSkill()
 {
 	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
 	player->GetSkills()[0]->SetSkill(selectedSet);
+}
+
+void SelectOption::Load(const string& skillName)
+{
+	SkillTable* table = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
+	selectedSet = table->Get(skillName);
+	for (int i = 0; i < (int)SelectOption::Options::Count; ++i)
+	{
+		switch ((SelectOption::Options)i)
+		{
+		case SelectOption::Options::Element:
+			options.second->GetButtons()[i]->GetText()->SetString(optButtons[0]->GetButtons()[(int)selectedSet.element]->GetText()->GetString());
+			break;
+		case SelectOption::Options::AttackType:
+			options.second->GetButtons()[i]->GetText()->SetString(optButtons[1]->GetButtons()[(int)selectedSet.attackType]->GetText()->GetString());
+			break;
+		case SelectOption::Options::AttackShape:
+			options.second->GetButtons()[i]->GetText()->SetString(optButtons[2]->GetButtons()[(int)selectedSet.attackShape]->GetText()->GetString());
+			break;
+		case SelectOption::Options::MoveType:
+			options.second->GetButtons()[i]->GetText()->SetString(optButtons[3]->GetButtons()[(int)selectedSet.moveType]->GetText()->GetString());
+			break;
+		case SelectOption::Options::PlayerAction:
+			options.second->GetButtons()[i]->GetText()->SetString(optButtons[4]->GetButtons()[(int)selectedSet.playerAction]->GetText()->GetString());
+			break;
+		case SelectOption::Options::DmgType:
+			options.second->GetButtons()[i]->GetText()->SetString(optButtons[5]->GetButtons()[(int)selectedSet.dmgType]->GetText()->GetString());
+			break;
+		case SelectOption::Options::SkillName:
+			textBoxs[0]->SetString(selectedSet.skillName);
+			options.second->GetButtons()[i]->GetText()->SetString(selectedSet.skillName);
+			break;
+		case SelectOption::Options::AttackCntLim:
+			textBoxs[1]->SetString(to_string(selectedSet.attackCntLim));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.attackCntLim));
+			break;
+		case SelectOption::Options::AttackInterval:
+			textBoxs[2]->SetString(to_string(selectedSet.attackInterval));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.attackInterval));
+			break;
+		case SelectOption::Options::Distance:
+			textBoxs[3]->SetString(to_string(selectedSet.distance));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.distance));
+			break;
+		case SelectOption::Options::Amplitude:
+			textBoxs[4]->SetString(to_string(selectedSet.amplitude));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.amplitude));
+			break;
+		case SelectOption::Options::Frequency:
+			textBoxs[5]->SetString(to_string(selectedSet.frequency));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.frequency));
+			break;
+		case SelectOption::Options::SkillDelay:
+			textBoxs[6]->SetString(to_string(selectedSet.skillDelay));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.skillDelay));
+			break;
+		case SelectOption::Options::SkillCoolDown:
+			textBoxs[7]->SetString(to_string(selectedSet.skillCoolDown));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.skillCoolDown));
+			break;
+		case SelectOption::Options::DmgRatio:
+			textBoxs[8]->SetString(to_string(selectedSet.dmgRatio));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.dmgRatio));
+			break;
+		case SelectOption::Options::DmgDelay:
+			textBoxs[9]->SetString(to_string(selectedSet.dmgDelay));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.dmgDelay));
+			break;
+		case SelectOption::Options::Duration:
+			textBoxs[10]->SetString(to_string(selectedSet.duration));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.duration));
+			break;
+		case SelectOption::Options::Speed:
+			textBoxs[11]->SetString(to_string(selectedSet.speed));
+			options.second->GetButtons()[i]->GetText()->SetString(to_string(selectedSet.speed));
+			break;
+		case SelectOption::Options::AnimClipName1:
+			textBoxs[12]->SetString(selectedSet.animClipName[0]);
+			options.second->GetButtons()[i]->GetText()->SetString(selectedSet.animClipName[0]);
+			break;
+		case SelectOption::Options::AnimClipName2:
+			textBoxs[13]->SetString(selectedSet.animClipName[1]);
+			options.second->GetButtons()[i]->GetText()->SetString(selectedSet.animClipName[1]);
+			break;
+		default:
+			break;
+		}
+	}
+	for (auto button : options.second->GetButtons())
+	{
+		button->Reposition();
+	}
 }

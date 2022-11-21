@@ -23,17 +23,6 @@ void SkillToolUiMgr::Init()
 	SelectOption* options = new SelectOption();
 	options->Init();
 	uiObjList[0].push_back(options);
-
-	/*Button2* button = new Button2();
-	button->Init();
-	button->UseText();
-	button->SetText(("fonts/NotoSansKR-Bold.otf"), 20, Color::White, "Modify");
-	button->SetHitBox({ 0.f, 0.f, 200.f, 30.f }, Color(150, 150, 150, 255));
-	button->GetHitBox().setOutlineThickness(2.f);
-	button->SetDevMode(true);
-	button->SetPos({ windowSize.x * 0.7f, 0.f });
-	button->SetOrigin(Origins::TL);
-	uiObjList[0].push_back(button);*/
 }
 
 void SkillToolUiMgr::Release()
@@ -49,6 +38,18 @@ void SkillToolUiMgr::Release()
 		}
 	}
 	uiObjList.clear();
+}
+
+void SkillToolUiMgr::Reset()
+{
+	UiMgr::Reset();
+	for (auto& uiObjs : uiObjList)
+	{
+		for (auto& obj : uiObjs.second)
+		{
+			obj->Reset();
+		}
+	}
 }
 
 void SkillToolUiMgr::SetPos(const Vector2f& pos)

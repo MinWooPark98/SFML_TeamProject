@@ -1,15 +1,16 @@
 #include "SceneMgr.h"
+#include "TitleScene.h"
 #include "PlayScene.h"
 #include "MapToolScene.h"
 #include "SkillToolScene.h"
 
-
 bool SceneMgr::Init()
 {
-    sceneMap[Scenes::Play] = new PlayScene();
+    sceneMap[Scenes::Title] = new TitleScene();
     sceneMap[Scenes::MapTool] = new MapToolScene();
     sceneMap[Scenes::SkillTool] = new SkillToolScene();
-    currScene = Scenes::SkillTool;
+    sceneMap[Scenes::Play] = new PlayScene();
+    currScene = Scenes::Title;
 
     for (auto& pair : sceneMap)
     {

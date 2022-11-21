@@ -2,6 +2,8 @@
 #include "../Framework/Framework.h"
 #include "../GameObject/Player.h"
 #include "../Ui/SkillToolUiMgr.h"
+#include "../Framework/InputMgr.h"
+#include "SceneMgr.h"
 
 SkillToolScene::SkillToolScene()
 	:Scene(Scenes::SkillTool)
@@ -34,6 +36,32 @@ void SkillToolScene::Release()
 void SkillToolScene::Reset()
 {
 	Scene::Reset();
+	for (auto& layer : objList)
+	{
+		for (auto& obj_pair : layer.second)
+		{
+			auto& objs = obj_pair.second;
+			for (auto& obj : objs)
+			{
+				if (obj->GetActive())
+				{
+					obj->Reset();
+				}
+			}
+		}
+	}
+	if (uiMgr != nullptr && uiMgr->GetActive())
+		uiMgr->Reset();
+}
+
+void SkillToolScene::Update(float dt)
+{
+	Scene::Update(dt);
+	if (InputMgr::GetKeyDown(Keyboard::Escape))
+	{
+		SCENE_MGR->ChangeScene(Scenes::Title);
+		return;
+	}
 }
 
 void SkillToolScene::Enter()
@@ -47,6 +75,8 @@ void SkillToolScene::Enter()
 
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
+
+	Reset();
 }
 
 void SkillToolScene::Exit()

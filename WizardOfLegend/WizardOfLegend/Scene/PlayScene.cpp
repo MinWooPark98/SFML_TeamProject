@@ -2,6 +2,7 @@
 #include "../GameObject/Lancer.h"
 #include "../Framework/Framework.h"
 #include "../GameObject/Player.h"
+#include "../GameObject/Skill.h"
 #include "../GameObject/Projectile.h"
 #include "../GameObject/Archer.h"
 #include "../GameObject/HeavyBombingArcher.h"
@@ -25,6 +26,10 @@ void PlayScene::Init()
 
 	Player* player = new Player();
 	player->Init();
+	auto& skills = player->GetSkills();
+	skills[0]->SetSkill("FireBall");
+	skills[4]->SetSkill("DragonArc");
+	skills[5]->SetSkill("FireFull");
 	objList[LayerType::Object][0].push_back(player);
 
 	Lancer* lancer = new Lancer();
@@ -53,11 +58,12 @@ void PlayScene::Init()
 
 void PlayScene::Update(float dt)
 {
-	if (InputMgr::GetKeyDown(Keyboard::Space))
-	{
-		SCENE_MGR->ChangeScene(Scenes::MapTool);
-	}
 	Scene::Update(dt);
+	if (InputMgr::GetKeyDown(Keyboard::Escape))
+	{
+		SCENE_MGR->ChangeScene(Scenes::Title);
+		return;
+	}
 }
 
 void PlayScene::Draw(RenderWindow& window)

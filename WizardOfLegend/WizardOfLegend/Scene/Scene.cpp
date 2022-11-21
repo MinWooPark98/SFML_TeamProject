@@ -84,8 +84,6 @@ void Scene::Update(float dt)
 
 	if (uiMgr != nullptr && uiMgr->GetActive())
 		uiMgr->Update(dt);
-	if (InputMgr::GetKeyDown(Keyboard::Escape))
-		exit(1);
 }
 
 void Scene::Draw(RenderWindow& window)

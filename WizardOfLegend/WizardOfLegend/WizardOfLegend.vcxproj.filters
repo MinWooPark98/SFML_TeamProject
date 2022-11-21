@@ -47,6 +47,8 @@
     <ClCompile Include="GameObject\Button2.cpp" />
     <ClCompile Include="GameObject\TextBox.cpp" />
     <ClCompile Include="Ui\OptionButtons.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Ui\TitleUiMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -98,6 +100,8 @@
     <ClInclude Include="GameObject\Button2.h" />
     <ClInclude Include="GameObject\TextBox.h" />
     <ClInclude Include="Ui\OptionButtons.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Ui\TitleUiMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
