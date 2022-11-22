@@ -61,6 +61,7 @@ void PlayScene::Init()
 
 void PlayScene::Update(float dt)
 {
+	worldView.setCenter(player->GetPos());
 	if (InputMgr::GetKeyDown(Keyboard::Key::Num1))
 	{
 		Lancer* lancer = new Lancer();

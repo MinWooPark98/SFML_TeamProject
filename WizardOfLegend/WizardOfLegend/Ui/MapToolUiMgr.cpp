@@ -161,15 +161,11 @@ void MapToolUiMgr::Update(float dt)
 			loadBtn->Update(dt);
 			loadWindow->SetActive(false);
 			((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
-			cout << "로드로드1" << endl;
-			cout << loadWindow->GetActive() << endl;
 		}
 		else
 		{
 			loadWindow->SetActive(true);
 			((MapToolUiMgr*)(parentScene->GetUiMgr()))->DeleteDraw();
-			cout << "로드로드2" << endl;
-			cout << loadWindow->GetActive() << endl;
 		}
 	}
 	
