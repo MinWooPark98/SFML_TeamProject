@@ -1,0 +1,28 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+MonsterSpawnCard,0,40,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/CardSpawn_0.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_1.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_2.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_3.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_4.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_5.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_6.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_7.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_8.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_9.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_10.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_11.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_12.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_13.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_14.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_15.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_16.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_17.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_18.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_19.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_20.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_21.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_22.png,0,0,64,64,32,25,0,0
+graphics/CardSpawn_23.png,0,0,64,64,32,25,0,0

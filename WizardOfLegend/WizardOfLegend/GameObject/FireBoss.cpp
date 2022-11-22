@@ -5,7 +5,7 @@ void FireBoss::Init()
 {
 	Release();
 	Enemy::Init();
-
+	SetScale({ 1, 1 });
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossClear"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossDie"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossDownFireball"));

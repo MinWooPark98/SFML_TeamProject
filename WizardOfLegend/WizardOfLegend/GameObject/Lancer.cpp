@@ -40,34 +40,45 @@ void Lancer::Init()
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());
 	weapon->SetOrigin(Origins::MC);
+	spawn->SetPos(GetPos());
+	SetCardColor(2);
 }
 
 void Lancer::Update(float dt)
 {
 	Enemy::Update(dt);
 	
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
-		NormalMonsterMove(dt);
-
-	if (InputMgr::GetKeyDown(Keyboard::Key::K))
+	if (!isSpawn)
 	{
-		SetCurHp(0);
+		spawnAnimation.Play("MonsterSpawnCard");
+		animation.Play("LancerRightIdle");
+		isSpawn = true;
 	}
-
-	if (curHp <= 0 && isAlive)
+	else if (isActionStart)
 	{
-		dieTimer = 1.f;
-		SetState(States::Die);
-		isAlive = false;
-	}
+		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
+			NormalMonsterMove(dt);
 
-	if (!Utils::EqualFloat(direction.x, 0.f))
-	{
-		lastDir = direction;
-	}
+		if (InputMgr::GetKeyDown(Keyboard::Key::K))
+		{
+			SetCurHp(0);
+		}
 
-	animation.Update(dt);
-	spearAnimation.Update(dt);
+		if (curHp <= 0 && isAlive)
+		{
+			dieTimer = 1.f;
+			SetState(States::Die);
+			isAlive = false;
+		}
+
+		if (!Utils::EqualFloat(direction.x, 0.f))
+		{
+			lastDir = direction;
+		}
+
+		animation.Update(dt);
+		spearAnimation.Update(dt);
+	}
 }
 
 void Lancer::Draw(RenderWindow& window)
@@ -80,7 +91,7 @@ void Lancer::Draw(RenderWindow& window)
 			window.draw(lancerAttackEffect->GetSprite(), &shader);
 	}
 
-	Object::Draw(window);
+	Enemy::Draw(window);
 
 	if (isAlive)
 		window.draw(sprite, &shader);

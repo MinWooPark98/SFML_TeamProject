@@ -1,0 +1,11 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+MonsterCard,0,20,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/ArcanaSummonEntity0.png,0,0,32,50,16,25,0,0
+graphics/ArcanaSummonEntity1.png,0,0,32,50,16,25,0,0
+graphics/ArcanaSummonEntity2.png,0,0,32,50,16,25,0,0
+graphics/ArcanaSummonEntity3.png,0,0,32,50,16,25,0,0
+graphics/ArcanaSummonEntity4.png,0,0,32,50,16,25,0,0
+graphics/ArcanaSummonEntity5.png,0,0,32,50,16,25,0,0
+graphics/ArcanaSummonEntity6.png,0,0,32,50,16,25,0,0

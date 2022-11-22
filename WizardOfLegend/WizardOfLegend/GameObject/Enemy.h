@@ -42,6 +42,19 @@ public:
 	};
 
 protected:
+	Animator spawnAnimation;
+	SpriteObj* spawn;
+	float spawnTimer = 2.f;
+	float deleteTimer = 0.3f;
+	bool isSpawn = false;
+	bool isActionStart = false;
+	// card shader
+	Shader cardShader;
+	Texture cardTexColorTable;
+	int cardPaletteIndex;
+	int cardPaletteSize;
+
+
 	Animator animation;
 	States curState;
 	BossStates curBossState;
@@ -87,7 +100,7 @@ public:
 	virtual void Release() override { SpriteObj::Release(); };
 	virtual void Reset() override { SpriteObj::Reset(); };
 	virtual void Update(float dt) override;
-	virtual void Draw(RenderWindow& window) override { SpriteObj::Draw(window); };
+	virtual void Draw(RenderWindow& window) override;
 	virtual void SetState(States newState) = 0;
 	virtual void SetState(BossStates newState) {};
 
@@ -123,6 +136,22 @@ public:
 	void SetColorTable(string table) { texColorTable.loadFromFile(table); };
 	void SetColor(int index);
 
+	void SetCardPaletteIndex(int index) { cardPaletteIndex = index; };
+	void SetCardPaletteSize(int size) { cardPaletteSize = size; };
+	void SetCardColorTable(string table) { cardTexColorTable.loadFromFile(table); };
+	void SetCardColor(int index)
+	{
+		cardPaletteIndex = (cardPaletteIndex - index) % cardPaletteSize;
+		cardShader.setUniform("colorTable", cardTexColorTable);
+		cardShader.setUniform("paletteIndex", (float)cardPaletteIndex / cardPaletteSize);
+	}
+	void SetCardPalette(int index, int size, string table)
+	{
+		cardPaletteIndex = index;
+		cardPaletteSize = size;
+		cardTexColorTable.loadFromFile(table);
+	};
+
 	void SetWeaponImage(string w) { weapon->SetTexture(*RESOURCE_MGR->GetTexture(w)); };
 	void SetPlayer(Player* p) { player = p; };
 
@@ -132,7 +161,7 @@ public:
 	void UpdateIdle();
 	virtual void UpdateMove(int attackDelay);
 	virtual void UpdateAttack(float dt) = 0;
-	
+
 	void SetMonsterType(MonsterType t) { type = t; };
 
 	void SetIsAlive(bool set) { isAlive = set; };
@@ -148,5 +177,8 @@ public:
 		maxHp = mHp;
 		damage = dmg;
 	};
+
+	void SetSpawn(bool set) { isSpawn = set; };
+	bool GetIsSpawn() const { return isSpawn; };
 };
 

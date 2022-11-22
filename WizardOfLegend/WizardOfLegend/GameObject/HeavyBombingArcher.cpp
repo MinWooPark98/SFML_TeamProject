@@ -3,14 +3,13 @@
 void HeavyBombingArcher::Init()
 {
 	Archer::Init();
-	SetScale({2, 2});
-	arrow->SetScale({1.5, 1.5});
-	weapon->SetScale({2, 2});
+	arrow->SetScale({1, 1});
+	weapon->SetScale({1.5, 1.5});
 	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ArrowLarge.png"));
 	arrow->SetHitBox((FloatRect)arrow->GetSprite().getTextureRect());
 	arrow->SetOrigin(Origins::MC);
-	arrowSpeed = 700.f;
-	arrowDir.setScale({2, 2});
+	arrowSpeed = 400.f;
+	arrowDir.setScale({ 2, 1 });
 	SetMonsterType(MonsterType::StageBoss);
 	SetPos({200, 200});
 	SetEscapeScale(100.f);
@@ -27,6 +26,11 @@ void HeavyBombingArcher::Init()
 		it->SetScale({1.5, 1.5});
 		it->SetOrigin(Origins::MC);
 	}
+
+
+	spawn->SetScale({ 1.5, 1.5 });
+	spawn->SetPos(GetPos());
+	SetCardColor(1);
 }
 
 void HeavyBombingArcher::Update(float dt)
@@ -52,7 +56,7 @@ void HeavyBombingArcher::Draw(RenderWindow& window)
 		arrowDir.setScale({ 1, 1 });
 	}
 	else
-		arrowDir.setScale({ 2, 2 });
+		arrowDir.setScale({ 2, 1 });
 }
 
 void HeavyBombingArcher::UpdateAttack(float dt)

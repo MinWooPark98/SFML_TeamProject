@@ -3,40 +3,52 @@
 void Enemy::Init()
 {
 	Release();
+	sprite.setScale({0, 1});
 	animation.SetTarget(&sprite);
 	position = { 0, 0 };
 	shader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	weapon = new SpriteObj();
 	type = MonsterType::None;
 	curState = States::RightIdle;
+
+	spawn = new SpriteObj();
+	spawn->SetOrigin(Origins::MC);
+	spawnAnimation.SetTarget(&spawn->GetSprite());
+	spawnAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("MonsterSpawnCard"));
+	spawnAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("MonsterCard"));
+	cardShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
+	SetCardPalette(19, 2, "graphics/CardColorIndex.png");
 }
 
 void Enemy::Update(float dt)
 { 
 	SpriteObj::Update(dt);
 
-	if (type == MonsterType::Normal || type == MonsterType::StageBoss)
+	if (isActionStart)
 	{
-		switch (curState)
+		if (type == MonsterType::Normal || type == MonsterType::StageBoss)
 		{
-		case States::LeftIdle: case States::RightIdle:
-			UpdateIdle();
-			break;
-		case States::LeftMove: case States::RightMove:
-			UpdateMove(2.f);
-			break;
-		case States::Attack: case States::MoveAttack:
-			UpdateAttack(dt);
-			break;
-		case States::Hit:
-			SetState(States::Hit);
-			break;
-		case States::Die:
-			SetState(States::Die);
-			break;
+			switch (curState)
+			{
+			case States::LeftIdle: case States::RightIdle:
+				UpdateIdle();
+				break;
+			case States::LeftMove: case States::RightMove:
+				UpdateMove(2.f);
+				break;
+			case States::Attack: case States::MoveAttack:
+				UpdateAttack(dt);
+				break;
+			case States::Hit:
+				SetState(States::Hit);
+				break;
+			case States::Die:
+				SetState(States::Die);
+				break;
+			}
 		}
 	}
-	else if (type == MonsterType::MiddleBoss)
+	if (type == MonsterType::MiddleBoss)
 	{
 		switch (curBossState)
 		{
@@ -66,6 +78,56 @@ void Enemy::Update(float dt)
 
 	if (curState == States::Die && dieTimer >= 0.f)
 		dieTimer -= dt;
+
+	if (isSpawn && !isActionStart)
+	{
+		if (spawnTimer <= 1.3f)
+		{
+			if (spawn->GetSprite().getScale().x <= 0.f && spawn->GetSprite().getScale().x > -0.1f)
+			{
+				spawn->SetTexture(*RESOURCE_MGR->GetTexture("graphics/CardSpawnUnindexed_25.png"));
+				spawnAnimation.Stop();
+			}
+
+			if (type == MonsterType::Normal)
+			{
+				if (spawn->GetSprite().getScale().x > -1.f)
+				{
+					spawn->SetScale({ spawn->GetSprite().getScale().x - (dt * 7) , 1 });
+
+					if (spawn->GetSprite().getScale().x <= 0.f)
+						sprite.setScale({ sprite.getScale().x + (dt * 7), 1 });
+				}
+				else if (spawn->GetSprite().getScale().x <= -1.f)
+				{
+					isActionStart = true;
+					spawnAnimation.Play("MonsterCard");
+				}
+			}
+			else if (type == MonsterType::StageBoss)
+			{
+				if (spawn->GetSprite().getScale().x > -1.5f)
+				{
+					spawn->SetScale({ spawn->GetSprite().getScale().x - (dt * 7) , 1.5 });
+
+					if (spawn->GetSprite().getScale().x <= 0.f)
+						sprite.setScale({ sprite.getScale().x + (dt * 7), 1.5 });
+				}
+				else if (spawn->GetSprite().getScale().x <= -1.5f)
+				{
+					isActionStart = true;
+					spawnAnimation.Play("MonsterCard");
+				}
+			}
+		}
+
+		spawnTimer -= dt;
+	}
+
+	if (isActionStart && deleteTimer >= 0.f)
+		deleteTimer -= dt;
+
+	spawnAnimation.Update(dt);
 }
 
 void Enemy::SetColor(int index)
@@ -174,5 +236,26 @@ void Enemy::UpdateMove(int attackDelay)
 
 		this->attackDelay = attackDelay;
 		return;
+	}
+}
+
+void Enemy::Draw(RenderWindow& window)
+{ 
+	if (type != MonsterType::MiddleBoss)
+	{
+		Object::Draw(window);
+
+
+		if (deleteTimer >= 0.f)
+		{
+			if (spawn->GetSprite().getScale().x >= 0.f)
+				window.draw(spawn->GetSprite(), &cardShader);
+			else
+				spawn->Draw(window);
+		}
+	}
+	else
+	{
+		SpriteObj::Draw(window);
 	}
 }

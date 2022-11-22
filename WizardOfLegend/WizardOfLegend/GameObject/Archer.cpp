@@ -32,47 +32,57 @@ void Archer::Init()
 	arrow->SetOrigin(Origins::MC);
 	SetArrowSpeed(400.f);
 	arrowDir.setFillColor(Color::Red);
-	arrowDir.setOrigin({});
-	arrowDir.setSize({2, 1080});
+	arrowDir.setSize({1, 300});
 
 	SetPaletteIndex(44);
 	SetpaletteSize(9);
 	SetColorTable("graphics/ArcherColorIndex.png");
 
-	SetSpeed(200.f);
+	SetSpeed(100.f);
 	SetMoveScale(500.f);
-	SetAttackScale(400.f);
+	SetAttackScale(200.f);
 	SetAttackStartDelay(1.f);
 	SetMonsterType(MonsterType::Normal);
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());
 	weapon->SetOrigin(Origins::MC);
+	spawn->SetPos(GetPos());
+	SetCardColor(2);
 }
 
 void Archer::Update(float dt)
 {
 	Enemy::Update(dt);
 
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack && curState != States::MoveAttack)
-		NormalMonsterMove(dt);
-
-	if (InputMgr::GetKeyDown(Keyboard::Key::L) && type == MonsterType::Normal)
-		SetCurHp(0);
-
-	if (curHp <= 0 && isAlive)
+	if (!isSpawn)
 	{
-		dieTimer = 1.f;
-		SetState(States::Die);
-		isAlive = false;
+		spawnAnimation.Play("MonsterSpawnCard");
+		animation.Play("ArcherRightIdle");
+		isSpawn = true;
 	}
-
-	if (!Utils::EqualFloat(direction.x, 0.f))
+	else if (isActionStart)
 	{
-		lastDir = direction;
-	}
+		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack && curState != States::MoveAttack)
+			NormalMonsterMove(dt);
 
-	animation.Update(dt);
-	bowAnimation.Update(dt);
+		if (InputMgr::GetKeyDown(Keyboard::Key::L) && type == MonsterType::Normal)
+			SetCurHp(0);
+
+		if (curHp <= 0 && isAlive)
+		{
+			dieTimer = 1.f;
+			SetState(States::Die);
+			isAlive = false;
+		}
+
+		if (!Utils::EqualFloat(direction.x, 0.f))
+		{
+			lastDir = direction;
+		}
+
+		animation.Update(dt);
+		bowAnimation.Update(dt);
+	}
 }
 
 void Archer::Draw(RenderWindow& window)
@@ -88,7 +98,7 @@ void Archer::Draw(RenderWindow& window)
 			arrow->Draw(window);
 	}
 
-	Object::Draw(window);
+	Enemy::Draw(window);
 
 	if (isAlive)
 		window.draw(sprite, &shader);

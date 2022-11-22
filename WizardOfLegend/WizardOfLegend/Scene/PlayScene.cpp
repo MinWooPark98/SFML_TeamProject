@@ -94,42 +94,6 @@ void PlayScene::Update(float dt)
 		fireBoss->SetPlayer(player);
 	}
 
-	if (InputMgr::GetKeyDown(Keyboard::Key::K))
-	{
-		for (auto it : objList[LayerType::Object][0])
-		{
-			if (!objList[LayerType::Object][0].empty())
-				delete it;
-		}
-		objList[LayerType::Object][0].clear();
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Key::L))
-	{
-		for (auto it : objList[LayerType::Object][1])
-		{
-			if (!objList[LayerType::Object][1].empty())
-				delete it;
-		}
-		objList[LayerType::Object][1].clear();
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Key::J))
-	{
-		for (auto it : objList[LayerType::Object][2])
-		{
-			if (!objList[LayerType::Object][2].empty())
-				delete it;
-		}
-		objList[LayerType::Object][2].clear();
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Key::H))
-	{
-		for (auto it : objList[LayerType::Object][3])
-		{
-			if (!objList[LayerType::Object][3].empty())
-				delete it;
-		}
-		objList[LayerType::Object][3].clear();
-	}
 	Scene::Update(dt);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
 	{
@@ -157,10 +121,10 @@ void PlayScene::Enter()
 {
 	Scene::Enter();
 	Vector2f size = (Vector2f)FRAMEWORK->GetWindowSize();
-	worldView.setSize(size * 0.5f);
+	worldView.setSize(size * 0.25f);
 	worldView.setCenter(size * 0.25f);
 
-	uiView.setSize(size * 0.5f);
+	uiView.setSize(size * 0.25f);
 	uiView.setCenter(size * 0.25f);
 }
 
