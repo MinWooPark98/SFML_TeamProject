@@ -173,8 +173,6 @@ void Skill::Update(float dt)
 		}
 	}
 	auto it = projectiles.begin();
-	if (isDoing && it == projectiles.end())
-		isDoing = false;
 	while(it != projectiles.end())
 	{
 		if (setting->attackShape == Projectile::AttackShape::Rotate)

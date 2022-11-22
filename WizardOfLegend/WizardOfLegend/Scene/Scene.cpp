@@ -20,7 +20,6 @@ Scene::~Scene()
 void Scene::Init()
 {
 	projectiles = new ObjectPool<Projectile>();
-	projectiles->Init(20);
 }
 void Scene::Release()
 {
@@ -60,9 +59,6 @@ void Scene::Update(float dt)
 	objMousePos = ScreenToWorld((Vector2i)mousePos);
 	uiMousePos = ScreenToUiPosition((Vector2i)mousePos);
 
-	if (projectiles != nullptr)
-		projectiles->Update(dt);
-
 	if (!isPause)
 	{
 		for (auto& layer : objList)
@@ -81,6 +77,9 @@ void Scene::Update(float dt)
 			}
 		}
 	}
+
+	if (projectiles != nullptr)
+		projectiles->Update(dt);
 
 	if (uiMgr != nullptr && uiMgr->GetActive())
 		uiMgr->Update(dt);
