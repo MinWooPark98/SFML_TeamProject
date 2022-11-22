@@ -13,6 +13,8 @@ protected:
 	Player* player;
 	IntRect mapSize;
 
+	//map<Object::ObjType, list<Object*>> aef;
+
 public:
 	PlayScene();
 	virtual ~PlayScene();
@@ -27,5 +29,7 @@ public:
 
 	virtual void Enter() override;
 	virtual void Exit() override;
+
+
 };
 

@@ -1,40 +1,112 @@
 {
   "TILE": [
     {
-      "texPath": "graphics/Map/Ground/AirPlatformTopLeft.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformTopLeft.png"
+      "texPath": "graphics/Map/Palette/AirPlatformTopLeft.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformTopLeft.png"
     },
     {
-      "texPath": "graphics/Map/Ground/AirPlatformTop.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformTop.png"
+      "texPath": "graphics/Map/Palette/AirPlatformTop.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformTop.png"
     },
     {
-      "texPath": "graphics/Map/Ground/AirPlatformTopRight.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformTopRight.png"
+      "texPath": "graphics/Map/Palette/AirPlatformTopRight.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformTopRight.png"
     },
     {
-      "texPath": "graphics/Map/Ground/AirPlatformLeft.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformLeft.png"
+      "texPath": "graphics/Map/Palette/AirPlatformLeft.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformLeft.png"
     },
     {
-      "texPath": "graphics/Map/Ground/AirPlatformCenter.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformCenter.png"
+      "texPath": "graphics/Map/Palette/AirPlatformCenter.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformCenter.png"
     },
     {
-      "texPath": "graphics/Map/Ground/AirPlatformRight.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformRight.png"
+      "texPath": "graphics/Map/Palette/AirPlatformRight.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformRight.png"
     },
     {
-      "texPath": "graphics/Map/Ground/AirPlatformBotLeft.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformBotLeft.png"
+      "texPath": "graphics/Map/Palette/AirPlatformBotLeft.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformBotLeft.png"
     },
     {
-      "texPath": "graphics/Map/Ground/AirPlatformBot.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformBot.png"
+      "texPath": "graphics/Map/Palette/AirPlatformBot.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformBot.png"
     },
     {
-      "texPath": "graphics/Map/Ground/AirPlatformBotRight.png",
-      "uiPath": "graphics/Map/Ground/AirPlatformBotRight.png"
+      "texPath": "graphics/Map/Palette/AirPlatformBotRight.png",
+      "uiPath": "graphics/Map/Palette/AirPlatformBotRight.png"
+    }
+  ],
+  "WALL": [
+    {
+      "texPath": "graphics/Map/Wall/AirWallBatton.png",
+      "uiPath": "graphics/Map/Palette/AirWallBatton.png"
+    },
+    {
+      "texPath": "graphics/Map/Wall/AirWallTop.png",
+      "uiPath": "graphics/Map/Palette/AirWallTop.png"
+    },
+    {
+      "texPath": "graphics/Map/Wall/AirWindow.png",
+      "uiPath": "graphics/Map/Palette/AirWindow0.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/Empty.png",
+      "uiPath": "graphics/Map/Palette/Empty.png"
+    }
+  ],
+  "OBJECT": [
+    {
+      "texPath": "graphics/Map/Object/AirBanner.png",
+      "uiPath": "graphics/Map/Palette/AirBanner.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/GateFull.png",
+      "uiPath": "graphics/Map/Palette/GateFull.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/PlazaArchwayOverlay.png",
+      "uiPath": "graphics/Map/Palette/PlazaArchwayOverlay.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/PlazaArchwayWall.png",
+      "uiPath": "graphics/Map/Palette/PlazaArchwayWall.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/TeleportLandingPad.png",
+      "uiPath": "graphics/Map/Palette/TeleportLandingPad.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/TreeTall.png",
+      "uiPath": "graphics/Map/Palette/TreeTall.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/TreeTallPurple.png",
+      "uiPath": "graphics/Map/Palette/TreeTallPurple.png"
+    }
+  ],
+  "PLAYER": [
+    {
+      "texPath": "graphics/Map/Player.png",
+      "uiPath": "graphics/Map/Palette/JesterPortrait.png"
+    }
+  ],
+  "ENEMY": [
+    {
+      "texPath": "graphics/Map/Lancer.png",
+      "uiPath": "graphics/Map/Palette/ArmorKnightSpear.png"
+    },
+    {
+      "texPath": "graphics/Map/ArcherNormal.png",
+      "uiPath": "graphics/Map/Palette/ArchitectNPCIdleNormal.png"
+    },
+    {
+      "texPath": "graphics/Map/ArcherBosspng.png",
+      "uiPath": "graphics/Map/Palette/ArchitectNPCIdleBoss.png"
+    },
+    {
+      "texPath": "graphics/Map/FireBoss.png",
+      "uiPath": "graphics/Map/Palette/FireBoss1.png"
     }
   ]
 }

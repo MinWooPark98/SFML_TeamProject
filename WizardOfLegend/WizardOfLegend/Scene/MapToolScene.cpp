@@ -39,8 +39,8 @@ void MapToolScene::Reset()
 
 	//DrawObj* draw = new DrawObj(uiMgr);
 	//auto editorObjs = FILE_MGR->GetEditorObjs();
-	//auto playerData = editorObjs["PLAYER"];
-	//draw->SetType("PLAYER");
+	//auto playerData = editorObjs["Player"];
+	//draw->SetType("Player");
 	//draw->SetPath(playerData[0].texPath);
 	//draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
 	//draw->SetOrigin(Origins::BC);
@@ -249,11 +249,11 @@ MapToolScene::~MapToolScene()
 
 void MapToolScene::SetType(string t)
 {
-	if (t == "Wall" || t == "Object" || t == "Enemy" || t == "Player")
+	if (t == "WALL" || t == "OBJECT" || t == "ENEMY" || t == "PLAYER")
 	{
 		nowType = LayerType::Object;
 	}
-	if (t == "Tile")
+	if (t == "TILE")
 	{
 		nowType = LayerType::Tile;
 	}
@@ -334,7 +334,7 @@ void MapToolScene::Load(string path)
 
 		int i = ((int)obj.position.x - 30) / 60;
 		int j = (int)obj.position.y / 60 - 1;
-		if (obj.type == "TREE" || obj.type == "STONE" || obj.type == "ENEMY" || obj.type == "PLAYER" || obj.type == "BLOCK")
+		if (obj.type == "WALL" || obj.type == "OBJECT" || obj.type == "ENEMY" )
 		{
 			objList[LayerType::Object][j].push_back(draw);
 			greedObjs[LayerType::Object][j][i] = draw;
