@@ -485,3 +485,11 @@ animations/fireBossAnimation/FireBossRightThrowingIdle.csv,3
 animations/fireBossAnimation/FireBossUpThrowingIdle.csv,3
 animations/fireBossAnimation/FireBossDownThrowingIdle.csv,3
 graphics/background1.png,0
+graphics/WizardDashDown.png,0
+graphics/WizardDashUp.png,0
+graphics/WizardDashRight0.png,0
+graphics/WizardDashRight1.png,0
+animations/player/DashDown.csv,3
+animations/player/DashUp.csv,3
+animations/player/DashLeft.csv,3
+animations/player/DashRight.csv,3

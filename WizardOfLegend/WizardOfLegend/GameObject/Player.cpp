@@ -8,7 +8,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), currSkill(nullptr), skillToolMode(false)
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.2f), dashTimer(0.f), currSkill(nullptr), skillToolMode(false)
 {
 }
 
@@ -25,16 +25,16 @@ void Player::SetState(States state)
 	case Player::States::Idle:
 		{
 			auto angle = Utils::Angle(lastDir);
-			if (angle > -135.f && angle <= -45.f)
+			if (angle > -135.f && angle < -45.f)
 				animator->Play("IdleUp");
-			else if (angle > -45.f && angle <= 45.f)
+			else if (angle >= -45.f && angle <= 45.f)
 				animator->Play("IdleRight");
-			else if (angle > 45.f && angle <= 135.f)
+			else if (angle > 45.f && angle < 135.f)
 				animator->Play("IdleDown");
 			else
 				animator->Play("IdleLeft");
-			break;
 		}
+		break;
 		/*if (Utils::EqualFloat(lastDir.x, 0.f))
 			lastDir.y > 0.f ? animator->Play("IdleDown") : animator->Play("IdleUp");
 		else
@@ -46,6 +46,19 @@ void Player::SetState(States state)
 			direction.y > 0.f ? animator->Play("RunDown") : animator->Play("RunUp");
 		else
 			direction.x > 0.f ? animator->Play("RunRight") : animator->Play("RunLeft");
+		break;
+	case Player::States::Dash:
+		{
+			auto angle = Utils::Angle(lastDir);
+			if (angle > -135.f && angle < -45.f)
+				animator->Play("DashUp");
+			else if (angle >= -45.f && angle <= 45.f)
+				animator->Play("DashRight");
+			else if (angle > 45.f && angle < 135.f)
+				animator->Play("DashDown");
+			else
+				animator->Play("DashLeft");
+		}
 		break;
 	case Player::States::Slide:
 		if (Utils::EqualFloat(lastDir.x, 0.f))
@@ -85,6 +98,10 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("RunRight"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("RunLeft"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("RunUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("DashDown"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("DashRight"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("DashLeft"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("DashUp"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideRight"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideLeft"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideDown"));
@@ -133,7 +150,8 @@ void Player::Update(float dt)
 	animator->Update(dt);
 
 	auto& windowSize = FRAMEWORK->GetWindowSize();
-	if (currState != States::Skill)
+	
+	if (currState == States::Idle || currState == States::Run)
 	{
 		direction.x = 0.f;
 		direction.y = 0.f;
@@ -145,10 +163,7 @@ void Player::Update(float dt)
 			direction.y += Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W) ? -1 : 0;
 		}
 		direction = Utils::Normalize(direction);
-	}
-	
-	if (currState == States::Idle || currState == States::Run)
-	{
+
 		if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
 		{
 			for (auto mouseDown : InputMgr::GetMouseDownList())
@@ -180,6 +195,7 @@ void Player::Update(float dt)
 				case Keyboard::Space:
 					SetCurrSkill(skills[2]);
 					skills[2]->Do();
+					SetState(States::Dash);
 					break;
 				case Keyboard::Q:
 					SetCurrSkill(skills[3]);
@@ -208,6 +224,9 @@ void Player::Update(float dt)
 	case Player::States::Run:
 		UpdateRun(dt);
 		break;
+	case Player::States::Dash:
+		UpdateDash(dt);
+		break;
 	case Player::States::Skill:
 		UpdateSkill(dt);
 		break;
@@ -217,6 +236,8 @@ void Player::Update(float dt)
 
 	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
 		lastDir = direction;
+	else if (!Utils::EqualFloat(lastDir.x, 0.f))
+		lastDir = Utils::Normalize({ lastDir.x, 0.f });
 
 	for (auto skill : skills)
 	{
@@ -266,6 +287,17 @@ void Player::UpdateRun(float dt)
 		direction.x > 0.f ? animator->Play("RunRight") : animator->Play("RunLeft");
 }
 
+void Player::UpdateDash(float dt)
+{
+	dashTimer += dt;
+	Translate(lastDir * runningSpeed * dt);
+	if (dashTimer >= dashDuration)
+	{
+		dashTimer = 0.f;
+		SetState(States::Slide);
+	}
+}
+
 void Player::UpdateSkill(float dt)
 {
 
@@ -273,30 +305,38 @@ void Player::UpdateSkill(float dt)
 
 void Player::Action()
 {
-	SetState(States::Skill);
-	auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
-	direction = mousePos - position;
-	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
-		lastDir = direction;
-	auto angle = Utils::Angle(direction);
+	SkillAction action = currSkill->GetSetting()->playerAction;
+	if (action != SkillAction::Dash)
+	{
+		SetState(States::Skill);
+		auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
+		direction = mousePos - position;
+		if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
+			lastDir = direction;
+	}
 	switch (currSkill->GetSetting()->playerAction)
 	{
-	case Player::SkillAction::NormalSpell:
-		if (angle > -135.f && angle <= -45.f)
-			isBackHand ? animator->Play("BackHandUp") : animator->Play("ForeHandUp");
-		else if (angle > -45.f && angle <= 45.f)
-			isBackHand ? animator->Play("BackHandRight") : animator->Play("ForeHandRight");
-		else if (angle > 45.f && angle <= 135.f)
-			isBackHand ? animator->Play("BackHandDown") : animator->Play("ForeHandDown");
-		else
-			isBackHand ? animator->Play("BackHandLeft") : animator->Play("ForeHandLeft");
-		isBackHand = !isBackHand;
+	case SkillAction::NormalSpell:
+		{
+			auto angle = Utils::Angle(direction);
+			if (angle > -135.f && angle <= -45.f)
+				isBackHand ? animator->Play("BackHandUp") : animator->Play("ForeHandUp");
+			else if (angle > -45.f && angle <= 45.f)
+				isBackHand ? animator->Play("BackHandRight") : animator->Play("ForeHandRight");
+			else if (angle > 45.f && angle <= 135.f)
+				isBackHand ? animator->Play("BackHandDown") : animator->Play("ForeHandDown");
+			else
+				isBackHand ? animator->Play("BackHandLeft") : animator->Play("ForeHandLeft");
+			isBackHand = !isBackHand;
+		}
 		break;
-	case Player::SkillAction::PBAoE:
+	case SkillAction::PBAoE:
 		// 애니메이션 재생
 		break;
-	case Player::SkillAction::JumpSlash:
+	case SkillAction::JumpSlash:
 		// 애니메이션 재생 및 이동
+		break;
+	default:
 		break;
 	}
 }

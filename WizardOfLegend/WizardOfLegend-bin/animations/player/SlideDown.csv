@@ -1,7 +1,10 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-SlideDown,0,6,,,,,,
+SlideDown,0,15,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/SlideDown0.png,0,0,26,36,13,18,0,0
+graphics/SlideDown0.png,0,0,26,36,13,18,0,0
+graphics/SlideDown0.png,0,0,26,36,13,18,0,0
 graphics/SlideDown1.png,0,0,26,32,13,16,0,0
+graphics/SlideDown2.png,0,0,26,32,13,16,0,0
 graphics/SlideDown2.png,0,0,26,32,13,16,0,0

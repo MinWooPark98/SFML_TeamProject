@@ -12,6 +12,7 @@ public:
 		None,
 		Idle,
 		Run,
+		Dash,
 		Slide,
 		Skill,
 	};
@@ -20,6 +21,7 @@ public:
 		NormalSpell,
 		PBAoE,
 		JumpSlash,
+		Dash,
 	};
 
 protected:
@@ -36,6 +38,8 @@ protected:
 	float runningSpeed;
 	float accelTime;
 	float accelTimer;
+	float dashDuration;
+	float dashTimer;
 
 	Vector2f lastDir;
 	bool isBackHand;	// true일 시 Backhand, false일 시 Forehand
@@ -57,6 +61,7 @@ public:
 
 	void UpdateIdle(float dt);
 	void UpdateRun(float dt);
+	void UpdateDash(float dt);
 	void UpdateSkill(float dt);
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }

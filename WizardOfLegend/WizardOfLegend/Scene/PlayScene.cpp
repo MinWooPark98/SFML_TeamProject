@@ -30,6 +30,7 @@ void PlayScene::Init()
 	objList[LayerType::Object][5].push_back(player);
 	auto& skills = player->GetSkills();
 	skills[0]->SetSkill("FireBall");
+	skills[2]->SetSkill("FireDash");
 	skills[4]->SetSkill("DragonArc");
 	skills[5]->SetSkill("FireFull");
 
