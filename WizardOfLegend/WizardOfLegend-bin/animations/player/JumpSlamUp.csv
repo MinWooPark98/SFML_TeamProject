@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-JumpSlamUp,0,10,,,,,,
+JumpSlamUp,0,12,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/WizardGroundSlamUp2.png,0,0,48,48,24,24,0,0
@@ -9,4 +9,5 @@ graphics/WizardGroundSlamUp5.png,0,0,48,48,24,24,0,0
 graphics/WizardGroundSlamUp6.png,0,0,48,48,24,24,0,0
 graphics/WizardGroundSlamUp7.png,0,0,48,48,24,24,0,0
 graphics/WizardGroundSlamUp8.png,0,0,48,48,24,24,0,0
+graphics/WizardGroundSlamUp9.png,0,0,48,48,24,24,0,0
 graphics/WizardGroundSlamUp9.png,0,0,48,48,24,24,0,0

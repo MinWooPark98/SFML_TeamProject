@@ -4,7 +4,6 @@
 #include "../Scene/SceneMgr.h"
 
 Skill::Skill()
-
 	:subject(nullptr), setting(nullptr), subType(SubjectType::None), isDoing(false), attackCnt(0), attackTimer(0.f), skillTimer(0.f)
 {
 }
@@ -13,8 +12,22 @@ Skill::~Skill()
 {
 }
 
+void Skill::Reset()
+{
+	for (auto projectile : projectiles)
+	{
+		projectile->SetActive(false);
+	}
+	projectiles.clear();
+	isDoing = false;
+	attackCnt = 0;
+	attackTimer = 0.f;
+	skillTimer = 0.f;
+}
+
 void Skill::SetSkill(const String& skillName)
 {
+	Reset();
 	SkillTable* table = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
 	if (setting == nullptr)
 		setting = new Set(table->Get(skillName));
@@ -24,6 +37,7 @@ void Skill::SetSkill(const String& skillName)
 
 void Skill::SetSkill(const Set& set)
 {
+	Reset();
 	if (setting == nullptr)
 		setting = new Set(set);
 	else

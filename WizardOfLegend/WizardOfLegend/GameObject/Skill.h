@@ -80,6 +80,8 @@ public:
 	Skill();
 	~Skill();
 
+	void Reset();
+
 	void SetSkill(const String& skillName);
 	void SetSkill(const Set& set);
 	void SetSubject(Object* sub, SubjectType type);
