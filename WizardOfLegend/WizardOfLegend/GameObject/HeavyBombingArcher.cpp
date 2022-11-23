@@ -84,7 +84,7 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 
 	if (curState == States::MoveAttack)
 	{
-		if (attackDelay >= attackStart)
+		if (attackDelay >= attackStart + 0.2f)
 		{
 			for (auto it : smollArrow)
 			{
@@ -92,7 +92,7 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 				it->SetPos(GetPos());
 			}
 		}
-		else
+		else if (attackDelay <= attackStart)
 		{
 			if (pattern == Pattern::MovingAttack || pattern == Pattern::EscapeAttack)
 			{

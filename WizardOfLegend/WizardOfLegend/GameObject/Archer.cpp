@@ -80,6 +80,16 @@ void Archer::Update(float dt)
 			lastDir = direction;
 		}
 
+		if (attackDelay <= attackStart + 0.2f && attackDelay >= attackStart + 0.05f)
+		{
+			if ((int)((attackDelay - attackStart) / 0.03f) % 2 == 0)
+				arrowDir.setFillColor({180, 180, 180});
+			else
+				arrowDir.setFillColor(Color::Red);
+		}
+		else
+			arrowDir.setFillColor(Color::Red);
+
 		animation.Update(dt);
 		bowAnimation.Update(dt);
 	}
@@ -147,7 +157,7 @@ void Archer::UpdateAttack(float dt)
 	if (curHp <= 0)
 		return;
 
-	if (attackDelay >= attackStart)
+	if (attackDelay >= attackStart + 0.2f)
 	{
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
 		weapon->SetPos(GetPos());
@@ -167,7 +177,7 @@ void Archer::UpdateAttack(float dt)
 
 		playerLastPos = player->GetPos();
 	}
-	else
+	else if (attackDelay <= attackStart)
 	{
 		if (curState == States::Attack)
 		{

@@ -1,0 +1,13 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FinalBossShield,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FinalBossShield0.png,0,0,48,48,24,24,0,0
+graphics/FinalBossShield1.png,0,0,48,48,24,24,0,0
+graphics/FinalBossShield2.png,0,0,48,48,24,24,0,0
+graphics/FinalBossShield3.png,0,0,48,48,24,24,0,0
+graphics/FinalBossShield4.png,0,0,48,48,24,24,0,0
+graphics/FinalBossShield5.png,0,0,48,48,24,24,0,0
+graphics/FinalBossShield6.png,0,0,48,48,24,24,0,0
+graphics/FinalBossShield7.png,0,0,48,48,24,24,0,0
+graphics/FinalBossShield8.png,0,0,48,48,24,24,0,0
