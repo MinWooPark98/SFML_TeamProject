@@ -90,47 +90,24 @@ void Enemy::Update(float dt)
 			}
 
 			if (type == MonsterType::Normal)
-			{
-				if (spawn->GetSprite().getScale().x > -1.f)
-				{
-					spawn->SetScale({ spawn->GetSprite().getScale().x - (dt * 7) , 1 });
-
-					if (spawn->GetSprite().getScale().x <= 0.f)
-						sprite.setScale({ sprite.getScale().x + (dt * 7), 1 });
-				}
-				else if (spawn->GetSprite().getScale().x <= -1.f)
-				{
-					isActionStart = true;
-					spawnAnimation.Play("MonsterCard");
-				}
-			}
+				SpawnScale(1.f, dt);
 			else if (type == MonsterType::StageBoss)
-			{
-				if (spawn->GetSprite().getScale().x > -1.5f)
-				{
-					spawn->SetScale({ spawn->GetSprite().getScale().x - (dt * 7) , 1.5 });
-
-					if (spawn->GetSprite().getScale().x <= 0.f)
-						sprite.setScale({ sprite.getScale().x + (dt * 7), 1.5 });
-				}
-				else if (spawn->GetSprite().getScale().x <= -1.5f)
-				{
-					isActionStart = true;
-					spawnAnimation.Play("MonsterCard");
-				}
-			}
+				SpawnScale(1.5f, dt);
 		}
 
 		spawnTimer -= dt;
 	}
 
-	if (isActionStart && deleteTimer >= 0.f)
+	if (deleteTimer >= 0.f)
 	{
-		deleteTimer -= dt;
-		isShader = false;
-	}
+		if (isActionStart)
+		{
+			deleteTimer -= dt;
+			isShader = false;
+		}
 
-	spawnAnimation.Update(dt);
+		spawnAnimation.Update(dt);
+	}
 }
 
 void Enemy::SetColor(int index)
@@ -239,6 +216,22 @@ void Enemy::UpdateMove(int attackDelay)
 
 		this->attackDelay = attackDelay;
 		return;
+	}
+}
+
+void Enemy::SpawnScale(float scale, float dt)
+{
+	if (spawn->GetSprite().getScale().x > -scale)
+	{
+		spawn->SetScale({ spawn->GetSprite().getScale().x - (dt * 7) , scale });
+
+		if (spawn->GetSprite().getScale().x <= 0.f)
+			sprite.setScale({ sprite.getScale().x + (dt * 7), scale });
+	}
+	else if (spawn->GetSprite().getScale().x <= -scale)
+	{
+		isActionStart = true;
+		spawnAnimation.Play("MonsterCard");
 	}
 }
 

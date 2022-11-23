@@ -181,5 +181,6 @@ public:
 
 	void SetSpawn(bool set) { isSpawn = set; };
 	bool GetIsSpawn() const { return isSpawn; };
+	void SpawnScale(float scale, float dt);
 };
 
