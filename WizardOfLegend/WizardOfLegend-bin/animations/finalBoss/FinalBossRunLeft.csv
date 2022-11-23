@@ -1,0 +1,5 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+RinalBossRunLeft,0,1,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FinalBossDashRight.png,0,0,48,48,24,24,1,0

@@ -1,0 +1,10 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FinalBossForeHandDown,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FinalBossForeHandDown0.png,0,0,48,48,24,24,0,0
+graphics/FinalBossForeHandDown1.png,0,0,48,48,24,24,0,0
+graphics/FinalBossForeHandDown2.png,0,0,48,48,24,24,0,0
+graphics/FinalBossForeHandDown3.png,0,0,48,48,24,24,0,0
+graphics/FinalBossForeHandDown4.png,0,0,48,48,24,24,0,0
+graphics/FinalBossForeHandDown5.png,0,0,48,48,24,24,0,0

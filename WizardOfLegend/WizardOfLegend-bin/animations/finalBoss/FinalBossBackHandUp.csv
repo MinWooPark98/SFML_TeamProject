@@ -1,0 +1,11 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FinalBossBackHandUp,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FinalBossBackHandUp0.png,0,0,48,48,24,24,0,0
+graphics/FinalBossBackHandUp1.png,0,0,48,48,24,24,0,0
+graphics/FinalBossBackHandUp2.png,0,0,48,48,24,24,0,0
+graphics/FinalBossBackHandUp3.png,0,0,48,48,24,24,0,0
+graphics/FinalBossBackHandUp4.png,0,0,48,48,24,24,0,0
+graphics/FinalBossBackHandUp5.png,0,0,48,48,24,24,0,0
+graphics/FinalBossBackHandUp6.png,0,0,48,48,24,24,0,0

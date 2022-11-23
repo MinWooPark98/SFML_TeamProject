@@ -2,23 +2,24 @@
 #include "UiMgr.h"
 
 class SpriteObj;
-class TitleUiMgr : public UiMgr
+class PlayUiMgr : public UiMgr
 {
 protected:
 	map<int, vector<Object*>> uiObjList;
 	Vector2i windowSize;
 
-	RectangleShape* backgrondShadow;
-	float backgroundShadowValue = 0.f;
+	SpriteObj* HpBarFill;
+	SpriteObj* HpBarHurt;
+	SpriteObj* OverdriveActiveBar;
 
-	SpriteObj* titleLogo;
-	bool logoMove;
+	float maxOverdriveBarSize = 48.f;
+	float overdriveBarSize = 0.f;
 
-	float startTextActiveTimer = 0.f;
+	bool testOverdrive = false;
 
 public:
-	TitleUiMgr();
-	virtual ~TitleUiMgr();
+	PlayUiMgr();
+	virtual ~PlayUiMgr();
 
 	virtual void Init() override;
 	virtual void Release() override;
@@ -26,3 +27,4 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 };
+

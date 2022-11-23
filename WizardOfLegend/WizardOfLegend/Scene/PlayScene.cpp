@@ -9,6 +9,7 @@
 #include "../GameObject/FireBoss.h"
 #include "../Framework/InputMgr.h"
 #include "../Scene/SceneMgr.h"
+#include "../Ui/PlayUiMgr.h"
 
 
 PlayScene::PlayScene()
@@ -23,7 +24,6 @@ PlayScene::~PlayScene()
 void PlayScene::Init()
 {
 	Scene::Init();
-
 
 	player = new Player();
 	player->Init();
@@ -72,6 +72,9 @@ void PlayScene::Init()
 	mapSize.top = 0;
 	mapSize.width = (tiles.back())->GetPos().x + 30;
 	mapSize.height = (tiles.back())->GetPos().y;
+
+	uiMgr = new PlayUiMgr();
+	uiMgr->Init();
 }
 
 void PlayScene::Update(float dt)
@@ -140,7 +143,7 @@ void PlayScene::Enter()
 	worldView.setCenter(size * 0.25f);
 
 	uiView.setSize(size * 0.25f);
-	uiView.setCenter(size * 0.25f);
+	uiView.setCenter(size * 0.125f);
 }
 
 void PlayScene::Exit()

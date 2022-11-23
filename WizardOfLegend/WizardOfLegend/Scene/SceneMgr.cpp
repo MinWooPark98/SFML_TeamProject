@@ -7,9 +7,9 @@
 bool SceneMgr::Init()
 {
     sceneMap[Scenes::Title] = new TitleScene();
+    sceneMap[Scenes::Play] = new PlayScene();
     sceneMap[Scenes::MapTool] = new MapToolScene();
     sceneMap[Scenes::SkillTool] = new SkillToolScene();
-    sceneMap[Scenes::Play] = new PlayScene();
     currScene = Scenes::Title;
 
     for (auto& pair : sceneMap)
@@ -37,6 +37,11 @@ void SceneMgr::ChangeScene(Scenes scene)
 Scene* SceneMgr::GetCurrentScene()
 {
     return sceneMap[currScene];
+}
+
+void SceneMgr::Exit()
+{
+    exit(1);
 }
 
 void SceneMgr::Update(float dt)
