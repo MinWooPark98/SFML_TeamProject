@@ -49,6 +49,7 @@
     <ClCompile Include="Ui\OptionButtons.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Ui\TitleUiMgr.cpp" />
+    <ClCompile Include="Ui\PlayUiMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -102,6 +103,7 @@
     <ClInclude Include="Ui\OptionButtons.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Ui\TitleUiMgr.h" />
+    <ClInclude Include="Ui\PlayUiMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

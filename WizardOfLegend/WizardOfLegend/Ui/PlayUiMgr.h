@@ -2,23 +2,18 @@
 #include "UiMgr.h"
 
 class SpriteObj;
-class TitleUiMgr : public UiMgr
+class PlayUiMgr : public UiMgr
 {
 protected:
 	map<int, vector<Object*>> uiObjList;
 	Vector2i windowSize;
 
-	RectangleShape* backgrondShadow;
-	float backgroundShadowValue = 0.f;
-
-	SpriteObj* titleLogo;
-	bool logoMove;
-
-	float startTextActiveTimer = 0.f;
+	SpriteObj* HpBarFill;
+	SpriteObj* HpBarHurt;
 
 public:
-	TitleUiMgr();
-	virtual ~TitleUiMgr();
+	PlayUiMgr();
+	virtual ~PlayUiMgr();
 
 	virtual void Init() override;
 	virtual void Release() override;
@@ -26,3 +21,4 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 };
+

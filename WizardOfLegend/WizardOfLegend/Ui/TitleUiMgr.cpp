@@ -49,13 +49,13 @@ void TitleUiMgr::Init()
 		button->GetText()->SetOutlineThickness(2.f);
 
 		if (i < 4)
+		{
 			button->SetPos({ windowSize.x * 0.5f, windowSize.y * (0.5f + 0.1f * i) });
+			button->MousePointerOn = bind(&TextObj::SetFillColor, button->GetText(), Color::White);
+			button->MousePointerOff = bind(&TextObj::SetFillColor, button->GetText(), Color(255, 255, 255, 153));
+		}
 		else
 			button->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.6f});
-
-
-		button->MousePointerOn = bind(&TextObj::SetFillColor, button->GetText(), Color::White);
-		button->MousePointerOff = bind(&TextObj::SetFillColor, button->GetText(), Color(255, 255, 255, 153));
 		
 		if (i < 3)
 			button->ClickOn = bind(&SceneMgr::ChangeScene, SCENE_MGR, (Scenes)(i + 1));
@@ -105,7 +105,10 @@ void TitleUiMgr::Update(float dt)
 	for (auto& uiObjs : uiObjList)
 	{
 		for (auto& obj : uiObjs.second)
-			obj->Update(dt);
+		{
+			if (obj->GetActive())
+				obj->Update(dt);
+		}
 	}
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Enter))
@@ -130,6 +133,17 @@ void TitleUiMgr::Update(float dt)
 			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue -= 0.3f) });
 	}
 
+	if (titleLogo->GetPos().y <= windowSize.y * 0.3f)
+	{
+		for (auto& uiObjs : uiObjList[1])
+			uiObjs->SetActive(true);
+	}
+	else
+	{
+		for (auto& uiObjs : uiObjList[1])
+			uiObjs->SetActive(false);
+	}
+
 	if (!logoMove)
 		startTextActiveTimer += dt;
 }
@@ -148,7 +162,7 @@ void TitleUiMgr::Draw(RenderWindow& window)
 		for (auto& uiObjs : uiObjList[1])
 			uiObjs->Draw(window);
 	}
-	else if (titleLogo->GetPos().y >= windowSize.y * 0.5f && (int)(startTextActiveTimer / 0.5f) % 2 == 0)
+	if (titleLogo->GetPos().y >= windowSize.y * 0.5f && (int)(startTextActiveTimer / 0.5f) % 2 == 0)
 	{
 		for (auto& uiObjs : uiObjList[2])
 			uiObjs->Draw(window);
