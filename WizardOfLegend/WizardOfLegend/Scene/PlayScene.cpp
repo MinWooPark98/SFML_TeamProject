@@ -38,6 +38,20 @@ void PlayScene::Init()
 
 	for (auto& obj : data)
 	{
+		if (obj.type == "WALL")
+		{
+			SpriteObj* draw = new SpriteObj();
+			draw->SetName(obj.type);
+			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
+			draw->SetOrigin(Origins::BC);
+			draw->SetPos(obj.position);
+			draw->SetHitBox(obj.path);
+			draw->SetObjType(Object::ObjTypes::Wall);
+
+			int i = ((int)obj.position.x - 30) / 60;
+			int j = (int)obj.position.y / 60 - 1;
+			objList[LayerType::Object][0].push_back(draw);
+		}
 		if (obj.type == "TILE")
 		{
 		SpriteObj* draw = new SpriteObj();
@@ -45,6 +59,7 @@ void PlayScene::Init()
 		draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
 		draw->SetOrigin(Origins::BC);
 		draw->SetPos(obj.position);
+		draw->SetObjType(Object::ObjTypes::Tile);
 		//draw->SetHitBox(obj.path);
 
 		int i = ((int)obj.position.x - 30) / 60;

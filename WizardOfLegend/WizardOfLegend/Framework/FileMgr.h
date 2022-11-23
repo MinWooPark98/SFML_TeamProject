@@ -8,7 +8,6 @@ private:
 	map<string, vector<ns::RectangleInfo>> hitBoxData; //find by path
 	map<string, vector<ObjectData>> mapInfo;
 	map<string, vector<EditorObjs>> editorObjs;
-	//cookieInfo[Jungle][Jump]
 public:
 	FileMgr();
 	~FileMgr();

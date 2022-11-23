@@ -59,7 +59,14 @@ void Object::Update(float dt)
 {
     if (gravityApply)
         direction.y += dt * gravity;
-    hitbox.setPosition(position);
+    if (!(objtype == ObjTypes::Wall))
+    {
+        hitbox.setPosition(position);
+    }
+    if (InputMgr::GetKeyDown(Keyboard::F1))
+    {
+        isDevMode = !isDevMode;
+    }
 }
 
 
@@ -75,6 +82,18 @@ void Object::SetHitBox(const FloatRect& rect, Color color)
 {
     hitbox.setSize({ rect.width,rect.height });
     hitbox.setFillColor(color);
+}
+
+void Object::SetHitBox(string path)
+{
+    auto hitData = FILE_MGR->GetHitBox(path);
+
+    for (auto& hit : hitData)
+    {        
+        SetHitBox(FloatRect(hit.pos.x, hit.pos.y, hit.size.x, hit.size.y));
+        hitbox.setPosition(GetPos()+ hit.pos);
+        Utils::SetOrigin(hitbox,Origins::BC);
+    }
 }
 
 void Object::Translate(const Vector2f& delta)

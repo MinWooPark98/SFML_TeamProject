@@ -26,7 +26,7 @@ void MapToolUiMgr::Init()
 	Vector2f WindowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 	paletteBook = new Button(this);
 	paletteBook->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/MapToolBook.png"), true);
-	paletteBook->SetPos({ WindowSize.x*0.5f,WindowSize.y *0.5f});
+	paletteBook->SetPos({ WindowSize.x,0});
 	paletteBook->SetOrigin(Origins::TC);
 	uiObjList[0].push_back(paletteBook);
 
@@ -49,15 +49,7 @@ void MapToolUiMgr::Init()
 	loadBtn->SetPos({ 50,120 });
 	uiObjList[0].push_back(loadBtn);
 
-	//exitBtn = new Button(this);
-	//exitBtn->SetClkColor(true);
-	//exitBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
-	//	75, Color::White, "EXIT", true);
-	//exitBtn->SetOrigin(Origins::TL);
-	//exitBtn->SetPos({ 50,190 });
-	//uiObjList[0].push_back(exitBtn);
-
-	selects = { "Tile","Wall","Object","Player","Enemy"};
+	selects = { "TILE","WALL","OBJECT","PLAYER","ENEMY"};
 	selectTextSize = { 40,40,40,40,40 };
 	selectPosY = { 54,54,54,54,54 };
 
@@ -94,7 +86,7 @@ void MapToolUiMgr::Init()
 			draw->SetData(obj);
 			uiObjList[1].push_back(draw);
 			type_selects[type.first].push_back(draw);
-			draw->SetActive(true);
+			draw->SetActive(false);
 		}
 	}
 
@@ -261,6 +253,7 @@ void MapToolUiMgr::Draw(RenderWindow& window)
 
 	if (!enabled)
 		return;
+
 	for (auto& uiObjs : uiObjList)
 	{
 		for (auto& obj : uiObjs.second)
