@@ -12,9 +12,9 @@ class Projectile;
 enum class Scenes
 {
 	Title,
+	Play,
 	MapTool,
 	SkillTool,
-	Play,
 };
 
 class UiMgr;

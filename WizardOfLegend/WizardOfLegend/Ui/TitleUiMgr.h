@@ -1,10 +1,19 @@
 #pragma once
 #include "UiMgr.h"
 
+class SpriteObj;
 class TitleUiMgr : public UiMgr
 {
 protected:
 	map<int, vector<Object*>> uiObjList;
+	Vector2i windowSize;
+	RectangleShape* backgrondShadow;
+	float backgroundShadowValue = 0.f;
+
+	SpriteObj* titleLogo;
+	bool logoMove;
+
+	float startTextActiveTimer = 0.f;
 
 public:
 	TitleUiMgr();

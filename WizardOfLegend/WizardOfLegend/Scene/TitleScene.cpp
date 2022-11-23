@@ -39,8 +39,6 @@ void TitleScene::Reset()
 void TitleScene::Update(float dt)
 {
 	Scene::Update(dt);
-	if (InputMgr::GetKeyDown(Keyboard::Escape))
-		exit(1);
 }
 
 void TitleScene::Draw(RenderWindow& window)
