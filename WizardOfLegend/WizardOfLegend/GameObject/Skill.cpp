@@ -55,7 +55,7 @@ void Skill::Do()
 	switch (subType)
 	{
 	case Skill::SubjectType::Player:
-		if(!(setting->attackType == AttackType::Multiple && isDoing))
+		if(!(isDoing&& (setting->attackType == AttackType::Multiple || setting->playerAction == Player::SkillAction::PBAoE)))
 			((Player*)subject)->Action();
 		switch (setting->attackShape)
 		{
@@ -191,9 +191,6 @@ void Skill::Update(float dt)
 	{
 		switch (setting->playerAction)
 		{
-		case Player::SkillAction::PBAoE:
-			// 플레이어 애니메이션 및 상태 종료
-			break;
 		case Player::SkillAction::JumpSlash:
 			// 플레이어 포지션 이동, 종료
 			break;

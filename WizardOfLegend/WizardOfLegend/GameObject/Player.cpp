@@ -8,7 +8,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.2f), dashTimer(0.f), currSkill(nullptr), skillToolMode(false)
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), currSkill(nullptr), skillToolMode(false)
 {
 }
 
@@ -107,18 +107,7 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideUp"));
 	{
-		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp" };
-		for (int i = 0; i < clipIds.size(); ++i)
-		{
-			AnimationEvent ev;
-			ev.clipId = clipIds[i];
-			ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
-			ev.onEvent = bind(&Player::SetState, this, States::Idle);
-			animator->AddEvent(ev);
-		}
-	}
-	{
-		vector<string> clipIds = { "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp" };
+		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp", "PBAoERight", "PBAoELeft", "PBAoEDown", "PBAoEUp" };
 		for (int i = 0; i < clipIds.size(); ++i)
 		{
 			AnimationEvent ev;
@@ -331,6 +320,17 @@ void Player::Action()
 		}
 		break;
 	case SkillAction::PBAoE:
+		{
+			auto angle = Utils::Angle(direction);
+			if (angle > -135.f && angle <= -45.f)
+				animator->Play("PBAoEUp");
+			else if (angle > -45.f && angle <= 45.f)
+				animator->Play("PBAoERight");
+			else if (angle > 45.f && angle <= 135.f)
+				animator->Play("PBAoEDown");
+			else
+				animator->Play("PBAoELeft");
+		}
 		// 애니메이션 재생
 		break;
 	case SkillAction::JumpSlash:
