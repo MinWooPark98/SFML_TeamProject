@@ -125,7 +125,10 @@ void Enemy::Update(float dt)
 	}
 
 	if (isActionStart && deleteTimer >= 0.f)
+	{
 		deleteTimer -= dt;
+		isShader = false;
+	}
 
 	spawnAnimation.Update(dt);
 }
@@ -245,12 +248,16 @@ void Enemy::Draw(RenderWindow& window)
 	{
 		Object::Draw(window);
 
-
-		if (deleteTimer >= 0.f)
+		if (isShader)
 		{
 			if (spawn->GetSprite().getScale().x >= 0.f)
 				window.draw(spawn->GetSprite(), &cardShader);
 			else
+				spawn->Draw(window);
+		}
+		else
+		{
+			if (deleteTimer >= 0.f)
 				spawn->Draw(window);
 		}
 	}

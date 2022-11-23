@@ -53,6 +53,7 @@ protected:
 	Texture cardTexColorTable;
 	int cardPaletteIndex;
 	int cardPaletteSize;
+	bool isShader = true;
 
 
 	Animator animation;
