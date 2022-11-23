@@ -11,10 +11,21 @@ using namespace sf;
 
 class Object
 {
+public:
+    enum class ObjTypes
+    {
+        Tile,
+        Wall,
+        Player,
+        Enemy,
+        ETC,
+    };
+
 protected:
     int id;
     string name;
     bool enabled;
+    ObjTypes objtype;
 
     Vector2f position;
     float rotation;
@@ -27,6 +38,7 @@ protected:
     static int objCount;
 
     RectangleShape hitbox;
+    Vector2f initPos;
     bool isDevMode;
 
     bool isUi;
@@ -73,6 +85,10 @@ public:
     virtual bool GetDevMode() const { return isDevMode; }
     virtual void SwitchDevMode() { isDevMode = !isDevMode; }
     virtual void SetHitBox(const FloatRect& rect, Color color = Color::Red);
+    virtual void SetHitBox(string path);
     RectangleShape& GetHitBox() { return hitbox; }
     FloatRect GetHitBounds() const { return hitbox.getGlobalBounds(); }
+
+    void SetObjType(ObjTypes type) { objtype = type; }
+    ObjTypes GetObjType() { return objtype; }
 };

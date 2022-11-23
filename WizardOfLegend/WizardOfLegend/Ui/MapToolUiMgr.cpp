@@ -26,7 +26,7 @@ void MapToolUiMgr::Init()
 	Vector2f WindowSize = (Vector2f)FRAMEWORK->GetWindowSize();
 	paletteBook = new Button(this);
 	paletteBook->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/MapToolBook.png"), true);
-	paletteBook->SetPos({ WindowSize.x*0.5f,WindowSize.y *0.5f});
+	paletteBook->SetPos({ WindowSize.x,0});
 	paletteBook->SetOrigin(Origins::TC);
 	uiObjList[0].push_back(paletteBook);
 

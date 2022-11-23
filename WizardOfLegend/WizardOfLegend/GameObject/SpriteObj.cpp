@@ -20,8 +20,8 @@ void SpriteObj::Update(float dt)
 
 void SpriteObj::Draw(RenderWindow& window)
 {
-    Object::Draw(window);
     window.draw(sprite);
+    Object::Draw(window);
 }
 
 void SpriteObj::SetTexture(const Texture& tex)

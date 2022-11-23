@@ -36,21 +36,6 @@ void MapToolScene::Reset()
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
 	nowType = LayerType::Object;
-
-	//DrawObj* draw = new DrawObj(uiMgr);
-	//auto editorObjs = FILE_MGR->GetEditorObjs();
-	//auto playerData = editorObjs["Player"];
-	//draw->SetType("Player");
-	//draw->SetPath(playerData[0].texPath);
-	//draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
-	//draw->SetOrigin(Origins::BC);
-	//draw->SetMove(false);
-	//draw->SetPos(greeds[0][0]->GetPos() + Vector2f{ 30.f, 60.f });
-	//draw->SetData(playerData[0]);
-	//objList[nowType][0].push_back(draw);
-	//greedObjs[nowType][0][0] = draw;
-
-	//player = draw;
 }
 
 void MapToolScene::Update(float dt)
@@ -58,6 +43,16 @@ void MapToolScene::Update(float dt)
 	Scene::Update(dt);
 	//uiMgr->Update(dt);
 
+	if (InputMgr::GetKeyDown(Keyboard::Key::F5))
+	{
+		for (auto& objs : greedObjs[LayerType::Object])
+		{
+			for (auto it = objs.second.begin(); it != objs.second.end();)
+			{
+				it->second->SwitchDevMode();
+			}
+		}
+	}
 	auto uimgr = ((MapToolUiMgr*)uiMgr);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
 	{
@@ -76,27 +71,30 @@ void MapToolScene::Update(float dt)
 
 		return;
 	}
-
-	if (InputMgr::GetMouseButton(Mouse::Right))
+	if (!uimgr->LoadActive())
 	{
-		uimgr->DeleteDraw();
-		return;
+		if (InputMgr::GetMouseButton(Mouse::Right))
+		{
+			uimgr->DeleteDraw();
+			return;
+		}
+		if (InputMgr::GetMouseWheelMoved() < 0)
+		{
+			Vector2f size = worldView.getSize();
+			worldView.setSize(size.x * 1.06f, size.y * 1.06f);
+		}
+		if (InputMgr::GetMouseWheelMoved() > 0)
+		{
+			Vector2f size = worldView.getSize();
+			worldView.setSize(size.x * 0.96f, size.y * 0.96f);
+		}
+		if (InputMgr::GetMouseButton(Mouse::Middle))
+		{
+			Vector2f pos = InputMgr::GetMousePosDisplacement();
+			worldView.setCenter(worldView.getCenter() + pos);
+		}
 	}
-	if (InputMgr::GetMouseWheelMoved() < 0)
-	{
-		Vector2f size = worldView.getSize();
-		worldView.setSize(size.x * 1.06f, size.y * 1.06f);
-	}
-	if (InputMgr::GetMouseWheelMoved() > 0)
-	{
-		Vector2f size = worldView.getSize();
-		worldView.setSize(size.x * 0.96f, size.y * 0.96f);
-	}
-	if (InputMgr::GetMouseButton(Mouse::Middle))
-	{
-		Vector2f pos = InputMgr::GetMousePosDisplacement();
-		worldView.setCenter(worldView.getCenter() + pos);
-	}
+	
 	for (int i = 0; i < HEIGHTCNT; i++)
 	{
 		for (int j = 0; j < WIDTHCNT; j++)
@@ -153,6 +151,7 @@ void MapToolScene::Update(float dt)
 				draw->SetMove(false);
 				draw->SetPos(greeds[i][j]->GetPos() + Vector2f{ 8.f, 16.f });
 				draw->SetData(nowDraw->GetData());
+
 				objList[nowType][i].push_back(draw);
 				greedObjs[nowType][i][j] = draw;
 
