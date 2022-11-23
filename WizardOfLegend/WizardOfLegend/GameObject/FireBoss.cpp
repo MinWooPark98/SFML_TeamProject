@@ -54,7 +54,7 @@ void FireBoss::Init()
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());
 	RandomPatternSet(AttackType::None);
-	//attackType = AttackType::DragonAttack;
+	attackType = AttackType::Meteor;
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -313,14 +313,14 @@ void FireBoss::UpdateAttack(float dt)
 		//case FireBoss::AttackType::DragonAttack:
 		//	UpdateDragonAttack(dt);
 		//	break;
-		//case FireBoss::AttackType::Meteor:
-		//	SetState(BossStates::Attack);
-			//break;
+		case FireBoss::AttackType::Meteor:
+			UpdateMeteor(dt);
+			break;
 		}
 
 		if (patternCount == 0 && attackDelay <= 0.f)
 		{
-			cout << "pattern reset" << endl;
+			std::cout << "pattern reset" << endl;
 			SetState(BossStates::Idle);
 			RandomPatternSet(AttackType::Meteor); // 처음부터 메테오 패턴 안 나오게
 			thirdAttackCount = 3;
@@ -487,20 +487,63 @@ void FireBoss::UpdateThrowingKnife(float dt)
 //	}
 //}
 //
-//void FireBoss::UpdateMeteor(float dt)
-//{
-//	if (nextPatternDelay <= 0.f)
-//	{
-//		SetState(BossStates::None);
-//		SetState(BossStates::Attack);
-//
-//		if (patternDelay <= 0.f)
-//		{
-//			RandomPatternSet(AttackType::Meteor);
-//			PatternOptionSet();
-//
-//			patternCount--;
-//			SetState(BossStates::Move);
-//		}
-//	}
-//}
+void FireBoss::UpdateMeteor(float dt)
+{
+	if (nextPatternDelay <= 0.f)
+	{
+		SetState(BossStates::None);
+		SetState(BossStates::Attack);
+
+		//if (patternDelay <= 0.f)
+		//{
+		//	RandomPatternSet(AttackType::Meteor);
+		//	PatternOptionSet();
+
+		//	patternCount--;
+		//	SetState(BossStates::Move);
+		//}
+	}
+
+	// 움직임
+	auto& pos = player->GetPos();
+	direction = Utils::Normalize(pos - position);
+	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
+		lastDir = direction;
+
+	auto mapDistance = Utils::Distance(pos, GetPos());
+	if (mapDistance >= Utils::Distance(pos, GetPos()) * 0.5f)
+		jumpDistance = Utils::Distance(pos, GetPos());
+	else
+	{
+		jumpDistance = 0.f;
+		direction = { 0.f, 0.f };
+	}
+
+	Vector2f moving = direction * jumpDistance * dt / jumpDuration;
+	float distance = Utils::Magnitude(moving);
+	if (jumpTimer < jumpDuration * 0.5f && jumpTimer + dt >= jumpDuration * 0.5f)
+	{
+		if (player->GetPos().x <= GetPos().x)
+			animation.Play("FireBossLeftFly");
+		else
+			animation.Play("FireBossRightFly");
+	}
+	Translate(moving);
+	jumpTimer += dt;
+	auto jumpHeightRatio = (jumpDuration * 0.5f - fabs(jumpTimer - jumpDuration * 0.5f)) / (jumpDuration * 0.5f);
+
+	jumpPosY = GetPos().y * jumpHeightRatio;
+
+	std::cout << GetPos().y << endl;
+	SetPos({ GetPos().x, jumpPosY });
+
+	if (jumpTimer >= jumpDuration)
+	{
+		jumpTimer = 0.f;
+
+		if (player->GetPos().x <= GetPos().x)
+			animation.Play("FireBossLeftStomp");
+		else
+			animation.Play("FireBossRightStomp");
+	}
+}

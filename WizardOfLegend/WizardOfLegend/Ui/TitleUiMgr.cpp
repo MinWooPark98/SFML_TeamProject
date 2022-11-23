@@ -32,7 +32,7 @@ void TitleUiMgr::Init()
 	backgrondShadow->setSize({ 2000, 1500 });
 	backgrondShadow->setFillColor({ 0, 0, 0, 0 });
 
-	vector<string> sceneNames = { "Play", "MapTool", "SkillTool", "Exit", "Press Enter To Start" };
+	vector<string> sceneNames = { "Play", "MapTool", "SkillTool", "Exit", "Press Any Key To Start" };
 	for (int i = 0; i < 5; ++i)
 	{
 		Button2* button = new Button2();
@@ -111,10 +111,15 @@ void TitleUiMgr::Update(float dt)
 		}
 	}
 
-	if (InputMgr::GetKeyDown(Keyboard::Key::Enter))
+	if (logoMove)
+	{
+		if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
+			logoMove = false;
+	}
+	else if (!logoMove && (!InputMgr::GetKeyDownList().empty() || !InputMgr::GetMouseDownList().empty()))
+	{
 		logoMove = true;
-	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
-		logoMove = false;
+	}
 
 	if (logoMove && titleLogo->GetPos().y > windowSize.y * 0.3f)
 	{

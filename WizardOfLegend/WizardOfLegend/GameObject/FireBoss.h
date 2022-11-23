@@ -40,6 +40,11 @@ protected:
 
 	vector<Skill*> skills;
 
+	float jumpDuration = 0.75f;
+	float jumpTimer = 0.f;
+	float jumpDistance = 0.f;
+	float jumpPosY = 0.f;
+
 public:
 	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};
 	virtual ~FireBoss() { Release(); };
