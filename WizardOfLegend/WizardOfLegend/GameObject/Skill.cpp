@@ -55,7 +55,7 @@ void Skill::Do()
 	switch (subType)
 	{
 	case Skill::SubjectType::Player:
-		if(!(isDoing&& (setting->attackType == AttackType::Multiple || setting->playerAction == Player::SkillAction::PBAoE)))
+		if(!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
 			((Player*)subject)->Action();
 		switch (setting->attackShape)
 		{

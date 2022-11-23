@@ -115,7 +115,7 @@ void SelectOption::Init()
 				OptionButtons* buttons = new OptionButtons();
 				buttons->SetActive(false);
 				buttons->SetPos(button2->GetPos() + Vector2f(0.f, buttonHeight));
-				vector<string> btnStr = { "NormalSpell", "PBAoE", "JumpSlash", "Dash"};
+				vector<string> btnStr = { "NormalSpell", "Dash", "PBAoE", "JumpSlash", "GroundSlam" };
 				for (int j = 0; j < btnStr.size(); ++j)
 				{
 					Button2* newButton = new Button2();

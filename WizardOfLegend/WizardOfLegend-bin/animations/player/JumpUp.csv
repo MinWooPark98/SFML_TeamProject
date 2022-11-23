@@ -1,0 +1,6 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+JumpUp,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WizardJumpUp0.png,0,0,26,28,13,14,0,0
+graphics/WizardJumpUp1.png,0,0,22,38,11,19,0,0

@@ -1,0 +1,12 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+JumpSlamDown,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WizardGroundSlamDown2.png,0,0,48,48,24,24,0,0
+graphics/WizardGroundSlamDown3.png,0,0,48,48,24,24,0,0
+graphics/WizardGroundSlamDown4.png,0,0,48,48,24,24,0,0
+graphics/WizardGroundSlamDown5.png,0,0,48,48,24,24,0,0
+graphics/WizardGroundSlamDown6.png,0,0,48,48,24,24,0,0
+graphics/WizardGroundSlamDown7.png,0,0,48,48,24,24,0,0
+graphics/WizardGroundSlamDown8.png,0,0,48,48,24,24,0,0
+graphics/WizardGroundSlamDown9.png,0,0,48,48,24,24,0,0
