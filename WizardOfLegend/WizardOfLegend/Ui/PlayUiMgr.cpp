@@ -48,6 +48,12 @@ void PlayUiMgr::Init()
 
 	uiObjList[0].push_back(HpBarHurt);
 	uiObjList[0].push_back(HpBarFill);
+
+	OverdriveActiveBar = new SpriteObj();
+	OverdriveActiveBar->SetTexture(*RESOURCE_MGR->GetTexture("graphics/OverdriveActiveBarFill.png"));
+	OverdriveActiveBar->SetPos({ windowSize.x * 0.074f, windowSize.y * 0.11f });
+	OverdriveActiveBar->SetSize({ 0, OverdriveActiveBar->GetSize().y });
+	uiObjList[0].push_back(OverdriveActiveBar);
 }
 
 void PlayUiMgr::Release()
@@ -83,8 +89,21 @@ void PlayUiMgr::Update(float dt)
 	for (auto& uiObjs : uiObjList)
 	{
 		for (auto& obj : uiObjs.second)
-			obj->Update(dt);
+		{
+			if (obj->GetActive())
+				obj->Update(dt);
+		}
 	}
+
+	if (InputMgr::GetKeyDown(Keyboard::Key::A))
+		testOverdrive = true;
+	if (InputMgr::GetKeyDown(Keyboard::Key::S))
+		testOverdrive = false;
+
+	if (testOverdrive && overdriveBarSize < maxOverdriveBarSize)
+		OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 1000), OverdriveActiveBar->GetSize().y });
+	else if (!testOverdrive && overdriveBarSize > 0)
+		OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 1000), OverdriveActiveBar->GetSize().y });
 }
 
 void PlayUiMgr::Draw(RenderWindow& window)

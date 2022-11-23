@@ -10,6 +10,12 @@ protected:
 
 	SpriteObj* HpBarFill;
 	SpriteObj* HpBarHurt;
+	SpriteObj* OverdriveActiveBar;
+
+	float maxOverdriveBarSize = 48.f;
+	float overdriveBarSize = 0.f;
+
+	bool testOverdrive = false;
 
 public:
 	PlayUiMgr();
