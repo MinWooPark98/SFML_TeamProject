@@ -12,14 +12,20 @@ public:
 		None,
 		Idle,
 		Run,
+		Dash,
 		Slide,
-		Skill,
+		NormalSpell,
+		PBAoE,
+		JumpSlash,
+		GroundSlam,
 	};
 	enum class SkillAction
 	{
 		NormalSpell,
+		Dash,
 		PBAoE,
 		JumpSlash,
+		GroundSlam,
 	};
 
 protected:
@@ -36,6 +42,12 @@ protected:
 	float runningSpeed;
 	float accelTime;
 	float accelTimer;
+	float dashDuration;
+	float dashTimer;
+	float jumpDuration;
+	float jumpTimer;
+	float jumpDistance;
+	float jumpOriginY;
 
 	Vector2f lastDir;
 	bool isBackHand;	// true일 시 Backhand, false일 시 Forehand
@@ -57,7 +69,8 @@ public:
 
 	void UpdateIdle(float dt);
 	void UpdateRun(float dt);
-	void UpdateSkill(float dt);
+	void UpdateDash(float dt);
+	void UpdateJumpSlash(float dt);
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }

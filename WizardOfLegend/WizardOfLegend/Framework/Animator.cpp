@@ -138,6 +138,11 @@ void Animator::ClearPlayQueue()
     }
 }
 
+void Animator::ClearClips()
+{
+    clips.clear();
+}
+
 float Animator::GetSpeed() const
 {
     return speed;

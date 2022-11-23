@@ -30,6 +30,8 @@ void PlayScene::Init()
 	objList[LayerType::Object][5].push_back(player);
 	auto& skills = player->GetSkills();
 	skills[0]->SetSkill("FireBall");
+	skills[1]->SetSkill("Dragon");
+	skills[2]->SetSkill("FireDash");
 	skills[4]->SetSkill("DragonArc");
 	skills[5]->SetSkill("FireFull");
 
@@ -140,7 +142,7 @@ void PlayScene::Enter()
 	Scene::Enter();
 	Vector2f size = (Vector2f)FRAMEWORK->GetWindowSize();
 	worldView.setSize(size * 0.25f);
-	worldView.setCenter(size * 0.25f);
+	worldView.setCenter(size * 0.125f);
 
 	uiView.setSize(size * 0.25f);
 	uiView.setCenter(size * 0.125f);

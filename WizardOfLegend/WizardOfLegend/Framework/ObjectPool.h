@@ -13,7 +13,7 @@ public:
 	ObjectPool();
 	~ObjectPool();
 
-	void Init(int cacheSize = 5);
+	void Init(int cacheSize = 20);
 	void Release();
 	void Reset();
 	void Update(float dt);
@@ -126,7 +126,6 @@ inline T* ObjectPool<T>::Get()
 	auto obj = unuse.front();
 	unuse.pop_front();
 	use.push_back(obj);
-
 	obj->Reset();
 	return obj;
 }

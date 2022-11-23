@@ -21,6 +21,9 @@ void Projectile::Init()
 void Projectile::Reset()
 {
 	SpriteObj::Reset();
+	if (animator != nullptr)
+		animator->ClearClips();
+	clipName.clear();
 	isMoving = false;
 	movingTimer = 0.f;
 	atkTimer = 0.f;

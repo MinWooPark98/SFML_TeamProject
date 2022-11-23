@@ -8,7 +8,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), currSkill(nullptr), skillToolMode(false)
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), currSkill(nullptr), skillToolMode(false)
 {
 }
 
@@ -18,40 +18,94 @@ Player::~Player()
 
 void Player::SetState(States state)
 {
-	if (currState == state)
+	if (state != States::NormalSpell && currState == state)
 		return;
 	switch (state)
 	{
-	case Player::States::Idle:
+	case States::Idle:
 		{
 			auto angle = Utils::Angle(lastDir);
-			if (angle > -135.f && angle <= -45.f)
+			if (angle > -135.f && angle < -45.f)
 				animator->Play("IdleUp");
-			else if (angle > -45.f && angle <= 45.f)
-				animator->Play("IdleRight");
-			else if (angle > 45.f && angle <= 135.f)
+			else if (angle > 45.f && angle < 135.f)
 				animator->Play("IdleDown");
+			else if (angle >= -45.f && angle <= 45.f)
+				animator->Play("IdleRight");
 			else
 				animator->Play("IdleLeft");
-			break;
 		}
-		/*if (Utils::EqualFloat(lastDir.x, 0.f))
-			lastDir.y > 0.f ? animator->Play("IdleDown") : animator->Play("IdleUp");
-		else
-			lastDir.x > 0.f ? animator->Play("IdleRight") : animator->Play("IdleLeft"); 
-		break;*/
-	case Player::States::Run:
+		break;
+	case States::Run:
 		accelTimer = 0.f;
 		if (Utils::EqualFloat(direction.x, 0.f))
 			direction.y > 0.f ? animator->Play("RunDown") : animator->Play("RunUp");
 		else
 			direction.x > 0.f ? animator->Play("RunRight") : animator->Play("RunLeft");
 		break;
-	case Player::States::Slide:
+	case States::Dash:
+		{
+			auto angle = Utils::Angle(lastDir);
+			if (angle > -135.f && angle < -45.f)
+				animator->Play("DashUp");
+			else if (angle > 45.f && angle < 135.f)
+				animator->Play("DashDown");
+			else if (angle >= -45.f && angle <= 45.f)
+				animator->Play("DashRight");
+			else
+				animator->Play("DashLeft");
+		}
+		break;
+	case States::Slide:
 		if (Utils::EqualFloat(lastDir.x, 0.f))
 			lastDir.y > 0.f ? animator->Play("SlideDown") : animator->Play("SlideUp");
 		else
 			lastDir.x > 0.f ? animator->Play("SlideRight") : animator->Play("SlideLeft");
+		break;
+	case States::NormalSpell:
+		{
+			auto angle = Utils::Angle(direction);
+			if (angle > -135.f && angle <= -45.f)
+				isBackHand ? animator->Play("BackHandUp") : animator->Play("ForeHandUp");
+			else if (angle > 45.f && angle <= 135.f)
+				isBackHand ? animator->Play("BackHandDown") : animator->Play("ForeHandDown");
+			else if (angle > -45.f && angle <= 45.f)
+				isBackHand ? animator->Play("BackHandRight") : animator->Play("ForeHandRight");
+			else
+				isBackHand ? animator->Play("BackHandLeft") : animator->Play("ForeHandLeft");
+			isBackHand = !isBackHand;
+		}
+		break;
+	case States::PBAoE:
+		{
+			auto angle = Utils::Angle(direction);
+			if (angle > -135.f && angle <= -45.f)
+				animator->Play("PBAoEUp");
+			else if (angle > 45.f && angle <= 135.f)
+				animator->Play("PBAoEDown");
+			else if (angle > -45.f && angle <= 45.f)
+				animator->Play("PBAoERight");
+			else
+				animator->Play("PBAoELeft");
+		}
+		break;
+	case States::JumpSlash:
+		{
+			auto angle = Utils::Angle(lastDir);
+			if (angle > -135.f && angle <= -45.f)
+				animator->Play("JumpUp");
+			else if (angle > 45.f && angle <= 135.f)
+				animator->Play("JumpDown");
+			else if (angle > -45.f && angle <= 45.f)
+				Utils::EqualFloat(jumpDistance, 0.f) ? animator->Play("JumpRight") : animator->Play("JumpRightAlt");
+			else
+				Utils::EqualFloat(jumpDistance, 0.f) ? animator->Play("JumpLeft") : animator->Play("JumpLeftAlt");
+		}
+		break;
+	case States::GroundSlam:
+		if (currState == States::JumpSlash)
+			lastDir.y >= 0.f ? animator->Play("JumpSlamDown") : animator->Play("JumpSlamUp");
+		else
+			lastDir.y >= 0.f ? animator->Play("GroundSlamDown") : animator->Play("GroundSlamUp");
 		break;
 	default:
 		break;
@@ -85,23 +139,30 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("RunRight"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("RunLeft"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("RunUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("DashDown"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("DashRight"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("DashLeft"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("DashUp"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideRight"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideLeft"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SlideUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpRight"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpRightAlt"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpLeft"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpLeftAlt"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpDown"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FallRight"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FallLeft"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FallDown"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FallUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamDown"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamDown"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamUp"));
 	{
-		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp" };
-		for (int i = 0; i < clipIds.size(); ++i)
-		{
-			AnimationEvent ev;
-			ev.clipId = clipIds[i];
-			ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
-			ev.onEvent = bind(&Player::SetState, this, States::Idle);
-			animator->AddEvent(ev);
-		}
-	}
-	{
-		vector<string> clipIds = { "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp" };
+		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp", "PBAoERight", "PBAoELeft", "PBAoEDown", "PBAoEUp", "GroundSlamDown", "GroundSlamUp", "JumpSlamDown", "JumpSlamUp" };
 		for (int i = 0; i < clipIds.size(); ++i)
 		{
 			AnimationEvent ev;
@@ -133,7 +194,8 @@ void Player::Update(float dt)
 	animator->Update(dt);
 
 	auto& windowSize = FRAMEWORK->GetWindowSize();
-	if (currState != States::Skill)
+	
+	if (currState == States::Idle || currState == States::Run)
 	{
 		direction.x = 0.f;
 		direction.y = 0.f;
@@ -145,10 +207,7 @@ void Player::Update(float dt)
 			direction.y += Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W) ? -1 : 0;
 		}
 		direction = Utils::Normalize(direction);
-	}
-	
-	if (currState == States::Idle || currState == States::Run)
-	{
+
 		if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
 		{
 			for (auto mouseDown : InputMgr::GetMouseDownList())
@@ -180,6 +239,7 @@ void Player::Update(float dt)
 				case Keyboard::Space:
 					SetCurrSkill(skills[2]);
 					skills[2]->Do();
+					SetState(States::Dash);
 					break;
 				case Keyboard::Q:
 					SetCurrSkill(skills[3]);
@@ -208,8 +268,11 @@ void Player::Update(float dt)
 	case Player::States::Run:
 		UpdateRun(dt);
 		break;
-	case Player::States::Skill:
-		UpdateSkill(dt);
+	case Player::States::Dash:
+		UpdateDash(dt);
+		break;
+	case Player::States::JumpSlash:
+		UpdateJumpSlash(dt);
 		break;
 	default:
 		break;
@@ -217,6 +280,8 @@ void Player::Update(float dt)
 
 	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
 		lastDir = direction;
+	/*else if (!Utils::EqualFloat(lastDir.x, 0.f))
+		lastDir = Utils::Normalize({ lastDir.x, 0.f });*/
 
 	for (auto skill : skills)
 	{
@@ -262,41 +327,86 @@ void Player::UpdateRun(float dt)
 
 	if (Utils::EqualFloat(direction.x, 0.f))
 		direction.y > 0.f ? animator->Play("RunDown") : animator->Play("RunUp");
-	else
+	else if(Utils::EqualFloat(lastDir.x, 0.f))
 		direction.x > 0.f ? animator->Play("RunRight") : animator->Play("RunLeft");
 }
 
-void Player::UpdateSkill(float dt)
+void Player::UpdateDash(float dt)
 {
+	dashTimer += dt;
+	Translate(lastDir * runningSpeed * dt);
+	if (dashTimer >= dashDuration)
+	{
+		dashTimer = 0.f;
+		SetState(States::Slide);
+	}
+}
 
+void Player::UpdateJumpSlash(float dt)
+{
+	Vector2f moving = direction * jumpDistance * dt / jumpDuration;
+	float distance = Utils::Magnitude(moving);
+	if (jumpTimer < jumpDuration * 0.5f && jumpTimer + dt >= jumpDuration * 0.5f)
+	{
+		auto angle = Utils::Angle(lastDir);
+		if (angle > -135.f && angle <= -45.f)
+			animator->Play("FallUp");
+		else if (angle > -45.f && angle <= 45.f)
+			animator->Play("FallRight");
+		else if (angle > 45.f && angle <= 135.f)
+			animator->Play("FallDown");
+		else
+			animator->Play("FallLeft");
+	}
+	Translate(moving);
+	jumpTimer += dt;
+	auto jumpHeightRatio = (jumpDuration * 0.5f - fabs(jumpTimer - jumpDuration * 0.5f)) / (jumpDuration * 0.5f);
+	jumpOriginY = 80.f * jumpHeightRatio;
+	auto& currOrigin = animator->GetFrame().origin;
+	sprite.setOrigin({ currOrigin.x, currOrigin.y + jumpOriginY});
+	if (jumpTimer >= jumpDuration)
+	{
+		jumpTimer = 0.f;
+		SetState(States::GroundSlam);
+	}
 }
 
 void Player::Action()
 {
-	SetState(States::Skill);
-	auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
-	direction = mousePos - position;
-	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
-		lastDir = direction;
-	auto angle = Utils::Angle(direction);
-	switch (currSkill->GetSetting()->playerAction)
+	SkillAction action = currSkill->GetSetting()->playerAction;
+	if (action != SkillAction::Dash)
 	{
-	case Player::SkillAction::NormalSpell:
-		if (angle > -135.f && angle <= -45.f)
-			isBackHand ? animator->Play("BackHandUp") : animator->Play("ForeHandUp");
-		else if (angle > -45.f && angle <= 45.f)
-			isBackHand ? animator->Play("BackHandRight") : animator->Play("ForeHandRight");
-		else if (angle > 45.f && angle <= 135.f)
-			isBackHand ? animator->Play("BackHandDown") : animator->Play("ForeHandDown");
-		else
-			isBackHand ? animator->Play("BackHandLeft") : animator->Play("ForeHandLeft");
-		isBackHand = !isBackHand;
+		auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
+		direction = Utils::Normalize(mousePos - position);
+		if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
+			lastDir = direction;
+		if (action == SkillAction::JumpSlash)
+		{
+			auto mouseDistance = Utils::Distance(mousePos, position);
+			if (mouseDistance >= currSkill->GetSetting()->distance * 0.5f)
+				jumpDistance = currSkill->GetSetting()->distance;
+			else
+			{
+				jumpDistance = 0.f;
+				direction = { 0.f, 0.f };
+			}
+		}
+	}
+	switch (action)
+	{
+	case SkillAction::NormalSpell:
+		SetState(States::NormalSpell);
 		break;
-	case Player::SkillAction::PBAoE:
-		// 애니메이션 재생
+	case SkillAction::PBAoE:
+		SetState(States::PBAoE);
 		break;
-	case Player::SkillAction::JumpSlash:
-		// 애니메이션 재생 및 이동
+	case SkillAction::JumpSlash:
+		SetState(States::JumpSlash);
+		break;
+	case SkillAction::GroundSlam:
+		SetState(States::GroundSlam);
+		break;
+	default:
 		break;
 	}
 }

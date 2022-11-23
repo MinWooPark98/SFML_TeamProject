@@ -46,6 +46,8 @@ public:
 	bool IsPlaying() const;
 	void ClearPlayQueue();
 
+	void ClearClips();
+
 	float GetSpeed() const;
 	void SetSpeed(float s);
 };

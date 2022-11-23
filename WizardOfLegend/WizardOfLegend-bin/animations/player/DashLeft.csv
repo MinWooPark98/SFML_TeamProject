@@ -1,0 +1,6 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+DashLeft,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WizardDashRight0.png,0,0,48,48,24,24,1,0
+graphics/WizardDashRight1.png,0,0,48,48,24,24,1,0
