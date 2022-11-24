@@ -11,6 +11,7 @@ protected:
 	SpriteObj* HpBarFill;
 	SpriteObj* HpBarHurt;
 	SpriteObj* OverdriveActiveBar;
+	SpriteObj* playerStatusBarPortrait;
 
 	float maxOverdriveBarSize = 48.f;
 	float overdriveBarSize = 0.f;

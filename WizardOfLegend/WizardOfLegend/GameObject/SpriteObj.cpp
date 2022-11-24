@@ -20,7 +20,7 @@ void SpriteObj::Update(float dt)
 
 void SpriteObj::Draw(RenderWindow& window)
 {
-    window.draw(sprite);
+    window.draw(sprite, &spriteShader);
     Object::Draw(window);
 }
 

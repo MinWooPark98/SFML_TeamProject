@@ -1,6 +1,6 @@
 #include "FireBoss.h"
 #include "Skill.h"
-
+#include "../Framework/Framework.h"
 void FireBoss::Init()
 {
 	Release();
@@ -54,7 +54,7 @@ void FireBoss::Init()
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());
 	RandomPatternSet(AttackType::None);
-	attackType = AttackType::Meteor;
+	//attackType = AttackType::Meteor;
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -489,10 +489,12 @@ void FireBoss::UpdateThrowingKnife(float dt)
 //
 void FireBoss::UpdateMeteor(float dt)
 {
-	if (nextPatternDelay <= 0.f)
-	{
-		SetState(BossStates::None);
-		SetState(BossStates::Attack);
+	//auto windowSize = FRAMEWORK->GetWindowSize() / 4;
+
+	//if (nextPatternDelay <= 0.f)
+	//{
+	//	SetState(BossStates::None);
+	//	SetState(BossStates::Attack);
 
 		//if (patternDelay <= 0.f)
 		//{
@@ -502,48 +504,40 @@ void FireBoss::UpdateMeteor(float dt)
 		//	patternCount--;
 		//	SetState(BossStates::Move);
 		//}
-	}
+	//}
 
 	// ¿òÁ÷ÀÓ
-	auto& pos = player->GetPos();
-	direction = Utils::Normalize(pos - position);
-	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
-		lastDir = direction;
+	//Vector2f pos = (Vector2f)windowSize;
+	//Vector2f pos = player->GetPos();
 
-	auto mapDistance = Utils::Distance(pos, GetPos());
-	if (mapDistance >= Utils::Distance(pos, GetPos()) * 0.5f)
-		jumpDistance = Utils::Distance(pos, GetPos());
-	else
-	{
-		jumpDistance = 0.f;
-		direction = { 0.f, 0.f };
-	}
+	//direction = Utils::Normalize(pos - lastPos);
 
-	Vector2f moving = direction * jumpDistance * dt / jumpDuration;
-	float distance = Utils::Magnitude(moving);
-	if (jumpTimer < jumpDuration * 0.5f && jumpTimer + dt >= jumpDuration * 0.5f)
-	{
-		if (player->GetPos().x <= GetPos().x)
-			animation.Play("FireBossLeftFly");
-		else
-			animation.Play("FireBossRightFly");
-	}
-	Translate(moving);
-	jumpTimer += dt;
-	auto jumpHeightRatio = (jumpDuration * 0.5f - fabs(jumpTimer - jumpDuration * 0.5f)) / (jumpDuration * 0.5f);
+	//if (pos.x <= GetPos().x)
+	//	direction.x = 0.f;
 
-	jumpPosY = GetPos().y * jumpHeightRatio;
+	//jumpDistance = Utils::Distance(pos, lastPos);
 
-	std::cout << GetPos().y << endl;
-	SetPos({ GetPos().x, jumpPosY });
+	//Vector2f moving = direction * jumpDistance * dt / jumpDuration;
+	//if (jumpTimer < jumpDuration * 0.5f && jumpTimer + dt >= jumpDuration * 0.5f)
+	//{
+	//	if (player->GetPos().x <= GetPos().x)
+	//		animation.Play("FireBossLeftFly");
+	//	else
+	//		animation.Play("FireBossRightFly");
+	//}
 
-	if (jumpTimer >= jumpDuration)
-	{
-		jumpTimer = 0.f;
+	//float addDistance = (((pos.y - lastPos.y) * 0.5f) + 80.f) * (dt / (jumpDuration * 0.5));
 
-		if (player->GetPos().x <= GetPos().x)
-			animation.Play("FireBossLeftStomp");
-		else
-			animation.Play("FireBossRightStomp");
-	}
+	//jumpTimer >= jumpDuration * 0.5f ? Translate({ moving.x, moving.y - addDistance }) : Translate({ moving.x, moving.y + addDistance });
+	//jumpTimer += dt;
+
+	//if (jumpTimer >= jumpDuration)
+	//{
+	//	jumpTimer = 0.f;
+	//	cout << "stomp" << endl;
+	//	if (player->GetPos().x <= GetPos().x)
+	//		animation.Play("FireBossLeftStomp");
+	//	else
+	//		animation.Play("FireBossRightStomp");
+	//}
 }

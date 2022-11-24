@@ -7,6 +7,12 @@ class SpriteObj : public Object
 protected:
     Sprite sprite;
 
+    Shader spriteShader;
+    Texture texColorTable;
+    int spritePaletteIndex;
+    int spritePaletteSize;
+    Texture spriteColorTable;
+
 public:
     SpriteObj();
     virtual ~SpriteObj();
@@ -41,5 +47,23 @@ public:
 
     FloatRect GetGlobalBounds() const;
     FloatRect GetLocalBounds() const;
+
+    void SetSpritePaletteIndex(int index) { spritePaletteIndex = index; };
+    void SetSpritePaletteSize(int size) { spritePaletteSize = size; };
+    void SetSpriteColorTable(string table) { spriteColorTable.loadFromFile(table); };
+    void SetSpriteColor(int index)
+    {
+        spritePaletteIndex = (spritePaletteIndex - index) % spritePaletteSize;
+        spriteShader.setUniform("colorTable", spriteColorTable);
+        spriteShader.setUniform("paletteIndex", (float)spritePaletteIndex / spritePaletteSize);
+    }
+    void SetSpritePalette(int index, int size, string table)
+    {
+        SetSpritePaletteIndex(index);
+        SetSpritePaletteSize(size);
+        SetSpriteColorTable(table);
+    };
+
+    void SetSpriteShader() { spriteShader.loadFromFile("shaders/palette.frag", Shader::Fragment); };
 };
 

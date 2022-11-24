@@ -54,6 +54,15 @@ void PlayUiMgr::Init()
 	OverdriveActiveBar->SetPos({ windowSize.x * 0.074f, windowSize.y * 0.11f });
 	OverdriveActiveBar->SetSize({ 0, OverdriveActiveBar->GetSize().y });
 	uiObjList[0].push_back(OverdriveActiveBar);
+
+	playerStatusBarPortrait = new SpriteObj();
+	playerStatusBarPortrait->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerStatusBarPortrait.png"));
+	playerStatusBarPortrait->SetPos({ windowSize.x * 0.038f, windowSize.y * 0.07f });
+	playerStatusBarPortrait->SetSpriteShader();
+	playerStatusBarPortrait->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
+	playerStatusBarPortrait->SetSpriteColor(1);
+
+	uiObjList[0].push_back(playerStatusBarPortrait);
 }
 
 void PlayUiMgr::Release()

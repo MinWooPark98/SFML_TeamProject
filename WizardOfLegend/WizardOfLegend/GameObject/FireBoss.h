@@ -40,7 +40,7 @@ protected:
 
 	vector<Skill*> skills;
 
-	float jumpDuration = 0.75f;
+	float jumpDuration = 3.f;
 	float jumpTimer = 0.f;
 	float jumpDistance = 0.f;
 	float jumpPosY = 0.f;
