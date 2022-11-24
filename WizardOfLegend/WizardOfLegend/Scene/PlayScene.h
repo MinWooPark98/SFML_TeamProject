@@ -13,7 +13,7 @@ protected:
 	Player* player;
 	IntRect mapSize;
 
-	//map<Object::ObjType, list<Object*>> aef;
+	map<Object::ObjTypes, list<Object*>> ObjTypeList;
 
 public:
 	PlayScene();

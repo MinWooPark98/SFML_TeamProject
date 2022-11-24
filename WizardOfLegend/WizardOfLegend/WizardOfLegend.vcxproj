@@ -203,6 +203,7 @@
     <ClCompile Include="Ui\UiMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3rd\OBB.h" />
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
     <ClInclude Include="GameObject\Button2.h" />

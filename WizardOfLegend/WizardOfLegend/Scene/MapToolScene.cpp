@@ -240,11 +240,11 @@ void MapToolScene::Release()
 
 void MapToolScene::SetType(string t)
 {
-	if (t == "WALL" || t == "OBJECT" || t == "ENEMY" || t == "PLAYER")
+	if (t == "OBJECT" || t == "ENEMY" || t == "PLAYER")
 	{
 		nowType = LayerType::Object;
 	}
-	if (t == "TILE")
+	if (t == "WALL" || t == "TILE")
 	{
 		nowType = LayerType::Tile;
 	}
