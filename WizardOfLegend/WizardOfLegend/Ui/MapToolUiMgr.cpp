@@ -169,7 +169,7 @@ void MapToolUiMgr::Update(float dt)
 		}
 		selIdx = (selects.size() + selIdx + 1) % selects.size();
 		selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
-			selectTextSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
+		selectTextSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
 		selectBtn->SetOrigin(Origins::MC);
 		selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ -paletteBook->GetHitBounds().width*0.5f, selectPosY[selIdx]});
 
@@ -291,7 +291,7 @@ void MapToolUiMgr::DeleteDraw()
 	nowDraw = nullptr;
 }
 
-bool MapToolUiMgr::IsUnder()
+bool MapToolUiMgr::IsPaletteBook()
 {
 	auto mousePos = InputMgr::GetMousePos();
 	mousePos = SCENE_MGR->GetCurrentScene()->ScreenToUiPosition((Vector2i)mousePos);
