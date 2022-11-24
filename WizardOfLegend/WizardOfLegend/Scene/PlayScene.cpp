@@ -25,15 +25,7 @@ void PlayScene::Init()
 {
 	Scene::Init();
 
-	player = new Player();
-	player->Init();
-	objList[LayerType::Object][5].push_back(player);
-	auto& skills = player->GetSkills();
-	skills[0]->SetSkill("FireBall");
-	skills[1]->SetSkill("Dragon");
-	skills[2]->SetSkill("FireDash");
-	skills[4]->SetSkill("DragonArc");
-	skills[5]->SetSkill("FireFull");
+
 
 	isMap = true;
 	auto& data = FILE_MGR->GetMap("TUTORIAL");
@@ -50,9 +42,8 @@ void PlayScene::Init()
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::Wall);
 
-			int i = ((int)obj.position.x - 8) / 16;
-			int j = (int)obj.position.y / 16 - 1;
 			objList[LayerType::Object][0].push_back(draw);
+			ObjTypeList[Object::ObjTypes::Wall].push_back(draw);
 		}
 		if (obj.type == "TILE")
 		{
@@ -62,11 +53,86 @@ void PlayScene::Init()
 		draw->SetOrigin(Origins::BC);
 		draw->SetPos(obj.position);
 		draw->SetObjType(Object::ObjTypes::Tile);
-		//draw->SetHitBox(obj.path);
+		ObjTypeList[Object::ObjTypes::Tile].push_back(draw);
 
-		int i = ((int)obj.position.x - 8) / 16;
-		int j = (int)obj.position.y / 16 - 1;
 		objList[LayerType::Tile][0].push_back(draw);
+		}
+		if (obj.type == "OBJECT")
+		{
+			SpriteObj* draw = new SpriteObj();
+			draw->SetName(obj.type);
+			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
+			draw->SetOrigin(Origins::BC);
+			draw->SetPos(obj.position);
+			draw->SetHitBox(obj.path);
+			draw->SetObjType(Object::ObjTypes::ETC);
+
+			objList[LayerType::Object][0].push_back(draw);
+			ObjTypeList[Object::ObjTypes::ETC].push_back(draw);
+		}
+		if (obj.type == "PLAYER")
+		{
+			player = new Player();
+			player->Init();
+			player->SetName(obj.type);
+			player->SetPos(obj.position);
+			player->SetObjType(Object::ObjTypes::Player);
+			objList[LayerType::Object][5].push_back(player);
+			ObjTypeList[Object::ObjTypes::Player].push_back(player);
+			auto& skills = player->GetSkills();
+			skills[0]->SetSkill("FireBall");
+			skills[1]->SetSkill("Dragon");
+			skills[2]->SetSkill("FireDash");
+			skills[4]->SetSkill("DragonArc");
+			skills[5]->SetSkill("FireFull");
+		}
+		if (obj.type == "ENEMY")
+		{
+			if (obj.path == "graphics/Map/Lancer.png")
+			{
+				Lancer* lancer = new Lancer();
+				lancer->Init();
+				lancer->SetName(obj.type);
+				lancer->SetPos(obj.position);
+				lancer->SetObjType(Object::ObjTypes::Enemy);
+				objList[LayerType::Object][0].push_back(lancer);
+				ObjTypeList[Object::ObjTypes::Enemy].push_back(lancer);
+			}
+			else if (obj.path == "graphics/Map/ArcherNormal.png")
+			{
+				Archer* archer = new Archer();
+				archer->Init();
+				archer->SetName(obj.type);
+				archer->SetPos(obj.position);
+				archer->SetObjType(Object::ObjTypes::Enemy);
+				archer->SetColor(3);
+				objList[LayerType::Object][1].push_back(archer);
+				ObjTypeList[Object::ObjTypes::Enemy].push_back(archer);
+			}
+			else if (obj.path == "graphics/Map/ArcherBosspng.png")
+			{
+				HeavyBombingArcher* heavyBombingArcher = new HeavyBombingArcher();
+				heavyBombingArcher->Init();
+				heavyBombingArcher->SetName(obj.type);
+				heavyBombingArcher->SetPos(obj.position);
+				heavyBombingArcher->SetObjType(Object::ObjTypes::Enemy);
+
+				heavyBombingArcher->SetColor(2);
+				objList[LayerType::Object][2].push_back(heavyBombingArcher);
+				ObjTypeList[Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
+			}
+			else if (obj.path == "graphics/Map/FireBoss.png")
+			{
+				fireBoss = new FireBoss();
+				fireBoss->Init();
+				fireBoss->SetName(obj.type);
+				fireBoss->SetPos(obj.position);
+				fireBoss->SetObjType(Object::ObjTypes::Enemy);
+
+				fireBoss->SetPlayerLastPos(player->GetPos());
+				objList[LayerType::Object][3].push_back(fireBoss);
+				ObjTypeList[Object::ObjTypes::Enemy].push_back(fireBoss);
+			}
 		}
 	}
 	auto& tiles = objList[LayerType::Tile][0];
@@ -75,6 +141,11 @@ void PlayScene::Init()
 	mapSize.width = (tiles.back())->GetPos().x + 16;
 	mapSize.height = (tiles.back())->GetPos().y;
 
+	for (auto& enemy : ObjTypeList[Object::ObjTypes::Enemy])
+	{
+		((Enemy*)enemy)->SetPlayer(player);
+	}
+
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
 }
@@ -82,40 +153,6 @@ void PlayScene::Init()
 void PlayScene::Update(float dt)
 {
 	worldView.setCenter(player->GetPos());
-	if (InputMgr::GetKeyDown(Keyboard::Key::Num1))
-	{
-		Lancer* lancer = new Lancer();
-		lancer->Init();
-		lancer->SetPos({200.f, 200.f});
-		lancer->SetCardPos(lancer->GetPos());
-		objList[LayerType::Object][1].push_back(lancer);
-		lancer->SetPlayer(player);
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Key::Num2))
-	{
-		Archer* archer = new Archer();
-		archer->Init();
-		archer->SetColor(3);
-		objList[LayerType::Object][1].push_back(archer);
-		archer->SetPlayer(player);
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Key::Num3))
-	{
-		HeavyBombingArcher* heavyBombingArcher = new HeavyBombingArcher();
-		heavyBombingArcher->Init();
-		heavyBombingArcher->SetColor(2);
-		objList[LayerType::Object][2].push_back(heavyBombingArcher);
-		heavyBombingArcher->SetPlayer(player);
-	}
-	if (InputMgr::GetKeyDown(Keyboard::Key::Num4))
-	{
-		fireBoss = new FireBoss();
-		fireBoss->Init();
-		fireBoss->SetPlayerLastPos(player->GetPos());
-		objList[LayerType::Object][3].push_back(fireBoss);
-		fireBoss->SetPlayer(player);
-	}
-
 	Scene::Update(dt);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
 	{
