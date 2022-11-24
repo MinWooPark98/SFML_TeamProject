@@ -48,7 +48,7 @@ public:
 	virtual void Select(DrawSelect* select);
 	DrawObj* GetDraw() { return nowDraw; }
 	void DeleteDraw();
-	bool IsUnder();
+	bool IsPaletteBook();
 	
 	void SetLoadPath(string path);
 	void SetLoadInit();

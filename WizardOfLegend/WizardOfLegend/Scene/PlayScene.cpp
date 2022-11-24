@@ -50,8 +50,8 @@ void PlayScene::Init()
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::Wall);
 
-			int i = ((int)obj.position.x - 30) / 60;
-			int j = (int)obj.position.y / 60 - 1;
+			int i = ((int)obj.position.x - 8) / 16;
+			int j = (int)obj.position.y / 16 - 1;
 			objList[LayerType::Object][0].push_back(draw);
 		}
 		if (obj.type == "TILE")
@@ -64,15 +64,15 @@ void PlayScene::Init()
 		draw->SetObjType(Object::ObjTypes::Tile);
 		//draw->SetHitBox(obj.path);
 
-		int i = ((int)obj.position.x - 30) / 60;
-		int j = (int)obj.position.y / 60 - 1;
+		int i = ((int)obj.position.x - 8) / 16;
+		int j = (int)obj.position.y / 16 - 1;
 		objList[LayerType::Tile][0].push_back(draw);
 		}
 	}
 	auto& tiles = objList[LayerType::Tile][0];
 	mapSize.left = 0;
 	mapSize.top = 0;
-	mapSize.width = (tiles.back())->GetPos().x + 30;
+	mapSize.width = (tiles.back())->GetPos().x + 16;
 	mapSize.height = (tiles.back())->GetPos().y;
 
 	uiMgr = new PlayUiMgr();

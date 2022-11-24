@@ -13,13 +13,14 @@ MapToolScene::MapToolScene()
 {
 }
 
-void MapToolScene::Init()
+MapToolScene::~MapToolScene()
 {
-	Reset();
 }
 
-void MapToolScene::Reset()
+void MapToolScene::Init()
 {
+	Scene::Init();
+
 	for (int i = 0; i < HEIGHTCNT; i++)
 	{
 		for (int j = 0; j < WIDTHCNT; j++)
@@ -32,10 +33,15 @@ void MapToolScene::Reset()
 			tile->SetUiView(false);
 		}
 	}
-	
+
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
 	nowType = LayerType::Object;
+}
+
+void MapToolScene::Reset()
+{
+	Release();
 }
 
 void MapToolScene::Update(float dt)
@@ -43,16 +49,6 @@ void MapToolScene::Update(float dt)
 	Scene::Update(dt);
 	//uiMgr->Update(dt);
 
-	if (InputMgr::GetKeyDown(Keyboard::Key::F5))
-	{
-		for (auto& objs : greedObjs[LayerType::Object])
-		{
-			for (auto it = objs.second.begin(); it != objs.second.end();)
-			{
-				it->second->SwitchDevMode();
-			}
-		}
-	}
 	auto uimgr = ((MapToolUiMgr*)uiMgr);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
 	{
@@ -68,7 +64,6 @@ void MapToolScene::Update(float dt)
 	{
 		string path = uimgr->loadFile();
 		Load(path);
-
 		return;
 	}
 	if (!uimgr->LoadActive())
@@ -101,13 +96,14 @@ void MapToolScene::Update(float dt)
 		{
 			if (greeds[i][j]->IsClick())
 			{
+				cout << i << "," << j << endl;
 				if (nowType == LayerType::Object && playerPos == Vector2i{ i,j })
 					return;
 
 				DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
 				auto& nowGreedObjs = greedObjs[nowType];
-
-				if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsUnder())
+				//삭제코드
+				if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
 				{
 					Button* findObj = nullptr;
 					if (nowGreedObjs.find(i) != nowGreedObjs.end())
@@ -197,7 +193,6 @@ void MapToolScene::Enter()
 	SCENE_MGR->GetCurrentScene()->GetWorldView().setSize({ WindowWidth , WindowHeight });
 	SCENE_MGR->GetCurrentScene()->GetUiView().setCenter({ WindowWidth / 2.f, WindowHeight / 2.f });
 	SCENE_MGR->GetCurrentScene()->GetUiView().setSize({ WindowWidth , WindowHeight });
-	Init();
 }
 
 void MapToolScene::Exit()
@@ -242,9 +237,6 @@ void MapToolScene::Release()
 
 }
 
-MapToolScene::~MapToolScene()
-{
-}
 
 void MapToolScene::SetType(string t)
 {
@@ -318,7 +310,7 @@ void MapToolScene::Load(string path)
 	objList[LayerType::Tile].clear();
 	objList[LayerType::Object].clear();
 	greedObjs.clear();
-
+	//로드 파일 그리드에 적용
 	player = nullptr;
 	auto& data = FILE_MGR->GetMap(path);
 	for (auto& obj : data)
@@ -331,8 +323,8 @@ void MapToolScene::Load(string path)
 		draw->SetMove(false);
 		draw->SetPos(obj.position);
 
-		int i = ((int)obj.position.x - 30) / 60;
-		int j = (int)obj.position.y / 60 - 1;
+		int i = ((int)obj.position.x - 8) / 16;
+		int j = (int)obj.position.y / 16 - 1;
 		if (obj.type == "WALL" || obj.type == "OBJECT" || obj.type == "ENEMY" )
 		{
 			objList[LayerType::Object][j].push_back(draw);

@@ -23,7 +23,7 @@ class Scene
 public:
 	enum class LayerType
 	{
-		None,
+		None = -1,
 		Back,
 		Tile,
 		Object,
