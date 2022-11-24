@@ -43,6 +43,9 @@ protected:
 
     bool isUi;
     bool viewIn;
+
+    Vector2f wallScope = {10, 10};
+
 public:
     Object();
     virtual ~Object();
@@ -91,4 +94,6 @@ public:
 
     void SetObjType(ObjTypes type) { objtype = type; }
     ObjTypes GetObjType() { return objtype; }
+
+    Vector2f GetWallScope() const { return wallScope; };
 };
