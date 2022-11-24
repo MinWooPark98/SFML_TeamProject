@@ -60,7 +60,7 @@ void PlayUiMgr::Init()
 	playerStatusBarPortrait->SetPos({ windowSize.x * 0.038f, windowSize.y * 0.07f });
 	playerStatusBarPortrait->SetSpriteShader();
 	playerStatusBarPortrait->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
-	playerStatusBarPortrait->SetSpriteColor(1);
+	playerStatusBarPortrait->SetSpriteColor(1); // 플레이어랑 색깔 연동해야함
 
 	uiObjList[0].push_back(playerStatusBarPortrait);
 }
