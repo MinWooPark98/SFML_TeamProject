@@ -5,7 +5,6 @@
 class FireBoss;
 class Player;
 
-
 class PlayScene : public Scene
 {
 protected:

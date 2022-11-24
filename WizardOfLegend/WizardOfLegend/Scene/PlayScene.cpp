@@ -86,7 +86,9 @@ void PlayScene::Update(float dt)
 	{
 		Lancer* lancer = new Lancer();
 		lancer->Init();
-		objList[LayerType::Object][0].push_back(lancer);
+		lancer->SetPos({200.f, 200.f});
+		lancer->SetCardPos(lancer->GetPos());
+		objList[LayerType::Object][1].push_back(lancer);
 		lancer->SetPlayer(player);
 	}
 	if (InputMgr::GetKeyDown(Keyboard::Key::Num2))

@@ -10,6 +10,11 @@ Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
 	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), currSkill(nullptr), skillToolMode(false)
 {
+	SpriteObj tempSpearImage;
+	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerIdleDown.png"));
+	FloatRect rect = (FloatRect)tempSpearImage.GetTextureRect();
+	SetHitBox(rect);
+	hitbox.setOrigin(tempSpearImage.GetSize().x * 0.5f, tempSpearImage.GetSize().y * 0.5f);
 }
 
 Player::~Player()
