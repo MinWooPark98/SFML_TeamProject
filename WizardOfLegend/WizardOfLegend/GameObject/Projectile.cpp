@@ -3,7 +3,7 @@
 #include "../Framework/ResourceMgr.h"
 
 Projectile::Projectile()
-	:atkShape(AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), moveType(MoveType::OneWay), isComingBack(false),  attackDmg(0), dmgType(DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0)
+	:atkShape(AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(RangeType::None), isComingBack(false),  attackDmg(0), dmgType(DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0)
 {
 }
 
@@ -30,6 +30,7 @@ void Projectile::Reset()
 	isOnDelay = true;
 	timer = 0.f;
 	isOnAtkDelay = false;
+	cumulativeFallingHeight = 0.f;
 	angle = 0.f;
 	isComingBack = false;
 	amplitude = 0.f;
@@ -60,6 +61,21 @@ void Projectile::Update(float dt)
 	movingTimer += dt;
 	switch (atkShape)
 	{
+	case AttackShape::Range:
+		{
+			cumulativeFallingHeight += fallingHeight * (dt / movingDuration);
+			auto& currOrigin = animator->GetFrame().origin;
+			sprite.setOrigin({ currOrigin.x, currOrigin.y + (fallingHeight - cumulativeFallingHeight) });
+			switch (rangeType)
+			{
+			case Projectile::RangeType::AbovePlayer:
+				Translate(direction * distance * (dt / movingDuration));
+				break;
+			default:
+				break;
+			}
+		}
+		break;
 	case Projectile::AttackShape::Rotate:
 		{
 			angle += speed * dt;
@@ -68,7 +84,7 @@ void Projectile::Update(float dt)
 		break;
 	case Projectile::AttackShape::Wave:
 		{
-			if (moveType == MoveType::BackAndForth && !isComingBack && movingTimer >= movingDuration * 0.5f)
+			if (waveType == WaveType::BackAndForth && !isComingBack && movingTimer >= movingDuration * 0.5f)
 			{
 				isComingBack = true;
 				animator->Play(clipName[1 - vecIdx]);

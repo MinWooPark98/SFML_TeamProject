@@ -345,7 +345,6 @@ void Player::UpdateDash(float dt)
 void Player::UpdateJumpSlash(float dt)
 {
 	Vector2f moving = direction * jumpDistance * dt / jumpDuration;
-	float distance = Utils::Magnitude(moving);
 	if (jumpTimer < jumpDuration * 0.5f && jumpTimer + dt >= jumpDuration * 0.5f)
 	{
 		auto angle = Utils::Angle(lastDir);

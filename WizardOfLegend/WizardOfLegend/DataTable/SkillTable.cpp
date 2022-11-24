@@ -38,17 +38,19 @@ bool SkillTable::Load()
 	vector<int> attackShape = doc.GetColumn<int>(6);
 	vector<float> amplitude = doc.GetColumn<float>(7);
 	vector<float> frequency = doc.GetColumn<float>(8);
-	vector<int> moveType = doc.GetColumn<int>(9);
-	vector<int> playerAction = doc.GetColumn<int>(10);
-	vector<float> skillDelay = doc.GetColumn<float>(11);
-	vector<float> skillCoolDown = doc.GetColumn<float>(12);
-	vector<float> dmgRatio = doc.GetColumn<float>(13);
-	vector<int> dmgType = doc.GetColumn<int>(14);
-	vector<float> dmgDelay = doc.GetColumn<float>(15);
-	vector<float> duration = doc.GetColumn<float>(16);
-	vector<float> speed = doc.GetColumn<float>(17);
-	vector<string> animClipName_1 = doc.GetColumn<string>(18);
-	vector<string> animClipName_2 = doc.GetColumn<string>(19);
+	vector<int> waveType = doc.GetColumn<int>(9);
+	vector<float> fallingHeight = doc.GetColumn<float>(10);
+	vector<int> rangeType = doc.GetColumn<int>(11);
+	vector<int> playerAction = doc.GetColumn<int>(12);
+	vector<float> skillDelay = doc.GetColumn<float>(13);
+	vector<float> skillCoolDown = doc.GetColumn<float>(14);
+	vector<float> dmgRatio = doc.GetColumn<float>(15);
+	vector<int> dmgType = doc.GetColumn<int>(16);
+	vector<float> dmgDelay = doc.GetColumn<float>(17);
+	vector<float> duration = doc.GetColumn<float>(18);
+	vector<float> speed = doc.GetColumn<float>(19);
+	vector<string> animClipName_1 = doc.GetColumn<string>(20);
+	vector<string> animClipName_2 = doc.GetColumn<string>(21);
 
 	for (int j = 0; j < doc.GetRowCount(); ++j)
 	{
@@ -57,7 +59,7 @@ bool SkillTable::Load()
 			cout << "duplicate values exist" << endl;
 			return false;
 		}
-		table.insert({ skillName[j], { skillName[j], (Skill::Element)element[j], (Skill::AttackType)attackType[j], attackCntLim[j], attackInterval[j], distance[j],  (Projectile::AttackShape)attackShape[j], amplitude[j], frequency[j], (Projectile::MoveType)moveType[j], (Player::SkillAction)playerAction[j], skillDelay[j], skillCoolDown[j], dmgRatio[j], (Projectile::DamageType)dmgType[j], dmgDelay[j], duration[j], speed[j], vector<string>({animClipName_1[j], animClipName_2[j]})}});
+		table.insert({ skillName[j], { skillName[j], (Skill::Element)element[j], (Skill::AttackType)attackType[j], attackCntLim[j], attackInterval[j], distance[j],  (Projectile::AttackShape)attackShape[j], amplitude[j], frequency[j], (Projectile::WaveType)waveType[j], fallingHeight[j], (Projectile::RangeType)rangeType[j], (Player::SkillAction)playerAction[j], skillDelay[j], skillCoolDown[j], dmgRatio[j], (Projectile::DamageType)dmgType[j], dmgDelay[j], duration[j], speed[j], vector<string>({animClipName_1[j], animClipName_2[j]})}});
 	}
 	return true;
 }

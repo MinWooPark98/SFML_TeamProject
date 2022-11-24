@@ -9,14 +9,22 @@ public:
 	enum class AttackShape
 	{
 		None = -1,
+		Surrounded,
 		Range,
 		Rotate,
 		Wave,
 	};
-	enum class MoveType
+	enum class WaveType
 	{
+		None = -1,
 		OneWay,
 		BackAndForth,
+	};
+	enum class RangeType
+	{
+		None = -1,
+		Default,
+		AbovePlayer,
 	};
 	enum class DamageType
 	{
@@ -33,7 +41,10 @@ protected:
 	float movingDuration;
 	float movingTimer;
 	float speed;
-	MoveType moveType;
+	WaveType waveType;
+	float fallingHeight;
+	float cumulativeFallingHeight;
+	RangeType rangeType;
 	bool isComingBack;
 	int attackDmg;
 
@@ -73,7 +84,9 @@ public:
 	bool GetMoving() const { return isMoving; }
 	void SetMovingDuration(float duration) { movingDuration = duration; }
 	void SetSpeed(float speed) { this->speed = speed; }
-	void SetMoveType(MoveType type) { moveType = type; }
+	void SetWaveType(WaveType type) { waveType = type; }
+	void SetFallingHeight(float height) { fallingHeight = height; }
+	void SetRangeType(RangeType type) { rangeType = type; }
 	void SetAtkDmg(int atkDmg) { attackDmg = atkDmg; }
 	void SetDmgType(DamageType dmgtype) { dmgType = dmgtype; }
 	void SetDelay(float delay) { this->delay = delay; }

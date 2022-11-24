@@ -4,7 +4,7 @@
 #include "Projectile.h"
 #include "Player.h"
 #include "Enemy.h"
-class Projectile;
+#include "../Framework/ObjectPool.h"
 
 class Skill
 {
@@ -37,7 +37,9 @@ public:
 		Projectile::AttackShape attackShape;	// range, rotate, wave
 		float amplitude;						// 진폭  / shape_wave일 때만 유효, wave일 때 0이면 직선, 클 수록 많이 휘는 곡선
 		float frequency;						// 얼마나 자주 진동하는가	/ shape_wave일 때만 유효
-		Projectile::MoveType moveType;			// 돌아오는가 / shape_wave일 때만 유효
+		Projectile::WaveType waveType;			// 돌아오는가 / shape_wave일 때만 유효
+		float fallingHeight;					// shape_range 일 때만 유효
+		Projectile::RangeType rangeType;		// shape_range 일 때만 유효
 		Player::SkillAction playerAction;		// 플레이어 동작 변경(kick, jumpSmash 등)
 		float skillDelay;						// 스킬 선 딜레이
 		float skillCoolDown;					// 스킬 딜레이(쿨타임 및 충전 시간)
@@ -49,8 +51,8 @@ public:
 		vector<string> animClipName;			// 스킬 애니메이션 클립 string
 
 		Set(){}
-		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, Projectile::AttackShape attackShape, float amplitude, float frequency, Projectile::MoveType moveType, Player::SkillAction playerAction, float skillDelay, float skillCoolDown, float dmgRatio, Projectile::DamageType dmgType, float dmgDelay, float duration, float speed, vector<string> animClipName)
-			:skillName(skillName), element(element), attackType(attackType), attackCntLim(attackCntLim), attackInterval(attackInterval), distance(distance), attackShape(attackShape), amplitude(amplitude), frequency(frequency), moveType(moveType), playerAction(playerAction), skillDelay(skillDelay), skillCoolDown(skillCoolDown), dmgRatio(dmgRatio), dmgType(dmgType), dmgDelay(dmgDelay), duration(duration), speed(speed), animClipName(animClipName) {}
+		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, Projectile::AttackShape attackShape, float amplitude, float frequency, Projectile::WaveType waveType, float fallingHeight, Projectile::RangeType rangeType, Player::SkillAction playerAction, float skillDelay, float skillCoolDown, float dmgRatio, Projectile::DamageType dmgType, float dmgDelay, float duration, float speed, vector<string> animClipName)
+			:skillName(skillName), element(element), attackType(attackType), attackCntLim(attackCntLim), attackInterval(attackInterval), distance(distance), attackShape(attackShape), amplitude(amplitude), frequency(frequency), waveType(waveType), fallingHeight(fallingHeight), rangeType(rangeType), playerAction(playerAction), skillDelay(skillDelay), skillCoolDown(skillCoolDown), dmgRatio(dmgRatio), dmgType(dmgType), dmgDelay(dmgDelay), duration(duration), speed(speed), animClipName(animClipName) {}
 		void Reset();
 	};
 
@@ -70,6 +72,7 @@ private:
 	bool isDoing;
 	Vector2f skillDir;
 	Vector2f startPos;
+	float distance;
 
 	Set* setting;
 	int attackCnt;
