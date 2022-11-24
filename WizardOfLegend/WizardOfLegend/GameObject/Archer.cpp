@@ -39,8 +39,8 @@ void Archer::Init()
 	SetColorTable("graphics/ArcherColorIndex.png");
 
 	SetSpeed(100.f);
-	SetMoveScale(500.f);
-	SetAttackScale(200.f);
+	SetMoveScale(200.f);
+	SetAttackScale(100.f);
 	SetAttackStartDelay(1.f);
 	SetMonsterType(MonsterType::Normal);
 	SetMaxHp(1);

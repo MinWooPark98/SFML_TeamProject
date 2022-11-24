@@ -12,8 +12,8 @@ void HeavyBombingArcher::Init()
 	arrowDir.setScale({ 2, 1 });
 	SetMonsterType(MonsterType::StageBoss);
 	SetPos({200, 200});
-	SetEscapeScale(100.f);
-	SetMoveAttackScale(300.f);
+	SetEscapeScale(50.f);
+	SetMoveAttackScale(100.f);
 	SetNormalAttackCount(2);
 	
 	for (int i = 0; i < smollArrowCount; i++)

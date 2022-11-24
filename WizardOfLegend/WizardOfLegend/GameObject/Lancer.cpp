@@ -34,8 +34,8 @@ void Lancer::Init()
 	SetColorTable("graphics/LancerColorIndex.png");
 	SetColor(3);
 	SetSpeed(200.f);
-	SetMoveScale(500.f);
-	SetAttackScale(150.f);
+	SetMoveScale(200.f);
+	SetAttackScale(100.f);
 	SetMonsterType(MonsterType::Normal);
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());

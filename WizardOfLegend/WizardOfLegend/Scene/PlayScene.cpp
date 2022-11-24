@@ -94,6 +94,7 @@ void PlayScene::Init()
 				lancer->Init();
 				lancer->SetName(obj.type);
 				lancer->SetPos(obj.position);
+				lancer->SetCardPos(lancer->GetPos());
 				lancer->SetObjType(Object::ObjTypes::Enemy);
 				objList[LayerType::Object][0].push_back(lancer);
 				ObjTypeList[Object::ObjTypes::Enemy].push_back(lancer);
@@ -104,6 +105,7 @@ void PlayScene::Init()
 				archer->Init();
 				archer->SetName(obj.type);
 				archer->SetPos(obj.position);
+				archer->SetCardPos(archer->GetPos());
 				archer->SetObjType(Object::ObjTypes::Enemy);
 				archer->SetColor(3);
 				objList[LayerType::Object][1].push_back(archer);
@@ -115,6 +117,7 @@ void PlayScene::Init()
 				heavyBombingArcher->Init();
 				heavyBombingArcher->SetName(obj.type);
 				heavyBombingArcher->SetPos(obj.position);
+				heavyBombingArcher->SetCardPos(heavyBombingArcher->GetPos());
 				heavyBombingArcher->SetObjType(Object::ObjTypes::Enemy);
 
 				heavyBombingArcher->SetColor(2);
@@ -159,6 +162,8 @@ void PlayScene::Update(float dt)
 		SCENE_MGR->ChangeScene(Scenes::Title);
 		return;
 	}
+
+
 }
 
 void PlayScene::Draw(RenderWindow& window)
