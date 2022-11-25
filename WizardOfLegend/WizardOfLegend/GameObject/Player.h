@@ -58,7 +58,7 @@ protected:
 	bool skillToolMode;
 
 	int maxHp = 525;
-	int curHp;
+	int curHp = 525;
 
 public:
 	Player();

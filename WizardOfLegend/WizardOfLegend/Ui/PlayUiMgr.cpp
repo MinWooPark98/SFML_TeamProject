@@ -150,7 +150,7 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 	// 데미지 받음
 	if (InputMgr::GetKeyDown(Keyboard::Key::G))
 	{
-		float damage = 52.f; // 몬스터 데미지로 변경
+		int damage = 50; // 몬스터 데미지로 변경
 
 		if (playerCurHp - damage <= 0.f)
 		{
@@ -166,7 +166,7 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 	// 회복
 	if (InputMgr::GetKeyDown(Keyboard::Key::Z))
 	{
-		float heal = 52.f; // 회복율로 변경
+		int heal = 50; // 회복율로 변경
 
 		if (playerCurHp + heal <= playerMaxHp)
 		{
@@ -174,15 +174,15 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 		}
 		else
 		{
-			float overHeal = (playerCurHp + heal) - playerMaxHp;
+			int overHeal = (playerCurHp + heal) - playerMaxHp;
 			playerCurHp += (heal - overHeal);
 		}
 	}
 
 	// Hp Bar Control
-	float playerCurHpBarSet = (playerMaxHp - playerCurHp) * (maxHpBarSize / playerMaxHp); // hp바 사이즈 비율
-	HpBarFill->SetSize({ hpBarSize - playerCurHpBarSet, HpBarFill->GetSize().y * 4 });
-	hpText->SetText(to_string((int)playerCurHp) + "/" + to_string((int)playerMaxHp));
+	int playerCurHpBarSet = (playerMaxHp - playerCurHp) * (maxHpBarSize / playerMaxHp); // hp바 사이즈 비율
+	HpBarFill->SetSize({ (float)hpBarSize - playerCurHpBarSet, HpBarFill->GetSize().y * 4 });
+	hpText->SetText(to_string(playerCurHp) + "/" + to_string(playerMaxHp));
 
 
 	// HP Yellow Bar Control

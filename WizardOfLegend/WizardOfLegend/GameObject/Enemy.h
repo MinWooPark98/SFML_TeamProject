@@ -76,9 +76,9 @@ protected:
 	float escapeScale;
 	float moveScale;
 	float speed;
-	float maxHp;
-	float curHp;
-	float damage;
+	int maxHp;
+	int curHp;
+	int damage;
 	int normalAttackCount;
 
 	// Player
@@ -108,14 +108,14 @@ public:
 	float GetSpeed() { return speed; };
 	void SetSpeed(float spd) { speed = spd; };
 
-	float GetMaxHp() { return maxHp; };
-	void SetMaxHp(float hp) { maxHp = hp; };
+	int GetMaxHp() { return maxHp; };
+	void SetMaxHp(int hp) { maxHp = hp; };
 
-	float GetCurHp() { return curHp; };
-	void SetCurHp(float hp) { curHp = hp; };
+	int GetCurHp() { return curHp; };
+	void SetCurHp(int hp) { curHp = hp; };
 
-	float GetDamage() { return damage; };
-	void SetDamage(float dmg) { damage = dmg; };
+	int GetDamage() { return damage; };
+	void SetDamage(int dmg) { damage = dmg; };
 
 	void SetMoveScale(float scale) { moveScale = scale; };
 	float GetMoveScale() const { return moveScale; };
