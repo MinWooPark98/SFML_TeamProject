@@ -48,8 +48,6 @@ void HeavyBombingArcher::Update(float dt)
 
 void HeavyBombingArcher::Draw(RenderWindow& window)
 {
-	Archer::Draw(window);
-
 	if (curState == States::MoveAttack)
 	{
 		for (auto it : smollArrow)
@@ -59,6 +57,8 @@ void HeavyBombingArcher::Draw(RenderWindow& window)
 	}
 	else
 		arrowDir.setScale({ 2, 1 });
+
+	Archer::Draw(window);
 }
 
 void HeavyBombingArcher::UpdateAttack(float dt)

@@ -15,6 +15,9 @@ Player::Player()
 	FloatRect rect = (FloatRect)tempSpearImage.GetTextureRect();
 	SetHitBox(rect);
 	hitbox.setOrigin(tempSpearImage.GetSize().x * 0.5f, tempSpearImage.GetSize().y * 0.5f);
+
+	SetMaxHp(525);
+	SetCurHp(GetMaxHp());
 }
 
 Player::~Player()

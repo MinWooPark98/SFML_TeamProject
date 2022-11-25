@@ -61,8 +61,15 @@ void PlayUiMgr::Init()
 	playerStatusBarPortrait->SetSpriteShader();
 	playerStatusBarPortrait->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
 	playerStatusBarPortrait->SetSpriteColor(1); // 플레이어랑 색깔 연동해야함
-
 	uiObjList[0].push_back(playerStatusBarPortrait);
+
+	hpText = new TextObj();
+	hpText->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	hpText->SetSize(7);
+	hpText->SetFillColor(Color::White);
+	hpText->SetText(to_string(525) + " / " + to_string(525)); // 플레이어 maxhp로 변경
+	hpText->SetPos({80, 10});
+	uiObjList[0].push_back(hpText);
 }
 
 void PlayUiMgr::Release()
@@ -109,10 +116,19 @@ void PlayUiMgr::Update(float dt)
 	if (InputMgr::GetKeyDown(Keyboard::Key::S))
 		testOverdrive = false;
 
+
+	if (InputMgr::GetKeyDown(Keyboard::Key::D))
+		testHp = true;
+	if (InputMgr::GetKeyDown(Keyboard::Key::F))
+		testHp = false;
+
+
 	if (testOverdrive && overdriveBarSize < maxOverdriveBarSize)
 		OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 1000), OverdriveActiveBar->GetSize().y });
 	else if (!testOverdrive && overdriveBarSize > 0)
 		OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 1000), OverdriveActiveBar->GetSize().y });
+
+	HpBarSizeControl(dt);
 }
 
 void PlayUiMgr::Draw(RenderWindow& window)
@@ -122,5 +138,57 @@ void PlayUiMgr::Draw(RenderWindow& window)
 	{
 		for (auto& obj : uiObjs.second)
 			obj->Draw(window);
+	}
+}
+
+void PlayUiMgr::HpBarSizeControl(float dt)
+{
+	// 데미지 받음
+	if (InputMgr::GetKeyDown(Keyboard::Key::G))
+	{
+		float damage = 52.f; // 몬스터 데미지로 변경
+
+		if (playerCurHp - damage <= 0.f)
+		{
+			playerCurHp = 0.f;
+			HpBarFill->SetSize({ 0, HpBarFill->GetSize().y });
+		}
+		else
+		{
+			playerCurHp -= damage;
+		}
+	}
+
+	// 회복
+	if (InputMgr::GetKeyDown(Keyboard::Key::Z))
+	{
+		float heal = 52.f; // 회복율로 변경
+
+		if (playerCurHp + heal <= playerMaxHp)
+		{
+			playerCurHp += heal;
+		}
+		else
+		{
+			float overHeal = (playerCurHp + heal) - playerMaxHp;
+			playerCurHp += (heal - overHeal);
+		}
+	}
+
+	// Hp Bar Control
+	float playerCurHpBarSet = (playerMaxHp - playerCurHp) * (maxHpBarSize / playerMaxHp); // hp바 사이즈 비율
+	HpBarFill->SetSize({ hpBarSize - playerCurHpBarSet, HpBarFill->GetSize().y });
+	hpText->SetText(to_string((int)playerCurHp) + " / " + to_string((int)playerMaxHp));
+
+
+	// HP Yellow Bar Control
+	if (hpBarSize - playerCurHpBarSet < hpBarHurtSize)
+	{
+		HpBarHurt->SetSize({ hpBarHurtSize -= (dt * 30), HpBarHurt->GetSize().y });
+	}
+	else if (hpBarSize - playerCurHpBarSet > hpBarHurtSize)
+	{
+		hpBarHurtSize = hpBarSize - playerCurHpBarSet;
+		HpBarHurt->SetSize({ hpBarHurtSize, HpBarHurt->GetSize().y });
 	}
 }

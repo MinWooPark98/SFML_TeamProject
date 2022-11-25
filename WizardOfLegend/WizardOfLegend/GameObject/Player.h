@@ -57,6 +57,9 @@ protected:
 
 	bool skillToolMode;
 
+	int maxHp = 525;
+	int curHp;
+
 public:
 	Player();
 	virtual ~Player();
@@ -82,5 +85,11 @@ public:
 
 	void SetSkillToolMode() { skillToolMode = true; }
 	vector<Skill*>& GetSkills() { return skills; }
+
+	int GetMaxHp() { return maxHp; };
+	void SetMaxHp(int hp) { maxHp = hp; };
+
+	int GetCurHp() { return curHp; };
+	void SetCurHp(int hp) { curHp = hp; };
 };
 
