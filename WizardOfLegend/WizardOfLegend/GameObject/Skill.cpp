@@ -87,10 +87,9 @@ void Skill::Do()
 			}
 			obj->SetDirection(skillDir);
 			obj->SetDistance(distance);
-			if (setting->rangeType == Projectile::RangeType::AbovePlayer)
-				obj->SetPos(subject->GetPos());
-			else
-				obj->SetPos(startPos + Utils::RandAreaPoint() * setting->amplitude);
+			obj->SetPos(setting->rangeType == Projectile::RangeType::AbovePlayer ? subject->GetPos() : startPos);
+			if (isDoing)
+				obj->Translate(Utils::RandAreaPoint() * setting->amplitude);
 			break;
 		case Projectile::AttackShape::Rotate:
 			if (isDoing)
