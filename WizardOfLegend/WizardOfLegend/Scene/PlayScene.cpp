@@ -194,8 +194,8 @@ void PlayScene::Enter()
 	worldView.setSize(size * 0.25f);
 	worldView.setCenter(size * 0.125f);
 
-	uiView.setSize(size * 0.25f);
-	uiView.setCenter(size * 0.125f);
+	uiView.setSize(size);
+	uiView.setCenter(size * 0.5f);
 }
 
 void PlayScene::Exit()

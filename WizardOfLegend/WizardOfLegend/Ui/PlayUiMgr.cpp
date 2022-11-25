@@ -20,10 +20,11 @@ PlayUiMgr::~PlayUiMgr()
 void PlayUiMgr::Init()
 {
 	UiMgr::Init();
-	windowSize = FRAMEWORK->GetWindowSize() / 4;
+	windowSize = FRAMEWORK->GetWindowSize();
 
 	SpriteObj* statusBar = new SpriteObj();
 	statusBar->SetTexture(*RESOURCE_MGR->GetTexture("graphics/StatusBarBG.png"));
+	statusBar->SetScale({4, 4});
 	statusBar->SetOrigin(Origins::MC);
 	statusBar->SetPos({ windowSize.x * 0.12f, windowSize.y * 0.1f });
 	uiObjList[0].push_back(statusBar);
@@ -39,6 +40,7 @@ void PlayUiMgr::Init()
 			hp->SetTexture(*RESOURCE_MGR->GetTexture("graphics/HPBarHurtFill.png"));
 
 		hp->SetPos({ windowSize.x * 0.074f, windowSize.y * 0.0745f });
+		hp->SetScale({ 4, 4 });
 
 		if (i == 0)
 			HpBarFill = hp;
@@ -52,23 +54,25 @@ void PlayUiMgr::Init()
 	OverdriveActiveBar = new SpriteObj();
 	OverdriveActiveBar->SetTexture(*RESOURCE_MGR->GetTexture("graphics/OverdriveActiveBarFill.png"));
 	OverdriveActiveBar->SetPos({ windowSize.x * 0.074f, windowSize.y * 0.11f });
+	OverdriveActiveBar->SetScale({4, 4});
 	OverdriveActiveBar->SetSize({ 0, OverdriveActiveBar->GetSize().y });
 	uiObjList[0].push_back(OverdriveActiveBar);
 
 	playerStatusBarPortrait = new SpriteObj();
 	playerStatusBarPortrait->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerStatusBarPortrait.png"));
 	playerStatusBarPortrait->SetPos({ windowSize.x * 0.038f, windowSize.y * 0.07f });
+	playerStatusBarPortrait->SetScale({4, 4});
 	playerStatusBarPortrait->SetSpriteShader();
 	playerStatusBarPortrait->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
 	playerStatusBarPortrait->SetSpriteColor(1); // 플레이어랑 색깔 연동해야함
 	uiObjList[0].push_back(playerStatusBarPortrait);
 
 	hpText = new TextObj();
-	hpText->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-	hpText->SetSize(7);
+	hpText->SetFont(*RESOURCE_MGR->GetFont("fonts/MunroSmall.ttf"));
+	hpText->SetSize(40);
 	hpText->SetFillColor(Color::White);
-	hpText->SetText(to_string(525) + " / " + to_string(525)); // 플레이어 maxhp로 변경
-	hpText->SetPos({80, 10});
+	hpText->SetText(to_string(525) + "/" + to_string(525)); // 플레이어 maxhp로 변경
+	hpText->SetPos({250, 50});
 	uiObjList[0].push_back(hpText);
 }
 
@@ -124,9 +128,9 @@ void PlayUiMgr::Update(float dt)
 
 
 	if (testOverdrive && overdriveBarSize < maxOverdriveBarSize)
-		OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 1000), OverdriveActiveBar->GetSize().y });
+		OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
 	else if (!testOverdrive && overdriveBarSize > 0)
-		OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 1000), OverdriveActiveBar->GetSize().y });
+		OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
 
 	HpBarSizeControl(dt);
 }
@@ -151,7 +155,7 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 		if (playerCurHp - damage <= 0.f)
 		{
 			playerCurHp = 0.f;
-			HpBarFill->SetSize({ 0, HpBarFill->GetSize().y });
+			HpBarFill->SetSize({ 0, HpBarFill->GetSize().y * 4 });
 		}
 		else
 		{
@@ -177,18 +181,18 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 
 	// Hp Bar Control
 	float playerCurHpBarSet = (playerMaxHp - playerCurHp) * (maxHpBarSize / playerMaxHp); // hp바 사이즈 비율
-	HpBarFill->SetSize({ hpBarSize - playerCurHpBarSet, HpBarFill->GetSize().y });
-	hpText->SetText(to_string((int)playerCurHp) + " / " + to_string((int)playerMaxHp));
+	HpBarFill->SetSize({ hpBarSize - playerCurHpBarSet, HpBarFill->GetSize().y * 4 });
+	hpText->SetText(to_string((int)playerCurHp) + "/" + to_string((int)playerMaxHp));
 
 
 	// HP Yellow Bar Control
 	if (hpBarSize - playerCurHpBarSet < hpBarHurtSize)
 	{
-		HpBarHurt->SetSize({ hpBarHurtSize -= (dt * 30), HpBarHurt->GetSize().y });
+		HpBarHurt->SetSize({ hpBarHurtSize -= (dt * 120), HpBarHurt->GetSize().y * 4 });
 	}
 	else if (hpBarSize - playerCurHpBarSet > hpBarHurtSize)
 	{
 		hpBarHurtSize = hpBarSize - playerCurHpBarSet;
-		HpBarHurt->SetSize({ hpBarHurtSize, HpBarHurt->GetSize().y });
+		HpBarHurt->SetSize({ hpBarHurtSize, HpBarHurt->GetSize().y * 4 });
 	}
 }

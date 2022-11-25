@@ -14,12 +14,12 @@ protected:
 	SpriteObj* OverdriveActiveBar;
 	SpriteObj* playerStatusBarPortrait;
 
-	float maxOverdriveBarSize = 48.f;
+	float maxOverdriveBarSize = 48.f * 4.f;
 	float overdriveBarSize = 0.f;
 
-	float maxHpBarSize = 62.f;
-	float hpBarSize = 62.f;
-	float hpBarHurtSize = 62.f;
+	float maxHpBarSize = 62.f * 4.f;
+	float hpBarSize = 62.f * 4.f;
+	float hpBarHurtSize = 62.f * 4.f;
 
 	bool testOverdrive = false;
 	bool testHp = false;
