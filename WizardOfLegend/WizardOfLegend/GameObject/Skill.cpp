@@ -4,8 +4,7 @@
 #include "../Scene/SceneMgr.h"
 
 Skill::Skill()
-
-	:subject(nullptr), setting(nullptr), subType(SubjectType::None), isDoing(false), attackCnt(0), attackTimer(0.f), skillTimer(0.f)
+	:subject(nullptr), setting(nullptr), subType(SubjectType::None), isDoing(false), distance(0.f), attackCnt(0), attackTimer(0.f), skillTimer(0.f)
 {
 }
 
@@ -13,8 +12,22 @@ Skill::~Skill()
 {
 }
 
+void Skill::Reset()
+{
+	for (auto projectile : projectiles)
+	{
+		projectile->SetActive(false);
+	}
+	projectiles.clear();
+	isDoing = false;
+	attackCnt = 0;
+	attackTimer = 0.f;
+	skillTimer = 0.f;
+}
+
 void Skill::SetSkill(const String& skillName)
 {
+	Reset();
 	SkillTable* table = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
 	if (setting == nullptr)
 		setting = new Set(table->Get(skillName));
@@ -24,6 +37,7 @@ void Skill::SetSkill(const String& skillName)
 
 void Skill::SetSkill(const Set& set)
 {
+	Reset();
 	if (setting == nullptr)
 		setting = new Set(set);
 	else
@@ -44,13 +58,16 @@ void Skill::Do()
 	Projectile* obj = SCENE_MGR->GetCurrentScene()->GetProjectiles()->Get();
 	obj->SetAtkShape(setting->attackShape);
 	obj->SetFrequency(setting->frequency);
-	obj->SetMoveType(setting->moveType);
+	obj->SetWaveType(setting->waveType);
+	obj->SetFallingHeight(setting->fallingHeight);
+	obj->SetRangeType(setting->rangeType);
 	obj->SetDelay(setting->skillDelay);
 	obj->SetDmgType(setting->dmgType);
 	obj->SetAtkDelay(setting->dmgDelay);
 	obj->SetMovingDuration(setting->duration);
 	obj->SetSpeed(setting->speed);
-	obj->SetDistance(setting->distance);
+	if(setting->attackShape != Projectile::AttackShape::Range)
+		obj->SetDistance(setting->distance);
 	obj->SetAnimClip(setting->animClipName);
 	switch (subType)
 	{
@@ -60,10 +77,19 @@ void Skill::Do()
 		switch (setting->attackShape)
 		{
 		case Projectile::AttackShape::Range:
-			skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+			if (!isDoing)
+			{
+				auto mouseVec = SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos();
+				auto mouseDistance = Utils::Magnitude(mouseVec);
+				skillDir = Utils::Normalize(mouseVec);
+				distance = mouseDistance <= setting->distance ? mouseDistance : setting->distance;
+				startPos = subject->GetPos() + skillDir * setting->distance;
+			}
 			obj->SetDirection(skillDir);
-			startPos = subject->GetPos() + skillDir * setting->distance;
-			obj->SetPos(startPos);
+			obj->SetDistance(distance);
+			obj->SetPos(setting->rangeType == Projectile::RangeType::AbovePlayer ? subject->GetPos() : startPos);
+			if (isDoing)
+				obj->Translate(Utils::RandAreaPoint() * setting->amplitude);
 			break;
 		case Projectile::AttackShape::Rotate:
 			if (isDoing)
@@ -220,7 +246,7 @@ void Skill::Set::Reset()
 	attackShape = Projectile::AttackShape::None;
 	amplitude = 0.f;
 	frequency = 0.f;
-	moveType = Projectile::MoveType::OneWay;
+	waveType = Projectile::WaveType::OneWay;
 	playerAction = Player::SkillAction::NormalSpell;
 	skillDelay = 0.f;
 	skillCoolDown = 0.f;
