@@ -34,6 +34,19 @@ void Archer::Init()
 	arrowDir.setFillColor(Color::Red);
 	arrowDir.setSize({1, 300});
 
+
+	archerAttackArm = new SpriteObj();
+	archerAttackArm->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ArcherAttackArm.png"));
+	archerAttackArm->SetOrigin(Origins::MC);
+
+	archerPullArm = new SpriteObj();
+	archerPullArm->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ArcherAttackPullArm0.png"));
+	archerPullArm->SetOrigin(Origins::MC);
+
+	archerPullArmAnimation.SetTarget(&archerPullArm->GetSprite());
+	archerPullArmAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("ArcherArm"));
+
+
 	SetPaletteIndex(44);
 	SetpaletteSize(9);
 	SetColorTable("graphics/ArcherColorIndex.png");
@@ -91,12 +104,28 @@ void Archer::Update(float dt)
 			arrowDir.setFillColor(Color::Red);
 
 		animation.Update(dt);
+		archerPullArmAnimation.Update(dt);
 		bowAnimation.Update(dt);
 	}
 }
 
 void Archer::Draw(RenderWindow& window)
 {
+	Enemy::Draw(window);
+
+	if (curState == States::Attack || curState == States::MoveAttack)
+	{
+		window.draw(archerAttackArm->GetSprite(), &shader);
+	}
+
+	if (isAlive)
+		window.draw(sprite, &shader);
+	else
+	{
+		if (dieTimer >= 0.f)
+			window.draw(sprite, &shader);
+	}
+
 	if (curState == States::Attack || curState == States::MoveAttack)
 	{
 		window.draw(weapon->GetSprite(), &shader);
@@ -106,16 +135,8 @@ void Archer::Draw(RenderWindow& window)
 
 		if (curState == States::Attack)
 			arrow->Draw(window);
-	}
 
-	Enemy::Draw(window);
-
-	if (isAlive)
-		window.draw(sprite, &shader);
-	else
-	{
-		if (dieTimer >= 0.f)
-			window.draw(sprite, &shader);
+		window.draw(archerPullArm->GetSprite(), &shader);
 	}
 }
 
@@ -160,14 +181,15 @@ void Archer::UpdateAttack(float dt)
 	if (attackDelay >= attackStart + 0.2f)
 	{
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
-		weapon->SetPos(GetPos());
+		weapon->SetPos(GetPos() - Utils::Normalize((player->GetPos() - GetPos())) * -3.f);
 		arrowDir.setPosition(GetPos());
 		arrowDir.setRotation(Utils::Angle(GetPos(), player->GetPos()) - 90);
 
 		if (curState == States::Attack)
 		{
 			arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
-			arrow->SetPos(GetPos());
+			//arrow->SetPos(GetPos());
+			arrow->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 8.f);
 		}
 
 		if (player->GetPos().x >= GetPos().x)
@@ -175,6 +197,15 @@ void Archer::UpdateAttack(float dt)
 		if (player->GetPos().x < GetPos().x)
 			animation.Play("ArcherLeftAttack");
 
+		if (type == MonsterType::Normal)
+		{
+			archerAttackArm->SetPos(weapon->GetPos());
+			archerPullArm->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * -8.f);
+		}
+
+		archerAttackArm->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
+		archerPullArm->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
+		archerPullArmAnimation.Play("ArcherArm");
 		playerLastPos = player->GetPos();
 	}
 	else if (attackDelay <= attackStart)

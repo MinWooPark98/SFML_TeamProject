@@ -13,7 +13,7 @@ protected:
 	IntRect mapSize;
 
 	map<Object::ObjTypes, list<Object*>> ObjTypeList;
-	vector<map<Object::ObjTypes, list<Object*>>> testObjTypeList;
+	//vector<map<Object::ObjTypes, list<Object*>>> testObjTypeList;
 
 public:
 	PlayScene();

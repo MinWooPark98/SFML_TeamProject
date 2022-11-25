@@ -332,7 +332,7 @@ void Player::UpdateRun(float dt)
 
 	if (Utils::EqualFloat(direction.x, 0.f))
 		direction.y > 0.f ? animator->Play("RunDown") : animator->Play("RunUp");
-	else if(Utils::EqualFloat(lastDir.x, 0.f))
+	else if(direction.x * lastDir.x <= 0.f)
 		direction.x > 0.f ? animator->Play("RunRight") : animator->Play("RunLeft");
 }
 

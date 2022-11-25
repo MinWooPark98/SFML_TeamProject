@@ -5,6 +5,8 @@ void HeavyBombingArcher::Init()
 	Archer::Init();
 	arrow->SetScale({1, 1});
 	weapon->SetScale({1.5, 1.5});
+	archerAttackArm->SetScale({ 1.5, 1.5 });
+	archerPullArm->SetScale({1.5, 1.5});
 	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ArrowLarge.png"));
 	arrow->SetHitBox((FloatRect)arrow->GetSprite().getTextureRect());
 	arrow->SetOrigin(Origins::MC);
@@ -68,6 +70,11 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 		else
 			SetNormalAttackCount(2);
 	}
+	else if (attackDelay >= attackStart + 0.2f)
+	{
+		archerAttackArm->SetPos(weapon->GetPos());
+		archerPullArm->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * -10.f);
+	}
 
 	Archer::UpdateAttack(dt);
 
@@ -99,7 +106,9 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 				for (int i = smollArrow.size() - 1; i > count; i--)
 					smollArrow[i]->SetPos(GetPos());
 
-				weapon->SetPos(GetPos());
+				weapon->SetPos(GetPos() - Utils::Normalize((playerLastPos - lastPos)) * -3.f);
+				archerAttackArm->SetPos(weapon->GetPos());
+				archerPullArm->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - lastPos)) * -10.f);
 				move = Utils::Normalize(playerLastPos - lastPos);
 
 				if (pattern == Pattern::EscapeAttack)

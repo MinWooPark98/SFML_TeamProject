@@ -14,6 +14,10 @@ protected:
 	float attackStart;
 	bool bowWait = false;
 
+	SpriteObj* archerAttackArm;
+	SpriteObj* archerPullArm;
+	Animator archerPullArmAnimation;
+
 public:
 	Archer();
 	virtual ~Archer() { Release(); };

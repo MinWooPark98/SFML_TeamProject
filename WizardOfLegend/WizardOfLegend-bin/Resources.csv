@@ -580,3 +580,7 @@ animations/player/GroundSlamUp.csv,3
 animations/player/JumpSlamDown.csv,3
 animations/player/JumpSlamUp.csv,3
 graphics/PlayerStatusBarPortrait.png,0
+graphics/ArcherArrowShowerPullArm.png,0
+graphics/ArcherAttackPullArm0.png,0
+graphics/ArcherAttackPullArm1.png,0
+animations/archerAnimation/ArcherArm.csv,3
