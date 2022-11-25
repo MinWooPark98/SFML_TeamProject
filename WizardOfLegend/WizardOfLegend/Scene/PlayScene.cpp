@@ -163,7 +163,13 @@ void PlayScene::Update(float dt)
 		return;
 	}
 
-
+	for (auto& enemy : ObjTypeList[Object::ObjTypes::Enemy])
+	{
+		for (auto& coll : ObjTypeList[Object::ObjTypes::Wall])
+		{
+			
+		}
+	}
 }
 
 void PlayScene::Draw(RenderWindow& window)

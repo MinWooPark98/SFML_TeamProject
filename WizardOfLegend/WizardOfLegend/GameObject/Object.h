@@ -44,7 +44,7 @@ protected:
     bool isUi;
     bool viewIn;
 
-    Vector2f wallScope = {10, 10};
+    Vector2f wallScope = {100, 100};
 
 public:
     Object();
