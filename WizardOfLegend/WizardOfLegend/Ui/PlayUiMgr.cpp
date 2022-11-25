@@ -188,7 +188,7 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 	// HP Yellow Bar Control
 	if (hpBarSize - playerCurHpBarSet < hpBarHurtSize)
 	{
-		HpBarHurt->SetSize({ hpBarHurtSize -= (dt * 120), HpBarHurt->GetSize().y * 4 });
+		HpBarHurt->SetSize({ hpBarHurtSize -= (dt * 50), HpBarHurt->GetSize().y * 4 });
 	}
 	else if (hpBarSize - playerCurHpBarSet > hpBarHurtSize)
 	{
