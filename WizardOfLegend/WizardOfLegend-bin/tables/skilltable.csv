@@ -1,6 +1,6 @@
-SkillName,"Element(Fire: 0, Air: 1, Earth: 2, Lightning: 3, Water: 4, Chaos: 5)","AttackType(Single: 0, Multiple: 1, SaveAttacks: 2)",AttackCntLim,AttackInterval,Distance,"AttackShape(Surrounded: 0, Range: 1, Rotate: 2, Wave: 3)",Amplitude,Frequency,"WaveType(OneWay: 0, BackAndForth: 1)",FallingHeight,"RangeType(Default: 0, AbovePlayer: 1)","PlayerAction(NormalSpell: 0, Dash:1, PBAoE: 2, JumpSlash: 3, GroundSlam: 4)",SkillDelay,SkillCoolDown,DmgRatio(damage = Subject_damage * DmgRatio),"DmgType(Once: 0, Periodic: 1)",DmgDelay,Duration,Speed,animClipName_1(Left),animClipName_2(Right)
-DragonArc,0,2,10,0.1,60,3,20,2.5,1,0,0,0,0,6,1.2,0,0,2,200,DragonArcLeft,DragonArcRight
-FireFull,0,1,10,0.05,60,2,20,2.5,0,0,0,0,0,6,1.2,0,0,6,75,FireFull,FireFull
-FireBall,0,1,10,0.1,60,3,0,10,0,0,0,0,0,5,1.5,0,0,4,300,FireFull,FireFull
-FireDash,0,1,10,0.05,60,2,20,2.5,0,0,0,1,0,6,1.2,0,0,6,75,FireFull,FireFull
-Dragon,0,2,10,0.1,120,3,20,2.5,1,0,0,3,0,6,1.2,0,0,2,200,DragonArcLeft,DragonArcRight
+SkillName,"Element(Fire: 0, Air: 1, Earth: 2, Lightning: 3, Water: 4, Chaos: 5)","AttackType(Single: 0, Multiple: 1, SaveAttacks: 2)",AttackCntLim,AttackInterval,Distance,"AttackShape(Surrounded: 0, Range: 1, Rotate: 2, Wave: 3)",Amplitude,Frequency,"WaveType(None: -1, OneWay: 0, BackAndForth: 1)",FallingHeight,"RangeType(None: -1, Default: 0, AbovePlayer: 1)","PlayerAction(NormalSpell: 0, Dash:1, PBAoE: 2, JumpSlash: 3, GroundSlam: 4)",SkillDelay,SkillCoolDown,DmgRatio(damage = Subject_damage * DmgRatio),"DmgType(Once: 0, Periodic: 1)",DmgDelay,Duration,Speed,animClipName_1(Left),animClipName_2(Right)
+DragonArc,0,2,10,0.1,60,3,20,2.5,1,0,-1,0,0,6,1.2,0,0,2,200,DragonArcLeft,DragonArcRight
+FireFull,0,1,10,0.05,60,2,20,2.5,0,0,-1,0,0,6,1.2,0,0,6,75,FireFull,FireFull
+FireBall,0,1,10,0.1,60,3,0,10,0,0,-1,0,0,5,1.5,0,0,4,300,FireFull,FireFull
+FireDash,0,1,10,0.05,60,2,20,2.5,0,0,-1,1,0,6,1.2,0,0,6,75,FireFull,FireFull
+Dragon,0,2,10,0.1,120,3,20,2.5,1,0,-1,3,0,6,1.2,0,0,2,200,DragonArcLeft,DragonArcRight

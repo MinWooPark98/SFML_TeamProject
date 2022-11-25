@@ -12,6 +12,8 @@ protected:
 	SpriteObj* sprite;
 	TextObj* text;
 
+	bool activated;
+
 	bool isMouseOn;
 	bool isClicked;
 
@@ -46,6 +48,8 @@ public:
 	void DefaultMouseOn();
 	void DefaultMouseOff();
 	void ChangeFillColor();
+
+	void SetActivated(bool activate);
 
 	function<void()> MousePointerOn;
 	function<void()> MousePointerOff;

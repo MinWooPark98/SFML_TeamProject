@@ -36,9 +36,9 @@ public:
 
 protected:
 	pair<OptionButtons*, OptionButtons*> options;
-	vector<OptionButtons*> optButtons;
+	map<Options, OptionButtons*> optButtons;
+	map<Options, TextBox*> textBoxs;
 	vector<OptionButtons*> menuButtons;
-	vector<TextBox*> textBoxs;
 
 	Skill::Set selectedSet;
 
@@ -53,7 +53,9 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 
 	void ApplyText(Options opt, TextBox* box);
+	void ApplyTextStr(Options opt, string str);
 	void ApplyOptBtn(Options opt, OptionButtons* opts, Button2* btn);
+	void ApplyOptBtnIdx(Options opt, int vecIdx);
 	void ConvertVal(string& str, int& opt);
 	void ConvertVal(string& str, float& opt);
 

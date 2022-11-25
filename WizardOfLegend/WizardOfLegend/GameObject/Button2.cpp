@@ -6,7 +6,7 @@
 #include "../Framework/InputMgr.h"
 
 Button2::Button2()
-    :sprite(nullptr), text(nullptr), isMouseOn(false), isClicked(false), origin(Origins::TL)
+    :sprite(nullptr), text(nullptr), activated(true), isMouseOn(false), isClicked(false), origin(Origins::TL)
 {
 }
 
@@ -158,8 +158,25 @@ void Button2::ChangeFillColor()
     hitbox.setFillColor(Color(255 - originalColor.r, 255 - originalColor.g, 255 - originalColor.b, 255));
 }
 
+void Button2::SetActivated(bool activate)
+{
+    Color initColor = hitbox.getFillColor();
+    if (activate)
+    {
+        hitbox.setFillColor({ initColor.r, initColor.g, initColor.b, 255 });
+        activated = true;
+    }
+    else
+    {
+        hitbox.setFillColor({ initColor.r, initColor.g, initColor.b, 175 });
+        activated = false;
+    }
+}
+
 void Button2::MouseOn()
 {
+    if (!activated)
+        return;
     isMouseOn = true;
     if (MousePointerOn != nullptr)
         MousePointerOn();
@@ -174,6 +191,8 @@ void Button2::MouseOff()
 
 void Button2::Clicked()
 {
+    if (!activated)
+        return;
     isClicked = true;
     if (ClickOn != nullptr)
         ClickOn();
