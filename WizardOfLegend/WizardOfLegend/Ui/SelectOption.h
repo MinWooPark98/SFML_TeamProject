@@ -52,6 +52,9 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
+	void ActivateAll();
+	void ActivateOption(Options option);
+	void DeactivateOption(Options option);
 	void ApplyText(Options opt, TextBox* box);
 	void ApplyTextStr(Options opt, string str);
 	void ApplyOptBtn(Options opt, OptionButtons* opts, Button2* btn);

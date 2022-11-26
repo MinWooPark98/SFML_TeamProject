@@ -1,5 +1,6 @@
 #pragma once
 #include "SpriteObj.h"
+#include "Skill.h"
 
 class Animator;
 
@@ -11,6 +12,7 @@ protected:
 	float duration;
 	float timer;
 
+	Skill::DamageType dmgType;
 	int attackDmg;
 	bool isOnAtkDelay;
 	float atkDelay;
@@ -28,4 +30,7 @@ public:
 	void Do();
 	void SetDuration(float duration) { this->duration = duration; }
 	void SetTimer(float timer) { this->timer = timer; }
+	void SetDmgType(Skill::DamageType type) { dmgType = type; }
+	void SetAtkDmg(int dmg) { attackDmg = dmg; }
+	void SetAtkDelay(float delay) { atkDelay = delay; }
 };

@@ -34,6 +34,9 @@ void Button2::Reset()
     }
     if (text != nullptr)
         text->SetString("");
+    SetActivated(true);
+    UnClicked();
+    MouseOff();
 }
 
 void Button2::Update(float dt)
@@ -152,10 +155,14 @@ void Button2::DefaultMouseOff()
         text->SetFillColor(textInitColor);
 }
 
-void Button2::ChangeFillColor()
+void Button2::FillBoxComplementaryColor()
 {
-    Color originalColor = hitbox.getFillColor();
-    hitbox.setFillColor(Color(255 - originalColor.r, 255 - originalColor.g, 255 - originalColor.b, 255));
+    hitbox.setFillColor(Color(255 - boxInitColor.r, 255 - boxInitColor.g, 255 - boxInitColor.b, 255));
+}
+
+void Button2::FillBoxInitColor()
+{
+    hitbox.setFillColor(Color(boxInitColor.r, boxInitColor.g, boxInitColor.b, 255));
 }
 
 void Button2::SetActivated(bool activate)

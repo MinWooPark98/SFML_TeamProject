@@ -232,10 +232,10 @@ void FireBoss::SetState(BossStates newState)
 			{
 				switch (skills[0]->GetSetting()->attackShape)
 				{
-				case Projectile::AttackShape::Range:
+				case Skill::AttackShape::Range:
 					skills[0]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
 					break;
-				case Projectile::AttackShape::Wave:
+				case Skill::AttackShape::Wave:
 					skills[0]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
 					break;
 				}

@@ -2,6 +2,7 @@
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/SkillTable.h"
 #include "../Scene/SceneMgr.h"
+#include "Projectile.h"
 #include "CastingCircle.h"
 
 Skill::Skill()
@@ -67,19 +68,31 @@ void Skill::Do()
 	obj->SetAtkDelay(setting->dmgDelay);
 	obj->SetMovingDuration(setting->duration);
 	obj->SetSpeed(setting->speed);
-	if(setting->attackShape != Projectile::AttackShape::Range)
+	if(setting->attackShape != AttackShape::Range)
 		obj->SetDistance(setting->distance);
 	obj->SetAnimClip(setting->animClipName);
 	switch (subType)
 	{
 	case Skill::SubjectType::Player:
-		if(!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
+		if(!(setting->playerAction == Player::SkillAction::NoAction) ||
+			!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
 			((Player*)subject)->Action();
 		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
 		switch (setting->attackShape)
 		{
-		case Projectile::AttackShape::Range:
+		case AttackShape::Surrounded:
+			obj->SetDirection({ 0.f, 0.f });
+			obj->SetPos(subject->GetPos());
+			break;
+		case AttackShape::Range:
 			{
+				if (setting->rangeType == RangeType::Default)
+				{
+					obj->SetDirection({ 0.f, 0.f });
+					obj->SetDistance(0.f);
+					obj->SetPos(subject->GetPos());
+					break;
+				}
 				if (!isDoing)
 				{
 					auto mouseVec = SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos();
@@ -90,12 +103,12 @@ void Skill::Do()
 				}
 				obj->SetDirection(skillDir);
 				obj->SetDistance(distance);
-				obj->SetPos(setting->rangeType == Projectile::RangeType::AbovePlayer ? subject->GetPos() : startPos);
+				obj->SetPos(setting->rangeType == RangeType::FromAbovePlayer ? subject->GetPos() : startPos);
 				Vector2f translation = Utils::RandAreaPoint() * setting->amplitude;
 				if (isDoing)
 				{
 					obj->Translate(translation);
-					if (setting->rangeType == Projectile::RangeType::Default)
+					if (setting->rangeType == RangeType::VerticalDescent)
 					{
 						for (auto circle : castingCircles)
 							circle->SetTimer(0.f);
@@ -108,22 +121,23 @@ void Skill::Do()
 				circle->Do();
 				circle->SetSize({ setting->amplitude * 2.f, setting->amplitude * 2.f });
 				castingCircles.push_back(circle);
-				if (setting->rangeType == Projectile::RangeType::AbovePlayer)
+				if (setting->rangeType == RangeType::FromAbovePlayer)
 				{
 					obj->SetFallingHeight(setting->fallingHeight - distance * skillDir.y);
-					circle->SetColor({ 255, 255, 255, 0 });
+					if(setting->attackType != AttackType::Single)
+						circle->SetColor({ 255, 255, 255, 0 });
 					if (isDoing)
 						circle->Translate(translation);
 				}
 			}
 			break;
-		case Projectile::AttackShape::Rotate:
+		case AttackShape::Rotate:
 			if (isDoing)
 				obj->SetAngle(projectiles.back()->GetAngle() + 360.f / setting->attackCntLim);
 			startPos = subject->GetPos();
 			obj->SetStartPos(startPos);
 			break;
-		case Projectile::AttackShape::Wave:
+		case AttackShape::Wave:
 			if (!(setting->attackType == AttackType::Multiple && isDoing))
 			{
 				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
@@ -140,18 +154,18 @@ void Skill::Do()
 	case Skill::SubjectType::Enemy:
 		switch (setting->attackShape)
 		{
-		case Projectile::AttackShape::Range:
+		case AttackShape::Range:
 			obj->SetDirection(skillDir);
 			startPos = subject->GetPos() + skillDir * setting->distance;
 			obj->SetPos(startPos);
 			break;
-		case Projectile::AttackShape::Rotate:
+		case AttackShape::Rotate:
 			if (isDoing)
 				obj->SetAngle(projectiles.back()->GetAngle() + 360.f / setting->attackCntLim);
 			startPos = subject->GetPos();
 			obj->SetStartPos(startPos);
 			break;
-		case Projectile::AttackShape::Wave:
+		case AttackShape::Wave:
 			if (!(setting->attackType == AttackType::Multiple && isDoing))
 			{
 				startPos = subject->GetPos() + skillDir * setting->distance;
@@ -207,7 +221,7 @@ void Skill::Update(float dt)
 				attackTimer += dt;
 				if (attackCnt < setting->attackCntLim)
 				{
-					if (setting->attackShape != Projectile::AttackShape::Rotate && attackTimer < setting->attackInterval)
+					if (setting->attackShape != AttackShape::Rotate && attackTimer < setting->attackInterval)
 						break;
 					Do();
 					attackTimer = 0.f;
@@ -227,7 +241,9 @@ void Skill::Update(float dt)
 		auto it = projectiles.begin();
 		while (it != projectiles.end())
 		{
-			if (setting->attackShape == Projectile::AttackShape::Rotate)
+			if (setting->attackShape == AttackShape::Surrounded)
+				(*it)->SetPos(subject->GetPos());
+			if (setting->attackShape == AttackShape::Rotate)
 				(*it)->SetStartPos(subject->GetPos());
 
 			if (!(*it)->GetMoving())
@@ -242,11 +258,11 @@ void Skill::Update(float dt)
 
 	if (projectiles.empty())
 	{
-		bool isDefaultCircle = setting->rangeType == Projectile::RangeType::Default;
+		bool isVerticalDescent = setting->rangeType == RangeType::VerticalDescent;
 		auto it = castingCircles.begin();
 		while (it != castingCircles.end())
 		{
-			if(isDefaultCircle)
+			if(isVerticalDescent)
 				(*it)->SetActive(false);
 			if (!(*it)->GetActive())
 			{
@@ -275,15 +291,15 @@ void Skill::Set::Reset()
 	attackCntLim = 0;
 	attackInterval = 0.f;
 	distance = 0.f;
-	attackShape = Projectile::AttackShape::None;
+	attackShape = AttackShape::None;
 	amplitude = 0.f;
 	frequency = 0.f;
-	waveType = Projectile::WaveType::OneWay;
+	waveType = WaveType::OneWay;
 	playerAction = Player::SkillAction::NormalSpell;
 	skillDelay = 0.f;
 	skillCoolDown = 0.f;
 	dmgRatio = 0.f;
-	dmgType = Projectile::DamageType::Once;
+	dmgType = DamageType::Once;
 	dmgDelay = 0.f;
 	duration = 0.f;
 	speed = 0.f;

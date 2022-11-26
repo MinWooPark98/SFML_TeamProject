@@ -296,12 +296,12 @@ void Player::Update(float dt)
 
 void Player::Draw(RenderWindow& window)
 {
-	Object::Draw(window);
-	window.draw(sprite, &playerShader);
 	for (auto skill : skills)
 	{
 		skill->Draw(window);
 	}
+	Object::Draw(window);
+	window.draw(sprite, &playerShader);
 }
 
 void Player::UpdateIdle(float dt)

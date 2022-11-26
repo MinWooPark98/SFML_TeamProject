@@ -21,6 +21,7 @@ public:
 	};
 	enum class SkillAction
 	{
+		NoAction,
 		NormalSpell,
 		Dash,
 		PBAoE,

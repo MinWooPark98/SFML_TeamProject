@@ -1,39 +1,13 @@
 #pragma once
 #include "SpriteObj.h"
+#include "Skill.h"
 
 class Animator;
 
 class Projectile : public SpriteObj
 {
-public:
-	enum class AttackShape
-	{
-		None = -1,
-		Surrounded,
-		Range,
-		Rotate,
-		Wave,
-	};
-	enum class WaveType
-	{
-		None = -1,
-		OneWay,
-		BackAndForth,
-	};
-	enum class RangeType
-	{
-		None = -1,
-		Default,
-		AbovePlayer,
-	};
-	enum class DamageType
-	{
-		Once,
-		Periodic,
-	};
-
 protected:
-	AttackShape atkShape;
+	Skill::AttackShape atkShape;
 
 	Animator* animator;
 
@@ -41,14 +15,14 @@ protected:
 	float movingDuration;
 	float movingTimer;
 	float speed;
-	WaveType waveType;
+	Skill::WaveType waveType;
 	float fallingHeight;
 	float cumulativeFallingHeight;
-	RangeType rangeType;
+	Skill::RangeType rangeType;
 	bool isComingBack;
 	int attackDmg;
 
-	DamageType dmgType;
+	Skill::DamageType dmgType;
 
 	bool isOnDelay;
 	float delay;
@@ -77,18 +51,18 @@ public:
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
 
-	void SetAtkShape(AttackShape shape) { atkShape = shape; }
+	void SetAtkShape(Skill::AttackShape shape) { atkShape = shape; }
 	void SetAnimClip(const vector<string>& clipName);
 	void Fire();
 	void SetMoving(bool moving) { isMoving = moving; }
 	bool GetMoving() const { return isMoving; }
 	void SetMovingDuration(float duration) { movingDuration = duration; }
 	void SetSpeed(float speed) { this->speed = speed; }
-	void SetWaveType(WaveType type) { waveType = type; }
+	void SetWaveType(Skill::WaveType type) { waveType = type; }
 	void SetFallingHeight(float height) { fallingHeight = height; }
-	void SetRangeType(RangeType type) { rangeType = type; }
+	void SetRangeType(Skill::RangeType type) { rangeType = type; }
 	void SetAtkDmg(int atkDmg) { attackDmg = atkDmg; }
-	void SetDmgType(DamageType dmgtype) { dmgType = dmgtype; }
+	void SetDmgType(Skill::DamageType dmgtype) { dmgType = dmgtype; }
 	void SetDelay(float delay) { this->delay = delay; }
 	void SetAtkDelay(float atkDelay) { this->atkDelay = atkDelay; }
 	void SetDistance(float distance) { this->distance = distance; }

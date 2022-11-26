@@ -3,7 +3,7 @@
 #include "../Framework/ResourceMgr.h"
 
 CastingCircle::CastingCircle()
-	:animator(nullptr), duration(0.f), timer(0.f), attackDmg(0), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f)
+	:animator(nullptr), duration(0.f), timer(0.f), dmgType(Skill::DamageType::Once), attackDmg(0), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f)
 {
 }
 
@@ -31,6 +31,8 @@ void CastingCircle::Reset()
 {
 	SpriteObj::Reset();
 	timer = 0.f;
+	isOnAtkDelay = false;
+	atkTimer = 0.f;
 	sprite.setColor({ 255, 255, 255, 255 });
 }
 
@@ -44,8 +46,9 @@ void CastingCircle::Update(float dt)
 
 	if (!isOnAtkDelay)
 	{
+		// 충돌 검사 및 데미지
 	}
-	else if (dmgType != DamageType::Once)
+	else if (dmgType != Skill::DamageType::Once)
 	{
 		atkTimer += dt;
 		if (atkTimer >= atkDelay)

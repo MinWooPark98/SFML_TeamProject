@@ -19,6 +19,7 @@ protected:
 
 	Origins origin;
 	Color textInitColor;
+	Color boxInitColor;
 	FloatRect btnBound;
 
 public:
@@ -47,9 +48,12 @@ public:
 
 	void DefaultMouseOn();
 	void DefaultMouseOff();
-	void ChangeFillColor();
+	void FillBoxComplementaryColor();
+	void FillBoxInitColor();
+	void SetBoxInitColor(Color color) { boxInitColor = color; }
 
 	void SetActivated(bool activate);
+	bool GetActivated() { return activated; }
 
 	function<void()> MousePointerOn;
 	function<void()> MousePointerOff;

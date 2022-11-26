@@ -33,8 +33,8 @@ void SelectOption::Init()
 		Button2* button2 = new Button2();
 		options.first->AddButton(button1, opts[i], { 0.f, 0.f, 200.f, buttonHeight });
 		options.second->AddButton(button2, "", { 0.f, 0.f, windowSize.x * 0.3f - 202.f, buttonHeight });
-		button2->MousePointerOn = bind(&Button2::ChangeFillColor, button2);
-		button2->MousePointerOff = bind(&Button2::ChangeFillColor, button2);
+		button2->MousePointerOn = bind(&Button2::FillBoxComplementaryColor, button2);
+		button2->MousePointerOff = bind(&Button2::FillBoxInitColor, button2);
 
 		switch ((Options)i)
 		{
@@ -120,7 +120,7 @@ void SelectOption::Init()
 				OptionButtons* buttons = new OptionButtons();
 				buttons->SetActive(false);
 				buttons->SetPos(button2->GetPos() + Vector2f(0.f, buttonHeight));
-				vector<string> btnStr = { "None", "Default", "AbovePlayer" };
+				vector<string> btnStr = { "None", "Default", "VerticalDescent", "FromAbovePlayer" };
 				for (int j = 0; j < btnStr.size(); ++j)
 				{
 					Button2* newButton = new Button2();
@@ -143,7 +143,7 @@ void SelectOption::Init()
 				OptionButtons* buttons = new OptionButtons();
 				buttons->SetActive(false);
 				buttons->SetPos(button2->GetPos() + Vector2f(0.f, buttonHeight));
-				vector<string> btnStr = { "NormalSpell", "Dash", "PBAoE", "JumpSlash", "GroundSlam" };
+				vector<string> btnStr = { "NoAction", "NormalSpell", "Dash", "PBAoE", "JumpSlash", "GroundSlam" };
 				for (int j = 0; j < btnStr.size(); ++j)
 				{
 					Button2* newButton = new Button2();
@@ -297,6 +297,38 @@ void SelectOption::Draw(RenderWindow& window)
 	}
 }
 
+void SelectOption::ActivateAll()
+{
+	auto& buttons = options.second->GetButtons();
+	for (int i = 0; i < (int)Options::Count; ++i)
+	{
+		if (!buttons[i]->GetActivated())
+		{
+			buttons[i]->SetActivated(true);
+			ApplyTextStr((Options)i, "");
+			buttons[i]->GetText()->SetString("");
+		}
+	}
+}
+
+void SelectOption::ActivateOption(Options option)
+{
+	auto& buttons = options.second->GetButtons();
+	if (buttons[(int)option]->GetActivated())
+		return;
+	buttons[(int)option]->SetActivated(true);
+	ApplyTextStr(option, "");
+	buttons[(int)option]->GetText()->SetString("");
+}
+
+void SelectOption::DeactivateOption(Options option)
+{
+	auto& buttons = options.second->GetButtons();
+	buttons[(int)option]->SetActivated(false);
+	ApplyTextStr(option, "0");
+	ApplyOptBtnIdx(option, 0);
+}
+
 void SelectOption::ApplyText(Options opt, TextBox* box)
 {
 	string str = box->GetString();
@@ -355,7 +387,7 @@ void SelectOption::ApplyTextStr(Options opt, string str)
 			selectedSet.animClipName[1] = str;
 			break;
 		default:
-			break;
+			return;
 		}
 	}
 	catch (exception expn)
@@ -379,7 +411,7 @@ void SelectOption::ApplyTextStr(Options opt, string str)
 
 void SelectOption::ApplyOptBtn(Options opt, OptionButtons* opts, Button2* btn)
 {
-	auto buttons = opts->GetButtons();
+	auto& buttons = opts->GetButtons();
 	int i = 0;
 	while (i < buttons.size())
 	{
@@ -395,6 +427,7 @@ void SelectOption::ApplyOptBtn(Options opt, OptionButtons* opts, Button2* btn)
 
 void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 {
+	auto& buttons = options.second->GetButtons();
 	switch (opt)
 	{
 	case SelectOption::Options::Element:
@@ -404,58 +437,38 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 		selectedSet.attackType = (Skill::AttackType)vecIdx;
 		break;
 	case SelectOption::Options::AttackShape:
-		selectedSet.attackShape = (Projectile::AttackShape)vecIdx;
+		selectedSet.attackShape = (Skill::AttackShape)vecIdx;
 		{
-			auto buttons = options.second->GetButtons();
-			switch ((Projectile::AttackShape)vecIdx)
+			switch ((Skill::AttackShape)vecIdx)
 			{
-			case Projectile::AttackShape::Surrounded:
-				buttons[(int)Options::Amplitude]->SetActivated(false);
-				ApplyTextStr(Options::Amplitude, "0");
-				buttons[(int)Options::Frequency]->SetActivated(false);
-				ApplyTextStr(Options::Frequency, "0");
-				buttons[(int)Options::WaveType]->SetActivated(false);
-				ApplyOptBtnIdx(Options::WaveType, 0);
-				buttons[(int)Options::FallingHeight]->SetActivated(false);
-				ApplyTextStr(Options::FallingHeight, "0");
-				buttons[(int)Options::RangeType]->SetActivated(false);
-				ApplyOptBtnIdx(Options::RangeType, 0);
+			case Skill::AttackShape::Surrounded:
+				ActivateAll();
+				DeactivateOption(Options::Distance);
+				DeactivateOption(Options::Amplitude);
+				DeactivateOption(Options::Frequency);
+				DeactivateOption(Options::WaveType);
+				DeactivateOption(Options::FallingHeight);
+				DeactivateOption(Options::RangeType);
+				DeactivateOption(Options::Speed);
 				break;
-			case Projectile::AttackShape::Range:
-				buttons[(int)Options::Amplitude]->SetActivated(true);
-				ApplyTextStr(Options::Amplitude, "");
-				buttons[(int)Options::Frequency]->SetActivated(false);
-				ApplyTextStr(Options::Frequency, "0");
-				buttons[(int)Options::WaveType]->SetActivated(false);
-				ApplyOptBtnIdx(Options::WaveType, 0);
-				buttons[(int)Options::FallingHeight]->SetActivated(true);
-				ApplyTextStr(Options::FallingHeight, "");
-				buttons[(int)Options::RangeType]->SetActivated(true);
-				options.second->GetButtons()[(int)Options::RangeType]->GetText()->SetString("");
+			case Skill::AttackShape::Range:
+				ActivateAll();
+				DeactivateOption(Options::Frequency);
+				DeactivateOption(Options::WaveType);
+				DeactivateOption(Options::Speed);
 				break;
-			case Projectile::AttackShape::Rotate:
-				buttons[(int)Options::Amplitude]->SetActivated(false);
-				ApplyTextStr(Options::Amplitude, "0");
-				buttons[(int)Options::Frequency]->SetActivated(false);
-				ApplyTextStr(Options::Frequency, "0");
-				buttons[(int)Options::WaveType]->SetActivated(false);
-				ApplyOptBtnIdx(Options::WaveType, 0);
-				buttons[(int)Options::FallingHeight]->SetActivated(false);
-				ApplyTextStr(Options::FallingHeight, "0");
-				buttons[(int)Options::RangeType]->SetActivated(false);
-				ApplyOptBtnIdx(Options::RangeType, 0);
+			case Skill::AttackShape::Rotate:
+				ActivateAll();
+				DeactivateOption(Options::Amplitude);
+				DeactivateOption(Options::Frequency);
+				DeactivateOption(Options::WaveType);
+				DeactivateOption(Options::FallingHeight);
+				DeactivateOption(Options::RangeType);
 				break;
-			case Projectile::AttackShape::Wave:
-				buttons[(int)Options::Amplitude]->SetActivated(true);
-				ApplyTextStr(Options::Amplitude, "");
-				buttons[(int)Options::Frequency]->SetActivated(true);
-				ApplyTextStr(Options::Frequency, "");
-				buttons[(int)Options::WaveType]->SetActivated(true);
-				options.second->GetButtons()[(int)Options::WaveType]->GetText()->SetString("");
-				buttons[(int)Options::FallingHeight]->SetActivated(false);
-				ApplyTextStr(Options::FallingHeight, "0");
-				buttons[(int)Options::RangeType]->SetActivated(false);
-				ApplyOptBtnIdx(Options::RangeType, 0);
+			case Skill::AttackShape::Wave:
+				ActivateAll();
+				DeactivateOption(Options::FallingHeight);
+				DeactivateOption(Options::RangeType);
 				break;
 			default:
 				break;
@@ -463,19 +476,39 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 		}
 		break;
 	case SelectOption::Options::WaveType:
-		selectedSet.waveType = (Projectile::WaveType)(vecIdx - 1);
+		selectedSet.waveType = (Skill::WaveType)(vecIdx - 1);
 		break;
 	case SelectOption::Options::RangeType:
-		selectedSet.rangeType = (Projectile::RangeType)(vecIdx - 1);
+		switch ((Skill::RangeType)(vecIdx - 1))
+		{
+		case Skill::RangeType::Default:
+			DeactivateOption(Options::Distance);
+			break;
+		default:
+			ActivateOption(Options::Distance);
+			break;
+		}
+		selectedSet.rangeType = (Skill::RangeType)(vecIdx - 1);
 		break;
 	case SelectOption::Options::PlayerAction:
 		selectedSet.playerAction = (Player::SkillAction)vecIdx;
 		break;
 	case SelectOption::Options::DmgType:
-		selectedSet.dmgType = (Projectile::DamageType)vecIdx;
+		switch ((Skill::DamageType)vecIdx)
+		{
+		case Skill::DamageType::Once:
+			DeactivateOption(Options::DmgDelay);
+			break;
+		case Skill::DamageType::Periodic:
+			ActivateOption(Options::DmgDelay);
+			break;
+		default:
+			break;
+		}
+		selectedSet.dmgType = (Skill::DamageType)vecIdx;
 		break;
 	default:
-		break;
+		return;
 	}
 	optButtons[opt]->SetActive(false);
 	options.second->GetButtons()[(int)opt]->GetText()->SetString(optButtons[opt]->GetButtons()[vecIdx]->GetText()->GetString());
@@ -594,31 +627,31 @@ void SelectOption::Load(const string& skillName)
 	SkillTable* table = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
 	table->Load();
 	selectedSet = table->Get(skillName);
+	ActivateAll();
 	for (int i = 0; i < (int)SelectOption::Options::Count; ++i)
 	{
 		switch ((SelectOption::Options)i)
 		{
 		case SelectOption::Options::Element:
-			options.second->GetButtons()[i]->GetText()->SetString(optButtons[Options::Element]->GetButtons()[(int)selectedSet.element]->GetText()->GetString());
+			ApplyOptBtnIdx(Options::Element, (int)selectedSet.element);
 			break;
 		case SelectOption::Options::AttackType:
-			options.second->GetButtons()[i]->GetText()->SetString(optButtons[Options::AttackType]->GetButtons()[(int)selectedSet.attackType]->GetText()->GetString());
+			ApplyOptBtnIdx(Options::AttackType, (int)selectedSet.attackType);
 			break;
 		case SelectOption::Options::AttackShape:
 			ApplyOptBtnIdx(Options::AttackShape, (int)selectedSet.attackShape);
-			options.second->GetButtons()[i]->GetText()->SetString(optButtons[Options::AttackShape]->GetButtons()[(int)selectedSet.attackShape]->GetText()->GetString());
 			break;
 		case SelectOption::Options::WaveType:
-			options.second->GetButtons()[i]->GetText()->SetString(optButtons[Options::WaveType]->GetButtons()[(int)selectedSet.waveType + 1]->GetText()->GetString());
+			ApplyOptBtnIdx(Options::WaveType, (int)selectedSet.waveType + 1);
 			break;
 		case SelectOption::Options::RangeType:
-			options.second->GetButtons()[i]->GetText()->SetString(optButtons[Options::RangeType]->GetButtons()[(int)selectedSet.rangeType + 1]->GetText()->GetString());
+			ApplyOptBtnIdx(Options::RangeType, (int)selectedSet.rangeType + 1);
 			break;
 		case SelectOption::Options::PlayerAction:
-			options.second->GetButtons()[i]->GetText()->SetString(optButtons[Options::PlayerAction]->GetButtons()[(int)selectedSet.playerAction]->GetText()->GetString());
+			ApplyOptBtnIdx(Options::PlayerAction, (int)selectedSet.playerAction);
 			break;
 		case SelectOption::Options::DmgType:
-			options.second->GetButtons()[i]->GetText()->SetString(optButtons[Options::DmgType]->GetButtons()[(int)selectedSet.dmgType]->GetText()->GetString());
+			ApplyOptBtnIdx(Options::DmgType, (int)selectedSet.dmgType);
 			break;
 		case SelectOption::Options::SkillName:
 			textBoxs[Options::SkillName]->SetString(selectedSet.skillName);

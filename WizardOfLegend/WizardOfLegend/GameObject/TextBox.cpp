@@ -76,7 +76,16 @@ void TextBox::Update(float dt)
 		}
 		else if (key == Keyboard::Backspace && !str.empty())
 		{
-			str.pop_back();
+			for (auto ing : ingList)
+			{
+				if (ing == Keyboard::LShift || ing == Keyboard::RShift)
+				{
+					str.clear();
+					break;
+				}
+			}
+			if(!str.empty())
+				str.pop_back();
 			SetString(str);
 			break;
 		}
