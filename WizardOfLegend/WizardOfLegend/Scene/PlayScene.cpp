@@ -25,8 +25,6 @@ void PlayScene::Init()
 {
 	Scene::Init();
 
-
-
 	isMap = true;
 	auto& data = FILE_MGR->GetMap("TUTORIAL");
 
@@ -158,20 +156,20 @@ void PlayScene::Update(float dt)
 	worldView.setCenter(player->GetPos());
 	Scene::Update(dt);
 
-	for (auto& enemy : ObjTypeList[Object::ObjTypes::Enemy])
-	{
-		for (auto& coll : ObjTypeList[Object::ObjTypes::Wall])
-		{
-			
-		}
-	}
-
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
 		if (!this->GetPause())
 			this->SetPause(true);
 		else
 			this->SetPause(false);
+	}
+
+	for (auto& enemy : ObjTypeList[Object::ObjTypes::Enemy])
+	{
+		for (auto& coll : ObjTypeList[Object::ObjTypes::Wall])
+		{
+			
+		}
 	}
 }
 

@@ -26,8 +26,6 @@ public:
 	bool Init(int width, int height);
 	bool Do();
 
-	void SetTimeScale(float timeScale) { this->timeScale = timeScale; };
-
 	 RenderWindow& GetWindow();
 };
 

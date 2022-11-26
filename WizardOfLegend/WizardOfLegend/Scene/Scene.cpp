@@ -76,10 +76,9 @@ void Scene::Update(float dt)
 				}
 			}
 		}
+		if (projectiles != nullptr)
+			projectiles->Update(dt);
 	}
-
-	if (projectiles != nullptr)
-		projectiles->Update(dt);
 
 	if (uiMgr != nullptr && uiMgr->GetActive())
 		uiMgr->Update(dt);
