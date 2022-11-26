@@ -2,6 +2,7 @@
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/SkillTable.h"
 #include "../Scene/SceneMgr.h"
+#include "CastingCircle.h"
 
 Skill::Skill()
 	:subject(nullptr), setting(nullptr), subType(SubjectType::None), isDoing(false), distance(0.f), attackCnt(0), attackTimer(0.f), skillTimer(0.f)
@@ -74,22 +75,47 @@ void Skill::Do()
 	case Skill::SubjectType::Player:
 		if(!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
 			((Player*)subject)->Action();
+		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
 		switch (setting->attackShape)
 		{
 		case Projectile::AttackShape::Range:
-			if (!isDoing)
 			{
-				auto mouseVec = SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos();
-				auto mouseDistance = Utils::Magnitude(mouseVec);
-				skillDir = Utils::Normalize(mouseVec);
-				distance = mouseDistance <= setting->distance ? mouseDistance : setting->distance;
-				startPos = subject->GetPos() + skillDir * setting->distance;
+				if (!isDoing)
+				{
+					auto mouseVec = SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos();
+					auto mouseDistance = Utils::Magnitude(mouseVec);
+					skillDir = Utils::Normalize(mouseVec);
+					distance = mouseDistance <= setting->distance ? mouseDistance : setting->distance;
+					startPos = subject->GetPos() + skillDir * distance;
+				}
+				obj->SetDirection(skillDir);
+				obj->SetDistance(distance);
+				obj->SetPos(setting->rangeType == Projectile::RangeType::AbovePlayer ? subject->GetPos() : startPos);
+				Vector2f translation = Utils::RandAreaPoint() * setting->amplitude;
+				if (isDoing)
+				{
+					obj->Translate(translation);
+					if (setting->rangeType == Projectile::RangeType::Default)
+					{
+						for (auto circle : castingCircles)
+							circle->SetTimer(0.f);
+						break;
+					}
+				}
+				CastingCircle* circle = SCENE_MGR->GetCurrentScene()->GetCastingCircles()->Get();
+				circle->SetPos(startPos);
+				circle->SetDuration(setting->duration);
+				circle->Do();
+				circle->SetSize({ setting->amplitude * 2.f, setting->amplitude * 2.f });
+				castingCircles.push_back(circle);
+				if (setting->rangeType == Projectile::RangeType::AbovePlayer)
+				{
+					obj->SetFallingHeight(setting->fallingHeight - distance * skillDir.y);
+					circle->SetColor({ 255, 255, 255, 0 });
+					if (isDoing)
+						circle->Translate(translation);
+				}
 			}
-			obj->SetDirection(skillDir);
-			obj->SetDistance(distance);
-			obj->SetPos(setting->rangeType == Projectile::RangeType::AbovePlayer ? subject->GetPos() : startPos);
-			if (isDoing)
-				obj->Translate(Utils::RandAreaPoint() * setting->amplitude);
 			break;
 		case Projectile::AttackShape::Rotate:
 			if (isDoing)
@@ -110,7 +136,6 @@ void Skill::Do()
 			obj->SetAmplitude(setting->amplitude);
 			break;
 		}
-		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
 		break;
 	case Skill::SubjectType::Enemy:
 		switch (setting->attackShape)
@@ -198,30 +223,37 @@ void Skill::Update(float dt)
 			break;
 		}
 	}
-	auto it = projectiles.begin();
-	while(it != projectiles.end())
 	{
-		if (setting->attackShape == Projectile::AttackShape::Rotate)
-			(*it)->SetStartPos(subject->GetPos());
-
-		if (!(*it)->GetMoving())
+		auto it = projectiles.begin();
+		while (it != projectiles.end())
 		{
-			(*it)->SetActive(false);
-			it = projectiles.erase(it);
-			continue;
+			if (setting->attackShape == Projectile::AttackShape::Rotate)
+				(*it)->SetStartPos(subject->GetPos());
+
+			if (!(*it)->GetMoving())
+			{
+				(*it)->SetActive(false);
+				it = projectiles.erase(it);
+				continue;
+			}
+			++it;
 		}
-		++it;
 	}
 
-	if (isDoing && projectiles.empty())
+	if (projectiles.empty())
 	{
-		switch (setting->playerAction)
+		bool isDefaultCircle = setting->rangeType == Projectile::RangeType::Default;
+		auto it = castingCircles.begin();
+		while (it != castingCircles.end())
 		{
-		case Player::SkillAction::JumpSlash:
-			// 플레이어 포지션 이동, 종료
-			break;
-		default:
-			break;
+			if(isDefaultCircle)
+				(*it)->SetActive(false);
+			if (!(*it)->GetActive())
+			{
+				it = castingCircles.erase(it);
+				continue;
+			}
+			++it;
 		}
 	}
 }

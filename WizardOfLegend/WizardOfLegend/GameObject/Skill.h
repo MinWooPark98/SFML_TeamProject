@@ -6,6 +6,8 @@
 #include "Enemy.h"
 #include "../Framework/ObjectPool.h"
 
+class CastingCircle;
+
 class Skill
 {
 public:
@@ -68,6 +70,7 @@ private:
 	SubjectType subType;
 
 	list<Projectile*> projectiles;
+	list<CastingCircle*> castingCircles;
 
 	bool isDoing;
 	Vector2f skillDir;

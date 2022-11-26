@@ -36,6 +36,7 @@ void Projectile::Reset()
 	amplitude = 0.f;
 	frequency = 0.f;
 	reverse = false;
+	sprite.setRotation(0.f);
 }
 
 void Projectile::Update(float dt)

@@ -580,3 +580,5 @@ animations/player/GroundSlamUp.csv,3
 animations/player/JumpSlamDown.csv,3
 animations/player/JumpSlamUp.csv,3
 graphics/PlayerStatusBarPortrait.png,0
+graphics/CastingCircleSheet.png,0
+animations/skill/CastingCircle.csv,3
