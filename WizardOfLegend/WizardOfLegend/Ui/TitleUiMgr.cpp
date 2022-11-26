@@ -32,7 +32,7 @@ void TitleUiMgr::Init()
 	backgrondShadow->setSize({ 2000, 1500 });
 	backgrondShadow->setFillColor({ 0, 0, 0, 0 });
 
-	vector<string> sceneNames = { "Play", "MapTool", "SkillTool", "Exit", "Press Any Key To Start" };
+	vector<string> sceneNames = { "PLAY", "MAP TOOL", "SKILL TOOL", "EXIT", "Press Any Key To Start" };
 	for (int i = 0; i < 5; ++i)
 	{
 		Button2* button = new Button2();
