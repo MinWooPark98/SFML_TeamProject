@@ -121,21 +121,25 @@ void TitleUiMgr::Update(float dt)
 		logoMove = true;
 	}
 
-	if (logoMove && titleLogo->GetPos().y > windowSize.y * 0.3f)
+	if (logoMove)
 	{
-		titleLogo->Translate({ 0, titleLogo->GetPos().y * (dt*2) * -1});
-		startTextActiveTimer = 0.f;
+		if (titleLogo->GetPos().y > windowSize.y * 0.3f)
+		{
+			titleLogo->Translate({ 0, titleLogo->GetPos().y * (dt * 2) * -1 });
+			startTextActiveTimer = 0.f;
+		}
 
 		if (backgroundShadowValue < 170)
-			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue += 1.5f) });
+			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue += 0.3f) });
 	}
 
-	else if (!logoMove && titleLogo->GetPos().y < windowSize.y * 0.5f)
+	else if (!logoMove)
 	{
-		titleLogo->Translate({ 0, titleLogo->GetPos().y * (dt * 2) });
+		if (titleLogo->GetPos().y < windowSize.y * 0.5f)
+			titleLogo->Translate({ 0, titleLogo->GetPos().y * (dt * 2) });
 
 		if (backgroundShadowValue > 0)
-			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue -= 1.5f) });
+			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue -= 0.3f) });
 	}
 
 	if (titleLogo->GetPos().y <= windowSize.y * 0.3f)
