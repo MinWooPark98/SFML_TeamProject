@@ -157,11 +157,6 @@ void PlayScene::Update(float dt)
 {
 	worldView.setCenter(player->GetPos());
 	Scene::Update(dt);
-	if (InputMgr::GetKeyDown(Keyboard::Escape))
-	{
-		SCENE_MGR->ChangeScene(Scenes::Title);
-		return;
-	}
 
 	for (auto& enemy : ObjTypeList[Object::ObjTypes::Enemy])
 	{
@@ -169,6 +164,14 @@ void PlayScene::Update(float dt)
 		{
 			
 		}
+	}
+
+	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
+	{
+		if (!this->GetPause())
+			this->SetPause(true);
+		else
+			this->SetPause(false);
 	}
 }
 

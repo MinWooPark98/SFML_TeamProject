@@ -3,6 +3,7 @@
 
 class SpriteObj;
 class TextObj;
+class Button2;
 class PlayUiMgr : public UiMgr
 {
 protected:
@@ -28,6 +29,11 @@ protected:
 	TextObj* hpText;
 	int playerCurHp = 525;
 	int playerMaxHp = 525;
+
+	// ¸Þ´ºÃ¢
+	SpriteObj* menu;
+	RectangleShape* menuRec;
+	bool isOption = false;
 
 public:
 	PlayUiMgr();
