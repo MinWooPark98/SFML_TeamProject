@@ -127,7 +127,7 @@ void TitleUiMgr::Update(float dt)
 		startTextActiveTimer = 0.f;
 
 		if (backgroundShadowValue < 170)
-			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue += 0.3f) });
+			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue += 1.5f) });
 	}
 
 	else if (!logoMove && titleLogo->GetPos().y < windowSize.y * 0.5f)
@@ -135,7 +135,7 @@ void TitleUiMgr::Update(float dt)
 		titleLogo->Translate({ 0, titleLogo->GetPos().y * (dt * 2) });
 
 		if (backgroundShadowValue > 0)
-			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue -= 0.3f) });
+			backgrondShadow->setFillColor({ 0, 0, 0, (Uint8)(backgroundShadowValue -= 1.5f) });
 	}
 
 	if (titleLogo->GetPos().y <= windowSize.y * 0.3f)
