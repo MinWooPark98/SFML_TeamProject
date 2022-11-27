@@ -56,7 +56,6 @@ void Skill::Do()
 {
 	if (setting == nullptr || subject == nullptr || attackCnt >= setting->attackCntLim)
 		return;
-
 	Projectile* obj = SCENE_MGR->GetCurrentScene()->GetProjectiles()->Get();
 	obj->SetAtkShape(setting->attackShape);
 	obj->SetFrequency(setting->frequency);
@@ -74,8 +73,7 @@ void Skill::Do()
 	switch (subType)
 	{
 	case Skill::SubjectType::Player:
-		if(!(setting->playerAction == Player::SkillAction::NoAction) ||
-			!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
+		if(!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
 			((Player*)subject)->Action();
 		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
 		switch (setting->attackShape)
@@ -104,7 +102,7 @@ void Skill::Do()
 				obj->SetDirection(skillDir);
 				obj->SetDistance(distance);
 				obj->SetPos(setting->rangeType == RangeType::FromAbovePlayer ? subject->GetPos() : startPos);
-				Vector2f translation = Utils::RandAreaPoint() * setting->amplitude;
+				Vector2f translation = Utils::RandAreaPoint() * setting->amplitude * setting->frequency;
 				if (isDoing)
 				{
 					obj->Translate(translation);
@@ -124,10 +122,14 @@ void Skill::Do()
 				if (setting->rangeType == RangeType::FromAbovePlayer)
 				{
 					obj->SetFallingHeight(setting->fallingHeight - distance * skillDir.y);
+					obj->SetPos(startPos);
 					if(setting->attackType != AttackType::Single)
 						circle->SetColor({ 255, 255, 255, 0 });
 					if (isDoing)
+					{
+						obj->Translate(translation);
 						circle->Translate(translation);
+					}
 				}
 			}
 			break;

@@ -2,13 +2,13 @@
 #include "../Framework/Animator.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/InputMgr.h"
-#include "Skill.h"
 #include "../Framework/Framework.h"
 #include "../Scene/SceneMgr.h"
+#include "SkillSet.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), currSkill(nullptr), skillToolMode(false)
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), currSkillSet(nullptr), skillToolMode(false)
 {
 	SpriteObj tempSpearImage;
 	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerIdleDown.png"));
@@ -173,7 +173,7 @@ void Player::Init()
 			AnimationEvent ev;
 			ev.clipId = clipIds[i];
 			ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
-			ev.onEvent = bind(&Player::SetState, this, States::Idle);
+			ev.onEvent = bind(&Player::FinishAction, this);
 			animator->AddEvent(ev);
 		}
 	}
@@ -183,9 +183,9 @@ void Player::Init()
 	lastDir = { 0.f, 1.f };
 	for (int i = 0; i < 6; ++i)
 	{
-		Skill* newSkill = new Skill();
-		newSkill->SetSubject(this, Skill::SubjectType::Player);
-		skills.push_back(newSkill);
+		SkillSet* newSkillSet = new SkillSet();
+		newSkillSet->SetSubject(this, Skill::SubjectType::Player);
+		skillSets.push_back(newSkillSet);
 	}
 
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
@@ -220,12 +220,14 @@ void Player::Update(float dt)
 				switch (mouseDown)
 				{
 				case Mouse::Left:
-					SetCurrSkill(skills[0]);
-					skills[0]->Do();
+					SetCurrSkillSet(skillSets[0]);
+					skillSets[0]->Restart();
+					skillSets[0]->Do();
 					break;
 				case Mouse::Right:
-					SetCurrSkill(skills[1]);
-					skills[1]->Do();
+					SetCurrSkillSet(skillSets[1]);
+					skillSets[1]->Restart();
+					skillSets[1]->Do();
 					break;
 				default:
 					break;
@@ -242,21 +244,25 @@ void Player::Update(float dt)
 				switch (keyDown)
 				{
 				case Keyboard::Space:
-					SetCurrSkill(skills[2]);
-					skills[2]->Do();
+					SetCurrSkillSet(skillSets[2]);
+					skillSets[2]->Restart();
+					skillSets[2]->Do();
 					SetState(States::Dash);
 					break;
 				case Keyboard::Q:
-					SetCurrSkill(skills[3]);
-					skills[3]->Do();
+					SetCurrSkillSet(skillSets[3]);
+					skillSets[3]->Restart();
+					skillSets[3]->Do();
 					break;
 				case Keyboard::E:
-					SetCurrSkill(skills[4]);
-					skills[4]->Do();
+					SetCurrSkillSet(skillSets[4]);
+					skillSets[4]->Restart();
+					skillSets[4]->Do();
 					break;
 				case Keyboard::R:
-					SetCurrSkill(skills[5]);
-					skills[5]->Do();
+					SetCurrSkillSet(skillSets[5]);
+					skillSets[5]->Restart();
+					skillSets[5]->Do();
 					break;
 				default:
 					break;
@@ -288,15 +294,15 @@ void Player::Update(float dt)
 	/*else if (!Utils::EqualFloat(lastDir.x, 0.f))
 		lastDir = Utils::Normalize({ lastDir.x, 0.f });*/
 
-	for (auto skill : skills)
+	for (auto skillSet : skillSets)
 	{
-		skill->Update(dt);
+		skillSet->Update(dt);
 	}
 }
 
 void Player::Draw(RenderWindow& window)
 {
-	for (auto skill : skills)
+	for (auto skill : skillSets)
 	{
 		skill->Draw(window);
 	}
@@ -371,13 +377,14 @@ void Player::UpdateJumpSlash(float dt)
 	if (jumpTimer >= jumpDuration)
 	{
 		jumpTimer = 0.f;
-		SetState(States::GroundSlam);
+		if(!currSkillSet->Do())
+			SetState(States::Idle);
 	}
 }
 
 void Player::Action()
 {
-	SkillAction action = currSkill->GetSetting()->playerAction;
+	SkillAction action = currSkillSet->GetCurrSkill()->GetSetting()->playerAction;
 	if (action != SkillAction::Dash)
 	{
 		auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
@@ -387,8 +394,8 @@ void Player::Action()
 		if (action == SkillAction::JumpSlash)
 		{
 			auto mouseDistance = Utils::Distance(mousePos, position);
-			if (mouseDistance >= currSkill->GetSetting()->distance * 0.5f)
-				jumpDistance = currSkill->GetSetting()->distance;
+			if (mouseDistance >= currSkillSet->GetCurrSkill()->GetSetting()->distance * 0.5f)
+				jumpDistance = currSkillSet->GetCurrSkill()->GetSetting()->distance;
 			else
 			{
 				jumpDistance = 0.f;
@@ -413,4 +420,10 @@ void Player::Action()
 	default:
 		break;
 	}
+}
+
+void Player::FinishAction()
+{
+	if (!currSkillSet->Do())
+		SetState(States::Idle);
 }

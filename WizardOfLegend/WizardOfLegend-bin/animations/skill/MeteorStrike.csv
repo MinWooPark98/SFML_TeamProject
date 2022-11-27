@@ -1,0 +1,8 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+MeteorStrike,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/MeteorStrike0.png,0,0,94,132,47,132,0,0
+graphics/MeteorStrike1.png,0,0,94,132,47,132,0,0
+graphics/MeteorStrike2.png,0,0,94,132,47,132,0,0
+graphics/MeteorStrike3.png,0,0,94,132,47,132,0,0

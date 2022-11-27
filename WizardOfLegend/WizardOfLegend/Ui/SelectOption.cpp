@@ -143,7 +143,7 @@ void SelectOption::Init()
 				OptionButtons* buttons = new OptionButtons();
 				buttons->SetActive(false);
 				buttons->SetPos(button2->GetPos() + Vector2f(0.f, buttonHeight));
-				vector<string> btnStr = { "NoAction", "NormalSpell", "Dash", "PBAoE", "JumpSlash", "GroundSlam" };
+				vector<string> btnStr = { "NormalSpell", "Dash", "PBAoE", "JumpSlash", "GroundSlam" };
 				for (int j = 0; j < btnStr.size(); ++j)
 				{
 					Button2* newButton = new Button2();
@@ -435,6 +435,16 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 		break;
 	case SelectOption::Options::AttackType:
 		selectedSet.attackType = (Skill::AttackType)vecIdx;
+		switch ((Skill::AttackType)vecIdx)
+		{
+		case Skill::AttackType::Single:
+			// 어택카운트 1로 만드는 코드 추가
+			DeactivateOption(Options::AttackInterval);
+			break;
+		default:
+			ActivateOption(Options::AttackInterval);
+			break;
+		}
 		break;
 	case SelectOption::Options::AttackShape:
 		selectedSet.attackShape = (Skill::AttackShape)vecIdx;
@@ -453,7 +463,6 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 				break;
 			case Skill::AttackShape::Range:
 				ActivateAll();
-				DeactivateOption(Options::Frequency);
 				DeactivateOption(Options::WaveType);
 				DeactivateOption(Options::Speed);
 				break;
@@ -483,9 +492,13 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 		{
 		case Skill::RangeType::Default:
 			DeactivateOption(Options::Distance);
+			DeactivateOption(Options::Frequency);
+			DeactivateOption(Options::FallingHeight);
 			break;
 		default:
 			ActivateOption(Options::Distance);
+			ActivateOption(Options::Frequency);
+			ActivateOption(Options::FallingHeight);
 			break;
 		}
 		selectedSet.rangeType = (Skill::RangeType)(vecIdx - 1);
@@ -619,7 +632,7 @@ void SelectOption::SaveSetToCSV()
 void SelectOption::SetPlayer1stSkill()
 {
 	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
-	player->GetSkills()[0]->SetSkill(selectedSet);
+	//player->GetSkillSets()[0]->SetSkill(selectedSet);
 }
 
 void SelectOption::Load(const string& skillName)

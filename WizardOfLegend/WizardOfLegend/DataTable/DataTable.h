@@ -11,6 +11,7 @@ public:
 		None = -1,
 		Language,
 		Skill,
+		SkillSet,
 	};
 private:
 	Types type;

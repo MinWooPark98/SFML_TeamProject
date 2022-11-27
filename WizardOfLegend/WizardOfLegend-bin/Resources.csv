@@ -582,3 +582,16 @@ animations/player/JumpSlamUp.csv,3
 graphics/PlayerStatusBarPortrait.png,0
 graphics/CastingCircleSheet.png,0
 animations/skill/CastingCircle.csv,3
+graphics/FlameWolf0.png,0
+graphics/FlameWolf1.png,0
+graphics/FlameWolf2.png,0
+graphics/FlameWolf3.png,0
+graphics/FlameWolf4.png,0
+graphics/FlameWolf5.png,0
+graphics/FlameWolf6.png,0
+animations/skill/FlameWolf.csv,3
+graphics/MeteorStrike0.png,0
+graphics/MeteorStrike1.png,0
+graphics/MeteorStrike2.png,0
+graphics/MeteorStrike3.png,0
+animations/skill/MeteorStrike.csv,3

@@ -2,7 +2,7 @@
 #include "SpriteObj.h"
 
 class Animator;
-class Skill;
+class SkillSet;
 
 class Player : public SpriteObj
 {
@@ -21,7 +21,6 @@ public:
 	};
 	enum class SkillAction
 	{
-		NoAction,
 		NormalSpell,
 		Dash,
 		PBAoE,
@@ -53,8 +52,8 @@ protected:
 	Vector2f lastDir;
 	bool isBackHand;	// true일 시 Backhand, false일 시 Forehand
 
-	vector<Skill*> skills;
-	Skill* currSkill;
+	vector<SkillSet*> skillSets;
+	SkillSet* currSkillSet;
 
 	bool skillToolMode;
 
@@ -79,9 +78,10 @@ public:
 	bool GetBackHand() const { return isBackHand; }
 
 	void Action();
-	void SetCurrSkill(Skill* skill) { currSkill = skill; }
+	void FinishAction();
+	void SetCurrSkillSet(SkillSet* skillSet) { currSkillSet = skillSet; }
 
 	void SetSkillToolMode() { skillToolMode = true; }
-	vector<Skill*>& GetSkills() { return skills; }
+	vector<SkillSet*>& GetSkillSets() { return skillSets; }
 };
 

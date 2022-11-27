@@ -1,0 +1,11 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FlameWolf,0,7,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FlameWolf0.png,0,0,80,96,40,48,0,0
+graphics/FlameWolf1.png,0,0,80,96,40,48,0,0
+graphics/FlameWolf2.png,0,0,80,96,40,48,0,0
+graphics/FlameWolf3.png,0,0,80,96,40,48,0,0
+graphics/FlameWolf4.png,0,0,80,96,40,48,0,0
+graphics/FlameWolf5.png,0,0,80,32,40,16,0,0
+graphics/FlameWolf6.png,0,0,80,32,40,16,0,0

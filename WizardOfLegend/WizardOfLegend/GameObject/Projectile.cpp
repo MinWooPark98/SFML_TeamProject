@@ -70,7 +70,10 @@ void Projectile::Update(float dt)
 			switch (rangeType)
 			{
 			case Skill::RangeType::FromAbovePlayer:
-				Translate(direction * distance * (dt / movingDuration));
+				{
+					auto rotation = -atan2f(distance * direction.x, fallingHeight) * 180.f / M_PI;
+					sprite.setRotation(rotation);
+				}
 				break;
 			default:
 				break;
