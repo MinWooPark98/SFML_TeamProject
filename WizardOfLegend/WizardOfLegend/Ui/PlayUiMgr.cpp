@@ -27,7 +27,7 @@ void PlayUiMgr::Init()
 	statusBar->SetScale({4, 4});
 	statusBar->SetOrigin(Origins::MC);
 	statusBar->SetPos({ windowSize.x * 0.12f, windowSize.y * 0.1f });
-	uiObjList[1].push_back(statusBar);
+	uiObjList[0].push_back(statusBar);
 
 	// Player Marker
 	{
@@ -37,7 +37,7 @@ void PlayUiMgr::Init()
 		playerMarker->SetScale({ 6, 6 });
 		playerMarker->SetColor({ 255, 255, 255, 30 });
 		playerMarker->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.5f });
-		uiObjList[1].push_back(playerMarker);
+		uiObjList[0].push_back(playerMarker);
 
 		playerMarkerOutLine = new SpriteObj();
 		playerMarkerOutLine->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerOutline.png"));
@@ -45,7 +45,7 @@ void PlayUiMgr::Init()
 		playerMarkerOutLine->SetScale({ 6, 6 });
 		playerMarkerOutLine->SetColor({ 255, 255, 255, 50 });
 		playerMarkerOutLine->SetPos(playerMarker->GetPos());
-		uiObjList[1].push_back(playerMarkerOutLine);
+		uiObjList[0].push_back(playerMarkerOutLine);
 
 		playerMarkerGlow = new SpriteObj();
 		playerMarkerGlow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerGlow.png"));
@@ -53,7 +53,7 @@ void PlayUiMgr::Init()
 		playerMarkerGlow->SetScale({ 5.5, 5.5 });
 		playerMarkerGlow->SetColor({ 255, 255, 255, 30 });
 		playerMarkerGlow->SetPos(playerMarker->GetPos());
-		uiObjList[1].push_back(playerMarkerGlow);
+		uiObjList[0].push_back(playerMarkerGlow);
 	}
 
 	// HP
@@ -85,9 +85,9 @@ void PlayUiMgr::Init()
 		hpText->SetText(to_string(525) + "/" + to_string(525)); // 플레이어 maxhp로 변경
 		hpText->SetPos({ 250, 50 });
 
-		uiObjList[1].push_back(HpBarHurt);
-		uiObjList[1].push_back(HpBarFill);
-		uiObjList[1].push_back(hpText);
+		uiObjList[0].push_back(HpBarHurt);
+		uiObjList[0].push_back(HpBarFill);
+		uiObjList[0].push_back(hpText);
 	}
 
 	// Hp Bar, Overdrive Bar
@@ -97,7 +97,7 @@ void PlayUiMgr::Init()
 		OverdriveActiveBar->SetPos({ windowSize.x * 0.074f, windowSize.y * 0.11f });
 		OverdriveActiveBar->SetScale({ 4, 4 });
 		OverdriveActiveBar->SetSize({ 0, OverdriveActiveBar->GetSize().y });
-		uiObjList[1].push_back(OverdriveActiveBar);
+		uiObjList[0].push_back(OverdriveActiveBar);
 
 		playerStatusBarPortrait = new SpriteObj();
 		playerStatusBarPortrait->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerStatusBarPortrait.png"));
@@ -106,7 +106,7 @@ void PlayUiMgr::Init()
 		playerStatusBarPortrait->SetSpriteShader();
 		playerStatusBarPortrait->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
 		playerStatusBarPortrait->SetSpriteColor(1); // 플레이어랑 색깔 연동해야함
-		uiObjList[1].push_back(playerStatusBarPortrait);
+		uiObjList[0].push_back(playerStatusBarPortrait);
 	}
 
 	// Menu
@@ -117,7 +117,7 @@ void PlayUiMgr::Init()
 		menu->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.5f });
 		menu->SetOrigin(Origins::MC);
 		menu->SetScale({ 3, 8 });
-		uiObjList[0].push_back(menu);
+		uiObjList[1].push_back(menu);
 
 
 		TextObj* menuText = new TextObj();
@@ -129,7 +129,7 @@ void PlayUiMgr::Init()
 		menuText->SetText("P A U S E");
 		menuText->SetOrigin(Origins::MC);
 		menuText->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.35f });
-		uiObjList[0].push_back(menuText);
+		uiObjList[1].push_back(menuText);
 
 		menuRec = new RectangleShape();
 		menuRec->setFillColor(Color::White);
@@ -164,7 +164,7 @@ void PlayUiMgr::Init()
 			button->SetOrigin(Origins::MC);
 			button->SetUI(true);
 
-			uiObjList[0].push_back(button);
+			uiObjList[1].push_back(button);
 		}
 	}
 }
@@ -258,7 +258,7 @@ void PlayUiMgr::Draw(RenderWindow& window)
 	{
 		for (auto& uiObjs : uiObjList)
 		{
-			if (uiObjs.second != uiObjList[0])
+			if (uiObjs.second != uiObjList[1])
 			{
 				for (auto& obj : uiObjs.second)
 				{
