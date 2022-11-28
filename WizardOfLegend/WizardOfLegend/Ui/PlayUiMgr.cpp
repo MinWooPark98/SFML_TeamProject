@@ -276,12 +276,6 @@ void PlayUiMgr::Update(float dt)
 		}
 	}
 
-	// Test
-	if (InputMgr::GetKeyDown(Keyboard::Key::A))
-		testOverdrive = true;
-	if (InputMgr::GetKeyDown(Keyboard::Key::S))
-		testOverdrive = false;
-
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
 		if (isOption)
@@ -300,11 +294,7 @@ void PlayUiMgr::Update(float dt)
 		for (auto& uiObjs : uiObjList[1])
 			uiObjs->SetActive(false);
 
-		if (testOverdrive && overdriveBarSize < maxOverdriveBarSize)
-			OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
-		else if (!testOverdrive && overdriveBarSize > 0)
-			OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
-
+		OverdriveBarControl(dt);
 		HpBarSizeControl(dt);
 		BossHpBraSizeControl(dt);
 
@@ -397,21 +387,6 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 {
 	bossName->SetOrigin(Origins::MC);
 
-	if (InputMgr::GetKeyDown(Keyboard::Key::Q)) // 충돌 조건으로 변경
-	{
-		int damage = 100; // 플레이어 스킬 데미지로 변경
-
-		if (bossCurHp - damage <= 0.f)
-		{
-			bossCurHp = 0.f;
-			bossHpBarFill->SetSize({ 0, bossHpBarFill->GetSize().y * 4 });
-		}
-		else
-		{
-			bossCurHp -= damage;
-		}
-	}
-
 	if (spawnTimer > 0.f)
 	{
 		if (bossCurHp < bossMaxHp)
@@ -430,6 +405,21 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 	}
 	else
 	{
+		if (InputMgr::GetKeyDown(Keyboard::Key::Q)) // 충돌 조건으로 변경
+		{
+			int damage = 100; // 플레이어 스킬 데미지로 변경
+
+			if (bossCurHp - damage <= 0.f)
+			{
+				bossCurHp = 0.f;
+				bossHpBarFill->SetSize({ 0, bossHpBarFill->GetSize().y * 4 });
+			}
+			else
+			{
+				bossCurHp -= damage;
+			}
+		}
+
 		// Hp Bar Control
 		int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
 		bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4 });
@@ -451,4 +441,18 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 			isAlive = false;
 		}
 	}
+}
+
+void PlayUiMgr::OverdriveBarControl(float dt)
+{
+	// Test
+	if (InputMgr::GetKeyDown(Keyboard::Key::A))
+		testOverdrive = true;
+	if (InputMgr::GetKeyDown(Keyboard::Key::S))
+		testOverdrive = false;
+
+	if (testOverdrive && overdriveBarSize < maxOverdriveBarSize)
+		OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
+	else if (!testOverdrive && overdriveBarSize > 0)
+		OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
 }

@@ -71,4 +71,5 @@ public:
 
 	void HpBarSizeControl(float dt);
 	void BossHpBraSizeControl(float dt);
+	void OverdriveBarControl(float dt);
 };
