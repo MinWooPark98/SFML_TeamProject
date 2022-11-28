@@ -54,6 +54,9 @@ protected:
 	int bossCurHp = 2000;
 	int bossMaxHp = 2000;
 
+	// 보스 임시 생존여부 설정
+	bool isAlive = true;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();

@@ -196,7 +196,7 @@ void PlayUiMgr::Init()
 		bossHpBarBG->SetOrigin(Origins::MC);
 		bossHpBarBG->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.12f });
 		bossHpBarBG->SetScale({ 4, 3.8 });
-		uiObjList[0].push_back(bossHpBarBG);
+		uiObjList[2].push_back(bossHpBarBG);
 
 		for (int i = 0; i < 2; i++)
 		{
@@ -229,9 +229,9 @@ void PlayUiMgr::Init()
 		bossName->SetText("BOSS NAME");
 		bossName->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.07f });
 
-		uiObjList[0].push_back(bossHpBarHurt);
-		uiObjList[0].push_back(bossHpBarFill);
-		uiObjList[0].push_back(bossName);
+		uiObjList[2].push_back(bossHpBarHurt);
+		uiObjList[2].push_back(bossHpBarFill);
+		uiObjList[2].push_back(bossName);
 	}
 }
 
@@ -423,5 +423,12 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 	{
 		bossHpBarHurtSize = bossHpBarSize - bossCurHpBarSet;
 		bossHpBarHurt->SetSize({ bossHpBarHurtSize, bossHpBarFill->GetSize().y * 4 });
+	}
+
+
+	if (bossCurHp <= 0 && isAlive)
+	{
+		uiObjList[2].clear();
+		isAlive = false;
 	}
 }
