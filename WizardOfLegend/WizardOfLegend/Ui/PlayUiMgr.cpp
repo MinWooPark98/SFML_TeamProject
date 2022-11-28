@@ -188,6 +188,51 @@ void PlayUiMgr::Init()
 			uiObjList[1].push_back(button);
 		}
 	}
+
+	// Boss Hp Bar
+	{
+		bossHpBarBG = new SpriteObj();
+		bossHpBarBG->SetTexture(*RESOURCE_MGR->GetTexture("graphics/EnemyHealthBarBG.png"));
+		bossHpBarBG->SetOrigin(Origins::MC);
+		bossHpBarBG->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.12f });
+		bossHpBarBG->SetScale({ 4, 3.8 });
+		uiObjList[0].push_back(bossHpBarBG);
+
+		for (int i = 0; i < 2; i++)
+		{
+			SpriteObj* hp = new SpriteObj();
+
+			if (i == 0)
+			{
+				hp->SetTexture(*RESOURCE_MGR->GetTexture("graphics/EnemyHealthBarFill.png"));
+				hp->SetSize({ bossMaxHpBarSize, 7.f * 4.f});
+				hp->SetOrigin(Origins::ML);
+				hp->SetPos({ windowSize.x * 0.5f - (hp->GetSize().x * 2) + 2.7f, windowSize.y * 0.12f + 2.f});
+				bossHpBarFill = hp;
+			}
+			else
+			{
+				hp->SetTexture(*RESOURCE_MGR->GetTexture("graphics/HPBarHurtFill.png"));
+				hp->SetSize({ bossHpBarFill->GetSize().x * 4.f + 5.f, bossHpBarFill->GetSize().y * 4.f });
+				hp->SetOrigin(Origins::ML);
+				hp->SetPos(bossHpBarFill->GetPos());
+				bossHpBarHurt = hp;
+			}
+		}
+
+		bossName = new TextObj();
+		bossName->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+		bossName->SetSize(35);
+		bossName->SetFillColor(Color::White);
+		bossName->SetOutlineColor(Color::Black);
+		bossName->SetOutlineThickness(1.5f);
+		bossName->SetText("BOSS");
+		bossName->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.07f });
+
+		uiObjList[0].push_back(bossHpBarHurt);
+		uiObjList[0].push_back(bossHpBarFill);
+		uiObjList[0].push_back(bossName);
+	}
 }
 
 void PlayUiMgr::Release()
@@ -229,17 +274,11 @@ void PlayUiMgr::Update(float dt)
 		}
 	}
 
+	// Test
 	if (InputMgr::GetKeyDown(Keyboard::Key::A))
 		testOverdrive = true;
 	if (InputMgr::GetKeyDown(Keyboard::Key::S))
 		testOverdrive = false;
-
-
-	if (InputMgr::GetKeyDown(Keyboard::Key::D))
-		testHp = true;
-	if (InputMgr::GetKeyDown(Keyboard::Key::F))
-		testHp = false;
-
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
@@ -265,6 +304,7 @@ void PlayUiMgr::Update(float dt)
 			OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
 
 		HpBarSizeControl(dt);
+		BossHpBraSizeControl(dt);
 
 		playerMarker->GetSprite().setRotation(Utils::Angle({ windowSize.x * 0.5f, windowSize.y * 0.5f }, InputMgr::GetMousePos()) + 90);
 		playerMarkerOutLine->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
@@ -302,7 +342,7 @@ void PlayUiMgr::Draw(RenderWindow& window)
 void PlayUiMgr::HpBarSizeControl(float dt)
 {
 	// 데미지 받음
-	if (InputMgr::GetKeyDown(Keyboard::Key::G))
+	if (InputMgr::GetKeyDown(Keyboard::Key::G)) // 충돌 조건으로 변경
 	{
 		int damage = 50; // 몬스터 데미지로 변경
 
@@ -348,5 +388,40 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 	{
 		hpBarHurtSize = hpBarSize - playerCurHpBarSet;
 		HpBarHurt->SetSize({ hpBarHurtSize, HpBarHurt->GetSize().y * 4 });
+	}
+}
+
+void PlayUiMgr::BossHpBraSizeControl(float dt)
+{
+	bossName->SetOrigin(Origins::MC);
+
+	if (InputMgr::GetKeyDown(Keyboard::Key::Q)) // 충돌 조건으로 변경
+	{
+		int damage = 100; // 플레이어 스킬 데미지로 변경
+
+		if (bossCurHp - damage <= 0.f)
+		{
+			bossCurHp = 0.f;
+			bossHpBarFill->SetSize({ 0, bossHpBarFill->GetSize().y * 4 });
+		}
+		else
+		{
+			bossCurHp -= damage;
+		}
+	}
+
+	// Hp Bar Control
+	int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp); // hp바 사이즈 비율
+	bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4 });
+
+	// HP Yellow Bar Control
+	if (bossHpBarSize - bossCurHpBarSet < bossHpBarHurtSize)
+	{
+		bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarFill->GetSize().y * 4.f });
+	}
+	else if (bossHpBarSize - bossCurHpBarSet > bossHpBarHurtSize)
+	{
+		bossHpBarHurtSize = bossHpBarSize - bossCurHpBarSet;
+		bossHpBarHurt->SetSize({ bossHpBarHurtSize, bossHpBarFill->GetSize().y * 4 });
 	}
 }

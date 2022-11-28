@@ -18,12 +18,11 @@ protected:
 	float maxOverdriveBarSize = 48.f * 4.f;
 	float overdriveBarSize = 0.f;
 
-	float maxHpBarSize = 62 * 4;
-	float hpBarSize = 62 * 4;
+	float maxHpBarSize = 62.f * 4.f;
+	float hpBarSize = 62.f * 4.f;
 	float hpBarHurtSize = 62.f * 4.f;
 
 	bool testOverdrive = false;
-	bool testHp = false;
 
 	// 플레이어한테 받아와야 함
 	TextObj* hpText;
@@ -39,6 +38,22 @@ protected:
 	SpriteObj* playerMarkerGlow;
 	SpriteObj* playerMarkerOutLine;
 
+
+
+	// bossHp
+	TextObj* bossName;
+	SpriteObj* bossHpBarFill;
+	SpriteObj* bossHpBarHurt;
+	SpriteObj* bossHpBarBG;
+
+	float bossMaxHpBarSize = 89.f * 4.f;
+	float bossHpBarSize = 89.f * 4.f;
+	float bossHpBarHurtSize = 82.f * 4.f;
+
+	// 보스마다 받아와야함
+	int bossCurHp = 2000;
+	int bossMaxHp = 2000;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();
@@ -50,5 +65,5 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 
 	void HpBarSizeControl(float dt);
+	void BossHpBraSizeControl(float dt);
 };
-
