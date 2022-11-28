@@ -188,7 +188,6 @@ void Archer::UpdateAttack(float dt)
 		if (curState == States::Attack)
 		{
 			arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
-			//arrow->SetPos(GetPos());
 			arrow->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 8.f);
 		}
 

@@ -102,6 +102,7 @@ void Scene::Draw(RenderWindow& window)
 			}
 		}
 	}
+
 	if (uiMgr != nullptr && uiMgr->GetActive())
 	{
 		window.setView(uiView);

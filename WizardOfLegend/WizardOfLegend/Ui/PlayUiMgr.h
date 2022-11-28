@@ -35,6 +35,10 @@ protected:
 	RectangleShape* menuRec;
 	bool isOption = false;
 
+	SpriteObj* playerMarker;
+	SpriteObj* playerMarkerGlow;
+	SpriteObj* playerMarkerOutLine;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();

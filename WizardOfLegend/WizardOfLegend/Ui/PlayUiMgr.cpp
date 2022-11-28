@@ -29,6 +29,33 @@ void PlayUiMgr::Init()
 	statusBar->SetPos({ windowSize.x * 0.12f, windowSize.y * 0.1f });
 	uiObjList[1].push_back(statusBar);
 
+	// Player Marker
+	{
+		playerMarker = new SpriteObj();
+		playerMarker->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarker #142163.png"));
+		playerMarker->SetOrigin(Origins::MC);
+		playerMarker->SetScale({ 6, 6 });
+		playerMarker->SetColor({ 255, 255, 255, 30 });
+		playerMarker->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.5f });
+		uiObjList[1].push_back(playerMarker);
+
+		playerMarkerOutLine = new SpriteObj();
+		playerMarkerOutLine->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerOutline.png"));
+		playerMarkerOutLine->SetOrigin(Origins::MC);
+		playerMarkerOutLine->SetScale({ 6, 6 });
+		playerMarkerOutLine->SetColor({ 255, 255, 255, 50 });
+		playerMarkerOutLine->SetPos(playerMarker->GetPos());
+		uiObjList[1].push_back(playerMarkerOutLine);
+
+		playerMarkerGlow = new SpriteObj();
+		playerMarkerGlow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerGlow.png"));
+		playerMarkerGlow->SetOrigin(Origins::MC);
+		playerMarkerGlow->SetScale({ 5.5, 5.5 });
+		playerMarkerGlow->SetColor({ 255, 255, 255, 30 });
+		playerMarkerGlow->SetPos(playerMarker->GetPos());
+		uiObjList[1].push_back(playerMarkerGlow);
+	}
+
 	// HP
 	{
 		for (int i = 0; i < 2; i++)
@@ -139,8 +166,6 @@ void PlayUiMgr::Init()
 
 			uiObjList[0].push_back(button);
 		}
-
-
 	}
 }
 
@@ -219,6 +244,10 @@ void PlayUiMgr::Update(float dt)
 			OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
 
 		HpBarSizeControl(dt);
+
+		playerMarker->GetSprite().setRotation(Utils::Angle({ windowSize.x * 0.5f, windowSize.y * 0.5f }, InputMgr::GetMousePos()) + 90);
+		playerMarkerOutLine->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
+		playerMarkerGlow->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 	}
 }
 
