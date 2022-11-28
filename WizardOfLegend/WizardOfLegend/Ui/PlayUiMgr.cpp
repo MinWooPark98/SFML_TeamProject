@@ -225,8 +225,8 @@ void PlayUiMgr::Init()
 		bossName->SetSize(35);
 		bossName->SetFillColor(Color::White);
 		bossName->SetOutlineColor(Color::Black);
-		bossName->SetOutlineThickness(1.5f);
-		bossName->SetText("BOSS");
+		bossName->SetOutlineThickness(2.f);
+		bossName->SetText("BOSS NAME");
 		bossName->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.07f });
 
 		uiObjList[0].push_back(bossHpBarHurt);
