@@ -78,7 +78,16 @@ void Archer::Update(float dt)
 		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack && curState != States::MoveAttack)
 		{
 			NormalMonsterMove(dt);
+
+			moveSoundTimer -= dt;
+			if (moveSoundTimer <= 0.f)
+			{
+				SOUND_MGR->Play("sounds/LightFootstep.wav");
+				moveSoundTimer = 0.4f;
+			}
 		}
+		else
+			moveSoundTimer = 0.f;
 
 		if (InputMgr::GetKeyDown(Keyboard::Key::L) && type == MonsterType::Normal)
 			SetCurHp(0);

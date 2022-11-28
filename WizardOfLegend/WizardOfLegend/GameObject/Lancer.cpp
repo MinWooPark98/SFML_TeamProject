@@ -56,7 +56,18 @@ void Lancer::Update(float dt)
 	else if (isActionStart)
 	{
 		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
+		{
 			NormalMonsterMove(dt);
+
+			moveSoundTimer -= dt;
+			if (moveSoundTimer <= 0.f)
+			{
+				SOUND_MGR->Play("sounds/MetalFootstep.wav");
+				moveSoundTimer = 0.4f;
+			}
+		}
+		else
+			moveSoundTimer = 0.f;
 
 		if (InputMgr::GetKeyDown(Keyboard::Key::K))
 		{

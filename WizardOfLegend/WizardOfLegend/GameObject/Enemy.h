@@ -94,6 +94,8 @@ protected:
 	// boss
 	bool superArmor = false;
 
+	float moveSoundTimer = 0.f;
+
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
 	virtual ~Enemy() { Release(); };
