@@ -591,3 +591,15 @@ graphics/PlayerMarkerGlow.png,0
 graphics/PlayerMarkerOutline.png,0
 graphics/EnemyHealthBarFill.png,0
 graphics/EnemyHealthBarBG.png,0
+sounds/ArcherAttackWindup.wav,2
+sounds/ArcherAttackRelease.wav,2
+sounds/ArcherArrow.wav,2
+sounds/LightFootstep.wav,2
+sounds/LancerAttackWindup.wav,2
+sounds/KnightAttack.wav,2
+sounds/MetalFootstep.wav,2
+sounds/EnemyDead.wav,2
+sounds/FireBossFlex0.wav,2
+sounds/FireBossFlex1.wav,2
+sounds/Chime.wav,2
+sounds/TitleScreen_Piano.wav,2

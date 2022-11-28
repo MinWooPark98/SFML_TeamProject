@@ -17,4 +17,7 @@ public:
 
 	virtual void Enter() override;
 	virtual void Exit() override;
+
+	static bool titleBgm;
+	static void TitleBgmStart() { titleBgm = true; };
 };

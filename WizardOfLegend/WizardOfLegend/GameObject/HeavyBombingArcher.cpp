@@ -138,6 +138,8 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 			if (smollArrowDelay <= 0.f && count < 4)
 			{
 				smollArrowDelay = 0.1f;
+				SOUND_MGR->Play("sounds/ArcherAttackRelease.wav");
+				SOUND_MGR->Play("sounds/ArcherArrow.wav");
 				count++;
 			}
 		}

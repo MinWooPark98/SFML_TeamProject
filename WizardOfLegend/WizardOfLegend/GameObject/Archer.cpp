@@ -76,7 +76,9 @@ void Archer::Update(float dt)
 	else if (isActionStart)
 	{
 		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack && curState != States::MoveAttack)
+		{
 			NormalMonsterMove(dt);
+		}
 
 		if (InputMgr::GetKeyDown(Keyboard::Key::L) && type == MonsterType::Normal)
 			SetCurHp(0);
@@ -221,11 +223,14 @@ void Archer::UpdateAttack(float dt)
 	if (attackDelay <= attackStart && bowWait)
 	{
 		bowAnimation.Play("BowShoot");
+		SOUND_MGR->Play("sounds/ArcherAttackRelease.wav");
+		SOUND_MGR->Play("sounds/ArcherArrow.wav");
 		bowWait = false;
 	}
 	else if (attackDelay >= attackStart && !bowWait)
 	{
 		bowAnimation.Play("BowPull");
+		SOUND_MGR->Play("sounds/ArcherAttackWindup.wav");
 		bowWait = true;
 	}
 

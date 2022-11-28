@@ -1,6 +1,5 @@
 #include "Lancer.h"
 
-
 void Lancer::Init()
 {
 	Enemy::Init();
@@ -183,6 +182,7 @@ void Lancer::UpdateAttack(float dt)
 
 		lancerAttackEffect->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 100.f);
 		spearAnimation.Play("SpearMotion");
+		SOUND_MGR->Play("sounds/KnightAttack.wav");
 		spearWait = false;
 	}
 	else if (attackDelay >= 1.f && !spearWait)
@@ -192,6 +192,7 @@ void Lancer::UpdateAttack(float dt)
 		if (spearPos == 3 || spearPos == 4)
 			weapon->SetPos({ weapon->GetPos().x + 7.f, weapon->GetPos().y });
 		playerLastPos = player->GetPos();
+		SOUND_MGR->Play("sounds/LancerAttackWindup.wav");
 		spearWait = true;
 	}
 

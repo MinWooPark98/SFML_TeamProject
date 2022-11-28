@@ -3,6 +3,7 @@
 #include "../Framework/Animator.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/InputMgr.h"
+#include "../Framework/SoundMgr.h"
 #include "Player.h"
 
 class Enemy : public SpriteObj

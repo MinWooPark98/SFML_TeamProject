@@ -3,7 +3,10 @@
 #include "../Framework/Framework.h"
 #include "../Ui/TitleUiMgr.h"
 #include "../Framework/InputMgr.h"
+#include "../Framework/SoundMgr.h"
 #include "SceneMgr.h"
+
+bool TitleScene::titleBgm = true;
 
 TitleScene::TitleScene()
 	:Scene(Scenes::Title)
@@ -39,6 +42,12 @@ void TitleScene::Reset()
 void TitleScene::Update(float dt)
 {
 	Scene::Update(dt);
+
+	if (titleBgm)
+	{
+		SOUND_MGR->Play("sounds/TitleScreen_Piano.wav", 1);
+		titleBgm = false;
+	}
 }
 
 void TitleScene::Draw(RenderWindow& window)
@@ -54,6 +63,7 @@ void TitleScene::Enter()
 	worldView.setCenter(size * 0.5f);
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
+	titleBgm = true;
 }
 
 void TitleScene::Exit()
