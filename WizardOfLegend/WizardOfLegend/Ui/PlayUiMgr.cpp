@@ -35,7 +35,7 @@ void PlayUiMgr::Init()
 		playerMarker->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarker #142163.png"));
 		playerMarker->SetOrigin(Origins::MC);
 		playerMarker->SetScale({ 6, 6 });
-		playerMarker->SetColor({ 255, 255, 255, 30 });
+		playerMarker->SetColor({ 255, 255, 255, 20 });
 		playerMarker->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.5f });
 		uiObjList[0].push_back(playerMarker);
 
@@ -43,7 +43,7 @@ void PlayUiMgr::Init()
 		playerMarkerOutLine->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerOutline.png"));
 		playerMarkerOutLine->SetOrigin(Origins::MC);
 		playerMarkerOutLine->SetScale({ 6, 6 });
-		playerMarkerOutLine->SetColor({ 255, 255, 255, 50 });
+		playerMarkerOutLine->SetColor({ 255, 255, 255, 30 });
 		playerMarkerOutLine->SetPos(playerMarker->GetPos());
 		uiObjList[0].push_back(playerMarkerOutLine);
 
@@ -51,7 +51,7 @@ void PlayUiMgr::Init()
 		playerMarkerGlow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerGlow.png"));
 		playerMarkerGlow->SetOrigin(Origins::MC);
 		playerMarkerGlow->SetScale({ 5.5, 5.5 });
-		playerMarkerGlow->SetColor({ 255, 255, 255, 30 });
+		playerMarkerGlow->SetColor({ 255, 255, 255, 20 });
 		playerMarkerGlow->SetPos(playerMarker->GetPos());
 		uiObjList[0].push_back(playerMarkerGlow);
 	}
@@ -154,6 +154,7 @@ void PlayUiMgr::Init()
 			button->MousePointerOn = bind(&TextObj::SetFillColor, button->GetText(), Color::White);
 			button->MousePointerOff = bind(&TextObj::SetFillColor, button->GetText(), Color(255, 255, 255, 153));
 
+			// 옵션 화면이랑 연결
 			//if (i == 0)
 				//button->ClickOn = bind(&SceneMgr::ChangeScene, SCENE_MGR, (Scenes)(i + 1));
 			if (i == 1)
