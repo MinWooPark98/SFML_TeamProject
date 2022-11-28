@@ -31,28 +31,48 @@ void PlayUiMgr::Init()
 
 	// Player Marker
 	{
-		playerMarker = new SpriteObj();
-		playerMarker->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarker #142163.png"));
-		playerMarker->SetOrigin(Origins::MC);
-		playerMarker->SetScale({ 6, 6 });
-		playerMarker->SetColor({ 255, 255, 255, 20 });
-		playerMarker->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.5f });
+		for (int i = 0; i < 3; i++)
+		{
+			auto marker = new SpriteObj();
+
+			switch (i)
+			{
+			case 0:
+				marker->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarker #142163.png"));
+				marker->SetScale({ 6, 6 });
+				marker->SetColor({ 255, 255, 255, 20 });
+				break;
+			case 1:
+				marker->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerOutline.png"));
+				marker->SetScale({ 6, 6 });
+				marker->SetColor({ 255, 255, 255, 30 });
+				break;
+			case 2:
+				marker->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerGlow.png"));
+				marker->SetScale({ 5.5, 5.5 });
+				marker->SetColor({ 255, 255, 255, 20 });
+				break;
+			}
+
+			marker->SetOrigin(Origins::MC);
+			marker->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.5f });
+
+			switch (i)
+			{
+			case 0:
+				playerMarker = marker;
+				break;
+			case 1:
+				playerMarkerOutLine = marker;
+				break;
+			case 2:
+				playerMarkerGlow = marker;
+				break;
+			}
+		}
+
 		uiObjList[0].push_back(playerMarker);
-
-		playerMarkerOutLine = new SpriteObj();
-		playerMarkerOutLine->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerOutline.png"));
-		playerMarkerOutLine->SetOrigin(Origins::MC);
-		playerMarkerOutLine->SetScale({ 6, 6 });
-		playerMarkerOutLine->SetColor({ 255, 255, 255, 30 });
-		playerMarkerOutLine->SetPos(playerMarker->GetPos());
 		uiObjList[0].push_back(playerMarkerOutLine);
-
-		playerMarkerGlow = new SpriteObj();
-		playerMarkerGlow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerMarkerGlow.png"));
-		playerMarkerGlow->SetOrigin(Origins::MC);
-		playerMarkerGlow->SetScale({ 5.5, 5.5 });
-		playerMarkerGlow->SetColor({ 255, 255, 255, 20 });
-		playerMarkerGlow->SetPos(playerMarker->GetPos());
 		uiObjList[0].push_back(playerMarkerGlow);
 	}
 
