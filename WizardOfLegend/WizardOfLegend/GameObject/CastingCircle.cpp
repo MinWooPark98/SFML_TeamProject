@@ -42,19 +42,26 @@ void CastingCircle::Update(float dt)
 	animator->Update(dt);
 	timer += dt;
 	if (timer >= duration)
+	{
+		if(dmgType == Skill::DamageType::Once)
+			// Once 충돌 처리
 		SetActive(false);
-
-	if (!isOnAtkDelay)
-	{
-		// 충돌 검사 및 데미지
 	}
-	else if (dmgType != Skill::DamageType::Once)
+
+	if (dmgType == Skill::DamageType::Periodic)
 	{
-		atkTimer += dt;
-		if (atkTimer >= atkDelay)
+		if (!isOnAtkDelay)
 		{
-			isOnAtkDelay = false;
-			atkTimer = 0.f;
+			// 충돌 검사 및 데미지
+		}
+		else
+		{
+			atkTimer += dt;
+			if (atkTimer >= atkDelay)
+			{
+				isOnAtkDelay = false;
+				atkTimer = 0.f;
+			}
 		}
 	}
 }

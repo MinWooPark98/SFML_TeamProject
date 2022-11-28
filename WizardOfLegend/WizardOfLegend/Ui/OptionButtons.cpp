@@ -67,6 +67,15 @@ void OptionButtons::SetPos(const Vector2f& pos)
 	}
 }
 
+void OptionButtons::Clear()
+{
+	for (auto button : buttons)
+	{
+		delete button;
+	}
+	buttons.clear();
+}
+
 void OptionButtons::AddButton(Button2* button, const string& str, const FloatRect& buttonSize, Color textColor, Color btnColor)
 {
 	if(button == nullptr)

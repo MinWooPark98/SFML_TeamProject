@@ -6,7 +6,7 @@
 #include "../Framework/InputMgr.h"
 
 Button2::Button2()
-    :sprite(nullptr), text(nullptr), activated(true), isMouseOn(false), isClicked(false), origin(Origins::TL)
+    :sprite(nullptr), text(nullptr), activated(true), isOtherView(false), isMouseOn(false), isClicked(false), origin(Origins::TL)
 {
 }
 
@@ -43,11 +43,14 @@ void Button2::Update(float dt)
 {
     Object::Update(dt);
     isClicked = false;
-    Vector2f mousePos;
-    if (isUi)
-        mousePos = SCENE_MGR->GetCurrentScene()->GetUiMousePos();
-    else
-        mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
+    if (!isOtherView)
+    {
+        if (isUi)
+            mousePos = SCENE_MGR->GetCurrentScene()->GetUiMousePos();
+        else
+            mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
+    }
+
     if (!isMouseOn)
     {
         if (btnBound.contains(mousePos))

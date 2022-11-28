@@ -49,6 +49,21 @@ void SkillSet::Set(const string& setName)
 	Restart();
 }
 
+void SkillSet::SetOnlyOneSkill(const Skill::Set& set)
+{
+	for (auto skill : usingSkills)
+	{
+		unusingSkills.push_back(skill);
+	}
+	usingSkills.clear();
+
+	auto skill = unusingSkills.front();
+	unusingSkills.pop_front();
+	skill->SetSkill(set);
+	usingSkills.push_back(skill);
+	Restart();
+}
+
 void SkillSet::SetSubject(Object* subject, Skill::SubjectType subType)
 {
 	this->subject = subject;

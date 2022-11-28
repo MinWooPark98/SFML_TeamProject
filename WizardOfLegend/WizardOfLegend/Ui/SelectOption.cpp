@@ -8,8 +8,11 @@
 #include <fstream>
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/SkillTable.h"
+#include "../GameObject/SkillSet.h"
+#include "DataTableList.h"
 
 SelectOption::SelectOption()
+	:skillList(nullptr), skillSetList(nullptr)
 {
 }
 
@@ -20,7 +23,7 @@ SelectOption::~SelectOption()
 void SelectOption::Init()
 {
 	auto windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
-	vector<string> opts = { "SkillName", "Element", "AttackType", "AttackCntLim", "AttackInterval", "Distance", "AttackShape", "Amplitude", "Frequency", "WaveType",  "FallingHeight", "RangeType", "PlayerAction", "SkillDelay", "SkillCoolDown", "DmgRatio", "DmgType", "DmgDelay", "Duration", "Speed", "AnimClipName_1", "AnimClipName_2" };
+	vector<string> opts = { "SkillName", "Element", "AttackType", "AttackCntLim", "AttackInterval", "Distance", "AttackShape", "Amplitude", "Frequency", "WaveType",  "FallingHeight", "RangeType", "PlayerAction", "SkillDelay", "SkillCoolDown", "DmgType", "DmgRatio", "DmgDelay", "Duration", "Speed", "AnimClipName_1", "AnimClipName_2", "SoundName_1", "SoundName_2" };
 	selectedSet.animClipName.assign(2, "");
 	float buttonHeight = windowSize.y * 0.8f / (int)Options::Count - 4.f;
 	options.first = new OptionButtons();
@@ -143,7 +146,7 @@ void SelectOption::Init()
 				OptionButtons* buttons = new OptionButtons();
 				buttons->SetActive(false);
 				buttons->SetPos(button2->GetPos() + Vector2f(0.f, buttonHeight));
-				vector<string> btnStr = { "NormalSpell", "Dash", "PBAoE", "JumpSlash", "GroundSlam" };
+				vector<string> btnStr = { "NormalSpell", "Dash", "PBAoE", "Jump", "GroundSlam" };
 				for (int j = 0; j < btnStr.size(); ++j)
 				{
 					Button2* newButton = new Button2();
@@ -161,7 +164,7 @@ void SelectOption::Init()
 				OptionButtons* buttons = new OptionButtons();
 				buttons->SetActive(false);
 				buttons->SetPos(button2->GetPos() + Vector2f(0.f, buttonHeight));
-				vector<string> btnStr = { "Once", "Periodic" };
+				vector<string> btnStr = { "Once", "Periodic", "NoDamage"};
 				for (int j = 0; j < btnStr.size(); ++j)
 				{
 					Button2* newButton = new Button2();
@@ -187,8 +190,20 @@ void SelectOption::Init()
 			break;
 		}
 	}
-	vector<string> menus[] = { {"New", "Load"}, {"Apply", "Save"} };
-	for (int i = 0; i < menus->size(); ++i)
+
+	skillList = new DataTableList();
+	skillList->Init();
+	skillList->SetDataTable(DataTable::Types::Skill);
+	skillList->Selected = bind(&SelectOption::Load, this, placeholders::_1);
+
+	skillSetList = new DataTableList();
+	skillSetList->Init();
+	skillSetList->SetDataTable(DataTable::Types::SkillSet);
+	skillSetList->Selected = bind(&SelectOption::LoadSkillSet, this, placeholders::_1);
+
+	vector<vector<string>> menus = { { "New Skill", "Load Skill" }, { "Apply Skill", "Save Skill" }, { "Load SkillSet" } };
+	buttonHeight = windowSize.y * 0.1f / menus.size() - 4.f;
+	for (int i = 0; i < menus.size(); ++i)
 	{
 		OptionButtons* newMenu = new OptionButtons();
 		newMenu->SetAxis(OptionButtons::Axis::Horizontal);
@@ -196,17 +211,19 @@ void SelectOption::Init()
 		for (int j = 0; j < menus[i].size(); ++j)
 		{
 			auto newButton = new Button2();
-			newMenu->AddButton(newButton, menus[i][j], { 0.f, 0.f, windowSize.x * 0.15f, buttonHeight });
+			newMenu->AddButton(newButton, menus[i][j], { 0.f, 0.f, windowSize.x * 0.3f / menus[i].size(), buttonHeight });
 			newButton->MousePointerOn = bind(&Button2::DefaultMouseOn, newButton);
 			newButton->MousePointerOff = bind(&Button2::DefaultMouseOff, newButton);
-			if (menus[i][j] == "New")
+			if (menus[i][j] == "New Skill")
 				newButton->ClickOn = bind(&SelectOption::Reset, this);
-			else if (menus[i][j] == "Load")
-				;
-			else if (menus[i][j] == "Apply")
+			else if (menus[i][j] == "Load Skill")
+				newButton->ClickOn = bind(&DataTableList::SetActive, skillList, true);
+			else if (menus[i][j] == "Apply Skill")
 				newButton->ClickOn = bind(&SelectOption::SetPlayer1stSkill, this);
-			else if(menus[i][j] == "Save")
+			else if(menus[i][j] == "Save Skill")
 				newButton->ClickOn = bind(&SelectOption::SaveSetToCSV, this);
+			else if (menus[i][j] == "Load SkillSet")
+				newButton->ClickOn = bind(&DataTableList::SetActive, skillSetList, true);;
 		}
 		menuButtons.push_back(newMenu);
 	}
@@ -243,7 +260,7 @@ void SelectOption::Update(float dt)
 	else if (InputMgr::GetKeyDown(Keyboard::F6))
 		Load("FireFull");
 	else if (InputMgr::GetKeyDown(Keyboard::F7))
-		Load("FireBall");
+		Load("WideAreaMeteor");
 
 	for (auto& buttons : menuButtons)
 	{
@@ -309,6 +326,19 @@ void SelectOption::ActivateAll()
 			buttons[i]->GetText()->SetString("");
 		}
 	}
+}
+
+void SelectOption::ActivateBasedOnAtkShape()
+{
+	ActivateOption(Options::AttackType);
+	ActivateOption(Options::Distance);
+	ActivateOption(Options::Amplitude);
+	ActivateOption(Options::Frequency);
+	ActivateOption(Options::WaveType);
+	ActivateOption(Options::FallingHeight);
+	ActivateOption(Options::RangeType);
+	ActivateOption(Options::Speed);
+	optButtons[Options::AttackType]->GetButtons()[2]->SetActivated(true);
 }
 
 void SelectOption::ActivateOption(Options option)
@@ -386,6 +416,12 @@ void SelectOption::ApplyTextStr(Options opt, string str)
 		case SelectOption::Options::AnimClipName2:
 			selectedSet.animClipName[1] = str;
 			break;
+		case SelectOption::Options::SoundName1:
+			selectedSet.soundName[0] = str;
+			break;
+		case SelectOption::Options::SoundName2:
+			selectedSet.soundName[1] = str;
+			break;
 		default:
 			return;
 		}
@@ -448,11 +484,11 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 		break;
 	case SelectOption::Options::AttackShape:
 		selectedSet.attackShape = (Skill::AttackShape)vecIdx;
+		ActivateBasedOnAtkShape();
 		{
 			switch ((Skill::AttackShape)vecIdx)
 			{
 			case Skill::AttackShape::Surrounded:
-				ActivateAll();
 				DeactivateOption(Options::Distance);
 				DeactivateOption(Options::Amplitude);
 				DeactivateOption(Options::Frequency);
@@ -462,12 +498,13 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 				DeactivateOption(Options::Speed);
 				break;
 			case Skill::AttackShape::Range:
-				ActivateAll();
 				DeactivateOption(Options::WaveType);
 				DeactivateOption(Options::Speed);
+				if(buttons[(int)Options::AttackType]->GetText()->GetString() == "SaveAttacks")
+					buttons[(int)Options::AttackType]->GetText()->SetString("");
+				optButtons[Options::AttackType]->GetButtons()[2]->SetActivated(false);
 				break;
 			case Skill::AttackShape::Rotate:
-				ActivateAll();
 				DeactivateOption(Options::Amplitude);
 				DeactivateOption(Options::Frequency);
 				DeactivateOption(Options::WaveType);
@@ -475,7 +512,6 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 				DeactivateOption(Options::RangeType);
 				break;
 			case Skill::AttackShape::Wave:
-				ActivateAll();
 				DeactivateOption(Options::FallingHeight);
 				DeactivateOption(Options::RangeType);
 				break;
@@ -490,13 +526,13 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 	case SelectOption::Options::RangeType:
 		switch ((Skill::RangeType)(vecIdx - 1))
 		{
+		case Skill::RangeType::None:
+			break;
 		case Skill::RangeType::Default:
-			DeactivateOption(Options::Distance);
 			DeactivateOption(Options::Frequency);
 			DeactivateOption(Options::FallingHeight);
 			break;
 		default:
-			ActivateOption(Options::Distance);
 			ActivateOption(Options::Frequency);
 			ActivateOption(Options::FallingHeight);
 			break;
@@ -510,10 +546,16 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 		switch ((Skill::DamageType)vecIdx)
 		{
 		case Skill::DamageType::Once:
+			ActivateOption(Options::DmgRatio);
 			DeactivateOption(Options::DmgDelay);
 			break;
 		case Skill::DamageType::Periodic:
+			ActivateOption(Options::DmgRatio);
 			ActivateOption(Options::DmgDelay);
+			break;
+		case Skill::DamageType::NoDamage:
+			DeactivateOption(Options::DmgRatio);
+			DeactivateOption(Options::DmgDelay);
 			break;
 		default:
 			break;
@@ -544,9 +586,13 @@ void SelectOption::ConvertVal(string& str, float& opt)
 
 void SelectOption::SaveSetToCSV()
 {
-	for (auto button : options.second->GetButtons())
+	auto& buttons = options.second->GetButtons();
+	for (int i = 0; i < (int)Options::Count; ++i)
 	{
-		if (button->GetText()->GetString().empty())
+		if ((Options)i == Options::SoundName1 || (Options)i == Options::SoundName2)
+			continue;
+
+		if (buttons[i]->GetText()->GetString().empty())
 			return;
 	}
 
@@ -632,7 +678,7 @@ void SelectOption::SaveSetToCSV()
 void SelectOption::SetPlayer1stSkill()
 {
 	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
-	//player->GetSkillSets()[0]->SetSkill(selectedSet);
+	player->GetSkillSets()[0]->SetOnlyOneSkill(selectedSet);
 }
 
 void SelectOption::Load(const string& skillName)
@@ -726,6 +772,14 @@ void SelectOption::Load(const string& skillName)
 			textBoxs[Options::AnimClipName2]->SetString(selectedSet.animClipName[1]);
 			options.second->GetButtons()[i]->GetText()->SetString(selectedSet.animClipName[1]);
 			break;
+		case SelectOption::Options::SoundName1:
+			textBoxs[Options::SoundName1]->SetString(selectedSet.soundName[0]);
+			options.second->GetButtons()[i]->GetText()->SetString(selectedSet.soundName[0]);
+			break;
+		case SelectOption::Options::SoundName2:
+			textBoxs[Options::SoundName2]->SetString(selectedSet.soundName[1]);
+			options.second->GetButtons()[i]->GetText()->SetString(selectedSet.soundName[1]);
+			break;
 		default:
 			break;
 		}
@@ -734,4 +788,11 @@ void SelectOption::Load(const string& skillName)
 	{
 		button->Reposition();
 	}
+	SetPlayer1stSkill();
+}
+
+void SelectOption::LoadSkillSet(const string& skillSetName)
+{
+	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
+	player->GetSkillSets()[0]->Set(skillSetName);
 }

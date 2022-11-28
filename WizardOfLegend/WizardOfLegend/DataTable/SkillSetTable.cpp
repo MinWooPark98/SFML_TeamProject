@@ -29,6 +29,7 @@ bool SkillSetTable::Load()
 	Release();
 	rapidcsv::Document doc(fileName, rapidcsv::LabelParams(0, -1));
 	vector<string> setName = doc.GetColumn<string>(0);
+	keys = setName;
 	auto columnCount = doc.GetColumnCount();
 	auto rowCount = doc.GetRowCount();
 	for (int j = 0; j < rowCount; ++j)

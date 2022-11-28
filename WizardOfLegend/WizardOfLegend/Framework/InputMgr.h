@@ -47,6 +47,7 @@ public:
 	static void Init();
 	static void Update(float dt);
 	static void ProcessInput(Event& ev);
+	static void Clear();
 
 	static bool GetKeyDown(Keyboard::Key key);
 	static bool GetKey(Keyboard::Key key);

@@ -52,6 +52,7 @@ public:
 	{
 		Once,
 		Periodic,
+		NoDamage,
 	};
 	
 	struct Set
@@ -71,16 +72,17 @@ public:
 		Player::SkillAction playerAction;		// 플레이어 동작 변경(kick, jumpSmash 등)
 		float skillDelay;						// 스킬 선 딜레이
 		float skillCoolDown;					// 스킬 딜레이(쿨타임 및 충전 시간)
-		float dmgRatio;							// 공격력 대비 스킬 데미지 비율
 		DamageType dmgType;						// 단일 타격인지
+		float dmgRatio;							// 공격력 대비 스킬 데미지 비율
 		float dmgDelay;							// 데미지 적용 딜레이
 		float duration;							// 스킬 지속 시간
 		float speed;							// shape_range 는 미적용, shpae_rotate일 때 음수면 반시계 방향, 스킬 이동 속도
 		vector<string> animClipName;			// 스킬 애니메이션 클립 string
+		vector<string> soundName;				// 스킬 시작 사운드, 종료 사운드
 
 		Set(){}
-		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, AttackShape attackShape, float amplitude, float frequency, WaveType waveType, float fallingHeight, RangeType rangeType, Player::SkillAction playerAction, float skillDelay, float skillCoolDown, float dmgRatio, DamageType dmgType, float dmgDelay, float duration, float speed, vector<string> animClipName)
-			:skillName(skillName), element(element), attackType(attackType), attackCntLim(attackCntLim), attackInterval(attackInterval), distance(distance), attackShape(attackShape), amplitude(amplitude), frequency(frequency), waveType(waveType), fallingHeight(fallingHeight), rangeType(rangeType), playerAction(playerAction), skillDelay(skillDelay), skillCoolDown(skillCoolDown), dmgRatio(dmgRatio), dmgType(dmgType), dmgDelay(dmgDelay), duration(duration), speed(speed), animClipName(animClipName) {}
+		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, AttackShape attackShape, float amplitude, float frequency, WaveType waveType, float fallingHeight, RangeType rangeType, Player::SkillAction playerAction, float skillDelay, float skillCoolDown, DamageType dmgType, float dmgRatio, float dmgDelay, float duration, float speed, vector<string> animClipName, vector<string> soundName)
+			:skillName(skillName), element(element), attackType(attackType), attackCntLim(attackCntLim), attackInterval(attackInterval), distance(distance), attackShape(attackShape), amplitude(amplitude), frequency(frequency), waveType(waveType), fallingHeight(fallingHeight), rangeType(rangeType), playerAction(playerAction), skillDelay(skillDelay), skillCoolDown(skillCoolDown), dmgType(dmgType), dmgRatio(dmgRatio), dmgDelay(dmgDelay), duration(duration), speed(speed), animClipName(animClipName), soundName(soundName) {}
 		void Reset();
 	};
 

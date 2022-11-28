@@ -14,6 +14,8 @@ protected:
 
 	bool activated;
 
+	bool isOtherView;
+	Vector2f mousePos;
 	bool isMouseOn;
 	bool isClicked;
 
@@ -54,6 +56,9 @@ public:
 
 	void SetActivated(bool activate);
 	bool GetActivated() { return activated; }
+
+	void IsOtherView(bool isOtherView) { this->isOtherView = isOtherView; }
+	void SetMousePos(const Vector2f pos) { mousePos = pos; }
 
 	function<void()> MousePointerOn;
 	function<void()> MousePointerOff;

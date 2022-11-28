@@ -53,6 +53,7 @@
     <ClCompile Include="GameObject\CastingCircle.cpp" />
     <ClCompile Include="GameObject\SkillSet.cpp" />
     <ClCompile Include="DataTable\SkillSetTable.cpp" />
+    <ClCompile Include="Ui\DataTableList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -111,6 +112,7 @@
     <ClInclude Include="GameObject\CastingCircle.h" />
     <ClInclude Include="GameObject\SkillSet.h" />
     <ClInclude Include="DataTable\SkillSetTable.h" />
+    <ClInclude Include="Ui\DataTableList.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

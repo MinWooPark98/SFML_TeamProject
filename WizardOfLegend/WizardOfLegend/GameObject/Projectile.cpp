@@ -116,17 +116,20 @@ void Projectile::Update(float dt)
 		movingTimer = 0.f;
 	}
 
-	if (!isOnAtkDelay)
+	if (dmgType != Skill::DamageType::NoDamage)
 	{
-		// 충돌 검사 및 데미지
-	}
-	else if (dmgType != Skill::DamageType::Once)
-	{
-		atkTimer += dt;
-		if (atkTimer >= atkDelay)
+		if (!isOnAtkDelay)
 		{
-			isOnAtkDelay = false;
-			atkTimer = 0.f;
+			// 충돌 검사 및 데미지
+		}
+		else if (dmgType == Skill::DamageType::Periodic)
+		{
+			atkTimer += dt;
+			if (atkTimer >= atkDelay)
+			{
+				isOnAtkDelay = false;
+				atkTimer = 0.f;
+			}
 		}
 	}
 }

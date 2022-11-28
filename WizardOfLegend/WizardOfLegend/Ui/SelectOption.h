@@ -4,6 +4,8 @@
 #include "../GameObject/TextBox.h"
 #include "OptionButtons.h"
 
+class DataTableList;
+
 class SelectOption : public Object
 {
 public:
@@ -24,13 +26,15 @@ public:
 		PlayerAction,
 		SkillDelay,
 		SkillCoolDown,
-		DmgRatio,
 		DmgType,
+		DmgRatio,
 		DmgDelay,
 		Duration,
 		Speed,
 		AnimClipName1,
 		AnimClipName2,
+		SoundName1,
+		SoundName2,
 		Count,
 	};
 
@@ -41,6 +45,9 @@ protected:
 	vector<OptionButtons*> menuButtons;
 
 	Skill::Set selectedSet;
+
+	DataTableList* skillList;
+	DataTableList* skillSetList;
 
 public:
 	SelectOption();
@@ -53,6 +60,7 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 
 	void ActivateAll();
+	void ActivateBasedOnAtkShape();
 	void ActivateOption(Options option);
 	void DeactivateOption(Options option);
 	void ApplyText(Options opt, TextBox* box);
@@ -66,6 +74,7 @@ public:
 	void SetPlayer1stSkill();
 
 	void Load(const string& skillName);
+	void LoadSkillSet(const string& skillSetName);
 
 	Skill::Set& GetSet() { return selectedSet; }
 };

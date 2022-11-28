@@ -93,7 +93,7 @@ void Player::SetState(States state)
 				animator->Play("PBAoELeft");
 		}
 		break;
-	case States::JumpSlash:
+	case States::Jump:
 		{
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle <= -45.f)
@@ -107,7 +107,7 @@ void Player::SetState(States state)
 		}
 		break;
 	case States::GroundSlam:
-		if (currState == States::JumpSlash)
+		if (currState == States::Jump)
 			lastDir.y >= 0.f ? animator->Play("JumpSlamDown") : animator->Play("JumpSlamUp");
 		else
 			lastDir.y >= 0.f ? animator->Play("GroundSlamDown") : animator->Play("GroundSlamUp");
@@ -282,8 +282,8 @@ void Player::Update(float dt)
 	case Player::States::Dash:
 		UpdateDash(dt);
 		break;
-	case Player::States::JumpSlash:
-		UpdateJumpSlash(dt);
+	case Player::States::Jump:
+		UpdateJump(dt);
 		break;
 	default:
 		break;
@@ -353,7 +353,7 @@ void Player::UpdateDash(float dt)
 	}
 }
 
-void Player::UpdateJumpSlash(float dt)
+void Player::UpdateJump(float dt)
 {
 	Vector2f moving = direction * jumpDistance * dt / jumpDuration;
 	if (jumpTimer < jumpDuration * 0.5f && jumpTimer + dt >= jumpDuration * 0.5f)
@@ -391,7 +391,7 @@ void Player::Action()
 		direction = Utils::Normalize(mousePos - position);
 		if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
 			lastDir = direction;
-		if (action == SkillAction::JumpSlash)
+		if (action == SkillAction::Jump)
 		{
 			auto mouseDistance = Utils::Distance(mousePos, position);
 			if (mouseDistance >= currSkillSet->GetCurrSkill()->GetSetting()->distance * 0.5f)
@@ -411,8 +411,8 @@ void Player::Action()
 	case SkillAction::PBAoE:
 		SetState(States::PBAoE);
 		break;
-	case SkillAction::JumpSlash:
-		SetState(States::JumpSlash);
+	case SkillAction::Jump:
+		SetState(States::Jump);
 		break;
 	case SkillAction::GroundSlam:
 		SetState(States::GroundSlam);

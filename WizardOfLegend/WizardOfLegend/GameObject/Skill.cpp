@@ -4,6 +4,7 @@
 #include "../Scene/SceneMgr.h"
 #include "Projectile.h"
 #include "CastingCircle.h"
+#include "../Framework/SoundMgr.h"
 
 Skill::Skill()
 	:subject(nullptr), setting(nullptr), subType(SubjectType::None), isDoing(false), distance(0.f), attackCnt(0), attackTimer(0.f), skillTimer(0.f)
@@ -102,7 +103,9 @@ void Skill::Do()
 				obj->SetDirection(skillDir);
 				obj->SetDistance(distance);
 				obj->SetPos(setting->rangeType == RangeType::FromAbovePlayer ? subject->GetPos() : startPos);
-				Vector2f translation = Utils::RandAreaPoint() * setting->amplitude * setting->frequency;
+				Vector2f translation = Utils::RandAreaPoint() * setting->amplitude;
+				if (setting->rangeType == RangeType::FromAbovePlayer && setting->attackType == AttackType::Multiple)
+					translation *= setting->frequency;
 				if (isDoing)
 				{
 					obj->Translate(translation);
@@ -121,7 +124,7 @@ void Skill::Do()
 				castingCircles.push_back(circle);
 				if (setting->rangeType == RangeType::FromAbovePlayer)
 				{
-					obj->SetFallingHeight(setting->fallingHeight - distance * skillDir.y);
+					obj->SetFallingHeight(setting->fallingHeight);
 					obj->SetPos(startPos);
 					if(setting->attackType != AttackType::Single)
 						circle->SetColor({ 255, 255, 255, 0 });
@@ -185,6 +188,8 @@ void Skill::Do()
 	isDoing = true;
 	obj->SetMoving(true);
 	projectiles.push_back(obj);
+	if(!setting->soundName[0].empty())
+		SOUND_MGR->Play(setting->soundName[0]);
 	++attackCnt;
 }
 
@@ -251,6 +256,8 @@ void Skill::Update(float dt)
 			if (!(*it)->GetMoving())
 			{
 				(*it)->SetActive(false);
+				if (!setting->soundName[1].empty())
+					SOUND_MGR->Play(setting->soundName[1]);
 				it = projectiles.erase(it);
 				continue;
 			}

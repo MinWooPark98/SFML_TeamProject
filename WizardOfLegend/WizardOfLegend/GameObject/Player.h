@@ -16,7 +16,7 @@ public:
 		Slide,
 		NormalSpell,
 		PBAoE,
-		JumpSlash,
+		Jump,
 		GroundSlam,
 	};
 	enum class SkillAction
@@ -24,7 +24,7 @@ public:
 		NormalSpell,
 		Dash,
 		PBAoE,
-		JumpSlash,
+		Jump,
 		GroundSlam,
 	};
 
@@ -70,7 +70,7 @@ public:
 	void UpdateIdle(float dt);
 	void UpdateRun(float dt);
 	void UpdateDash(float dt);
-	void UpdateJumpSlash(float dt);
+	void UpdateJump(float dt);
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }

@@ -22,6 +22,7 @@ public:
 
 	void Restart();
 	void Set(const string& setName);
+	void SetOnlyOneSkill(const Skill::Set& set);
 	void SetSubject(Object* subject, Skill::SubjectType subType);
 	bool Do();
 	void Update(float dt);
