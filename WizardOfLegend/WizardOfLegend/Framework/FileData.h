@@ -45,8 +45,9 @@ namespace ns
 		string type; // 바닥, 풀, (나무, 바위, 상자, 벽(특수)) 에너미
 		string path; // 스프라이트 파일
 		sf::Vector2f position;
+		sf::Vector2f size;
 		//vector<Item> item;
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE(ObjectData, type, path, position);//, item
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(ObjectData, type, path, position,size);//, item
 	};
 
 	struct EditorObjs

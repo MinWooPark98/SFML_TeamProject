@@ -21,6 +21,8 @@ public:
 	string GetType() { return type; }
 	EditorObjs GetData()  { return data; }
 	void SetData(EditorObjs d) { data = d; }
+	void SetSize(Vector2f size);
+	Vector2f GetSize();
 
 };
 

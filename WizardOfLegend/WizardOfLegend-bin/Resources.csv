@@ -384,7 +384,7 @@ animations/monsterSpawn/MonsterSpawnCard.csv,3
 graphics/CardColorIndex.png,0
 graphics/Map/MapToolBook.png,0
 graphics/Map/window.png,0
-graphics/Map/greed.png,0
+graphics/Map/grid.png,0
 graphics/Map/button.png,0
 graphics/Map/ArcherBosspng.png,0
 graphics/Map/ArcherNormal.png,0
@@ -580,3 +580,4 @@ animations/player/GroundSlamUp.csv,3
 animations/player/JumpSlamDown.csv,3
 animations/player/JumpSlamUp.csv,3
 graphics/PlayerStatusBarPortrait.png,0
+graphics/Map/Empty.png,0

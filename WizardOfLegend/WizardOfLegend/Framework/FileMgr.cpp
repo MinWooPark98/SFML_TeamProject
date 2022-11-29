@@ -114,14 +114,14 @@ void FileMgr::LoadAll()
 
 }
 
-const vector<ObjectData>& FileMgr::GetMap(string name)
-{
-    return mapInfo[name];
-}
-
 const vector<ns::RectangleInfo>& FileMgr::GetHitBox(string name)
 {
 	return hitBoxData[name];
+}
+
+const vector<ObjectData>& FileMgr::GetMap(string name)
+{
+    return mapInfo[name];
 }
 
 void FileMgr::SaveMap(vector<ObjectData> newData, string name)

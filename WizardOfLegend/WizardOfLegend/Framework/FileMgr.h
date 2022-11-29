@@ -17,8 +17,8 @@ public:
 
 	const vector<ObjectData>& GetMap(string name);
 	const map<string, vector<ObjectData>>& GetAllMap() { return mapInfo; };
-
 	void SaveMap(vector<ObjectData> newData, string name);
+
 	const map<string, vector<EditorObjs>>& GetEditorObjs() { return editorObjs; }
 };
 

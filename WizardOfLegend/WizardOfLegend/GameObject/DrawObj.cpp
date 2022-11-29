@@ -31,3 +31,14 @@ void DrawObj::SetMove(bool move)
 {
 	isMove = move;
 }
+
+void DrawObj::SetSize(Vector2f size)
+{
+	auto localSize = sprite->GetLocalBounds();
+	sprite->SetScale({ size.x / localSize.width, size.y / localSize.height });
+}
+
+Vector2f DrawObj::GetSize()
+{
+	return sprite->GetSize();
+}

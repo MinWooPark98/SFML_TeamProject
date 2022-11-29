@@ -108,5 +108,11 @@
       "texPath": "graphics/Map/FireBoss.png",
       "uiPath": "graphics/Map/Palette/FireBoss1.png"
     }
+  ],
+  "SECTOR": [
+    {
+      "texPath": "graphics/Map/Palette/Empty.png",
+      "uiPath": "graphics/Map/Palette/Empty.png"
+    }
   ]
 }

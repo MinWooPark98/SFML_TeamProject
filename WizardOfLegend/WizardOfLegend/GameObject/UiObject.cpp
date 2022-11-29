@@ -249,3 +249,5 @@ void UiObject::Draw(RenderWindow& window)
 {
 	Object::Draw(window);
 }
+
+

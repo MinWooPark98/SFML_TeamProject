@@ -92,6 +92,7 @@ void SpriteObj::SetScale(Vector2f scale)
 {
     sprite.setScale(scale);
 }
+
 const IntRect& SpriteObj::GetTextureRect() const
 {
     return sprite.getTextureRect();

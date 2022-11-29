@@ -28,9 +28,9 @@ void PlayScene::Init()
 
 
 	isMap = true;
-	auto& data = FILE_MGR->GetMap("TUTORIAL");
+	//auto& data = FILE_MGR->GetMap("TUTORIAL");
 
-	for (auto& obj : data)
+	/*for (auto& obj : data)
 	{
 		if (obj.type == "WALL")
 		{
@@ -41,6 +41,11 @@ void PlayScene::Init()
 			draw->SetPos(obj.position);
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::Wall);
+			if (obj.path == "graphics/Map/Palette/Empty.png")
+			{
+				draw->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/Empty.png"));
+				draw->SetObjType(Object::ObjTypes::rnejddl);				
+			}
 
 			objList[LayerType::Object][0].push_back(draw);
 			ObjTypeList[Object::ObjTypes::Wall].push_back(draw);
@@ -134,12 +139,12 @@ void PlayScene::Init()
 				ObjTypeList[Object::ObjTypes::Enemy].push_back(fireBoss);
 			}
 		}
-	}
+	}*//*
 	auto& tiles = objList[LayerType::Tile][0];
 	mapSize.left = 0;
 	mapSize.top = 0;
 	mapSize.width = (tiles.back())->GetPos().x + 16;
-	mapSize.height = (tiles.back())->GetPos().y;
+	mapSize.height = (tiles.back())->GetPos().y;*/
 
 	for (auto& enemy : ObjTypeList[Object::ObjTypes::Enemy])
 	{
