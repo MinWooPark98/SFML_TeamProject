@@ -97,13 +97,14 @@ void MapToolScene::Update(float dt)
 		{
 			if (grids[i][j]->IsClick())
 			{
-				//cout << i << "," << j << endl;
+				cout << i << "," << j << endl;
 				if (nowType == LayerType::Object && playerPos == Vector2i{ i,j })
 					return;
 
 				//DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
 				nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
 				auto& nowgridObjs = gridObjs[nowType];
+				auto& nowsectorObjs = sectors[nowType];
 
 
 				//삭제코드
@@ -118,6 +119,23 @@ void MapToolScene::Update(float dt)
 							auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
 							objList[nowType][i].erase(deleteObj);
 							gridObjs[nowType][i].erase(nowgridObjs[i].find(j));
+
+							delete findObj;
+						}
+					}
+					return;
+				}
+				if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
+				{
+					Sector* findObj = nullptr;
+					if (nowsectorObjs.find(i) != nowsectorObjs.end())
+					{
+						if (nowsectorObjs[i].find(j) != nowsectorObjs[i].end())
+						{
+							findObj = nowsectorObjs[i][j];
+							auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
+							objList[nowType][i].erase(deleteObj);
+							sectors[nowType][i].erase(nowsectorObjs[i].find(j));
 
 							delete findObj;
 						}
@@ -151,6 +169,8 @@ void MapToolScene::Update(float dt)
 						sector->SetPos(grids[i][j]->GetPos());
 						cout << "sector1 " << grids[i][j]->GetPos().x << "," << grids[i][j]->GetPos().y << endl;
 						isNowDraw = true;
+						sectorI = i;
+						sectorJ = j;
 					}
 					sector->UpdateNowDraw(dt,nowDraw);
 					sector->SetSize({ grids[i][j]->GetPos().x - sector->GetPos().x+16,grids[i][j]->GetPos().y - sector->GetPos().y+16 });
@@ -214,8 +234,8 @@ void MapToolScene::Update(float dt)
 					//sectors.push_back(sector);
 					isNowDraw = false;
 
-					objList[nowType][i].push_back(sector);
-					sectors[nowType][i][j] = sector;
+					objList[nowType][sectorI].push_back(sector);
+					sectors[nowType][sectorI][sectorJ] = sector;
 					cout << "up" << endl;
 				}
 			}
@@ -303,6 +323,7 @@ void MapToolScene::Release()
 	objList[LayerType::Object].clear();
 	objList[LayerType::Sector].clear();
 	gridObjs.clear();
+	sectors.clear();
 
 	player = nullptr;
 
@@ -416,6 +437,7 @@ void MapToolScene::Load(string path)
 	objList[LayerType::Object].clear();
 	objList[LayerType::Sector].clear();
 	gridObjs.clear();
+	sectors.clear();
 	//로드 파일 그리드에 적용
 	player = nullptr;
 	auto& data = FILE_MGR->GetMap(path);

@@ -12,7 +12,8 @@ protected:
 	Player* player;
 	IntRect mapSize;
 
-	map<Object::ObjTypes, list<Object*>> ObjTypeList;
+	//vector<Sector> adsfdsfasd;
+	vector<map<Object::ObjTypes, list<Object*>>> objTypeList;
 
 public:
 	PlayScene();

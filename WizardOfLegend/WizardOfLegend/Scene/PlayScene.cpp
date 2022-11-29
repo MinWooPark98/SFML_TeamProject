@@ -25,14 +25,17 @@ void PlayScene::Init()
 {
 	Scene::Init();
 
-
-
 	isMap = true;
-	//auto& data = FILE_MGR->GetMap("TUTORIAL");
+	auto& data = FILE_MGR->GetMap("TUTORIAL");
 
-	/*for (auto& obj : data)
+	for (auto& obj : data)
 	{
-		if (obj.type == "WALL")
+		if (obj.type == "SECTOR")
+		{
+
+
+		}
+		else if (obj.type == "WALL")
 		{
 			SpriteObj* draw = new SpriteObj();
 			draw->SetName(obj.type);
@@ -48,9 +51,9 @@ void PlayScene::Init()
 			}
 
 			objList[LayerType::Object][0].push_back(draw);
-			ObjTypeList[Object::ObjTypes::Wall].push_back(draw);
+			objTypeList[0][Object::ObjTypes::Wall].push_back(draw);
 		}
-		if (obj.type == "TILE")
+		else if (obj.type == "TILE")
 		{
 		SpriteObj* draw = new SpriteObj();
 		draw->SetName(obj.type);
@@ -58,11 +61,11 @@ void PlayScene::Init()
 		draw->SetOrigin(Origins::BC);
 		draw->SetPos(obj.position);
 		draw->SetObjType(Object::ObjTypes::Tile);
-		ObjTypeList[Object::ObjTypes::Tile].push_back(draw);
+		objTypeList[Object::ObjTypes::Tile].push_back(draw);
 
 		objList[LayerType::Tile][0].push_back(draw);
 		}
-		if (obj.type == "OBJECT")
+		else if (obj.type == "OBJECT")
 		{
 			SpriteObj* draw = new SpriteObj();
 			draw->SetName(obj.type);
@@ -73,9 +76,9 @@ void PlayScene::Init()
 			draw->SetObjType(Object::ObjTypes::ETC);
 
 			objList[LayerType::Object][0].push_back(draw);
-			ObjTypeList[Object::ObjTypes::ETC].push_back(draw);
+			objTypeList[Object::ObjTypes::ETC].push_back(draw);
 		}
-		if (obj.type == "PLAYER")
+		else if (obj.type == "PLAYER")
 		{
 			player = new Player();
 			player->Init();
@@ -83,7 +86,7 @@ void PlayScene::Init()
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
 			objList[LayerType::Object][5].push_back(player);
-			ObjTypeList[Object::ObjTypes::Player].push_back(player);
+			objTypeList[Object::ObjTypes::Player].push_back(player);
 			auto& skills = player->GetSkills();
 			skills[0]->SetSkill("FireBall");
 			skills[1]->SetSkill("Dragon");
@@ -91,7 +94,7 @@ void PlayScene::Init()
 			skills[4]->SetSkill("DragonArc");
 			skills[5]->SetSkill("FireFull");
 		}
-		if (obj.type == "ENEMY")
+		else if (obj.type == "ENEMY")
 		{
 			if (obj.path == "graphics/Map/Lancer.png")
 			{
@@ -101,7 +104,7 @@ void PlayScene::Init()
 				lancer->SetPos(obj.position);
 				lancer->SetObjType(Object::ObjTypes::Enemy);
 				objList[LayerType::Object][0].push_back(lancer);
-				ObjTypeList[Object::ObjTypes::Enemy].push_back(lancer);
+				objTypeList[Object::ObjTypes::Enemy].push_back(lancer);
 			}
 			else if (obj.path == "graphics/Map/ArcherNormal.png")
 			{
@@ -112,7 +115,7 @@ void PlayScene::Init()
 				archer->SetObjType(Object::ObjTypes::Enemy);
 				archer->SetColor(3);
 				objList[LayerType::Object][1].push_back(archer);
-				ObjTypeList[Object::ObjTypes::Enemy].push_back(archer);
+				objTypeList[Object::ObjTypes::Enemy].push_back(archer);
 			}
 			else if (obj.path == "graphics/Map/ArcherBosspng.png")
 			{
@@ -124,7 +127,7 @@ void PlayScene::Init()
 
 				heavyBombingArcher->SetColor(2);
 				objList[LayerType::Object][2].push_back(heavyBombingArcher);
-				ObjTypeList[Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
+				objTypeList[Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
 			}
 			else if (obj.path == "graphics/Map/FireBoss.png")
 			{
@@ -133,20 +136,19 @@ void PlayScene::Init()
 				fireBoss->SetName(obj.type);
 				fireBoss->SetPos(obj.position);
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
-
 				fireBoss->SetPlayerLastPos(player->GetPos());
 				objList[LayerType::Object][3].push_back(fireBoss);
-				ObjTypeList[Object::ObjTypes::Enemy].push_back(fireBoss);
+				objTypeList[Object::ObjTypes::Enemy].push_back(fireBoss);
 			}
 		}
-	}*//*
+	}
 	auto& tiles = objList[LayerType::Tile][0];
 	mapSize.left = 0;
 	mapSize.top = 0;
 	mapSize.width = (tiles.back())->GetPos().x + 16;
-	mapSize.height = (tiles.back())->GetPos().y;*/
+	mapSize.height = (tiles.back())->GetPos().y;
 
-	for (auto& enemy : ObjTypeList[Object::ObjTypes::Enemy])
+	for (auto& enemy : objTypeList[Object::ObjTypes::Enemy])
 	{
 		((Enemy*)enemy)->SetPlayer(player);
 	}

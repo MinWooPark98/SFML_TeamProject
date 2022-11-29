@@ -45,7 +45,7 @@ void Sector::UpdateNowDraw(float dt, DrawObj* nowDraw)
 		SetPath(nowDraw->GetPath());
 		//SetPos({ grids[i][j]->GetPos()+ (Vector2f)startPos });
 	}
-	endPos = (Vector2i)InputMgr::GetMousePos();
+	//endPos = (Vector2i)InputMgr::GetMousePos();
 	//SetSize({ (float)endPos.x - GetPos().x,(float)endPos.y - GetPos().y});
 	//cout << "Update" << endl;
 }

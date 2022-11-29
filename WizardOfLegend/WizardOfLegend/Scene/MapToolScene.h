@@ -29,6 +29,8 @@ private:
 	//vector<RectangleShape*> sectors;
 	Sector* sector;
 	map<LayerType, map<int, map<int, Sector*>>> sectors;
+	int sectorI;
+	int sectorJ;
 
 public:
 	MapToolScene();
