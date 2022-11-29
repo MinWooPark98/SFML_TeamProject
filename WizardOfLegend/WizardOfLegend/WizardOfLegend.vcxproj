@@ -151,6 +151,7 @@
     <ClCompile Include="GameObject\Enemy.cpp" />
     <ClCompile Include="GameObject\Archer.cpp" />
     <ClCompile Include="GameObject\TextBox.cpp" />
+    <ClCompile Include="GameObject\Sector.cpp" />
     <ClCompile Include="Ui\PlayUiMgr.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Ui\TitleUiMgr.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="GameObject\Enemy.h" />
     <ClInclude Include="GameObject\Archer.h" />
     <ClInclude Include="GameObject\TextBox.h" />
+    <ClInclude Include="GameObject\Sector.h" />
     <ClInclude Include="Ui\PlayUiMgr.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Ui\TitleUiMgr.h" />

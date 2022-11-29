@@ -18,6 +18,7 @@ public:
         Wall,
         Player,
         Enemy,
+        rnejddl,
         ETC,
     };
 

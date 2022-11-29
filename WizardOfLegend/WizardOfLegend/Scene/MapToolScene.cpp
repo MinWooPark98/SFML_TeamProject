@@ -7,6 +7,7 @@
 #include "../Framework/InputMgr.h"
 #include <algorithm>
 #include "../Framework/Framework.h"
+#include "../GameObject/Sector.h"
 
 MapToolScene::MapToolScene()
 	: Scene(Scenes::MapTool)
@@ -26,8 +27,8 @@ void MapToolScene::Init()
 		for (int j = 0; j < WIDTHCNT; j++)
 		{
 			auto tile = new Button(nullptr);
-			greeds[i].push_back(tile);
-			tile->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/greed.png"), true);
+			grids[i].push_back(tile);
+			tile->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/grid.png"), true);
 			tile->SetPos({ 16.f * j, 16.f * i });
 			objList[LayerType::Back][i].push_back(tile);
 			tile->SetUiView(false);
@@ -94,26 +95,47 @@ void MapToolScene::Update(float dt)
 	{
 		for (int j = 0; j < WIDTHCNT; j++)
 		{
-			if (greeds[i][j]->IsClick())
+			if (grids[i][j]->IsClick())
 			{
 				cout << i << "," << j << endl;
 				if (nowType == LayerType::Object && playerPos == Vector2i{ i,j })
 					return;
 
-				DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
-				auto& nowGreedObjs = greedObjs[nowType];
+				//DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
+				nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
+				auto& nowgridObjs = gridObjs[nowType];
+				auto& nowsectorObjs = sectors[nowType];
+
+
 				//삭제코드
 				if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
 				{
 					Button* findObj = nullptr;
-					if (nowGreedObjs.find(i) != nowGreedObjs.end())
+					if (nowgridObjs.find(i) != nowgridObjs.end())
 					{
-						if (nowGreedObjs[i].find(j) != nowGreedObjs[i].end())
+						if (nowgridObjs[i].find(j) != nowgridObjs[i].end())
 						{
-							findObj = nowGreedObjs[i][j];
+							findObj = nowgridObjs[i][j];
 							auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
 							objList[nowType][i].erase(deleteObj);
-							greedObjs[nowType][i].erase(nowGreedObjs[i].find(j));
+							gridObjs[nowType][i].erase(nowgridObjs[i].find(j));
+
+							delete findObj;
+						}
+					}
+					return;
+				}
+				if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
+				{
+					Sector* findObj = nullptr;
+					if (nowsectorObjs.find(i) != nowsectorObjs.end())
+					{
+						if (nowsectorObjs[i].find(j) != nowsectorObjs[i].end())
+						{
+							findObj = nowsectorObjs[i][j];
+							auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
+							objList[nowType][i].erase(deleteObj);
+							sectors[nowType][i].erase(nowsectorObjs[i].find(j));
 
 							delete findObj;
 						}
@@ -122,56 +144,99 @@ void MapToolScene::Update(float dt)
 				}
 
 				Button* findObj = nullptr;
-				if (nowGreedObjs.find(i) != nowGreedObjs.end())
+				if (nowgridObjs.find(i) != nowgridObjs.end())
 				{
-					if (nowGreedObjs[i].find(j) != nowGreedObjs[i].end())
+					if (nowgridObjs[i].find(j) != nowgridObjs[i].end())
 					{
-						findObj = nowGreedObjs[i][j];
+						findObj = nowgridObjs[i][j];
 
 						if (nowDraw->GetType() == "PLAYER")
 							return;
 
 						auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
 						objList[nowType][i].erase(deleteObj);
-						greedObjs[nowType][i].erase(nowGreedObjs[i].find(j));
+						gridObjs[nowType][i].erase(nowgridObjs[i].find(j));
 
 						delete findObj;
 					}
 				}
 
-				DrawObj* draw = new DrawObj(uiMgr);
-				draw->SetType(nowDraw->GetType());
-				draw->SetPath(nowDraw->GetPath());
-				draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
-				draw->SetOrigin(Origins::BC);
-				draw->SetMove(false);
-				draw->SetPos(greeds[i][j]->GetPos() + Vector2f{ 8.f, 16.f });
-				draw->SetData(nowDraw->GetData());
-
-				objList[nowType][i].push_back(draw);
-				greedObjs[nowType][i][j] = draw;
-
-				if (nowDraw->GetType() == "PLAYER")
+				if (nowDraw->GetType() == "SECTOR")
 				{
-					if (player != nullptr)
-					{
-						int pi = playerPos.x;
-						int pj = playerPos.y;
-						if (nowGreedObjs.find(pi) != nowGreedObjs.end())
-						{
-							if (nowGreedObjs[pi].find(pj) != nowGreedObjs[pi].end())
-							{
-								findObj = nowGreedObjs[pi][pj];
-								auto deleteObj = find(objList[nowType][pi].begin(), objList[nowType][pi].end(), findObj);
-								objList[nowType][pi].erase(deleteObj);
-								greedObjs[nowType][pi].erase(nowGreedObjs[pi].find(pj));
+					if (InputMgr::GetMouseButtonDown(Mouse::Left))
+					{					
+						sector = new Sector();
+						sector->SetPos(grids[i][j]->GetPos());
+						cout << "sector1 " << grids[i][j]->GetPos().x << "," << grids[i][j]->GetPos().y << endl;
+						isNowDraw = true;
+						sectorI = i;
+						sectorJ = j;
+					}
+					sector->UpdateNowDraw(dt,nowDraw);
+					sector->SetSize({ grids[i][j]->GetPos().x - sector->GetPos().x+16,grids[i][j]->GetPos().y - sector->GetPos().y+16 });
+					cout<<"grids " << grids[i][j]->GetPos().x << "," << grids[i][j]->GetPos().y << endl;
+					cout<<"sector2 " << sector->GetPos().x << "," << sector->GetPos().y << endl;
+					
 
-								delete findObj;
+					//endPos = InputMgr::GetMousePos();
+					//sector = new RectangleShape();se
+					//sector->setPosition({ (Vector2f)startPos});
+					//sector->setFillColor({ 0,0,0,0 });
+					//sector->setOutlineColor(Color::Red);
+					//sector->setOutlineThickness(4.f);
+					//sector->setSize({ endPos.x - startPos.x,endPos.y - startPos.y });
+					//isNowDraw = true;
+				}
+				else
+				{
+					DrawObj* draw = new DrawObj(uiMgr);
+					draw->SetType(nowDraw->GetType());
+					draw->SetPath(nowDraw->GetPath());
+					draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
+					draw->SetOrigin(Origins::BC);
+					draw->SetMove(false);
+					draw->SetPos(grids[i][j]->GetPos() + Vector2f{ 8.f, 16.f });
+					draw->SetData(nowDraw->GetData());
+
+					objList[nowType][i].push_back(draw);
+					gridObjs[nowType][i][j] = draw;
+
+					if (nowDraw->GetType() == "PLAYER")
+					{
+						if (player != nullptr)
+						{
+							int pi = playerPos.x;
+							int pj = playerPos.y;
+							if (nowgridObjs.find(pi) != nowgridObjs.end())
+							{
+								if (nowgridObjs[pi].find(pj) != nowgridObjs[pi].end())
+								{
+									findObj = nowgridObjs[pi][pj];
+									auto deleteObj = find(objList[nowType][pi].begin(), objList[nowType][pi].end(), findObj);
+									objList[nowType][pi].erase(deleteObj);
+									gridObjs[nowType][pi].erase(nowgridObjs[pi].find(pj));
+
+									delete findObj;
+								}
 							}
 						}
+						player = draw;
+						playerPos = { i,j };
+
 					}
-					player = draw;
-					playerPos = { i,j };
+				}
+				
+			}
+			if (nowDraw != nullptr&&isNowDraw)
+			{
+				if (nowDraw->GetType() == "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
+				{
+					//sectors.push_back(sector);
+					isNowDraw = false;
+
+					objList[nowType][sectorI].push_back(sector);
+					sectors[nowType][sectorI][sectorJ] = sector;
+					cout << "up" << endl;
 				}
 			}
 		}
@@ -182,6 +247,16 @@ void MapToolScene::Draw(RenderWindow& window)
 {
 	//uiMgr->Draw(window);
 	Scene::Draw(window);
+	if (sector != nullptr)
+	{
+		window.setView(worldView);
+		sector->Draw(window);
+	}
+
+	//for (auto sectorlist : sectors)
+	//{
+	//	window.draw(*sectorlist);
+	//}
 }
 
 
@@ -229,9 +304,26 @@ void MapToolScene::Release()
 		}
 		objs.second.clear();
 	}
+	for (auto& objs : objList[LayerType::Sector])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
+	sectors.clear();
+
 	objList[LayerType::Tile].clear();
 	objList[LayerType::Object].clear();
-	greedObjs.clear();
+	objList[LayerType::Sector].clear();
+	gridObjs.clear();
+	sectors.clear();
 
 	player = nullptr;
 
@@ -240,6 +332,10 @@ void MapToolScene::Release()
 
 void MapToolScene::SetType(string t)
 {
+	if (t == "SECTOR")
+	{
+		nowType = LayerType::Sector;
+	}
 	if (t == "OBJECT" || t == "ENEMY" || t == "PLAYER")
 	{
 		nowType = LayerType::Object;
@@ -254,7 +350,7 @@ void MapToolScene::Save()
 {
 	saveObjs.clear();
 	string path = ((MapToolUiMgr*)(uiMgr))->GetPath();
-	for (auto& layer : greedObjs)
+	for (auto& layer : gridObjs)
 	{
 		for (auto& objs : layer.second)
 		{
@@ -265,12 +361,28 @@ void MapToolScene::Save()
 				data.type = nowObject->GetType();
 				data.path = nowObject->GetPath();
 				data.position = nowObject->GetPos();
+				data.size = nowObject->GetSize();
 				saveObjs.push_back(data);
 			}
 		}
 	}
-
-
+	for (auto& layer : sectors)
+	{
+		for (auto& objs : layer.second)
+		{
+			for (auto& obj : objs.second)
+			{
+				auto& nowObject = obj.second;
+				ObjectData data;
+				data.type = nowObject->GetType();
+				data.path = nowObject->GetPath();
+				data.position = nowObject->GetPos();
+				data.size = nowObject->GetSize();
+				saveObjs.push_back(data);
+			}
+		}
+	}
+	
 	if (path == "")
 		return;
 
@@ -307,9 +419,25 @@ void MapToolScene::Load(string path)
 		}
 		objs.second.clear();
 	}
+
+	for (auto& objs : objList[LayerType::Sector])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
 	objList[LayerType::Tile].clear();
 	objList[LayerType::Object].clear();
-	greedObjs.clear();
+	objList[LayerType::Sector].clear();
+	gridObjs.clear();
+	sectors.clear();
 	//로드 파일 그리드에 적용
 	player = nullptr;
 	auto& data = FILE_MGR->GetMap(path);
@@ -323,12 +451,18 @@ void MapToolScene::Load(string path)
 		draw->SetMove(false);
 		draw->SetPos(obj.position);
 
+		Sector* sector = new Sector();
+		sector->SetType(obj.type);
+		sector->SetPath(obj.path);
+		sector->SetPos(obj.position);
+		sector->SetSize(obj.size);
+
 		int i = ((int)obj.position.x - 8) / 16;
 		int j = (int)obj.position.y / 16 - 1;
 		if (obj.type == "WALL" || obj.type == "OBJECT" || obj.type == "ENEMY" )
 		{
 			objList[LayerType::Object][j].push_back(draw);
-			greedObjs[LayerType::Object][j][i] = draw;
+			gridObjs[LayerType::Object][j][i] = draw;
 
 			if (obj.type == "PLAYER")
 			{
@@ -339,7 +473,13 @@ void MapToolScene::Load(string path)
 		else if (obj.type == "TILE")
 		{
 			objList[LayerType::Tile][j].push_back(draw);
-			greedObjs[LayerType::Tile][j][i] = draw;
+			gridObjs[LayerType::Tile][j][i] = draw;
+		}
+
+		else if (obj.type == "SECTOR")
+		{
+			objList[LayerType::Sector][j].push_back(sector);
+			sectors[LayerType::Sector][j][i] = sector;
 		}
 	}
 

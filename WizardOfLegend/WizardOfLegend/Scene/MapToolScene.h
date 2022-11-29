@@ -6,19 +6,31 @@
 class Button;
 class UiMgr;
 class DrawObj;
+class Sector;
+
 class MapToolScene : public Scene
 {
 private:
 
-	map<int, vector<Button*>> greeds;
-	map<LayerType, map<int, map<int, DrawObj*>>> greedObjs; //Tile, Object, Enermy
+	map<int, vector<Button*>> grids;
+	map<LayerType, map<int, map<int, DrawObj*>>> gridObjs; //Tile, Object, Enermy
 	vector<ObjectData> saveObjs;
 	Vector2f initMousePos;
 	string type;
 
 	LayerType nowType;
+	DrawObj* nowDraw;
+	bool isNowDraw = false;
+
 	DrawObj* player;
 	Vector2i playerPos;
+
+	//RectangleShape* sector;
+	//vector<RectangleShape*> sectors;
+	Sector* sector;
+	map<LayerType, map<int, map<int, Sector*>>> sectors;
+	int sectorI;
+	int sectorJ;
 
 public:
 	MapToolScene();

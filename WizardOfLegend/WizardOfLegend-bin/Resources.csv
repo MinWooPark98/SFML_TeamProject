@@ -385,7 +385,7 @@ animations/monsterSpawn/MonsterSpawnCard.csv,3
 graphics/CardColorIndex.png,0
 graphics/Map/MapToolBook.png,0
 graphics/Map/window.png,0
-graphics/Map/greed.png,0
+graphics/Map/grid.png,0
 graphics/Map/button.png,0
 graphics/Map/ArcherBosspng.png,0
 graphics/Map/ArcherNormal.png,0
@@ -603,3 +603,4 @@ sounds/FireBossFlex0.wav,2
 sounds/FireBossFlex1.wav,2
 sounds/Chime.wav,2
 sounds/TitleScreen_Piano.wav,2
+graphics/Map/Empty.png,0

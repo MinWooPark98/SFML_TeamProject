@@ -63,5 +63,6 @@ public:
 	virtual void SetUiView(bool state) { isUiView = state; }
 
 	void SetBound(FloatRect b) { bound = b; }
+
 };
 
