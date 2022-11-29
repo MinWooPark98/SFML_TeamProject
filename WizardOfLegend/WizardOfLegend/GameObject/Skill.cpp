@@ -66,6 +66,7 @@ void Skill::Do()
 	if (setting == nullptr || subject == nullptr || attackCnt >= setting->attackCntLim)
 		return;
 	Projectile* obj = SCENE_MGR->GetCurrentScene()->GetProjectiles()->Get();
+	obj->SetSubjectType(subType);
 	obj->SetAtkShape(setting->attackShape);
 	obj->SetFrequency(setting->frequency);
 	obj->SetWaveType(setting->waveType);
@@ -125,6 +126,7 @@ void Skill::Do()
 					}
 				}
 				CastingCircle* circle = SCENE_MGR->GetCurrentScene()->GetCastingCircles()->Get();
+				circle->SetSubjectType(subType);
 				circle->SetPos(startPos);
 				circle->SetDuration(setting->duration);
 				circle->Do();

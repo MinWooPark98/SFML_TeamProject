@@ -419,10 +419,10 @@ void Player::Action()
 	default:
 		break;
 	}
-}
+}                                                                                                                                                                                                                                                                               
 
 void Player::FinishAction()
 {
-	if (!currSkillSet->Do())
+	if (currSkillSet == nullptr || !currSkillSet->Do())
 		SetState(States::Idle);
 }
