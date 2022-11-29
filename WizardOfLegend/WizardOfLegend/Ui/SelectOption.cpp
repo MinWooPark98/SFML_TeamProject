@@ -255,12 +255,14 @@ void SelectOption::Update(float dt)
 {
 	Object::Update(dt);
 
-	if (InputMgr::GetKeyDown(Keyboard::F5))
-		Load("DragonArc");
-	else if (InputMgr::GetKeyDown(Keyboard::F6))
-		Load("FireFull");
-	else if (InputMgr::GetKeyDown(Keyboard::F7))
-		Load("WideAreaMeteor");
+	auto& windowSize = FRAMEWORK->GetWindowSize();
+	if (InputMgr::GetMouseButtonDown(Mouse::Left) && InputMgr::GetMousePos().x < windowSize.x * 0.7f)
+	{
+		Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
+		if(player->GetCurrSkillSet()->GetCurrSkill()->GetSetting()->playerAction == Player::SkillAction::Dash &&
+			(player->GetState() == Player::States::Idle || player->GetState() == Player::States::Run))
+			player->SetState(Player::States::Dash);
+	}
 
 	for (auto& buttons : menuButtons)
 	{

@@ -8,7 +8,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), currSkillSet(nullptr), skillToolMode(false)
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false)
 {
 	SpriteObj tempSpearImage;
 	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerIdleDown.png"));
@@ -49,7 +49,7 @@ void Player::SetState(States state)
 		break;
 	case States::Dash:
 		{
-			auto angle = Utils::Angle(lastDir);
+			auto angle = Utils::Angle(dashDir);
 			if (angle > -135.f && angle < -45.f)
 				animator->Play("DashUp");
 			else if (angle > 45.f && angle < 135.f)
@@ -61,10 +61,10 @@ void Player::SetState(States state)
 		}
 		break;
 	case States::Slide:
-		if (Utils::EqualFloat(lastDir.x, 0.f))
-			lastDir.y > 0.f ? animator->Play("SlideDown") : animator->Play("SlideUp");
+		if (Utils::EqualFloat(dashDir.x, 0.f))
+			dashDir.y > 0.f ? animator->Play("SlideDown") : animator->Play("SlideUp");
 		else
-			lastDir.x > 0.f ? animator->Play("SlideRight") : animator->Play("SlideLeft");
+			dashDir.x > 0.f ? animator->Play("SlideRight") : animator->Play("SlideLeft");
 		break;
 	case States::NormalSpell:
 		{
@@ -180,7 +180,6 @@ void Player::Init()
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
 
-	lastDir = { 0.f, 1.f };
 	for (int i = 0; i < 6; ++i)
 	{
 		SkillSet* newSkillSet = new SkillSet();
@@ -290,9 +289,12 @@ void Player::Update(float dt)
 	}
 
 	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
+	{
 		lastDir = direction;
-	/*else if (!Utils::EqualFloat(lastDir.x, 0.f))
-		lastDir = Utils::Normalize({ lastDir.x, 0.f });*/
+		dashDir = lastDir;
+	}
+	else if (!Utils::EqualFloat(lastDir.x, 0.f))
+		dashDir = Utils::Normalize({ lastDir.x, 0.f });
 
 	for (auto skillSet : skillSets)
 	{
@@ -345,7 +347,7 @@ void Player::UpdateRun(float dt)
 void Player::UpdateDash(float dt)
 {
 	dashTimer += dt;
-	Translate(lastDir * runningSpeed * dt);
+	Translate(dashDir * runningSpeed * dt);
 	if (dashTimer >= dashDuration)
 	{
 		dashTimer = 0.f;

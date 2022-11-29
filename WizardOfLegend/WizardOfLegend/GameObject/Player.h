@@ -50,6 +50,7 @@ protected:
 	float jumpOriginY;
 
 	Vector2f lastDir;
+	Vector2f dashDir;
 	bool isBackHand;	// true일 시 Backhand, false일 시 Forehand
 
 	vector<SkillSet*> skillSets;
@@ -62,6 +63,7 @@ public:
 	virtual ~Player();
 
 	void SetState(States state);
+	States GetState() const { return currState; }
 
 	virtual void Init() override;
 	virtual void Update(float dt) override;
@@ -80,6 +82,7 @@ public:
 	void Action();
 	void FinishAction();
 	void SetCurrSkillSet(SkillSet* skillSet) { currSkillSet = skillSet; }
+	SkillSet* GetCurrSkillSet() { return currSkillSet; }
 
 	void SetSkillToolMode() { skillToolMode = true; }
 	vector<SkillSet*>& GetSkillSets() { return skillSets; }

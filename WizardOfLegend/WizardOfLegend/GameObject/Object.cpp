@@ -5,7 +5,7 @@
 int Object::objCount = 0;
 
 Object::Object()
-    :isDevMode(false), rotation(0.f), enabled(true), gravity(0.f), gravityApply(false), direction(0.f, 0.f)
+    :isDevMode(false), rotation(0.f), enabled(true), gravity(0.f), gravityApply(false), direction(1.f, 0.f)
 {
     id = ++objCount;
 }
