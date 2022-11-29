@@ -66,6 +66,9 @@ void FireBoss::Init()
 	skills[1]->SetSkill("FireFull");
 
 	lastPos = GetPos();
+
+	SetHitBox({ 20.f, 20.f, 10.f, 20.f }, Color::Red);
+	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 }
 
 void FireBoss::Update(float dt)
@@ -111,6 +114,10 @@ void FireBoss::Update(float dt)
 	if (isThrowingKnife && nextPatternDelay <= 1.3f)
 		isThrowingKnife = false;
 
+	if (curBossState == BossStates::Idle)
+		hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.2f);
+	else
+		hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 
 	if (curBossState == BossStates::Idle && patternDelay <= 0.f)
 		curBossState = BossStates::Move;

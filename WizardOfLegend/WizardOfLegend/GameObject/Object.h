@@ -38,6 +38,7 @@ protected:
     static int objCount;
 
     RectangleShape hitbox;
+    RectangleShape lowhitbox;
     Vector2f initPos;
     bool isDevMode;
 
@@ -92,4 +93,10 @@ public:
 
     void SetObjType(ObjTypes type) { objtype = type; }
     ObjTypes GetObjType() { return objtype; }
+
+    void SetLowHitBox(const FloatRect& rect, Color color = Color::White)
+    {
+        lowhitbox.setSize({ rect.width,rect.height });
+        lowhitbox.setFillColor(color);
+    }
 };
