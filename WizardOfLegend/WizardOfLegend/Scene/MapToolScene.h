@@ -48,4 +48,3 @@ public:
 	void Save();
 	void Load(string path);
 };
-

@@ -90,7 +90,7 @@ public:
     virtual void SwitchDevMode() { isDevMode = !isDevMode; }
     virtual void SetHitBox(const FloatRect& rect, Color color = Color::Red);
     virtual void SetHitBox(string path);
-    RectangleShape& GetHitBox() { return hitbox; }
+    RectangleShape& GetHitBox() { return hitbox; } 
     FloatRect GetHitBounds() const { return hitbox.getGlobalBounds(); }
 
     void SetObjType(ObjTypes type) { objtype = type; }

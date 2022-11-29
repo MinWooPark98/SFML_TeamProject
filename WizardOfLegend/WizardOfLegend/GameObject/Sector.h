@@ -41,5 +41,7 @@ public:
 
 	void SetSize(const Vector2f& size) { ((RectangleShape*)sector)->setSize(size); }
 	const Vector2f& GetSize() const { return ((RectangleShape*)sector)->getSize(); }
+
+	Shape* GetSectorShape() const { return sector; };
 };
 

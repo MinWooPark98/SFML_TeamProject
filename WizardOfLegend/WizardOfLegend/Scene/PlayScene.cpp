@@ -38,6 +38,8 @@ void PlayScene::Init()
 			sector->SetName(obj.type);
 			sector->SetPos(obj.position);
 			sector->SetSize(obj.size);
+			sector->SetHitBox((FloatRect)sector->GetSectorShape()->getGlobalBounds());
+			//sector->SetHitBox({100, 100, 100, 100}, Color::Red);
 			sector->SetObjType(Object::ObjTypes::Sector);
 			room.push_back(*sector);
 			objList[LayerType::Sector][0].push_back(sector);
@@ -68,7 +70,6 @@ void PlayScene::Init()
 			}
 
 			objList[LayerType::Object][0].push_back(draw);
-			collisionList[0][Object::ObjTypes::Wall].push_back(draw);
 		}
 		else if (obj.type == "TILE")
 		{
@@ -159,6 +160,41 @@ void PlayScene::Init()
 			}
 		}
 	}
+
+
+
+	//for (int i = 0; i < room.size(); i++)
+	//{
+	//	if (Utils::OBB(draw->GetHitBox(), room[i].GetHitBox()))
+	//	{
+	//		collisionList[i][Object::ObjTypes::Wall].push_back(draw);
+	//	}
+	//}
+	//collisionList[0][Object::ObjTypes::Wall].push_back(draw);
+
+	for (auto& a : objList)
+	{
+		for (auto& b : a.second)
+		{
+			for (auto& c : b.second)
+			{
+				for (int i = 0; i < room.size(); i++)
+				{
+					if (Utils::OBB(c->GetHitBox(), room[i].GetHitBox()))
+					{
+						collisionList[i][c->GetObjType()].push_back(c);
+						cout << (int)c->GetObjType() << endl;
+					}
+				}
+			}
+		}
+	}
+
+	//for (int i = 0; i < room.size(); i++)
+	//{
+	//	cout << room[i].GetHitBox().getGlobalBounds().height << " " << room[i].GetHitBox().getGlobalBounds().width << endl;
+	//}
+
 	auto& tiles = objList[LayerType::Tile][0];
 	mapSize.left = 0;
 	mapSize.top = 0;
@@ -187,13 +223,23 @@ void PlayScene::Update(float dt)
 			this->SetPause(false);
 	}
 
-	//for (auto& enemy : collisionList[Object::ObjTypes::Enemy])
-	//{
-	//	for (auto& coll : collisionList[Object::ObjTypes::Wall])
-	//	{
-	//		
-	//	}
-	//}
+
+	for (int i = 0; i < room.size(); i++)
+	{
+		if (!collisionList[i].empty())
+		{
+			for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+			{
+				for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
+				{
+					if (Utils::OBB(enemy->GetHitBox(), coll->GetHitBox()))
+					{
+						cout << "hi" << endl;
+					}
+				}
+			}
+		}
+	}
 }
 
 void PlayScene::Draw(RenderWindow& window)
