@@ -11,7 +11,7 @@ SkillSetTable::~SkillSetTable()
 {
 }
 
-const list<string>& SkillSetTable::Get(const string& setName)
+const pair<float, list<string>>& SkillSetTable::Get(const string& setName)
 {
 	auto find = table.find(setName);
 	if (find == table.end())
@@ -39,14 +39,27 @@ bool SkillSetTable::Load()
 			cout << "duplicate values exist" << endl;
 			return false;
 		}
+		float coolDown = 0.f;
+		list<string> skillNames;
 		string str;
-		for(int i = 1; i < columnCount;++i)
+		try
+		{
+			coolDown = doc.GetCell<float>(1, j);
+			if (coolDown < 0.f)
+				coolDown = -1.f;
+		}
+		catch (exception expn)
+		{
+			coolDown = -1.f;
+		}
+		for(int i = 2; i < columnCount;++i)
 		{
 			str = doc.GetCell<string>(i, j);
 			if (str.empty())
 				break;
-			table[setName[j]].push_back(str);
+			skillNames.push_back(str);
 		}
+		table[setName[j]] = { coolDown, skillNames };
 	}
 	return true;
 }

@@ -6,13 +6,13 @@
 class SkillSetTable : public DataTable
 {
 protected:
-	map<string, list<string>> table;
+	map<string, pair<float, list<string>>> table;
 
 public:
 	SkillSetTable();
 	virtual ~SkillSetTable();
 
-	const list<string>& Get(const string& setName);
+	const pair<float, list<string>>& Get(const string& setName);
 
 	virtual void Release() override;
 	virtual bool Load() override;

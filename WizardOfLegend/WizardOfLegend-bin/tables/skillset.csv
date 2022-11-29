@@ -1,6 +1,6 @@
-SkillName,Skills(Row B~~),
-DragonArc,DragonArc,FireFull
-FireFull,FireFull,
-FireBall,FireBall,
-FireDash,FireDash,
-JumpMeteor,FlameWolf,WideAreaMeteor
+SetName,SetCoolDown (유효한 쿨타임 입력 시 해당 쿨타임으로 작동 / 유효하지 않은 쿨타임 또는 비워둘 시 모든 스킬 중 가장 쿨타임이 긴 값으로 설정),Skill 1,Skill 2,Skill 3,Skill 4,…
+DragonArc,-,DragonArc,FireFull,DragonArc,,
+FireFull,-,FireFull,,,,
+FireBall,-,FireBall,,,,
+FireDash,-,FireDash,,,,
+JumpMeteor,-,FlameWolf,WideAreaMeteor,,,

@@ -28,6 +28,14 @@ void Skill::Reset()
 	skillTimer = 0.f;
 }
 
+void Skill::Reprepare()
+{
+	isDoing = false;
+	attackCnt = 0;
+	attackTimer = 0.f;
+	skillTimer = 0.f;
+}
+
 void Skill::SetSkill(const String& skillName)
 {
 	Reset();

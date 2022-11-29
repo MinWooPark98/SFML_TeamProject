@@ -115,6 +115,7 @@ public:
 	~Skill();
 
 	void Reset();
+	void Reprepare();
 
 	void SetSkill(const String& skillName);
 	void SetSkill(const Set& set);

@@ -221,12 +221,10 @@ void Player::Update(float dt)
 				case Mouse::Left:
 					SetCurrSkillSet(skillSets[0]);
 					skillSets[0]->Restart();
-					skillSets[0]->Do();
 					break;
 				case Mouse::Right:
 					SetCurrSkillSet(skillSets[1]);
 					skillSets[1]->Restart();
-					skillSets[1]->Do();
 					break;
 				default:
 					break;
@@ -245,23 +243,19 @@ void Player::Update(float dt)
 				case Keyboard::Space:
 					SetCurrSkillSet(skillSets[2]);
 					skillSets[2]->Restart();
-					skillSets[2]->Do();
 					SetState(States::Dash);
 					break;
 				case Keyboard::Q:
 					SetCurrSkillSet(skillSets[3]);
 					skillSets[3]->Restart();
-					skillSets[3]->Do();
 					break;
 				case Keyboard::E:
 					SetCurrSkillSet(skillSets[4]);
 					skillSets[4]->Restart();
-					skillSets[4]->Do();
 					break;
 				case Keyboard::R:
 					SetCurrSkillSet(skillSets[5]);
 					skillSets[5]->Restart();
-					skillSets[5]->Do();
 					break;
 				default:
 					break;
@@ -379,7 +373,7 @@ void Player::UpdateJump(float dt)
 	if (jumpTimer >= jumpDuration)
 	{
 		jumpTimer = 0.f;
-		if(!currSkillSet->Do())
+		if (!currSkillSet->Do())
 			SetState(States::Idle);
 	}
 }

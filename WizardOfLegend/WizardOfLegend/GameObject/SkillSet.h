@@ -16,6 +16,11 @@ private:
 	Object* subject;
 	Skill::SubjectType subType;
 
+	bool isOnCoolDown;
+	bool newCoolDownEntered;
+	float newCoolDown;
+	float timer;
+
 public:
 	SkillSet();
 	~SkillSet();
