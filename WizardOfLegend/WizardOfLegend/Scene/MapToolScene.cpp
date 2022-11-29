@@ -34,7 +34,7 @@ void MapToolScene::Init()
 			tile->SetUiView(false);
 		}
 	}
-
+	
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
 	nowType = LayerType::Object;
@@ -49,6 +49,7 @@ void MapToolScene::Update(float dt)
 {
 	Scene::Update(dt);
 	//uiMgr->Update(dt);
+	//최소점 최대점
 
 	auto uimgr = ((MapToolUiMgr*)uiMgr);
 	if (InputMgr::GetKeyDown(Keyboard::Escape))
@@ -77,12 +78,12 @@ void MapToolScene::Update(float dt)
 		if (InputMgr::GetMouseWheelMoved() < 0)
 		{
 			Vector2f size = worldView.getSize();
-			worldView.setSize(size.x * 1.06f, size.y * 1.06f);
+			worldView.setSize(size.x * 1.1f, size.y * 1.1f);
 		}
 		if (InputMgr::GetMouseWheelMoved() > 0)
 		{
 			Vector2f size = worldView.getSize();
-			worldView.setSize(size.x * 0.96f, size.y * 0.96f);
+			worldView.setSize(size.x * 0.9f, size.y * 0.9f);
 		}
 		if (InputMgr::GetMouseButton(Mouse::Middle))
 		{
@@ -91,168 +92,190 @@ void MapToolScene::Update(float dt)
 		}
 	}
 	
-	for (int i = 0; i < HEIGHTCNT; i++)
+	
+	Vector2f v = objMousePos;
+	v.x /= 16;
+	v.y /= 16;
+	int i = v.x;
+	int j = v.y;
+	cout << endl;
+	cout << i << endl;
+	cout << j << endl;
+	if (i < 150 && j < 150&& i > 0 && j > 0)
 	{
-		for (int j = 0; j < WIDTHCNT; j++)
+		if (grids[j][i]->IsClick())
 		{
-			if (grids[i][j]->IsClick())
+			//cout << i << "," << j << endl;
+			if (nowType == LayerType::Object && playerPos == Vector2i{ j,i })
+				return;
+
+			//DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
+			nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
+			auto& nowgridObjs = gridObjs[nowType];
+			auto& nowsectorObjs = sectors[nowType];
+
+
+			//삭제코드
+			if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
 			{
-				cout << i << "," << j << endl;
-				if (nowType == LayerType::Object && playerPos == Vector2i{ i,j })
-					return;
-
-				//DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
-				nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
-				auto& nowgridObjs = gridObjs[nowType];
-				auto& nowsectorObjs = sectors[nowType];
-
-
-				//삭제코드
-				if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
-				{
-					Button* findObj = nullptr;
-					if (nowgridObjs.find(i) != nowgridObjs.end())
-					{
-						if (nowgridObjs[i].find(j) != nowgridObjs[i].end())
-						{
-							findObj = nowgridObjs[i][j];
-							auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
-							objList[nowType][i].erase(deleteObj);
-							gridObjs[nowType][i].erase(nowgridObjs[i].find(j));
-
-							delete findObj;
-						}
-					}
-					return;
-				}
-				if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
-				{
-					Sector* findObj = nullptr;
-					if (nowsectorObjs.find(i) != nowsectorObjs.end())
-					{
-						if (nowsectorObjs[i].find(j) != nowsectorObjs[i].end())
-						{
-							findObj = nowsectorObjs[i][j];
-							auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
-							objList[nowType][i].erase(deleteObj);
-							sectors[nowType][i].erase(nowsectorObjs[i].find(j));
-
-							delete findObj;
-						}
-					}
-					return;
-				}
-
 				Button* findObj = nullptr;
-				if (nowgridObjs.find(i) != nowgridObjs.end())
+				if (nowgridObjs.find(j) != nowgridObjs.end())
 				{
-					if (nowgridObjs[i].find(j) != nowgridObjs[i].end())
+					if (nowgridObjs[j].find(i) != nowgridObjs[j].end())
 					{
-						findObj = nowgridObjs[i][j];
-
-						if (nowDraw->GetType() == "PLAYER")
-							return;
-
+						findObj = nowgridObjs[j][i];
 						auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
-						objList[nowType][i].erase(deleteObj);
-						gridObjs[nowType][i].erase(nowgridObjs[i].find(j));
+						objList[nowType][j].erase(deleteObj);
+						gridObjs[nowType][j].erase(nowgridObjs[j].find(i));
 
 						delete findObj;
 					}
 				}
-
-				if (nowDraw->GetType() == "SECTOR")
+				return;
+			}
+			if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
+			{
+				Sector* findObj = nullptr;
+				if (nowsectorObjs.find(j) != nowsectorObjs.end())
 				{
-					if (InputMgr::GetMouseButtonDown(Mouse::Left))
-					{					
-						sector = new Sector();
-						sector->SetPos(grids[i][j]->GetPos());
-						cout << "sector1 " << grids[i][j]->GetPos().x << "," << grids[i][j]->GetPos().y << endl;
-						isNowDraw = true;
-						sectorI = i;
-						sectorJ = j;
+					if (nowsectorObjs[j].find(i) != nowsectorObjs[j].end())
+					{
+						findObj = nowsectorObjs[j][i];
+						auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findObj);
+						objList[nowType][j].erase(deleteObj);
+						sectors[nowType][j].erase(nowsectorObjs[j].find(i));
+
+						delete findObj;
 					}
-					sector->UpdateNowDraw(dt,nowDraw);
-					sector->SetSize({ grids[i][j]->GetPos().x - sector->GetPos().x+16,grids[i][j]->GetPos().y - sector->GetPos().y+16 });
-					cout<<"grids " << grids[i][j]->GetPos().x << "," << grids[i][j]->GetPos().y << endl;
-					cout<<"sector2 " << sector->GetPos().x << "," << sector->GetPos().y << endl;
-					
-
-					//endPos = InputMgr::GetMousePos();
-					//sector = new RectangleShape();se
-					//sector->setPosition({ (Vector2f)startPos});
-					//sector->setFillColor({ 0,0,0,0 });
-					//sector->setOutlineColor(Color::Red);
-					//sector->setOutlineThickness(4.f);
-					//sector->setSize({ endPos.x - startPos.x,endPos.y - startPos.y });
-					//isNowDraw = true;
 				}
-				else
-				{
-					DrawObj* draw = new DrawObj(uiMgr);
-					draw->SetType(nowDraw->GetType());
-					draw->SetPath(nowDraw->GetPath());
-					draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
-					draw->SetOrigin(Origins::BC);
-					draw->SetMove(false);
-					draw->SetPos(grids[i][j]->GetPos() + Vector2f{ 8.f, 16.f });
-					draw->SetData(nowDraw->GetData());
+				return;
+			}
 
-					objList[nowType][i].push_back(draw);
-					gridObjs[nowType][i][j] = draw;
+			Button* findObj = nullptr;
+			if (nowgridObjs.find(j) != nowgridObjs.end())
+			{
+				if (nowgridObjs[j].find(i) != nowgridObjs[j].end())
+				{
+					findObj = nowgridObjs[j][i];
 
 					if (nowDraw->GetType() == "PLAYER")
-					{
-						if (player != nullptr)
-						{
-							int pi = playerPos.x;
-							int pj = playerPos.y;
-							if (nowgridObjs.find(pi) != nowgridObjs.end())
-							{
-								if (nowgridObjs[pi].find(pj) != nowgridObjs[pi].end())
-								{
-									findObj = nowgridObjs[pi][pj];
-									auto deleteObj = find(objList[nowType][pi].begin(), objList[nowType][pi].end(), findObj);
-									objList[nowType][pi].erase(deleteObj);
-									gridObjs[nowType][pi].erase(nowgridObjs[pi].find(pj));
+						return;
 
-									delete findObj;
-								}
+					auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findObj);
+					objList[nowType][j].erase(deleteObj);
+					gridObjs[nowType][j].erase(nowgridObjs[j].find(i));
+
+					delete findObj;
+				}
+			}
+
+			if (nowDraw->GetType() == "SECTOR")
+			{
+				if (InputMgr::GetMouseButtonDown(Mouse::Left))
+				{
+					sector = new Sector();
+					sector->SetPos(grids[j][i]->GetPos());
+					cout << "sector1 " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
+					isNowDraw = true;
+					sectorJ = j;
+					sectorI = i;
+				}
+				sector->UpdateNowDraw(dt, nowDraw);
+				sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
+				cout << "grids " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
+				cout << "sector2 " << sector->GetPos().x << "," << sector->GetPos().y << endl;
+
+			}
+			else
+			{
+				DrawObj* draw = new DrawObj(uiMgr);
+				draw->SetType(nowDraw->GetType());
+				draw->SetPath(nowDraw->GetPath());
+				draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
+				draw->SetOrigin(Origins::BC);
+				draw->SetMove(false);
+				draw->SetPos(grids[j][i]->GetPos() + Vector2f{ 8.f, 16.f });
+				draw->SetData(nowDraw->GetData());
+
+				objList[nowType][j].push_back(draw);
+				gridObjs[nowType][j][i] = draw;
+
+				if (nowDraw->GetType() == "PLAYER")
+				{
+					if (player != nullptr)
+					{
+						int pj = playerPos.x;
+						int pi = playerPos.y;
+						if (nowgridObjs.find(pj) != nowgridObjs.end())
+						{
+							if (nowgridObjs[pj].find(pi) != nowgridObjs[pj].end())
+							{
+								findObj = nowgridObjs[pj][pi];
+								auto deleteObj = find(objList[nowType][pj].begin(), objList[nowType][pj].end(), findObj);
+								objList[nowType][pj].erase(deleteObj);
+								gridObjs[nowType][pj].erase(nowgridObjs[pj].find(pi));
+
+								delete findObj;
 							}
 						}
-						player = draw;
-						playerPos = { i,j };
-
 					}
-				}
-				
-			}
-			if (nowDraw != nullptr&&isNowDraw)
-			{
-				if (nowDraw->GetType() == "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
-				{
-					//sectors.push_back(sector);
-					isNowDraw = false;
+					player = draw;
+					playerPos = { j,i };
 
-					objList[nowType][sectorI].push_back(sector);
-					sectors[nowType][sectorI][sectorJ] = sector;
-					cout << "up" << endl;
 				}
+			}
+
+		}
+		if (nowDraw != nullptr && isNowDraw)
+		{
+			if (nowDraw->GetType() == "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
+			{
+				isNowDraw = false;
+
+				objList[nowType][sectorJ].push_back(sector);
+				sectors[nowType][sectorJ][sectorI] = sector;
+				cout << "up" << endl;
 			}
 		}
 	}
+	//for (int i = 0; i < HEIGHTCNT; i++)
+	//{
+	//	for (int j = 0; j < WIDTHCNT; j++)
+	//	{
+			
+	//	}
+	//}
 }
 
 void MapToolScene::Draw(RenderWindow& window)
 {
 	//uiMgr->Draw(window);
+	Vector2i min = { (int)(worldView.getCenter().x - (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y - (int)worldView.getSize().y * 0.5f) };
+	Vector2i max = { (int)(worldView.getCenter().x + (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y + (int)worldView.getSize().y * 0.5f) };
+	for (auto& layer : objList)
+	{
+		for (auto& obj_pair : layer.second)
+		{
+			auto& objs = obj_pair.second;
+			for (auto& obj : objs)
+			{
+				if (obj->GetPos().x<max.x+16&& obj->GetPos().y < max.y+16&& obj->GetPos().x > min.x-16 && obj->GetPos().y > min.y-16)
+				{
+					obj->SetActive(true);
+				}
+				else
+				{
+					obj->SetActive(false);
+				}
+			}
+		}
+	}
 	Scene::Draw(window);
 	if (sector != nullptr)
 	{
 		window.setView(worldView);
 		sector->Draw(window);
 	}
-
 	//for (auto sectorlist : sectors)
 	//{
 	//	window.draw(*sectorlist);

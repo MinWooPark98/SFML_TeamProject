@@ -43,8 +43,8 @@ void PlayScene::Init()
 			objList[LayerType::Sector][0].push_back(sector);
 		}
 	}
-
-	for (int i = 0; i < room.size(); i++)
+	//for (int i = 0; i < room.size(); i++)
+	for (int i = 0; i < 6; i++)
 	{
 		collisionList.push_back(map<Object::ObjTypes, list<Object*>>());
 	}
