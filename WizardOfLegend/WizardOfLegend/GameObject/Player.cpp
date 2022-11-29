@@ -2,13 +2,13 @@
 #include "../Framework/Animator.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/InputMgr.h"
-#include "Skill.h"
 #include "../Framework/Framework.h"
 #include "../Scene/SceneMgr.h"
+#include "SkillSet.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), currSkill(nullptr), skillToolMode(false)
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false)
 {
 	SpriteObj tempSpearImage;
 	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerIdleDown.png"));
@@ -52,7 +52,7 @@ void Player::SetState(States state)
 		break;
 	case States::Dash:
 		{
-			auto angle = Utils::Angle(lastDir);
+			auto angle = Utils::Angle(dashDir);
 			if (angle > -135.f && angle < -45.f)
 				animator->Play("DashUp");
 			else if (angle > 45.f && angle < 135.f)
@@ -64,10 +64,10 @@ void Player::SetState(States state)
 		}
 		break;
 	case States::Slide:
-		if (Utils::EqualFloat(lastDir.x, 0.f))
-			lastDir.y > 0.f ? animator->Play("SlideDown") : animator->Play("SlideUp");
+		if (Utils::EqualFloat(dashDir.x, 0.f))
+			dashDir.y > 0.f ? animator->Play("SlideDown") : animator->Play("SlideUp");
 		else
-			lastDir.x > 0.f ? animator->Play("SlideRight") : animator->Play("SlideLeft");
+			dashDir.x > 0.f ? animator->Play("SlideRight") : animator->Play("SlideLeft");
 		break;
 	case States::NormalSpell:
 		{
@@ -96,7 +96,7 @@ void Player::SetState(States state)
 				animator->Play("PBAoELeft");
 		}
 		break;
-	case States::JumpSlash:
+	case States::Jump:
 		{
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle <= -45.f)
@@ -110,7 +110,7 @@ void Player::SetState(States state)
 		}
 		break;
 	case States::GroundSlam:
-		if (currState == States::JumpSlash)
+		if (currState == States::Jump)
 			lastDir.y >= 0.f ? animator->Play("JumpSlamDown") : animator->Play("JumpSlamUp");
 		else
 			lastDir.y >= 0.f ? animator->Play("GroundSlamDown") : animator->Play("GroundSlamUp");
@@ -176,19 +176,18 @@ void Player::Init()
 			AnimationEvent ev;
 			ev.clipId = clipIds[i];
 			ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
-			ev.onEvent = bind(&Player::SetState, this, States::Idle);
+			ev.onEvent = bind(&Player::FinishAction, this);
 			animator->AddEvent(ev);
 		}
 	}
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
 
-	lastDir = { 0.f, 1.f };
 	for (int i = 0; i < 6; ++i)
 	{
-		Skill* newSkill = new Skill();
-		newSkill->SetSubject(this, Skill::SubjectType::Player);
-		skills.push_back(newSkill);
+		SkillSet* newSkillSet = new SkillSet();
+		newSkillSet->SetSubject(this, Skill::SubjectType::Player);
+		skillSets.push_back(newSkillSet);
 	}
 
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
@@ -223,12 +222,12 @@ void Player::Update(float dt)
 				switch (mouseDown)
 				{
 				case Mouse::Left:
-					SetCurrSkill(skills[0]);
-					skills[0]->Do();
+					SetCurrSkillSet(skillSets[0]);
+					skillSets[0]->Restart();
 					break;
 				case Mouse::Right:
-					SetCurrSkill(skills[1]);
-					skills[1]->Do();
+					SetCurrSkillSet(skillSets[1]);
+					skillSets[1]->Restart();
 					break;
 				default:
 					break;
@@ -245,21 +244,21 @@ void Player::Update(float dt)
 				switch (keyDown)
 				{
 				case Keyboard::Space:
-					SetCurrSkill(skills[2]);
-					skills[2]->Do();
+					SetCurrSkillSet(skillSets[2]);
+					skillSets[2]->Restart();
 					SetState(States::Dash);
 					break;
 				case Keyboard::Q:
-					SetCurrSkill(skills[3]);
-					skills[3]->Do();
+					SetCurrSkillSet(skillSets[3]);
+					skillSets[3]->Restart();
 					break;
 				case Keyboard::E:
-					SetCurrSkill(skills[4]);
-					skills[4]->Do();
+					SetCurrSkillSet(skillSets[4]);
+					skillSets[4]->Restart();
 					break;
 				case Keyboard::R:
-					SetCurrSkill(skills[5]);
-					skills[5]->Do();
+					SetCurrSkillSet(skillSets[5]);
+					skillSets[5]->Restart();
 					break;
 				default:
 					break;
@@ -279,32 +278,35 @@ void Player::Update(float dt)
 	case Player::States::Dash:
 		UpdateDash(dt);
 		break;
-	case Player::States::JumpSlash:
-		UpdateJumpSlash(dt);
+	case Player::States::Jump:
+		UpdateJump(dt);
 		break;
 	default:
 		break;
 	}
 
 	if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
-		lastDir = direction;
-	/*else if (!Utils::EqualFloat(lastDir.x, 0.f))
-		lastDir = Utils::Normalize({ lastDir.x, 0.f });*/
-
-	for (auto skill : skills)
 	{
-		skill->Update(dt);
+		lastDir = direction;
+		dashDir = lastDir;
+	}
+	else if (!Utils::EqualFloat(lastDir.x, 0.f))
+		dashDir = Utils::Normalize({ lastDir.x, 0.f });
+
+	for (auto skillSet : skillSets)
+	{
+		skillSet->Update(dt);
 	}
 }
 
 void Player::Draw(RenderWindow& window)
 {
-	Object::Draw(window);
-	window.draw(sprite, &playerShader);
-	for (auto skill : skills)
+	for (auto skill : skillSets)
 	{
 		skill->Draw(window);
 	}
+	Object::Draw(window);
+	window.draw(sprite, &playerShader);
 }
 
 void Player::UpdateIdle(float dt)
@@ -342,7 +344,7 @@ void Player::UpdateRun(float dt)
 void Player::UpdateDash(float dt)
 {
 	dashTimer += dt;
-	Translate(lastDir * runningSpeed * dt);
+	Translate(dashDir * runningSpeed * dt);
 	if (dashTimer >= dashDuration)
 	{
 		dashTimer = 0.f;
@@ -350,7 +352,7 @@ void Player::UpdateDash(float dt)
 	}
 }
 
-void Player::UpdateJumpSlash(float dt)
+void Player::UpdateJump(float dt)
 {
 	Vector2f moving = direction * jumpDistance * dt / jumpDuration;
 	if (jumpTimer < jumpDuration * 0.5f && jumpTimer + dt >= jumpDuration * 0.5f)
@@ -374,24 +376,25 @@ void Player::UpdateJumpSlash(float dt)
 	if (jumpTimer >= jumpDuration)
 	{
 		jumpTimer = 0.f;
-		SetState(States::GroundSlam);
+		if (!currSkillSet->Do())
+			SetState(States::Idle);
 	}
 }
 
 void Player::Action()
 {
-	SkillAction action = currSkill->GetSetting()->playerAction;
+	SkillAction action = currSkillSet->GetCurrSkill()->GetSetting()->playerAction;
 	if (action != SkillAction::Dash)
 	{
 		auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
 		direction = Utils::Normalize(mousePos - position);
 		if (!Utils::EqualFloat(direction.x, 0.f) || !Utils::EqualFloat(direction.y, 0.f))
 			lastDir = direction;
-		if (action == SkillAction::JumpSlash)
+		if (action == SkillAction::Jump)
 		{
 			auto mouseDistance = Utils::Distance(mousePos, position);
-			if (mouseDistance >= currSkill->GetSetting()->distance * 0.5f)
-				jumpDistance = currSkill->GetSetting()->distance;
+			if (mouseDistance >= currSkillSet->GetCurrSkill()->GetSetting()->distance * 0.5f)
+				jumpDistance = currSkillSet->GetCurrSkill()->GetSetting()->distance;
 			else
 			{
 				jumpDistance = 0.f;
@@ -407,8 +410,8 @@ void Player::Action()
 	case SkillAction::PBAoE:
 		SetState(States::PBAoE);
 		break;
-	case SkillAction::JumpSlash:
-		SetState(States::JumpSlash);
+	case SkillAction::Jump:
+		SetState(States::Jump);
 		break;
 	case SkillAction::GroundSlam:
 		SetState(States::GroundSlam);
@@ -416,4 +419,10 @@ void Player::Action()
 	default:
 		break;
 	}
+}
+
+void Player::FinishAction()
+{
+	if (!currSkillSet->Do())
+		SetState(States::Idle);
 }

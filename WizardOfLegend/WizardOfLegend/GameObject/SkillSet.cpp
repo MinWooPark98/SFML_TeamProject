@@ -1,0 +1,129 @@
+#include "SkillSet.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/SkillSetTable.h"
+
+SkillSet::SkillSet()
+	:subject(nullptr), subType(Skill::SubjectType::None), isOnCoolDown(false), newCoolDownEntered(false), newCoolDown(0.f), timer(0.f)
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		unusingSkills.push_back(new Skill());
+	}
+}
+
+SkillSet::~SkillSet()
+{
+}
+
+void SkillSet::Restart()
+{
+	if (isOnCoolDown)
+		return;
+	isOnCoolDown = true;
+	currSkillIt = usingSkills.rend();
+	for (auto skill : usingSkills)
+	{
+		skill->Reprepare();
+	}
+	Do();
+}
+
+void SkillSet::Set(const string& setName)
+{
+	for (auto skill : usingSkills)
+	{
+		unusingSkills.push_back(skill);
+	}
+	usingSkills.clear();
+
+	SkillSetTable* table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
+	auto& skillSetInfo = table->Get(setName);
+	newCoolDown = skillSetInfo.first;
+	if (!Utils::EqualFloat(newCoolDown, -1.f))
+		newCoolDownEntered = true;
+	auto& skillNames = skillSetInfo.second;
+	for (auto& skillName : skillNames)
+	{
+		if (unusingSkills.empty())
+		{
+			for (int i = 0; i < usingSkills.size(); ++i)
+			{
+				Skill* newSkill = new Skill();
+				newSkill->SetSubject(subject, subType);
+				unusingSkills.push_back(newSkill);
+			}
+		}
+		auto skill = unusingSkills.front();
+		unusingSkills.pop_front();
+		skill->SetSkill(skillName);
+		if (!newCoolDownEntered)
+		{
+			float coolDown = skill->GetSetting()->skillCoolDown;
+			if(newCoolDown < coolDown)
+				newCoolDown = coolDown;
+		}
+		usingSkills.push_back(skill);
+	}
+}
+
+void SkillSet::SetOnlyOneSkill(const Skill::Set& set)
+{
+	for (auto skill : usingSkills)
+	{
+		unusingSkills.push_back(skill);
+	}
+	usingSkills.clear();
+
+	newCoolDown = set.skillCoolDown;
+	auto skill = unusingSkills.front();
+	unusingSkills.pop_front();
+	skill->SetSkill(set);
+	usingSkills.push_back(skill);
+}
+
+void SkillSet::SetSubject(Object* subject, Skill::SubjectType subType)
+{
+	this->subject = subject;
+	this->subType = subType;
+	for (auto skill : unusingSkills)
+	{
+		skill->SetSubject(subject, subType);
+	}
+	for (auto skill : usingSkills)
+	{
+		skill->SetSubject(subject, subType);
+	}
+}
+
+bool SkillSet::Do()
+{
+	if (currSkillIt == usingSkills.rbegin())
+		return false;
+	(*(--currSkillIt))->Do();
+	return true;
+}
+
+void SkillSet::Update(float dt)
+{
+	if (isOnCoolDown)
+	{
+		timer += dt;
+		if (timer >= newCoolDown)
+		{
+			isOnCoolDown = false;
+			timer = 0.f;
+		}
+	}
+	for (auto skill : usingSkills)
+	{
+		skill->Update(dt);
+	}
+}
+
+void SkillSet::Draw(RenderWindow& window)
+{
+	for (auto skill : usingSkills)
+	{
+		skill->Draw(window);
+	}
+}

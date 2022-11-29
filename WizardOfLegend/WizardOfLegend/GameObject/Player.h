@@ -2,7 +2,7 @@
 #include "SpriteObj.h"
 
 class Animator;
-class Skill;
+class SkillSet;
 
 class Player : public SpriteObj
 {
@@ -16,7 +16,7 @@ public:
 		Slide,
 		NormalSpell,
 		PBAoE,
-		JumpSlash,
+		Jump,
 		GroundSlam,
 	};
 	enum class SkillAction
@@ -24,7 +24,7 @@ public:
 		NormalSpell,
 		Dash,
 		PBAoE,
-		JumpSlash,
+		Jump,
 		GroundSlam,
 	};
 
@@ -50,10 +50,11 @@ protected:
 	float jumpOriginY;
 
 	Vector2f lastDir;
+	Vector2f dashDir;
 	bool isBackHand;	// true일 시 Backhand, false일 시 Forehand
 
-	vector<Skill*> skills;
-	Skill* currSkill;
+	vector<SkillSet*> skillSets;
+	SkillSet* currSkillSet;
 
 	bool skillToolMode;
 
@@ -65,6 +66,7 @@ public:
 	virtual ~Player();
 
 	void SetState(States state);
+	States GetState() const { return currState; }
 
 	virtual void Init() override;
 	virtual void Update(float dt) override;
@@ -73,7 +75,7 @@ public:
 	void UpdateIdle(float dt);
 	void UpdateRun(float dt);
 	void UpdateDash(float dt);
-	void UpdateJumpSlash(float dt);
+	void UpdateJump(float dt);
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
@@ -81,15 +83,18 @@ public:
 	bool GetBackHand() const { return isBackHand; }
 
 	void Action();
-	void SetCurrSkill(Skill* skill) { currSkill = skill; }
+	void FinishAction();
+	void SetCurrSkillSet(SkillSet* skillSet) { currSkillSet = skillSet; }
+	SkillSet* GetCurrSkillSet() { return currSkillSet; }
 
 	void SetSkillToolMode() { skillToolMode = true; }
-	vector<Skill*>& GetSkills() { return skills; }
 
 	int GetMaxHp() { return maxHp; };
 	void SetMaxHp(int hp) { maxHp = hp; };
 
 	int GetCurHp() { return curHp; };
 	void SetCurHp(int hp) { curHp = hp; };
+
+	vector<SkillSet*>& GetSkillSets() { return skillSets; }
 };
 

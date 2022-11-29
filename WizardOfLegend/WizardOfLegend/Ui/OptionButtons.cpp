@@ -67,6 +67,15 @@ void OptionButtons::SetPos(const Vector2f& pos)
 	}
 }
 
+void OptionButtons::Clear()
+{
+	for (auto button : buttons)
+	{
+		delete button;
+	}
+	buttons.clear();
+}
+
 void OptionButtons::AddButton(Button2* button, const string& str, const FloatRect& buttonSize, Color textColor, Color btnColor)
 {
 	if(button == nullptr)
@@ -75,6 +84,7 @@ void OptionButtons::AddButton(Button2* button, const string& str, const FloatRec
 	button->UseText();
 	button->SetText("fonts/NotoSansKR-Bold.otf", 20, textColor, str);
 	button->SetHitBox(buttonSize, btnColor);
+	button->SetBoxInitColor(btnColor);
 	button->GetHitBox().setOutlineThickness(2.f);
 	button->SetDevMode(true);
 	if (!buttons.empty())

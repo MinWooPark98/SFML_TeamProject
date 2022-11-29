@@ -7,7 +7,7 @@
 #include "../Framework/SoundMgr.h"
 
 Button2::Button2()
-    :sprite(nullptr), text(nullptr), isMouseOn(false), isClicked(false), origin(Origins::TL)
+    :sprite(nullptr), text(nullptr), activated(true), isOtherView(false), isMouseOn(false), isClicked(false), origin(Origins::TL)
 {
 }
 
@@ -35,17 +35,23 @@ void Button2::Reset()
     }
     if (text != nullptr)
         text->SetString("");
+    SetActivated(true);
+    UnClicked();
+    MouseOff();
 }
 
 void Button2::Update(float dt)
 {
     Object::Update(dt);
     isClicked = false;
-    Vector2f mousePos;
-    if (isUi)
-        mousePos = SCENE_MGR->GetCurrentScene()->GetUiMousePos();
-    else
-        mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
+    if (!isOtherView)
+    {
+        if (isUi)
+            mousePos = SCENE_MGR->GetCurrentScene()->GetUiMousePos();
+        else
+            mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
+    }
+
     if (!isMouseOn)
     {
         if (btnBound.contains(mousePos))
@@ -153,14 +159,35 @@ void Button2::DefaultMouseOff()
         text->SetFillColor(textInitColor);
 }
 
-void Button2::ChangeFillColor()
+void Button2::FillBoxComplementaryColor()
 {
-    Color originalColor = hitbox.getFillColor();
-    hitbox.setFillColor(Color(255 - originalColor.r, 255 - originalColor.g, 255 - originalColor.b, 255));
+    hitbox.setFillColor(Color(255 - boxInitColor.r, 255 - boxInitColor.g, 255 - boxInitColor.b, 255));
+}
+
+void Button2::FillBoxInitColor()
+{
+    hitbox.setFillColor(Color(boxInitColor.r, boxInitColor.g, boxInitColor.b, 255));
+}
+
+void Button2::SetActivated(bool activate)
+{
+    Color initColor = hitbox.getFillColor();
+    if (activate)
+    {
+        hitbox.setFillColor({ initColor.r, initColor.g, initColor.b, 255 });
+        activated = true;
+    }
+    else
+    {
+        hitbox.setFillColor({ initColor.r, initColor.g, initColor.b, 175 });
+        activated = false;
+    }
 }
 
 void Button2::MouseOn()
 {
+    if (!activated)
+        return;
     isMouseOn = true;
     if (MousePointerOn != nullptr)
     {
@@ -178,6 +205,8 @@ void Button2::MouseOff()
 
 void Button2::Clicked()
 {
+    if (!activated)
+        return;
     isClicked = true;
     if (ClickOn != nullptr)
         ClickOn();

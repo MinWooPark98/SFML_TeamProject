@@ -8,6 +8,7 @@ using namespace sf;
 using namespace std;
 
 class Projectile;
+class CastingCircle;
 
 enum class Scenes
 {
@@ -37,6 +38,7 @@ protected:
 	map<LayerType, map<int, vector<Object*>>> objList;
 
 	ObjectPool<Projectile>* projectiles;
+	ObjectPool<CastingCircle>* circles;
 
 	bool isPause;
 	Vector2f objMousePos;
@@ -85,6 +87,7 @@ public:
 	const Vector2f& GetUiMousePos() const { return uiMousePos; }
 	vector<list<Object*>*>& GetLayout() { return layOut; }
 	ObjectPool<Projectile>* GetProjectiles() { return projectiles; }
+	ObjectPool<CastingCircle>* GetCastingCircles() { return circles; }
 	//virtual void LayerSort();
 };
 //bool sorting(Object* p1, Object* p2);

@@ -125,6 +125,16 @@ void InputMgr::ProcessInput(Event& ev)
 	}
 }
 
+void InputMgr::Clear()
+{
+	downList.clear();
+	ingList.clear();
+	upList.clear();
+	downMouse.clear();
+	ingMouse.clear();
+	upMouse.clear();
+}
+
 bool InputMgr::GetKeyDown(Keyboard::Key key)
 {
 	return find(downList.begin(), downList.end(), key) != downList.end();

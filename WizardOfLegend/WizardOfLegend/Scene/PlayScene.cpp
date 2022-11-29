@@ -10,6 +10,7 @@
 #include "../Framework/InputMgr.h"
 #include "../Scene/SceneMgr.h"
 #include "../Ui/PlayUiMgr.h"
+#include "../GameObject/SkillSet.h"
 
 
 PlayScene::PlayScene()
@@ -86,13 +87,13 @@ void PlayScene::Init()
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
 			objList[LayerType::Object][5].push_back(player);
-			objTypeList[Object::ObjTypes::Player].push_back(player);
-			auto& skills = player->GetSkills();
-			skills[0]->SetSkill("FireBall");
-			skills[1]->SetSkill("Dragon");
-			skills[2]->SetSkill("FireDash");
-			skills[4]->SetSkill("DragonArc");
-			skills[5]->SetSkill("FireFull");
+			ObjTypeList[Object::ObjTypes::Player].push_back(player);
+			auto& skillSet = player->GetSkillSets();
+			skillSet[0]->Set("FireBall");
+			skillSet[1]->Set("JumpMeteor");
+			skillSet[2]->Set("FireDash");
+			skillSet[4]->Set("DragonArc");
+			skillSet[5]->Set("FireFull");
 		}
 		else if (obj.type == "ENEMY")
 		{

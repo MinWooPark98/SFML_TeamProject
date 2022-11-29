@@ -4,6 +4,8 @@
 #include "../GameObject/TextBox.h"
 #include "OptionButtons.h"
 
+class DataTableList;
+
 class SelectOption : public Object
 {
 public:
@@ -24,23 +26,28 @@ public:
 		PlayerAction,
 		SkillDelay,
 		SkillCoolDown,
-		DmgRatio,
 		DmgType,
+		DmgRatio,
 		DmgDelay,
 		Duration,
 		Speed,
 		AnimClipName1,
 		AnimClipName2,
+		SoundName1,
+		SoundName2,
 		Count,
 	};
 
 protected:
 	pair<OptionButtons*, OptionButtons*> options;
-	vector<OptionButtons*> optButtons;
+	map<Options, OptionButtons*> optButtons;
+	map<Options, TextBox*> textBoxs;
 	vector<OptionButtons*> menuButtons;
-	vector<TextBox*> textBoxs;
 
 	Skill::Set selectedSet;
+
+	DataTableList* skillList;
+	DataTableList* skillSetList;
 
 public:
 	SelectOption();
@@ -52,8 +59,14 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
+	void ActivateAll();
+	void ActivateBasedOnAtkShape();
+	void ActivateOption(Options option);
+	void DeactivateOption(Options option);
 	void ApplyText(Options opt, TextBox* box);
+	void ApplyTextStr(Options opt, string str);
 	void ApplyOptBtn(Options opt, OptionButtons* opts, Button2* btn);
+	void ApplyOptBtnIdx(Options opt, int vecIdx);
 	void ConvertVal(string& str, int& opt);
 	void ConvertVal(string& str, float& opt);
 
@@ -61,6 +74,7 @@ public:
 	void SetPlayer1stSkill();
 
 	void Load(const string& skillName);
+	void LoadSkillSet(const string& skillSetName);
 
 	Skill::Set& GetSet() { return selectedSet; }
 };

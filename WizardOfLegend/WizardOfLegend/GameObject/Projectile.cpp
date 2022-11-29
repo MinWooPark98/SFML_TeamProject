@@ -3,7 +3,7 @@
 #include "../Framework/ResourceMgr.h"
 
 Projectile::Projectile()
-	:atkShape(AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(RangeType::None), isComingBack(false),  attackDmg(0), dmgType(DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0)
+	:atkShape(Skill::AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(Skill::WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(Skill::RangeType::None), isComingBack(false),  attackDmg(0), dmgType(Skill::DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0)
 {
 }
 
@@ -36,6 +36,7 @@ void Projectile::Reset()
 	amplitude = 0.f;
 	frequency = 0.f;
 	reverse = false;
+	sprite.setRotation(0.f);
 }
 
 void Projectile::Update(float dt)
@@ -61,30 +62,33 @@ void Projectile::Update(float dt)
 	movingTimer += dt;
 	switch (atkShape)
 	{
-	case AttackShape::Range:
+	case Skill::AttackShape::Range:
 		{
 			cumulativeFallingHeight += fallingHeight * (dt / movingDuration);
 			auto& currOrigin = animator->GetFrame().origin;
 			sprite.setOrigin({ currOrigin.x, currOrigin.y + (fallingHeight - cumulativeFallingHeight) });
 			switch (rangeType)
 			{
-			case Projectile::RangeType::AbovePlayer:
-				Translate(direction * distance * (dt / movingDuration));
+			case Skill::RangeType::FromAbovePlayer:
+				{
+					auto rotation = -atan2f(distance * direction.x, fallingHeight) * 180.f / M_PI;
+					sprite.setRotation(rotation);
+				}
 				break;
 			default:
 				break;
 			}
 		}
 		break;
-	case Projectile::AttackShape::Rotate:
+	case Skill::AttackShape::Rotate:
 		{
 			angle += speed * dt;
 			SetPos({ startPos.x + distance * (float)cos((angle) * (M_PI / 180.f)), startPos.y + distance * (float)sin((angle) * (M_PI / 180.f)) });
 		}
 		break;
-	case Projectile::AttackShape::Wave:
+	case Skill::AttackShape::Wave:
 		{
-			if (waveType == WaveType::BackAndForth && !isComingBack && movingTimer >= movingDuration * 0.5f)
+			if (waveType == Skill::WaveType::BackAndForth && !isComingBack && movingTimer >= movingDuration * 0.5f)
 			{
 				isComingBack = true;
 				animator->Play(clipName[1 - vecIdx]);
@@ -112,17 +116,20 @@ void Projectile::Update(float dt)
 		movingTimer = 0.f;
 	}
 
-	if (!isOnAtkDelay)
+	if (dmgType != Skill::DamageType::NoDamage)
 	{
-		// �浹 �˻�, ����
-	}
-	else if (dmgType != DamageType::Once)
-	{
-		atkTimer += dt;
-		if (atkTimer >= atkDelay)
+		if (!isOnAtkDelay)
 		{
-			isOnAtkDelay = false;
-			atkTimer = 0.f;
+			// 충돌 검사 및 데미지
+		}
+		else if (dmgType == Skill::DamageType::Periodic)
+		{
+			atkTimer += dt;
+			if (atkTimer >= atkDelay)
+			{
+				isOnAtkDelay = false;
+				atkTimer = 0.f;
+			}
 		}
 	}
 }
@@ -138,7 +145,7 @@ void Projectile::SetAnimClip(const vector<string>& clipName)
 
 void Projectile::Fire()
 {
-	if (atkShape == Projectile::AttackShape::Rotate)
+	if (atkShape == Skill::AttackShape::Rotate)
 		vecIdx = speed > 0.f ? 0 : 1;
 	else
 		vecIdx = direction.x < 0.f ? 0 : 1;

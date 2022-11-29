@@ -89,7 +89,6 @@ void FileMgr::LoadAll()
 		auto name = file.path().string();
 		name = name.substr(16, name.size() - 17 + 1);
 		name = name.substr(0, name.size() - 5);
-		cout << name << endl;
 		ifstream allMap(path);
 		json allMap_d = json::parse(allMap);
 		mapInfo[name] = allMap_d;

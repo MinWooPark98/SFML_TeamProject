@@ -146,12 +146,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ui\DataTableList.cpp" />
+    <ClCompile Include="GameObject\CastingCircle.cpp" />
     <ClCompile Include="GameObject\Button2.cpp" />
     <ClCompile Include="GameObject\FireBoss.cpp" />
     <ClCompile Include="GameObject\Enemy.cpp" />
     <ClCompile Include="GameObject\Archer.cpp" />
     <ClCompile Include="GameObject\TextBox.cpp" />
     <ClCompile Include="GameObject\Sector.cpp" />
+    <ClCompile Include="GameObject\SkillSet.cpp" />
+    <ClCompile Include="DataTable\SkillSetTable.cpp" />
     <ClCompile Include="Ui\PlayUiMgr.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Ui\TitleUiMgr.cpp" />
@@ -207,12 +211,16 @@
     <ClInclude Include="3rd\OBB.h" />
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="Ui\DataTableList.h" />
+    <ClInclude Include="GameObject\CastingCircle.h" />
     <ClInclude Include="GameObject\Button2.h" />
     <ClInclude Include="GameObject\FireBoss.h" />
     <ClInclude Include="GameObject\Enemy.h" />
     <ClInclude Include="GameObject\Archer.h" />
     <ClInclude Include="GameObject\TextBox.h" />
     <ClInclude Include="GameObject\Sector.h" />
+    <ClInclude Include="GameObject\SkillSet.h" />
+    <ClInclude Include="DataTable\SkillSetTable.h" />
     <ClInclude Include="Ui\PlayUiMgr.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Ui\TitleUiMgr.h" />

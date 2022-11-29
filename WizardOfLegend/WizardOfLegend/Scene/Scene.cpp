@@ -6,6 +6,7 @@
 #include "../Scene/SceneMgr.h"
 #include "../Framework/SoundMgr.h"
 #include "../GameObject/Projectile.h"
+#include "../GameObject/CastingCircle.h"
 
 Scene::Scene(Scenes type)
 	: type(type), uiMgr(nullptr), isPause(false), projectiles(nullptr)
@@ -20,6 +21,7 @@ Scene::~Scene()
 void Scene::Init()
 {
 	projectiles = new ObjectPool<Projectile>();
+	circles = new ObjectPool<CastingCircle>();
 }
 void Scene::Release()
 {
@@ -78,6 +80,8 @@ void Scene::Update(float dt)
 		}
 		if (projectiles != nullptr)
 			projectiles->Update(dt);
+		if (circles != nullptr)
+			circles->Update(dt);
 	}
 
 	if (uiMgr != nullptr && uiMgr->GetActive())
@@ -87,6 +91,13 @@ void Scene::Update(float dt)
 void Scene::Draw(RenderWindow& window)
 {
 	window.setView(worldView);
+
+	auto& usingCircles = circles->GetUseList();
+	for (auto circle : usingCircles)
+	{
+		if (circle->GetActive())
+			circle->Draw(window);
+	}
 
 	for (auto& layer : objList)
 	{

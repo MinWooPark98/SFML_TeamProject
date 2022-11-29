@@ -12,11 +12,16 @@ protected:
 	SpriteObj* sprite;
 	TextObj* text;
 
+	bool activated;
+
+	bool isOtherView;
+	Vector2f mousePos;
 	bool isMouseOn;
 	bool isClicked;
 
 	Origins origin;
 	Color textInitColor;
+	Color boxInitColor;
 	FloatRect btnBound;
 
 public:
@@ -45,7 +50,15 @@ public:
 
 	void DefaultMouseOn();
 	void DefaultMouseOff();
-	void ChangeFillColor();
+	void FillBoxComplementaryColor();
+	void FillBoxInitColor();
+	void SetBoxInitColor(Color color) { boxInitColor = color; }
+
+	void SetActivated(bool activate);
+	bool GetActivated() { return activated; }
+
+	void IsOtherView(bool isOtherView) { this->isOtherView = isOtherView; }
+	void SetMousePos(const Vector2f pos) { mousePos = pos; }
 
 	function<void()> MousePointerOn;
 	function<void()> MousePointerOff;
