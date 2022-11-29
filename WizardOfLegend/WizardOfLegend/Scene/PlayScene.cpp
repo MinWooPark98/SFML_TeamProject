@@ -11,6 +11,7 @@
 #include "../Scene/SceneMgr.h"
 #include "../Ui/PlayUiMgr.h"
 #include "../GameObject/SkillSet.h"
+#include "../GameObject/Sector.h"
 
 
 PlayScene::PlayScene()
@@ -33,10 +34,25 @@ void PlayScene::Init()
 	{
 		if (obj.type == "SECTOR")
 		{
-
-
+			Sector* sector = new Sector();
+			sector->SetName(obj.type);
+			sector->SetPos(obj.position);
+			sector->SetSize(obj.size);
+			sector->SetObjType(Object::ObjTypes::Sector);
+			room.push_back(*sector);
+			objList[LayerType::Sector][0].push_back(sector);
 		}
-		else if (obj.type == "WALL")
+	}
+
+	for (int i = 0; i < room.size(); i++)
+	{
+		collisionList.push_back(map<Object::ObjTypes, list<Object*>>());
+	}
+
+	for (auto& obj : data)
+		{
+
+		if (obj.type == "WALL")
 		{
 			SpriteObj* draw = new SpriteObj();
 			draw->SetName(obj.type);
@@ -52,19 +68,18 @@ void PlayScene::Init()
 			}
 
 			objList[LayerType::Object][0].push_back(draw);
-			objTypeList[0][Object::ObjTypes::Wall].push_back(draw);
+			collisionList[0][Object::ObjTypes::Wall].push_back(draw);
 		}
 		else if (obj.type == "TILE")
 		{
-		SpriteObj* draw = new SpriteObj();
-		draw->SetName(obj.type);
-		draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
-		draw->SetOrigin(Origins::BC);
-		draw->SetPos(obj.position);
-		draw->SetObjType(Object::ObjTypes::Tile);
-		objTypeList[Object::ObjTypes::Tile].push_back(draw);
+			SpriteObj* draw = new SpriteObj();
+			draw->SetName(obj.type);
+			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
+			draw->SetOrigin(Origins::BC);
+			draw->SetPos(obj.position);
+			draw->SetObjType(Object::ObjTypes::Tile);
 
-		objList[LayerType::Tile][0].push_back(draw);
+			objList[LayerType::Tile][0].push_back(draw);
 		}
 		else if (obj.type == "OBJECT")
 		{
@@ -77,7 +92,6 @@ void PlayScene::Init()
 			draw->SetObjType(Object::ObjTypes::ETC);
 
 			objList[LayerType::Object][0].push_back(draw);
-			objTypeList[Object::ObjTypes::ETC].push_back(draw);
 		}
 		else if (obj.type == "PLAYER")
 		{
@@ -87,7 +101,7 @@ void PlayScene::Init()
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
 			objList[LayerType::Object][5].push_back(player);
-			ObjTypeList[Object::ObjTypes::Player].push_back(player);
+			collisionList[0][Object::ObjTypes::Player].push_back(player);
 			auto& skillSet = player->GetSkillSets();
 			skillSet[0]->Set("FireBall");
 			skillSet[1]->Set("JumpMeteor");
@@ -106,7 +120,7 @@ void PlayScene::Init()
 				lancer->SetCardPos(lancer->GetPos());
 				lancer->SetObjType(Object::ObjTypes::Enemy);
 				objList[LayerType::Object][0].push_back(lancer);
-				objTypeList[Object::ObjTypes::Enemy].push_back(lancer);
+				collisionList[0][Object::ObjTypes::Enemy].push_back(lancer);
 			}
 			else if (obj.path == "graphics/Map/ArcherNormal.png")
 			{
@@ -118,7 +132,7 @@ void PlayScene::Init()
 				archer->SetObjType(Object::ObjTypes::Enemy);
 				archer->SetColor(3);
 				objList[LayerType::Object][1].push_back(archer);
-				objTypeList[Object::ObjTypes::Enemy].push_back(archer);
+				collisionList[0][Object::ObjTypes::Enemy].push_back(archer);
 			}
 			else if (obj.path == "graphics/Map/ArcherBosspng.png")
 			{
@@ -131,7 +145,7 @@ void PlayScene::Init()
 
 				heavyBombingArcher->SetColor(2);
 				objList[LayerType::Object][2].push_back(heavyBombingArcher);
-				objTypeList[Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
+				collisionList[0][Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
 			}
 			else if (obj.path == "graphics/Map/FireBoss.png")
 			{
@@ -140,9 +154,8 @@ void PlayScene::Init()
 				fireBoss->SetName(obj.type);
 				fireBoss->SetPos(obj.position);
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
-				fireBoss->SetPlayerLastPos(player->GetPos());
 				objList[LayerType::Object][3].push_back(fireBoss);
-				objTypeList[Object::ObjTypes::Enemy].push_back(fireBoss);
+				collisionList[0][Object::ObjTypes::Enemy].push_back(fireBoss);
 			}
 		}
 	}
@@ -152,7 +165,7 @@ void PlayScene::Init()
 	mapSize.width = (tiles.back())->GetPos().x + 16;
 	mapSize.height = (tiles.back())->GetPos().y;
 
-	for (auto& enemy : objTypeList[Object::ObjTypes::Enemy])
+	for (auto& enemy : collisionList[0][Object::ObjTypes::Enemy])
 	{
 		((Enemy*)enemy)->SetPlayer(player);
 	}
@@ -174,13 +187,13 @@ void PlayScene::Update(float dt)
 			this->SetPause(false);
 	}
 
-	for (auto& enemy : ObjTypeList[Object::ObjTypes::Enemy])
-	{
-		for (auto& coll : ObjTypeList[Object::ObjTypes::Wall])
-		{
-			
-		}
-	}
+	//for (auto& enemy : collisionList[Object::ObjTypes::Enemy])
+	//{
+	//	for (auto& coll : collisionList[Object::ObjTypes::Wall])
+	//	{
+	//		
+	//	}
+	//}
 }
 
 void PlayScene::Draw(RenderWindow& window)

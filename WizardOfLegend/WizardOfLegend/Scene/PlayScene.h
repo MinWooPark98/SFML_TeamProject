@@ -4,7 +4,7 @@
 
 class FireBoss;
 class Player;
-
+class Sector;
 class PlayScene : public Scene
 {
 protected:
@@ -12,8 +12,9 @@ protected:
 	Player* player;
 	IntRect mapSize;
 
-	//vector<Sector> adsfdsfasd;
-	vector<map<Object::ObjTypes, list<Object*>>> objTypeList;
+	vector<Sector> room;
+	vector<map<Object::ObjTypes, list<Object*>>> collisionList;
+	//map<Object::ObjTypes, list<Object*>> objTypeList;
 
 public:
 	PlayScene();

@@ -28,6 +28,7 @@ public:
 		Back,
 		Tile,
 		Object,
+		Sector,
 		Count,
 	};
 

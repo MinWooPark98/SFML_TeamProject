@@ -19,6 +19,7 @@ public:
         Player,
         Enemy,
         rnejddl,
+        Sector,
         ETC,
     };
 
