@@ -18,12 +18,6 @@ void Enemy::Init()
 	spawnAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("MonsterCard"));
 	cardShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	SetCardPalette(19, 2, "graphics/CardColorIndex.png");
-
-	SpriteObj tempSpearImage;
-	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerIdleDown.png"));
-	FloatRect rect = (FloatRect)tempSpearImage.GetTextureRect();
-	SetHitBox(rect);
-	hitbox.setOrigin(tempSpearImage.GetSize().x * 0.5f, tempSpearImage.GetSize().y * 0.5f);
 }
 
 void Enemy::Update(float dt)

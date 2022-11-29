@@ -41,6 +41,9 @@ void Lancer::Init()
 	weapon->SetOrigin(Origins::MC);
 	spawn->SetPos(GetPos());
 	SetCardColor(2);
+
+	SetHitBox({ 20.f, 20.f, 20.f, 30.f }, Color::Red);
+	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 }
 
 void Lancer::Update(float dt)

@@ -188,4 +188,3 @@ public:
 
 	void SetCardPos(Vector2f pos) { spawn->SetPos(pos); };
 };
-

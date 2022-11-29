@@ -11,11 +11,14 @@ void HeavyBombingArcher::Init()
 	arrow->SetHitBox((FloatRect)arrow->GetSprite().getTextureRect());
 	arrow->SetOrigin(Origins::MC);
 	arrowSpeed = 400.f;
-	arrowDir.setScale({ 2, 1 });
+	arrowDir.setSize({ 1, 400 });
 	SetMonsterType(MonsterType::StageBoss);
 	SetPos({200, 200});
-	SetEscapeScale(50.f);
-	SetMoveAttackScale(100.f);
+
+	SetMoveScale(400.f);
+	SetAttackScale(300.f);
+	SetMoveAttackScale(200.f);
+	SetEscapeScale(100.f);
 	SetNormalAttackCount(2);
 	
 	for (int i = 0; i < smollArrowCount; i++)
@@ -33,6 +36,10 @@ void HeavyBombingArcher::Init()
 	spawn->SetScale({ 1.5, 1.5 });
 	spawn->SetPos(GetPos());
 	SetCardColor(1);
+
+
+	SetHitBox({ 20.f, 20.f, 20.f, 40.f }, Color::Red);
+	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 }
 
 void HeavyBombingArcher::Update(float dt)
@@ -48,6 +55,8 @@ void HeavyBombingArcher::Update(float dt)
 
 void HeavyBombingArcher::Draw(RenderWindow& window)
 {
+	Archer::Draw(window);
+
 	if (curState == States::MoveAttack)
 	{
 		for (auto it : smollArrow)
@@ -56,9 +65,7 @@ void HeavyBombingArcher::Draw(RenderWindow& window)
 		arrowDir.setScale({ 1, 1 });
 	}
 	else
-		arrowDir.setScale({ 2, 1 });
-
-	Archer::Draw(window);
+		arrowDir.setScale({ 1.5, 1 });
 }
 
 void HeavyBombingArcher::UpdateAttack(float dt)
