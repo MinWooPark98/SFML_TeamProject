@@ -1,4 +1,4 @@
-#include "Sector.h"
+#include "Cliff.h"
 #include <SFML/Graphics.hpp>
 #include "../Framework/InputMgr.h"
 #include "../Ui/MapToolUiMgr.h"
@@ -6,33 +6,33 @@
 
 using namespace sf;
 
-Sector::Sector()
+Cliff::Cliff()
 {
-	sector = new RectangleShape();
-	sector->setFillColor({ 0,0,0,0 });
-	sector->setOutlineColor(Color::Red);
-	sector->setOutlineThickness(4.f);
+	cliff = new RectangleShape();
+	cliff->setFillColor({ 0,0,0,0 });
+	cliff->setOutlineColor(Color::Blue);
+	cliff->setOutlineThickness(4.f);
 	isPlayerInToTheRoom = false;
 	Init();
 }
 
-Sector::~Sector()
+Cliff::~Cliff()
 {
 }
 
-void Sector::Update(float dt)
+void Cliff::Update(float dt)
 {
 	Object::Update(dt);
 
 }
 
-void Sector::Draw(RenderWindow& window)
+void Cliff::Draw(RenderWindow& window)
 {
-	
-	window.draw(*sector);
+
+	window.draw(*cliff);
 }
 
-void Sector::UpdateNowDraw(float dt, DrawObj* nowDraw)
+void Cliff::UpdateNowDraw(float dt, DrawObj* nowDraw)
 {
 
 	if (InputMgr::GetMouseButtonDown(Mouse::Left))
@@ -42,9 +42,9 @@ void Sector::UpdateNowDraw(float dt, DrawObj* nowDraw)
 	}
 }
 
-void Sector::SetPos(const Vector2f& pos)
+void Cliff::SetPos(const Vector2f& pos)
 {
 	Object::SetPos(pos);
-	sector->setPosition(pos);
+	cliff->setPosition(pos);
 	//cout << "sectorpos" << sector->getPosition().x << "," << sector->getPosition().y << endl;
 }

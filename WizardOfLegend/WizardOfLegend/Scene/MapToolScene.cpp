@@ -8,6 +8,7 @@
 #include <algorithm>
 #include "../Framework/Framework.h"
 #include "../GameObject/Sector.h"
+#include "../GameObject/Cliff.h"
 
 MapToolScene::MapToolScene()
 	: Scene(Scenes::MapTool)
@@ -34,10 +35,10 @@ void MapToolScene::Init()
 			tile->SetUiView(false);
 		}
 	}
-	
+
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
-	nowType = LayerType::Object;
+	nowType = LayerType::Tile;
 }
 
 void MapToolScene::Reset()
@@ -91,29 +92,67 @@ void MapToolScene::Update(float dt)
 			worldView.setCenter(worldView.getCenter() + pos);
 		}
 	}
-	
-	
+	if (InputMgr::GetKeyDown(Keyboard::F6))
+	{
+		for (auto& objs : objList[LayerType::Sector])
+		{
+			for (auto it = objs.second.begin(); it != objs.second.end();)
+			{
+				auto del = *it;
+				it = objs.second.erase(it);
+				if (del != nullptr)
+				{
+					delete del;
+				}
+			}
+			objs.second.clear();
+		}
+		sectors.clear();
+		sector = nullptr;
+	}
+	if (InputMgr::GetKeyDown(Keyboard::F7))
+	{
+		for (auto& objs : objList[LayerType::Cliff])
+		{
+			for (auto it = objs.second.begin(); it != objs.second.end();)
+			{
+				auto del = *it;
+				it = objs.second.erase(it);
+				if (del != nullptr)
+				{
+					delete del;
+				}
+			}
+			objs.second.clear();
+		}
+		cliffs.clear();
+		cliff = nullptr;
+	}
+
+
 	Vector2f v = objMousePos;
 	v.x /= 16;
 	v.y /= 16;
 	int i = v.x;
 	int j = v.y;
-	cout << endl;
+	/*cout << endl;
 	cout << i << endl;
-	cout << j << endl;
-	if (i < 150 && j < 150&& i > 0 && j > 0)
+	cout << j << endl;*/
+	if (i < 150 && j < 150 && i > -1 && j > -1)
 	{
+		//for (int i = 0; i < HEIGHTCNT; i++)
+		//{
+		//	for (int j = 0; j < WIDTHCNT; j++)
+		//	{
+		//DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
+		nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
+		auto& nowgridObjs = gridObjs[nowType];
+		auto& nowsectorObjs = sectors[nowType];
 		if (grids[j][i]->IsClick())
 		{
-			//cout << i << "," << j << endl;
+			cout << i << "," << j << endl;
 			if (nowType == LayerType::Object && playerPos == Vector2i{ j,i })
 				return;
-
-			//DrawObj* nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
-			nowDraw = ((MapToolUiMgr*)uiMgr)->GetDraw();
-			auto& nowgridObjs = gridObjs[nowType];
-			auto& nowsectorObjs = sectors[nowType];
-
 
 			//삭제코드
 			if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
@@ -124,7 +163,8 @@ void MapToolScene::Update(float dt)
 					if (nowgridObjs[j].find(i) != nowgridObjs[j].end())
 					{
 						findObj = nowgridObjs[j][i];
-						auto deleteObj = find(objList[nowType][i].begin(), objList[nowType][i].end(), findObj);
+						auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findObj);
+
 						objList[nowType][j].erase(deleteObj);
 						gridObjs[nowType][j].erase(nowgridObjs[j].find(i));
 
@@ -169,14 +209,14 @@ void MapToolScene::Update(float dt)
 				}
 			}
 
-			if (nowDraw->GetType() == "SECTOR")
+			if (nowDraw->GetType() == "SECTOR" && nowDraw != nullptr)
 			{
 				if (InputMgr::GetMouseButtonDown(Mouse::Left))
 				{
 					sector = new Sector();
 					sector->SetPos(grids[j][i]->GetPos());
 					cout << "sector1 " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
-					isNowDraw = true;
+					isNowSectorDraw = true;
 					sectorJ = j;
 					sectorI = i;
 				}
@@ -186,65 +226,144 @@ void MapToolScene::Update(float dt)
 				cout << "sector2 " << sector->GetPos().x << "," << sector->GetPos().y << endl;
 
 			}
-			else
+			if (nowDraw->GetType() == "CLIFF" && nowDraw != nullptr)
 			{
-				DrawObj* draw = new DrawObj(uiMgr);
-				draw->SetType(nowDraw->GetType());
-				draw->SetPath(nowDraw->GetPath());
-				draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
-				draw->SetOrigin(Origins::BC);
-				draw->SetMove(false);
-				draw->SetPos(grids[j][i]->GetPos() + Vector2f{ 8.f, 16.f });
-				draw->SetData(nowDraw->GetData());
-
-				objList[nowType][j].push_back(draw);
-				gridObjs[nowType][j][i] = draw;
-
-				if (nowDraw->GetType() == "PLAYER")
+				if (InputMgr::GetMouseButtonDown(Mouse::Left))
 				{
-					if (player != nullptr)
-					{
-						int pj = playerPos.x;
-						int pi = playerPos.y;
-						if (nowgridObjs.find(pj) != nowgridObjs.end())
-						{
-							if (nowgridObjs[pj].find(pi) != nowgridObjs[pj].end())
-							{
-								findObj = nowgridObjs[pj][pi];
-								auto deleteObj = find(objList[nowType][pj].begin(), objList[nowType][pj].end(), findObj);
-								objList[nowType][pj].erase(deleteObj);
-								gridObjs[nowType][pj].erase(nowgridObjs[pj].find(pi));
-
-								delete findObj;
-							}
-						}
-					}
-					player = draw;
-					playerPos = { j,i };
-
+					cliff = new Cliff();
+					cliff->SetPos(grids[j][i]->GetPos());
+					isNowCliffDraw = true;
+					sectorJ = j;
+					sectorI = i;
 				}
+				cliff->UpdateNowDraw(dt, nowDraw);
+				cliff->SetSize({ grids[j][i]->GetPos().x - cliff->GetPos().x + 16,grids[j][i]->GetPos().y - cliff->GetPos().y + 16 });
 			}
+			if (nowDraw->GetType() != "SECTOR" && nowDraw->GetType() != "CLIFF" && nowDraw != nullptr)
+			{
+				if (InputMgr::GetMouseButtonDown(Mouse::Left))
+				{
+					sector = new Sector();
+					sector->SetPos(grids[j][i]->GetPos());
+					isNowObjDraw = true;
+					sectorJ = j;
+					sectorI = i;
+				}
+				if (sector != nullptr)
+				{
+					sector->UpdateNowDraw(dt, nowDraw);
+					sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
+				}
 
+			}
 		}
-		if (nowDraw != nullptr && isNowDraw)
+		if (nowDraw != nullptr && isNowSectorDraw)
 		{
+			cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
 			if (nowDraw->GetType() == "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
 			{
-				isNowDraw = false;
+				isNowSectorDraw = false;
 
 				objList[nowType][sectorJ].push_back(sector);
 				sectors[nowType][sectorJ][sectorI] = sector;
 				cout << "up" << endl;
+
+				if (sector != nullptr)
+				{
+					sector = nullptr;
+				}
+			}
+		}
+		if (nowDraw != nullptr && isNowCliffDraw)
+		{
+			cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
+			if (nowDraw->GetType() == "CLIFF" && InputMgr::GetMouseButtonUp(Mouse::Left))
+			{
+				isNowCliffDraw = false;
+
+				objList[nowType][sectorJ].push_back(cliff);
+				cliffs[nowType][sectorJ][sectorI] = cliff;
+				cout << "up" << endl;
+
+				if (cliff != nullptr)
+				{
+					cliff = nullptr;
+				}
+			}
+		}
+		if (nowDraw != nullptr && isNowObjDraw)
+		{
+			cout << nowDraw->GetType() << endl;
+			cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
+			if (nowDraw->GetType() != "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
+			{
+				isNowObjDraw = false;
+				for (int x = sectorJ; x < j + 1; x++)
+				{
+					for (int y = sectorI; y < i + 1; y++)
+					{
+						
+							Button* findObj = nullptr;
+							if (nowgridObjs.find(x) != nowgridObjs.end())
+							{
+								if (nowgridObjs[x].find(y) != nowgridObjs[x].end())
+								{
+									findObj = nowgridObjs[x][y];
+									auto deleteObj = find(objList[nowType][x].begin(), objList[nowType][x].end(), findObj);
+
+									objList[nowType][x].erase(deleteObj);
+									gridObjs[nowType][x].erase(nowgridObjs[x].find(y));
+
+									delete findObj;
+								}
+							}
+
+						DrawObj* draw = new DrawObj(uiMgr);
+						draw->SetType(nowDraw->GetType());
+						draw->SetPath(nowDraw->GetPath());
+						draw->SetTexture(*RESOURCE_MGR->GetTexture(draw->GetPath()), true);
+						draw->SetOrigin(Origins::BC);
+						draw->SetMove(false);
+						draw->SetPos(grids[x][y]->GetPos() + Vector2f{ 8.f, 16.f });
+						draw->SetData(nowDraw->GetData());
+
+						objList[nowType][x].push_back(draw);
+						gridObjs[nowType][x][y] = draw;
+
+						if (nowDraw->GetType() == "PLAYER")
+						{
+							if (player != nullptr)
+							{
+								int pj = playerPos.x;
+								int pi = playerPos.y;
+								Button* findObj = nullptr;
+								if (nowgridObjs.find(pj) != nowgridObjs.end())
+								{
+									if (nowgridObjs[pj].find(pi) != nowgridObjs[pj].end())
+									{
+										findObj = nowgridObjs[pj][pi];
+										auto deleteObj = find(objList[nowType][pj].begin(), objList[nowType][pj].end(), findObj);
+										objList[nowType][pj].erase(deleteObj);
+										gridObjs[nowType][pj].erase(nowgridObjs[pj].find(pi));
+
+										delete findObj;
+									}
+								}
+							}
+							player = draw;
+							playerPos = { x,y };
+						}
+					}
+
+				}
+				if (sector != nullptr)
+				{
+					sector = nullptr;
+				}
 			}
 		}
 	}
-	//for (int i = 0; i < HEIGHTCNT; i++)
-	//{
-	//	for (int j = 0; j < WIDTHCNT; j++)
-	//	{
-			
-	//	}
-	//}
+
 }
 
 void MapToolScene::Draw(RenderWindow& window)
@@ -259,7 +378,7 @@ void MapToolScene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetPos().x<max.x+16&& obj->GetPos().y < max.y+16&& obj->GetPos().x > min.x-16 && obj->GetPos().y > min.y-16)
+				if (obj->GetPos().x<max.x + 16 && obj->GetPos().y < max.y + 16 && obj->GetPos().x > min.x - 16 && obj->GetPos().y > min.y - 16)
 				{
 					obj->SetActive(true);
 				}
@@ -275,6 +394,11 @@ void MapToolScene::Draw(RenderWindow& window)
 	{
 		window.setView(worldView);
 		sector->Draw(window);
+	}
+	if (cliff != nullptr)
+	{
+		window.setView(worldView);
+		cliff->Draw(window);
 	}
 	//for (auto sectorlist : sectors)
 	//{
@@ -313,7 +437,19 @@ void MapToolScene::Release()
 		}
 		objs.second.clear();
 	}
-
+	for (auto& objs : objList[LayerType::Wall])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
 	for (auto& objs : objList[LayerType::Tile])
 	{
 		for (auto it = objs.second.begin(); it != objs.second.end();)
@@ -341,12 +477,29 @@ void MapToolScene::Release()
 		objs.second.clear();
 	}
 	sectors.clear();
+	for (auto& objs : objList[LayerType::Cliff])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
+	cliffs.clear();
 
 	objList[LayerType::Tile].clear();
+	objList[LayerType::Wall].clear();
 	objList[LayerType::Object].clear();
 	objList[LayerType::Sector].clear();
+	objList[LayerType::Cliff].clear();
 	gridObjs.clear();
 	sectors.clear();
+	cliffs.clear();
 
 	player = nullptr;
 
@@ -359,11 +512,19 @@ void MapToolScene::SetType(string t)
 	{
 		nowType = LayerType::Sector;
 	}
+	if (t == "CLIFF")
+	{
+		nowType = LayerType::Cliff;
+	}
 	if (t == "OBJECT" || t == "ENEMY" || t == "PLAYER")
 	{
 		nowType = LayerType::Object;
 	}
-	if (t == "WALL" || t == "TILE")
+	if (t == "WALL")
+	{
+		nowType = LayerType::Wall;
+	}
+	if (t == "TILE")
 	{
 		nowType = LayerType::Tile;
 	}
@@ -405,7 +566,23 @@ void MapToolScene::Save()
 			}
 		}
 	}
-	
+	for (auto& layer : cliffs)
+	{
+		for (auto& objs : layer.second)
+		{
+			for (auto& obj : objs.second)
+			{
+				auto& nowObject = obj.second;
+				ObjectData data;
+				data.type = nowObject->GetType();
+				data.path = nowObject->GetPath();
+				data.position = nowObject->GetPos();
+				data.size = nowObject->GetSize();
+				saveObjs.push_back(data);
+			}
+		}
+	}
+
 	if (path == "")
 		return;
 
@@ -416,6 +593,19 @@ void MapToolScene::Save()
 void MapToolScene::Load(string path)
 {
 	for (auto& objs : objList[LayerType::Object])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
+	for (auto& objs : objList[LayerType::Wall])
 	{
 		for (auto it = objs.second.begin(); it != objs.second.end();)
 		{
@@ -456,11 +646,27 @@ void MapToolScene::Load(string path)
 		}
 		objs.second.clear();
 	}
+	for (auto& objs : objList[LayerType::Cliff])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
 	objList[LayerType::Tile].clear();
+	objList[LayerType::Wall].clear();
 	objList[LayerType::Object].clear();
 	objList[LayerType::Sector].clear();
+	objList[LayerType::Cliff].clear();
 	gridObjs.clear();
 	sectors.clear();
+	cliffs.clear();
 	//로드 파일 그리드에 적용
 	player = nullptr;
 	auto& data = FILE_MGR->GetMap(path);
@@ -480,9 +686,15 @@ void MapToolScene::Load(string path)
 		sector->SetPos(obj.position);
 		sector->SetSize(obj.size);
 
+		Cliff* cliff = new Cliff();
+		cliff->SetType(obj.type);
+		cliff->SetPath(obj.path);
+		cliff->SetPos(obj.position);
+		cliff->SetSize(obj.size);
+
 		int i = ((int)obj.position.x - 8) / 16;
 		int j = (int)obj.position.y / 16 - 1;
-		if (obj.type == "WALL" || obj.type == "OBJECT" || obj.type == "ENEMY" )
+		if (obj.type == "OBJECT" || obj.type == "ENEMY")
 		{
 			objList[LayerType::Object][j].push_back(draw);
 			gridObjs[LayerType::Object][j][i] = draw;
@@ -493,16 +705,25 @@ void MapToolScene::Load(string path)
 				playerPos = Vector2i{ j,i };
 			}
 		}
+		else if (obj.type == "WALL")
+		{
+			objList[LayerType::Tile][j].push_back(draw);
+			gridObjs[LayerType::Tile][j][i] = draw;
+		}
 		else if (obj.type == "TILE")
 		{
 			objList[LayerType::Tile][j].push_back(draw);
 			gridObjs[LayerType::Tile][j][i] = draw;
 		}
-
 		else if (obj.type == "SECTOR")
 		{
 			objList[LayerType::Sector][j].push_back(sector);
 			sectors[LayerType::Sector][j][i] = sector;
+		}
+		else if (obj.type == "CLIFF")
+		{
+			objList[LayerType::Cliff][j].push_back(cliff);
+			cliffs[LayerType::Cliff][j][i] = cliff;
 		}
 	}
 

@@ -46,5 +46,41 @@
         "y": 16.0
       }
     }
+  ],
+  "graphics/Map/Object/GateFull.png": [
+    {
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "x": 16.0,
+        "y": 16.0
+      }
+    }
+  ],
+  "graphics/Map/Palette/LeftGate.png": [
+    {
+      "pos": {
+        "x": 4.0,
+        "y": 0
+      },
+      "size": {
+        "x": 8.0,
+        "y": 16.0
+      }
+    }
+  ],
+  "graphics/Map/Palette/RightGate.png": [
+    {
+      "pos": {
+        "x": -4.0,
+        "y": 0
+      },
+      "size": {
+        "x": 8.0,
+        "y": 16.0
+      }
+    }
   ]
 }

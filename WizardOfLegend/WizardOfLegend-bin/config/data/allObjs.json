@@ -38,31 +38,35 @@
     }
   ],
   "WALL": [
+        {
+      "texPath": "graphics/Map/Wall/AirWallTop.png",
+      "uiPath": "graphics/Map/Palette/AirWallTop.png"
+    },
     {
       "texPath": "graphics/Map/Wall/AirWallBatton.png",
       "uiPath": "graphics/Map/Palette/AirWallBatton.png"
-    },
-    {
-      "texPath": "graphics/Map/Wall/AirWallTop.png",
-      "uiPath": "graphics/Map/Palette/AirWallTop.png"
     },
     {
       "texPath": "graphics/Map/Wall/AirWindow.png",
       "uiPath": "graphics/Map/Palette/AirWindow0.png"
     },
     {
-      "texPath": "graphics/Map/Palette/Empty.png",
-      "uiPath": "graphics/Map/Palette/Empty.png"
+      "texPath": "graphics/Map/Object/GateFull.png",
+      "uiPath": "graphics/Map/Palette/GateFull.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/LeftGate.png",
+      "uiPath": "graphics/Map/Palette/LeftGate.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/RightGate.png",
+      "uiPath": "graphics/Map/Palette/RightGate.png"
     }
   ],
   "OBJECT": [
     {
       "texPath": "graphics/Map/Object/AirBanner.png",
       "uiPath": "graphics/Map/Palette/AirBanner.png"
-    },
-    {
-      "texPath": "graphics/Map/Object/GateFull.png",
-      "uiPath": "graphics/Map/Palette/GateFull.png"
     },
     {
       "texPath": "graphics/Map/Object/PlazaArchwayOverlay.png",
@@ -113,6 +117,12 @@
     {
       "texPath": "graphics/Map/Palette/Empty.png",
       "uiPath": "graphics/Map/Palette/Empty.png"
+    }
+  ],
+  "CLIFF": [
+    {
+      "texPath": "graphics/Map/Palette/Cliff.png",
+      "uiPath": "graphics/Map/Palette/Cliff.png"
     }
   ]
 }

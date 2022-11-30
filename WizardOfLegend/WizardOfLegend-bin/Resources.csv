@@ -393,6 +393,8 @@ graphics/Map/FireBoss.png,0
 graphics/Map/Lancer.png,0
 graphics/Map/Object/AirBanner.png,0
 graphics/Map/Object/GateFull.png,0
+graphics/Map/Palette/RightGate.png,0
+graphics/Map/Palette/LeftGate.png,0
 graphics/Map/Object/PlazaArchwayOverlay.png,0
 graphics/Map/Object/PlazaArchwayWall.png,0
 graphics/Map/Object/TeleportLandingPad.png,0
@@ -424,6 +426,7 @@ graphics/Map/Palette/ArchitectNPCIdleBoss.png,0
 graphics/Map/Palette/ArchitectNPCIdleNormal.png,0
 graphics/Map/Palette/ArmorKnightSpear.png,0
 graphics/Map/Palette/Empty.png,0
+graphics/Map/Palette/Cliff.png,0
 graphics/Map/Palette/FireBoss1.png,0
 graphics/Map/Palette/GateFull.png,0
 graphics/Map/Palette/JesterPortrait.png,0

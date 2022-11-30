@@ -49,17 +49,17 @@ void MapToolUiMgr::Init()
 	loadBtn->SetPos({ 50,120 });
 	uiObjList[0].push_back(loadBtn);
 
-	selects = { "TILE","WALL","OBJECT","PLAYER","ENEMY","SECTOR"};
-	selectTextSize = { 40,40,40,40,40,40 };
-	selectPosY = { 54,54,54,54,54,54 };
+	selects = { "TILE","WALL","OBJECT","PLAYER","ENEMY","SECTOR","CLIFF"};
+	selectTextSize = { 40,40,40,40,40,40,40 };
+	selectPosY = { 54,54,54,54,54,54,54 };
 
 	selIdx = 0;
 	selectBtn = new Button(this);
 	selectBtn->SetClkColor(true);
 	selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
-		selectTextSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
+		selectTextSize[selIdx], Color::White, selects[selIdx], true); 
 	selectBtn->SetOrigin(Origins::MC);
-	selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ -paletteBook->GetHitBounds().width*0.75f, selectPosY[selIdx]});
+	selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ -200, selectPosY[selIdx]});
 	uiObjList[0].push_back(selectBtn);
 
 	for (auto& type : editorObjs)
@@ -171,7 +171,7 @@ void MapToolUiMgr::Update(float dt)
 		selectBtn->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"),
 		selectTextSize[selIdx], Color::White, selects[selIdx], true); //TILE TREE STONE PLAYER ENEMY BOX ANOTHER
 		selectBtn->SetOrigin(Origins::MC);
-		selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ -paletteBook->GetHitBounds().width*0.75f, selectPosY[selIdx]});
+		selectBtn->SetPos(paletteBook->GetPos() + Vector2f{ -200, selectPosY[selIdx]});
 
 		for (auto& obj : type_selects[selects[selIdx]])
 		{

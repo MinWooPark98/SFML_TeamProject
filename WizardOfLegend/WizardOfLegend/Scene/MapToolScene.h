@@ -7,6 +7,7 @@ class Button;
 class UiMgr;
 class DrawObj;
 class Sector;
+class Cliff;
 
 class MapToolScene : public Scene
 {
@@ -20,7 +21,9 @@ private:
 
 	LayerType nowType;
 	DrawObj* nowDraw;
-	bool isNowDraw = false;
+	bool isNowSectorDraw = false;
+	bool isNowCliffDraw = false;
+	bool isNowObjDraw = false;
 
 	DrawObj* player;
 	Vector2i playerPos;
@@ -28,7 +31,9 @@ private:
 	//RectangleShape* sector;
 	//vector<RectangleShape*> sectors;
 	Sector* sector;
+	Cliff* cliff;
 	map<LayerType, map<int, map<int, Sector*>>> sectors;
+	map<LayerType, map<int, map<int, Cliff*>>> cliffs;
 	int sectorI;
 	int sectorJ;
 
