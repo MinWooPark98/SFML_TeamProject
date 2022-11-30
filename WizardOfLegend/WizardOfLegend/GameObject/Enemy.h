@@ -96,6 +96,8 @@ protected:
 
 	float moveSoundTimer = 0.f;
 
+	Vector2f monsterLastPosition;
+
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
 	virtual ~Enemy() { Release(); };
@@ -187,4 +189,6 @@ public:
 	void SpawnScale(float scale, float dt);
 
 	void SetCardPos(Vector2f pos) { spawn->SetPos(pos); };
+
+	Vector2f GetLastPosition() const { return monsterLastPosition; };
 };

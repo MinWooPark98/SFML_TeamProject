@@ -216,9 +216,46 @@ void PlayScene::Update(float dt)
 			{
 				for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
 				{
-					if (Utils::OBB(enemy->GetHitBox(), coll->GetHitBox()))
+					if (Utils::OBB(enemy->GetLowHitBox(), coll->GetHitBox()))
 					{
-						
+						bool leftandRight = false;
+						bool topandLow = false;
+						bool eorkrtjs = false;
+
+						// 적 우점
+						auto enemyRightPoint = enemy->GetLowHitBounds().width + enemy->GetLowHitBounds().left;
+						// 적 하점
+						auto enemyLowPoint = enemy->GetLowHitBounds().height + enemy->GetLowHitBounds().top;
+
+						// 벽 x
+						auto collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
+						// 벽 y
+						auto collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+
+						if (enemy->GetLowHitBounds().left >= collXPoint ||
+							enemyRightPoint <= collXPoint)
+						{
+							if (enemyLowPoint >= collYPoint)
+								leftandRight = true;
+						}
+
+						if (enemy->GetLowHitBounds().height <= collYPoint ||
+							enemyLowPoint >= collYPoint)
+						{
+							if (enemyRightPoint >= collXPoint)
+								topandLow = true;
+						}
+
+						if (topandLow)
+						{
+							enemy->SetPos({ enemy->GetPos().x, enemy->GetLastPosition().y });
+							cout << "a" << endl;
+						}
+						if (leftandRight)
+						{
+							enemy->SetPos({ enemy->GetLastPosition().x, enemy->GetPos().y });
+							cout << "b" << endl;
+						}
 					}
 				}
 			}

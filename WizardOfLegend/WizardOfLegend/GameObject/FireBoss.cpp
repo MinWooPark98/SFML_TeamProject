@@ -69,6 +69,7 @@ void FireBoss::Init()
 
 	SetHitBox({ 20.f, 20.f, 10.f, 20.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
+	SetLowHitBox({ 20.f, 20.f, 10.f, 5.f }, Color::White);
 }
 
 void FireBoss::Update(float dt)

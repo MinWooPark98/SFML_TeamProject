@@ -47,6 +47,8 @@ protected:
     bool isUi;
     bool viewIn;
 
+    Vector2f monsterLastPosition;
+
 public:
     Object();
     virtual ~Object();
@@ -92,6 +94,7 @@ public:
     virtual void SetHitBox(string path);
     RectangleShape& GetHitBox() { return hitbox; } 
     FloatRect GetHitBounds() const { return hitbox.getGlobalBounds(); }
+    FloatRect GetLowHitBounds() const { return lowhitbox.getGlobalBounds(); }
 
     void SetObjType(ObjTypes type) { objtype = type; }
     ObjTypes GetObjType() { return objtype; }
@@ -101,4 +104,8 @@ public:
         lowhitbox.setSize({ rect.width,rect.height });
         lowhitbox.setFillColor(color);
     }
+    RectangleShape& GetLowHitBox() { return lowhitbox; }
+
+    Vector2f GetLastPosition() const { return monsterLastPosition; };
+    void SetMonsterLastPosition(Vector2f pos) { monsterLastPosition = pos; };
 };
