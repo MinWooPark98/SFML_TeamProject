@@ -52,17 +52,24 @@ void Button2::Update(float dt)
             mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
     }
 
+    bool mouseOnBtn = btnBound.contains(mousePos);
     if (!isMouseOn)
     {
-        if (btnBound.contains(mousePos))
+        if (mouseOnBtn)
             MouseOn();
     }
-    else
+    else if(!mouseOnBtn)
+        MouseOff();
+
+    if (InputMgr::GetMouseButtonDown(Mouse::Left))
     {
-        if (!btnBound.contains(mousePos))
-            MouseOff();
-        else if (InputMgr::GetMouseButtonDown(Mouse::Left))
-            Clicked();
+        if (mouseOnBtn)
+        {
+            if(!isClicked)
+                Clicked();
+        }
+        else
+            UnClicked();
     }
 }
 

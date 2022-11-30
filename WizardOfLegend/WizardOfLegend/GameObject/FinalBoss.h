@@ -17,6 +17,9 @@ public:
 		Idle,
 		Dash,
 		Slide,
+		Wait,
+		NormalSpell,
+		GroundSlam,
 
 	};
 
