@@ -619,3 +619,5 @@ graphics/MeteorStrike1.png,0
 graphics/MeteorStrike2.png,0
 graphics/MeteorStrike3.png,0
 animations/skill/MeteorStrike.csv,3
+animations/player/GroundSlamDownEnd.csv,3
+animations/player/GroundSlamUpEnd.csv,3

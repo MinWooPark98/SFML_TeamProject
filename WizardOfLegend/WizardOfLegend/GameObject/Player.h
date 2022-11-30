@@ -20,6 +20,7 @@ public:
 		PBAoE,
 		Jump,
 		GroundSlam,
+		GroundSlamEnd,
 	};
 	enum class SkillAction
 	{

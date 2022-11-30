@@ -576,6 +576,9 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 		case Player::SkillAction::Dash:
 			DeactivateOption(Options::StopMoving);
 			break;
+		case Player::SkillAction::Jump:
+			DeactivateOption(Options::StopMoving);
+			break;
 		default:
 			ActivateOption(Options::StopMoving);
 			break;

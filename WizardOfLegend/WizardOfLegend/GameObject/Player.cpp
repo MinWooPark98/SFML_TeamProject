@@ -116,6 +116,9 @@ void Player::SetState(States state)
 		else
 			lastDir.y >= 0.f ? animator->Play("GroundSlamDown") : animator->Play("GroundSlamUp");
 		break;
+	case States::GroundSlamEnd:
+			lastDir.y >= 0.f ? animator->Play("GroundSlamDownEnd") : animator->Play("GroundSlamUpEnd");
+		break;
 	default:
 		break;
 	}
@@ -170,8 +173,10 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamUp"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamDownEnd"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamUpEnd"));
 	{
-		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp" };
+		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "GroundSlamDownEnd", "GroundSlamUpEnd" };
 		for (int i = 0; i < clipIds.size(); ++i)
 		{
 			AnimationEvent ev;
@@ -400,7 +405,10 @@ void Player::UpdateWait(float dt)
 	if (currSkillSet->GetCurrSkill()->GetDoing())
 		return;
 	if (!currSkillSet->Do())
-		SetState(States::Idle);
+	{
+		if (currSkillSet->GetCurrSkill()->GetSetting()->playerAction == SkillAction::GroundSlam)
+			SetState(States::GroundSlamEnd);
+	}
 }
 
 void Player::Action(Skill* currSkill)
@@ -459,8 +467,16 @@ void Player::FinishAction()
 				return;
 		}
 	}
-	if (currState == States::Dash)
+	switch (currState)
+	{
+	case Player::States::Dash:
 		SetState(States::Slide);
-	else
+		break;
+	case Player::States::GroundSlam:
+		SetState(States::GroundSlamEnd);
+		break;
+	default:
 		SetState(States::Idle);
+		break;
+	}
 }

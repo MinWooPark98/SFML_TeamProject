@@ -105,7 +105,7 @@ public:
 	virtual void Reset() override { SpriteObj::Reset(); };
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
-	virtual void SetState(States newState) = 0;
+	virtual void SetState(States newState) {}
 	virtual void SetState(BossStates newState) {};
 
 	float GetSpeed() { return speed; };
