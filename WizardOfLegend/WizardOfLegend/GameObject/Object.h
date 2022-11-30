@@ -18,6 +18,7 @@ public:
         Wall,
         Player,
         Enemy,
+        Boss,
         rnejddl,
         Sector,
         ETC,
