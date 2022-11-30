@@ -513,10 +513,10 @@ animations/finalBoss/FinalBossForeHandRight.csv,3
 animations/finalBoss/FinalBossForeHandUp.csv,3
 animations/finalBoss/FinalBossIdleLeft.csv,3
 animations/finalBoss/FinalBossIdleRight.csv,3
-animations/finalBoss/FinalBossRunDown.csv,3
-animations/finalBoss/FinalBossRunLeft.csv,3
-animations/finalBoss/FinalBossRunRight.csv,3
-animations/finalBoss/FinalBossRunUp.csv,3
+animations/finalBoss/FinalBossDashDown.csv,3
+animations/finalBoss/FinalBossDashLeft.csv,3
+animations/finalBoss/FinalBossDashRight.csv,3
+animations/finalBoss/FinalBossDashUp.csv,3
 animations/finalBoss/FinalBossShield.csv,3
 animations/finalBoss/FinalBossSlideDown.csv,3
 animations/finalBoss/FinalBossSlideLeft.csv,3

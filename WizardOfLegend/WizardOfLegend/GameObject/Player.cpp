@@ -31,6 +31,7 @@ void Player::SetState(States state)
 	switch (state)
 	{
 	case States::Idle:
+		currSkillSet = nullptr;
 		{
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle < -45.f)
@@ -170,7 +171,18 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamUp"));
 	{
-		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp", "PBAoERight", "PBAoELeft", "PBAoEDown", "PBAoEUp", "GroundSlamDown", "GroundSlamUp", "JumpSlamDown", "JumpSlamUp" };
+		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp" };
+		for (int i = 0; i < clipIds.size(); ++i)
+		{
+			AnimationEvent ev;
+			ev.clipId = clipIds[i];
+			ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
+			ev.onEvent = bind(&Player::SetState, this, States::Idle);
+			animator->AddEvent(ev);
+		}
+	}
+	{
+		vector<string> clipIds = { "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp", "PBAoERight", "PBAoELeft", "PBAoEDown", "PBAoEUp", "GroundSlamDown", "GroundSlamUp", "JumpSlamDown", "JumpSlamUp" };
 		for (int i = 0; i < clipIds.size(); ++i)
 		{
 			AnimationEvent ev;
@@ -281,6 +293,9 @@ void Player::Update(float dt)
 	case Player::States::Jump:
 		UpdateJump(dt);
 		break;
+	case Player::States::Wait:
+		UpdateWait(dt);
+		break;
 	default:
 		break;
 	}
@@ -348,7 +363,7 @@ void Player::UpdateDash(float dt)
 	if (dashTimer >= dashDuration)
 	{
 		dashTimer = 0.f;
-		SetState(States::Slide);
+		FinishAction();
 	}
 }
 
@@ -376,14 +391,21 @@ void Player::UpdateJump(float dt)
 	if (jumpTimer >= jumpDuration)
 	{
 		jumpTimer = 0.f;
-		if (!currSkillSet->Do())
-			SetState(States::Idle);
+		FinishAction();
 	}
 }
 
-void Player::Action()
+void Player::UpdateWait(float dt)
 {
-	SkillAction action = currSkillSet->GetCurrSkill()->GetSetting()->playerAction;
+	if (currSkillSet->GetCurrSkill()->GetDoing())
+		return;
+	if (!currSkillSet->Do())
+		SetState(States::Idle);
+}
+
+void Player::Action(Skill* currSkill)
+{
+	SkillAction action = currSkill->GetSetting()->playerAction;
 	if (action != SkillAction::Dash)
 	{
 		auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
@@ -393,8 +415,8 @@ void Player::Action()
 		if (action == SkillAction::Jump)
 		{
 			auto mouseDistance = Utils::Distance(mousePos, position);
-			if (mouseDistance >= currSkillSet->GetCurrSkill()->GetSetting()->distance * 0.5f)
-				jumpDistance = currSkillSet->GetCurrSkill()->GetSetting()->distance;
+			if (mouseDistance >= currSkill->GetSetting()->distance * 0.5f)
+				jumpDistance = currSkill->GetSetting()->distance;
 			else
 			{
 				jumpDistance = 0.f;
@@ -423,6 +445,22 @@ void Player::Action()
 
 void Player::FinishAction()
 {
-	if (currSkillSet == nullptr || !currSkillSet->Do())
+	if (currSkillSet != nullptr)
+	{
+		Skill* currSkill = currSkillSet->GetCurrSkill();
+		if (currSkill != nullptr)
+		{
+			if (currSkillSet->GetCurrSkill()->GetSetting()->stopMoving == Skill::StopMoving::Immovable)
+			{
+				SetState(States::Wait);
+				return;
+			}
+			if (currSkillSet->Do())
+				return;
+		}
+	}
+	if (currState == States::Dash)
+		SetState(States::Slide);
+	else
 		SetState(States::Idle);
 }

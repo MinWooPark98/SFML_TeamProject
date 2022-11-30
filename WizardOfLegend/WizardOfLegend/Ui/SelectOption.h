@@ -24,6 +24,7 @@ public:
 		FallingHeight,
 		RangeType,
 		PlayerAction,
+		StopMoving,
 		SkillDelay,
 		SkillCoolDown,
 		DmgType,

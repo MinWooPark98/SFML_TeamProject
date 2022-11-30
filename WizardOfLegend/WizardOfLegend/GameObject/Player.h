@@ -3,17 +3,19 @@
 
 class Animator;
 class SkillSet;
+class Skill;
 
 class Player : public SpriteObj
 {
 public:
 	enum class States
 	{
-		None,
+		None = -1,
 		Idle,
 		Run,
 		Dash,
 		Slide,
+		Wait,
 		NormalSpell,
 		PBAoE,
 		Jump,
@@ -76,13 +78,14 @@ public:
 	void UpdateRun(float dt);
 	void UpdateDash(float dt);
 	void UpdateJump(float dt);
+	void UpdateWait(float dt);
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
 
 	bool GetBackHand() const { return isBackHand; }
 
-	void Action();
+	void Action(Skill* skill);
 	void FinishAction();
 	void SetCurrSkillSet(SkillSet* skillSet) { currSkillSet = skillSet; }
 	SkillSet* GetCurrSkillSet() { return currSkillSet; }

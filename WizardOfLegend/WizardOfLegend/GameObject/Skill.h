@@ -48,6 +48,11 @@ public:
 		VerticalDescent,
 		FromAbovePlayer,
 	};
+	enum class StopMoving
+	{
+		Movable,
+		Immovable,
+	};
 	enum class DamageType
 	{
 		Once,
@@ -70,6 +75,7 @@ public:
 		float fallingHeight;					// shape_range 일 때만 유효
 		RangeType rangeType;					// shape_range 일 때만 유효
 		Player::SkillAction playerAction;		// 플레이어 동작 변경(kick, jumpSmash 등)
+		StopMoving stopMoving;					// 스킬이 끝날 때까지 이동 불가
 		float skillDelay;						// 스킬 선 딜레이
 		float skillCoolDown;					// 스킬 딜레이(쿨타임 및 충전 시간)
 		DamageType dmgType;						// 단일 타격인지
@@ -81,8 +87,8 @@ public:
 		vector<string> soundName;				// 스킬 시작 사운드, 종료 사운드
 
 		Set(){}
-		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, AttackShape attackShape, float amplitude, float frequency, WaveType waveType, float fallingHeight, RangeType rangeType, Player::SkillAction playerAction, float skillDelay, float skillCoolDown, DamageType dmgType, float dmgRatio, float dmgDelay, float duration, float speed, vector<string> animClipName, vector<string> soundName)
-			:skillName(skillName), element(element), attackType(attackType), attackCntLim(attackCntLim), attackInterval(attackInterval), distance(distance), attackShape(attackShape), amplitude(amplitude), frequency(frequency), waveType(waveType), fallingHeight(fallingHeight), rangeType(rangeType), playerAction(playerAction), skillDelay(skillDelay), skillCoolDown(skillCoolDown), dmgType(dmgType), dmgRatio(dmgRatio), dmgDelay(dmgDelay), duration(duration), speed(speed), animClipName(animClipName), soundName(soundName) {}
+		Set(string skillName, Element element, AttackType attackType, int attackCntLim, float attackInterval, float distance, AttackShape attackShape, float amplitude, float frequency, WaveType waveType, float fallingHeight, RangeType rangeType, Player::SkillAction playerAction, StopMoving stopMoving, float skillDelay, float skillCoolDown, DamageType dmgType, float dmgRatio, float dmgDelay, float duration, float speed, vector<string> animClipName, vector<string> soundName)
+			:skillName(skillName), element(element), attackType(attackType), attackCntLim(attackCntLim), attackInterval(attackInterval), distance(distance), attackShape(attackShape), amplitude(amplitude), frequency(frequency), waveType(waveType), fallingHeight(fallingHeight), rangeType(rangeType), playerAction(playerAction), stopMoving(stopMoving), skillDelay(skillDelay), skillCoolDown(skillCoolDown), dmgType(dmgType), dmgRatio(dmgRatio), dmgDelay(dmgDelay), duration(duration), speed(speed), animClipName(animClipName), soundName(soundName) {}
 		void Reset();
 	};
 
@@ -124,6 +130,7 @@ public:
 	void Update(float dt);
 	void Draw(RenderWindow& window);
 
+	bool GetDoing() { return isDoing; }
 	Set* GetSetting() { return setting; }
 
 	Vector2f GetSkillDir() const { return skillDir; };

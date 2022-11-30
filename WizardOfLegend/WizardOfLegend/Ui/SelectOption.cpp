@@ -23,7 +23,7 @@ SelectOption::~SelectOption()
 void SelectOption::Init()
 {
 	auto windowSize = (Vector2f)FRAMEWORK->GetWindowSize();
-	vector<string> opts = { "SkillName", "Element", "AttackType", "AttackCntLim", "AttackInterval", "Distance", "AttackShape", "Amplitude", "Frequency", "WaveType",  "FallingHeight", "RangeType", "PlayerAction", "SkillDelay", "SkillCoolDown", "DmgType", "DmgRatio", "DmgDelay", "Duration", "Speed", "AnimClipName_1", "AnimClipName_2", "SoundName_1", "SoundName_2" };
+	vector<string> opts = { "SkillName", "Element", "AttackType", "AttackCntLim", "AttackInterval", "Distance", "AttackShape", "Amplitude", "Frequency", "WaveType",  "FallingHeight", "RangeType", "PlayerAction", "StopMoving", "SkillDelay", "SkillCoolDown", "DmgType", "DmgRatio", "DmgDelay", "Duration", "Speed", "AnimClipName_1", "AnimClipName_2", "SoundName_1", "SoundName_2" };
 	selectedSet.animClipName.assign(2, "");
 	float buttonHeight = windowSize.y * 0.8f / (int)Options::Count - 4.f;
 	options.first = new OptionButtons();
@@ -159,6 +159,24 @@ void SelectOption::Init()
 				optButtons.insert({ Options::PlayerAction, buttons });
 			}
 			break;
+		case Options::StopMoving:
+			{
+				OptionButtons* buttons = new OptionButtons();
+				buttons->SetActive(false);
+				buttons->SetPos(button2->GetPos() + Vector2f(0.f, buttonHeight));
+				vector<string> btnStr = { "Movable", "Immovable" };
+				for (int j = 0; j < btnStr.size(); ++j)
+				{
+					Button2* newButton = new Button2();
+					buttons->AddButton(newButton, btnStr[j], button2->GetHitBounds(), Color::White, Color(163, 204, 162, 255));
+					newButton->MousePointerOn = bind(&Button2::DefaultMouseOn, newButton);
+					newButton->MousePointerOff = bind(&Button2::DefaultMouseOff, newButton);
+					newButton->ClickOn = bind(&SelectOption::ApplyOptBtn, this, (Options)i, buttons, newButton);
+				}
+				button2->ClickOn = bind(&OptionButtons::SetActive, buttons, true);
+				optButtons.insert({ Options::StopMoving, buttons });
+			}
+			break;
 		case Options::DmgType:
 			{
 				OptionButtons* buttons = new OptionButtons();
@@ -259,7 +277,7 @@ void SelectOption::Update(float dt)
 	if (InputMgr::GetMouseButtonDown(Mouse::Left) && InputMgr::GetMousePos().x < windowSize.x * 0.7f)
 	{
 		Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
-		if(player->GetCurrSkillSet()->GetCurrSkill()->GetSetting()->playerAction == Player::SkillAction::Dash &&
+		if(player->GetSkillSets()[0]->GetCurrSkill()->GetSetting()->playerAction == Player::SkillAction::Dash &&
 			(player->GetState() == Player::States::Idle || player->GetState() == Player::States::Run))
 			player->SetState(Player::States::Dash);
 	}
@@ -543,6 +561,18 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 		break;
 	case SelectOption::Options::PlayerAction:
 		selectedSet.playerAction = (Player::SkillAction)vecIdx;
+		switch ((Player::SkillAction)vecIdx)
+		{
+		case Player::SkillAction::Dash:
+			DeactivateOption(Options::StopMoving);
+			break;
+		default:
+			ActivateOption(Options::StopMoving);
+			break;
+		}
+		break;
+	case SelectOption::Options::StopMoving:
+		selectedSet.stopMoving = (Skill::StopMoving)vecIdx;
 		break;
 	case SelectOption::Options::DmgType:
 		switch ((Skill::DamageType)vecIdx)
@@ -630,6 +660,9 @@ void SelectOption::SaveSetToCSV()
 				case SelectOption::Options::PlayerAction:
 					doc.SetCell(j, i, (int)selectedSet.playerAction);
 					break;
+				case SelectOption::Options::StopMoving:
+					doc.SetCell(j, i, (int)selectedSet.stopMoving);
+					break;
 				case SelectOption::Options::DmgType:
 					doc.SetCell(j, i, (int)selectedSet.dmgType);
 					break;
@@ -664,6 +697,9 @@ void SelectOption::SaveSetToCSV()
 				break;
 			case SelectOption::Options::PlayerAction:
 				doc.SetCell(j, row, (int)selectedSet.playerAction);
+				break;
+			case SelectOption::Options::StopMoving:
+				doc.SetCell(j, row, (int)selectedSet.stopMoving);
 				break;
 			case SelectOption::Options::DmgType:
 				doc.SetCell(j, row, (int)selectedSet.dmgType);
@@ -710,6 +746,9 @@ void SelectOption::Load(const string& skillName)
 			break;
 		case SelectOption::Options::PlayerAction:
 			ApplyOptBtnIdx(Options::PlayerAction, (int)selectedSet.playerAction);
+			break;
+		case SelectOption::Options::StopMoving:
+			ApplyOptBtnIdx(Options::StopMoving, (int)selectedSet.stopMoving);
 			break;
 		case SelectOption::Options::DmgType:
 			ApplyOptBtnIdx(Options::DmgType, (int)selectedSet.dmgType);

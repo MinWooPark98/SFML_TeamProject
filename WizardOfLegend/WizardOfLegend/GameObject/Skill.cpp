@@ -22,10 +22,12 @@ void Skill::Reset()
 		projectile->SetActive(false);
 	}
 	projectiles.clear();
-	isDoing = false;
-	attackCnt = 0;
-	attackTimer = 0.f;
-	skillTimer = 0.f;
+	for (auto circle : castingCircles)
+	{
+		circle->SetActive(false);
+	}
+	castingCircles.clear();
+	Reprepare();
 }
 
 void Skill::Reprepare()
@@ -84,7 +86,7 @@ void Skill::Do()
 	{
 	case Skill::SubjectType::Player:
 		if(!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
-			((Player*)subject)->Action();
+			((Player*)subject)->Action(this);
 		obj->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
 		switch (setting->attackShape)
 		{
