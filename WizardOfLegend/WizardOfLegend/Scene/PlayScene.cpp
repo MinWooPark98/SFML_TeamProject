@@ -161,17 +161,6 @@ void PlayScene::Init()
 		}
 	}
 
-
-
-	//for (int i = 0; i < room.size(); i++)
-	//{
-	//	if (Utils::OBB(draw->GetHitBox(), room[i].GetHitBox()))
-	//	{
-	//		collisionList[i][Object::ObjTypes::Wall].push_back(draw);
-	//	}
-	//}
-	//collisionList[0][Object::ObjTypes::Wall].push_back(draw);
-
 	for (auto& a : objList)
 	{
 		for (auto& b : a.second)
@@ -183,17 +172,12 @@ void PlayScene::Init()
 					if (Utils::OBB(c->GetHitBox(), room[i].GetHitBox()))
 					{
 						collisionList[i][c->GetObjType()].push_back(c);
-						cout << (int)c->GetObjType() << endl;
+						cout << (int)c->GetObjType() << endl; // 5 = Sector
 					}
 				}
 			}
 		}
 	}
-
-	//for (int i = 0; i < room.size(); i++)
-	//{
-	//	cout << room[i].GetHitBox().getGlobalBounds().height << " " << room[i].GetHitBox().getGlobalBounds().width << endl;
-	//}
 
 	auto& tiles = objList[LayerType::Tile][0];
 	mapSize.left = 0;
@@ -217,10 +201,10 @@ void PlayScene::Update(float dt)
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
-		if (!this->GetPause())
-			this->SetPause(true);
+		if (!GetPause())
+			SetPause(true);
 		else
-			this->SetPause(false);
+			SetPause(false);
 	}
 
 
@@ -234,7 +218,7 @@ void PlayScene::Update(float dt)
 				{
 					if (Utils::OBB(enemy->GetHitBox(), coll->GetHitBox()))
 					{
-						cout << "hi" << endl;
+						
 					}
 				}
 			}
