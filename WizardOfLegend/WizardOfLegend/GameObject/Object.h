@@ -18,7 +18,8 @@ public:
         Wall,
         Player,
         Enemy,
-        rnejddl,
+        FinalBoss,
+        Cliff,
         Sector,
         ETC,
     };

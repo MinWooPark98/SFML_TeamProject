@@ -43,5 +43,7 @@ public:
 
 	void SetSize(const Vector2f& size) { ((RectangleShape*)cliff)->setSize(size); }
 	const Vector2f& GetSize() const { return ((RectangleShape*)cliff)->getSize(); }
+
+	Shape* GetCliffShape() const { return cliff; };
 };
 

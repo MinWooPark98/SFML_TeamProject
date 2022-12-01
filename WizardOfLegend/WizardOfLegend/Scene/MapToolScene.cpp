@@ -220,6 +220,8 @@ void MapToolScene::Update(float dt)
 					sectorJ = j;
 					sectorI = i;
 				}
+				if (sector == nullptr)
+					return;
 				sector->UpdateNowDraw(dt, nowDraw);
 				sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
 				cout << "grids " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
@@ -707,8 +709,8 @@ void MapToolScene::Load(string path)
 		}
 		else if (obj.type == "WALL")
 		{
-			objList[LayerType::Tile][j].push_back(draw);
-			gridObjs[LayerType::Tile][j][i] = draw;
+			objList[LayerType::Wall][j].push_back(draw);
+			gridObjs[LayerType::Wall][j][i] = draw;
 		}
 		else if (obj.type == "TILE")
 		{

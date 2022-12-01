@@ -12,6 +12,7 @@
 #include "../Ui/PlayUiMgr.h"
 #include "../GameObject/SkillSet.h"
 #include "../GameObject/Sector.h"
+#include "../GameObject/Cliff.h"
 
 
 PlayScene::PlayScene()
@@ -45,8 +46,8 @@ void PlayScene::Init()
 			objList[LayerType::Sector][0].push_back(sector);
 		}
 	}
-	//for (int i = 0; i < room.size(); i++)
-	for (int i = 0; i < 6; i++)
+	
+	for (int i = 0; i < room.size(); i++)
 	{
 		collisionList.push_back(map<Object::ObjTypes, list<Object*>>());
 	}
@@ -63,11 +64,6 @@ void PlayScene::Init()
 			draw->SetPos(obj.position);
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::Wall);
-			if (obj.path == "graphics/Map/Palette/Empty.png")
-			{
-				draw->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/Empty.png"));
-				draw->SetObjType(Object::ObjTypes::rnejddl);				
-			}
 
 			objList[LayerType::Object][0].push_back(draw);
 		}
@@ -120,6 +116,7 @@ void PlayScene::Init()
 				lancer->SetPos(obj.position);
 				lancer->SetCardPos(lancer->GetPos());
 				lancer->SetObjType(Object::ObjTypes::Enemy);
+				lancer->SetActive(false);
 				objList[LayerType::Object][0].push_back(lancer);
 				collisionList[0][Object::ObjTypes::Enemy].push_back(lancer);
 			}
@@ -132,6 +129,7 @@ void PlayScene::Init()
 				archer->SetCardPos(archer->GetPos());
 				archer->SetObjType(Object::ObjTypes::Enemy);
 				archer->SetColor(3);
+				archer->SetActive(false);
 				objList[LayerType::Object][1].push_back(archer);
 				collisionList[0][Object::ObjTypes::Enemy].push_back(archer);
 			}
@@ -143,8 +141,8 @@ void PlayScene::Init()
 				heavyBombingArcher->SetPos(obj.position);
 				heavyBombingArcher->SetCardPos(heavyBombingArcher->GetPos());
 				heavyBombingArcher->SetObjType(Object::ObjTypes::Enemy);
-
 				heavyBombingArcher->SetColor(2);
+				heavyBombingArcher->SetActive(false);
 				objList[LayerType::Object][2].push_back(heavyBombingArcher);
 				collisionList[0][Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
 			}
@@ -155,9 +153,22 @@ void PlayScene::Init()
 				fireBoss->SetName(obj.type);
 				fireBoss->SetPos(obj.position);
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
+				fireBoss->SetActive(false);
 				objList[LayerType::Object][3].push_back(fireBoss);
 				collisionList[0][Object::ObjTypes::Enemy].push_back(fireBoss);
 			}
+		}
+		else if (obj.type == "CLIFF")
+		{
+			Cliff* cliff = new Cliff();
+			cliff->SetName(obj.type);
+			cliff->SetPos(obj.position);
+			cliff->SetSize(obj.size);
+			cliff->SetHitBox((FloatRect)cliff->GetCliffShape()->getGlobalBounds());
+			cliff->SetHitBox({100, 100, 100, 100}, Color::Blue);
+			cliff->SetObjType(Object::ObjTypes::Cliff);
+			objList[LayerType::Object][3].push_back(cliff);
+			collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
 		}
 	}
 
@@ -206,7 +217,19 @@ void PlayScene::Update(float dt)
 		else
 			SetPause(false);
 	}
-
+	//플레이어 방 위치 
+	for (int i = 0; i < room.size(); i++)
+	{
+		if (Utils::OBB(player->GetHitBox(), room[i].GetHitBox()))
+		{
+			collisionList[i][player->GetObjType()].push_back(player);
+			SpownEnemy(i);
+		}
+		else
+		{
+			collisionList[i][player->GetObjType()].remove(player);
+		}
+	}
 
 	for (int i = 0; i < room.size(); i++)
 	{
@@ -222,7 +245,7 @@ void PlayScene::Update(float dt)
 						bool topandLow = false;
 						
 						// 적 우점
-						float enemyRightPoint = enemy->GetLowHitBounds().width + enemy->GetLowHitBounds().left;
+						float enemyRightPoint = enemy->GetLowHitBounds().  width + enemy->GetLowHitBounds().left;
 						// 적 하점
 						float enemyLowPoint = enemy->GetLowHitBounds().height + enemy->GetLowHitBounds().top;
 						// 벽 x
@@ -305,4 +328,18 @@ void PlayScene::Enter()
 void PlayScene::Exit()
 {
 	Scene::Exit();
+}
+
+void PlayScene::SpownEnemy(int i)
+{
+	for (auto& c_list : collisionList[i])
+	{
+		for (auto& obj : c_list.second)
+		{
+			if (obj->GetObjType() == Object::ObjTypes::Enemy)
+			{
+				obj->SetActive(true);
+			}
+		}
+	}
 }
