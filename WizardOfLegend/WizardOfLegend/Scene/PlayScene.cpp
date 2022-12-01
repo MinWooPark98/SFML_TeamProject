@@ -220,41 +220,34 @@ void PlayScene::Update(float dt)
 					{
 						bool leftandRight = false;
 						bool topandLow = false;
-						bool eorkrtjs = false;
-
+						
 						// 적 우점
-						auto enemyRightPoint = enemy->GetLowHitBounds().width + enemy->GetLowHitBounds().left;
+						float enemyRightPoint = enemy->GetLowHitBounds().width + enemy->GetLowHitBounds().left;
 						// 적 하점
-						auto enemyLowPoint = enemy->GetLowHitBounds().height + enemy->GetLowHitBounds().top;
-
+						float enemyLowPoint = enemy->GetLowHitBounds().height + enemy->GetLowHitBounds().top;
 						// 벽 x
-						auto collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
+						float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
 						// 벽 y
-						auto collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+						float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
 
-						if (enemy->GetLowHitBounds().left >= collXPoint ||
-							enemyRightPoint <= collXPoint)
+						if (enemy->GetLowHitBounds().left >= collXPoint || enemyRightPoint <= collXPoint )
 						{
-							if (enemyLowPoint >= collYPoint)
-								leftandRight = true;
+							leftandRight = true;
 						}
-
-						if (enemy->GetLowHitBounds().height <= collYPoint ||
-							enemyLowPoint >= collYPoint)
+						if (enemy->GetLowHitBounds().height <= collYPoint || enemyLowPoint >= collYPoint)
 						{
-							if (enemyRightPoint >= collXPoint)
-								topandLow = true;
+							topandLow = true;
 						}
 
 						if (topandLow)
 						{
 							enemy->SetPos({ enemy->GetPos().x, enemy->GetLastPosition().y });
-							cout << "a" << endl;
+							//cout << "LR" << endl;
 						}
 						if (leftandRight)
 						{
 							enemy->SetPos({ enemy->GetLastPosition().x, enemy->GetPos().y });
-							cout << "b" << endl;
+							//cout << "TB" << endl;
 						}
 					}
 				}

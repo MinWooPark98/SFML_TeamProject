@@ -65,7 +65,7 @@ void Archer::Init()
 	SetHitBox({ 20.f, 20.f, 10.f, 30.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 	SetLowHitBox({ 20.f, 20.f, 10.f, 5.f }, Color::White);
-	lowhitbox.setOrigin(lowhitbox.getSize().x * 0.5f, lowhitbox.getSize().y * 0.5f);
+	SetLowHitBoxOrigin(Origins::TC);
 }
 
 void Archer::Update(float dt)
