@@ -48,7 +48,7 @@ protected:
     bool isUi;
     bool viewIn;
 
-    Vector2f monsterLastPosition;
+    Vector2f lastPosition;
 
 public:
     Object();
@@ -107,6 +107,6 @@ public:
     }
     RectangleShape& GetLowHitBox() { return lowhitbox; }
 
-    Vector2f GetLastPosition() const { return monsterLastPosition; };
-    void SetMonsterLastPosition(Vector2f pos) { monsterLastPosition = pos; };
+    Vector2f GetLastPosition() const { return lastPosition; };
+    void SetLastPosition(Vector2f pos) { lastPosition = pos; };
 };

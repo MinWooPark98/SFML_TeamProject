@@ -193,10 +193,14 @@ void Player::Init()
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
 	playerShader.setUniform("paletteIndex", (float)paletteIdx / paletteSize);	// index 바꿔주어 색 변경 -> 속성 변경 추후 추가
+	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
+	SetLowHitBoxOrigin(Origins::MC);
 }
 
 void Player::Update(float dt)
 {
+	SetLastPosition(GetPos());
+
 	SpriteObj::Update(dt);
 	animator->Update(dt);
 

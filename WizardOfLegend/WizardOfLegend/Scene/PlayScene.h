@@ -15,6 +15,7 @@ protected:
 	vector<Sector> room;
 	vector<map<Object::ObjTypes, list<Object*>>> collisionList;
 
+	int playerRoom;
 
 public:
 	PlayScene();

@@ -14,7 +14,6 @@
 #include "../GameObject/Sector.h"
 #include "../GameObject/Cliff.h"
 
-
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
 {
@@ -40,7 +39,6 @@ void PlayScene::Init()
 			sector->SetPos(obj.position);
 			sector->SetSize(obj.size);
 			sector->SetHitBox((FloatRect)sector->GetSectorShape()->getGlobalBounds());
-			//sector->SetHitBox({100, 100, 100, 100}, Color::Red);
 			sector->SetObjType(Object::ObjTypes::Sector);
 			room.push_back(*sector);
 			objList[LayerType::Sector][0].push_back(sector);
@@ -217,13 +215,14 @@ void PlayScene::Update(float dt)
 		else
 			SetPause(false);
 	}
+
 	//플레이어 방 위치 
 	for (int i = 0; i < room.size(); i++)
 	{
-		if (Utils::OBB(player->GetHitBox(), room[i].GetHitBox()))
+		if (player->GetLowHitBounds().intersects(room[i].GetHitBounds()))
 		{
 			collisionList[i][player->GetObjType()].push_back(player);
-			SpownEnemy(i);
+			playerRoom = i;
 		}
 		else
 		{
@@ -231,49 +230,74 @@ void PlayScene::Update(float dt)
 		}
 	}
 
-	for (int i = 0; i < room.size(); i++)
+	if (!collisionList[playerRoom].empty())
 	{
-		if (!collisionList[i].empty())
+		for (auto& enemy : collisionList[playerRoom][Object::ObjTypes::Enemy])
 		{
-			for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+			for (auto& coll : collisionList[playerRoom][Object::ObjTypes::Wall])
 			{
-				for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
+				if (enemy->GetLowHitBounds().intersects(coll->GetHitBounds()))
 				{
-					if (Utils::OBB(enemy->GetLowHitBox(), coll->GetHitBox()))
+					bool leftandRight = false;
+					bool topandLow = false;
+
+					// 적 우점
+					float enemyRightPoint = enemy->GetLowHitBounds().width + enemy->GetLowHitBounds().left;
+					// 적 하점
+					float enemyLowPoint = enemy->GetLowHitBounds().height + enemy->GetLowHitBounds().top;
+
+					// 벽 x
+					float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
+					// 벽 y
+					float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+
+					if (enemy->GetLowHitBounds().left >= collXPoint || enemyRightPoint <= collXPoint)
 					{
-						bool leftandRight = false;
-						bool topandLow = false;
-						
-						// 적 우점
-						float enemyRightPoint = enemy->GetLowHitBounds().  width + enemy->GetLowHitBounds().left;
-						// 적 하점
-						float enemyLowPoint = enemy->GetLowHitBounds().height + enemy->GetLowHitBounds().top;
-						// 벽 x
-						float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
-						// 벽 y
-						float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+						leftandRight = true;
+					}
+					if (enemy->GetLowHitBounds().height <= collYPoint || enemyLowPoint >= collYPoint)
+					{
+						topandLow = true;
+					}
 
-						if (enemy->GetLowHitBounds().left >= collXPoint || enemyRightPoint <= collXPoint )
-						{
-							leftandRight = true;
-						}
-						if (enemy->GetLowHitBounds().height <= collYPoint || enemyLowPoint >= collYPoint)
-						{
-							topandLow = true;
-						}
-
-						if (topandLow)
-						{
-							enemy->SetPos({ enemy->GetPos().x, enemy->GetLastPosition().y });
-							//cout << "LR" << endl;
-						}
-						if (leftandRight)
-						{
-							enemy->SetPos({ enemy->GetLastPosition().x, enemy->GetPos().y });
-							//cout << "TB" << endl;
-						}
+					if (topandLow)
+					{
+						enemy->SetPos({ enemy->GetPos().x, enemy->GetLastPosition().y });
+					}
+					if (leftandRight)
+					{
+						enemy->SetPos({ enemy->GetLastPosition().x, enemy->GetPos().y });
 					}
 				}
+			}
+		}
+	}
+
+	for (auto& coll : collisionList[playerRoom][Object::ObjTypes::Wall])
+	{
+		if (player->GetLowHitBounds().intersects(coll->GetHitBounds()))
+		{
+			bool leftandRight = false;
+			bool topandLow = false;
+
+			float playerRightPoint = player->GetLowHitBounds().width + player->GetLowHitBounds().left;
+			float playerLowPoint = player->GetLowHitBounds().height + player->GetLowHitBounds().top;
+
+			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
+			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+
+			if (player->GetLowHitBounds().height <= collYPoint || playerLowPoint >= collYPoint)
+				topandLow = true;
+			if (player->GetLowHitBounds().left >= collXPoint || playerRightPoint <= collXPoint)
+				leftandRight = true;
+
+			if (topandLow)
+			{
+				player->SetPos({ player->GetPos().x, player->GetLastPosition().y });
+			}
+			if (leftandRight)
+			{
+				player->SetPos({ player->GetLastPosition().x, player->GetPos().y });
 			}
 		}
 	}
@@ -290,7 +314,7 @@ void PlayScene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetPos().x<max.x + 16 && obj->GetPos().y < max.y + 16 && obj->GetPos().x > min.x - 16 && obj->GetPos().y > min.y - 16)
+				if (obj->GetPos().x<max.x + 32 && obj->GetPos().y < max.y + 32 && obj->GetPos().x > min.x - 32 && obj->GetPos().y > min.y - 32)
 				{
 					obj->SetActive(true);
 				}

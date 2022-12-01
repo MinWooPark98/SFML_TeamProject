@@ -43,7 +43,7 @@ void Object::SetPos(const Vector2f& pos)
 {
     position = pos;
     hitbox.setPosition(position);
-    lowhitbox.setPosition({ position.x, position.y + (hitbox.getSize().y * 0.5f)});
+    lowhitbox.setPosition({ position.x, position.y + (hitbox.getSize().y * 0.5f) + (lowhitbox.getSize().y * 0.5f)});
 }
 
 const Vector2f& Object::GetPos() const
@@ -63,7 +63,7 @@ void Object::Update(float dt)
     if (!(objtype == ObjTypes::Wall))
     {
         hitbox.setPosition(position);
-        lowhitbox.setPosition({ position.x, position.y + (hitbox.getSize().y * 0.5f) });
+        lowhitbox.setPosition({ position.x, position.y + (hitbox.getSize().y * 0.5f) + (lowhitbox.getSize().y * 0.5f) });
     }
     if (InputMgr::GetKeyDown(Keyboard::F1))
     {

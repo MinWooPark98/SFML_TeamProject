@@ -109,7 +109,7 @@ void Enemy::Update(float dt)
 		spawnAnimation.Update(dt);
 	}
 
-	SetMonsterLastPosition(GetPos());
+	SetLastPosition(GetPos());
 }
 
 void Enemy::SetColor(int index)

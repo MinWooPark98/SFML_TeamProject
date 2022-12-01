@@ -157,7 +157,7 @@ void PlayUiMgr::Init()
 		menuRec->setOrigin(menuRec->getSize().x * 0.5f, menuRec->getSize().y * 0.5f);
 		menuRec->setPosition({ windowSize.x * 0.5f, windowSize.y * 0.4f });
 		
-		vector<string> sceneNames = { "OPTION", "TITLE" ,"EXIT" };
+		vector<string> sceneNames = { "SKILL", "TITLE" ,"EXIT" };
 		for (int i = 0; i < 3; ++i)
 		{
 			Button2* button = new Button2();
@@ -334,21 +334,29 @@ void PlayUiMgr::Draw(RenderWindow& window)
 void PlayUiMgr::HpBarSizeControl(float dt)
 {
 	// 데미지 받음
-	if (InputMgr::GetKeyDown(Keyboard::Key::G)) // 충돌 조건으로 변경
+	//if (InputMgr::GetKeyDown(Keyboard::Key::G)) // 충돌 조건으로 변경
+	//{
+	//	//monsterDamage = 50; // 몬스터 데미지로 변경
+
+	//	if (playerCurHp - monsterDamage <= 0.f)
+	//	{
+	//		playerCurHp = 0.f;
+	//		HpBarFill->SetSize({ 0, HpBarFill->GetSize().y * 4 });
+	//	}
+	//	else
+	//	{
+	//		playerCurHp -= monsterDamage;
+	//	}
+	//}
+	if (playerCurHp - monsterDamage <= 0.f)
 	{
-		int damage = 50; // 몬스터 데미지로 변경
-
-		if (playerCurHp - damage <= 0.f)
-		{
-			playerCurHp = 0.f;
-			HpBarFill->SetSize({ 0, HpBarFill->GetSize().y * 4 });
-		}
-		else
-		{
-			playerCurHp -= damage;
-		}
+		playerCurHp = 0.f;
+		HpBarFill->SetSize({ 0, HpBarFill->GetSize().y * 4 });
 	}
-
+	else
+	{
+		playerCurHp -= monsterDamage;
+	}
 	// 회복
 	if (InputMgr::GetKeyDown(Keyboard::Key::Z))
 	{
