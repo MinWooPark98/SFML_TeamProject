@@ -13,7 +13,6 @@
 #include "../GameObject/SkillSet.h"
 #include "../GameObject/Sector.h"
 
-
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
 {

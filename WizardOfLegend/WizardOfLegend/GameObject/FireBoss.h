@@ -40,10 +40,11 @@ protected:
 
 	vector<Skill*> skills;
 
-	float jumpDuration = 3.f;
-	float jumpTimer = 0.f;
-	float jumpDistance = 0.f;
-	float jumpPosY = 0.f;
+	SpriteObj* fireWing;
+	Animator fireWingAnimation;
+
+	SpriteObj* firebossKick;
+	Animator kickAnimation;
 
 public:
 	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};
@@ -77,5 +78,7 @@ public:
 	void UpdateMeteor(float dt);
 
 	void SetPlayerLastPos(Vector2f playerPos) { playerLastPos = playerPos; };
+
+	RectangleShape GetFireBossKickHitBox() const { return firebossKick->GetHitBox(); }; // OBB 충돌에 쓰기 위함
 };
 

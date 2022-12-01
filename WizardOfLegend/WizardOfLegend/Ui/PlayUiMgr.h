@@ -59,6 +59,8 @@ protected:
 	float spawnTimer = 2.f;
 	float dieTimer = 1.f;
 
+	int monsterDamage = 0;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();
@@ -72,4 +74,6 @@ public:
 	void HpBarSizeControl(float dt);
 	void BossHpBraSizeControl(float dt);
 	void OverdriveBarControl(float dt);
+
+	void SetMonsterDamage(int damage) { monsterDamage = damage; };
 };

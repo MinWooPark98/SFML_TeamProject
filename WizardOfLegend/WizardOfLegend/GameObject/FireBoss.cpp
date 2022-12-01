@@ -46,6 +46,22 @@ void FireBoss::Init()
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossDownThrowingIdle"));
 	animation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossUpThrowingIdle"));
 
+	fireWing = new SpriteObj();
+	fireWing->SetOrigin(Origins::MC);
+	fireWing->SetScale({1.3, 1.3});
+	fireWingAnimation.SetTarget(&fireWing->GetSprite());
+	fireWingAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossWing"));
+
+	SpriteObj* kickSprite = new SpriteObj();
+	kickSprite->SetTexture(*RESOURCE_MGR->GetTexture("graphics/FireHitEffectLarge0.png")); 
+	firebossKick = new SpriteObj();
+	firebossKick->SetOrigin(Origins::MC);
+	firebossKick->SetScale({ 1.5, 1.5 });
+	firebossKick->SetHitBox((FloatRect)kickSprite->GetTextureRect(), Color::Red);
+	firebossKick->SetHitBoxOrigin(Origins::MC);
+	kickAnimation.SetTarget(&firebossKick->GetSprite());
+	kickAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossKick"));
+
 	SetPos({200, 200});
 	SetSpeed(700.f);
 	SetMoveScale(10000.f);
@@ -54,7 +70,7 @@ void FireBoss::Init()
 	SetMaxHp(1);
 	SetCurHp(GetMaxHp());
 	RandomPatternSet(AttackType::None);
-	//attackType = AttackType::Meteor;
+	attackType = AttackType::ThirdAttack;
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -105,6 +121,8 @@ void FireBoss::Update(float dt)
 	if (attackType == AttackType::ThirdAttack && curBossState == BossStates::Attack && thirdAttackCount > 0 && patternDelay <= 0.f)
 	{
 		auto kick = Utils::Normalize(playerLastPos - lastPos);
+		firebossKick->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
+		firebossKick->GetHitBox().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
 		Translate({ (dt * speed * kick) / 5.f });
 	}
 
@@ -130,6 +148,9 @@ void FireBoss::Update(float dt)
 
 	patternDelay -= dt;
 	animation.Update(dt);
+	fireWingAnimation.Update(dt);
+	kickAnimation.Update(dt);
+
 	for (auto skill : skills)
 	{
 		skill->Update(dt);
@@ -142,6 +163,17 @@ void FireBoss::Draw(RenderWindow& window)
 	{
 		Enemy::Draw(window);
 		window.draw(sprite);
+
+		if (fireWing->GetActive())
+			fireWing->Draw(window);
+		if (firebossKick->GetActive())
+		{
+			firebossKick->Draw(window);
+
+			if (isDevMode)
+				window.draw(firebossKick->GetHitBox());
+		}
+
 		for (auto skill : skills)
 		{
 			skill->Draw(window);
@@ -182,6 +214,8 @@ void FireBoss::SetState(BossStates newState)
 			{
 				attackDelay = 0.3f;
 				nextPatternDelay = 1.5f;
+				fireWing->SetPos({ GetPos().x, GetPos().y - (GetSize().y * 0.5f)});
+				firebossKick->SetPos({ GetPos().x, GetPos().y });
 				switch (moveType)
 				{
 				case FireBoss::MoveType::LeftAndRight:
@@ -265,25 +299,6 @@ void FireBoss::SetState(BossStates newState)
 			}
 			break;
 		case FireBoss::AttackType::DragonAttack:
-			//if (nextPatternDelay > 0.f)
-			//{
-			//	switch (lastMoveType)
-			//	{
-			//	case FireBoss::MoveType::LeftAndRight:
-			//		direction.x < 0.f ? animation.Play("FireBossLeftRun") : animation.Play("FireBossRightRun");
-			//		break;
-			//	case FireBoss::MoveType::TopAndBottom:
-			//		direction.y < 0.f ? animation.Play("FireBossUpRun") : animation.Play("FireBossDownRun");
-			//		break;
-			//	}
-			//	SetPos({0, 0});
-			//}
-			//else
-			//{
-			//	animation.Play(playerLastPos.x < lastPos.x ? "FireBossLeftLand" : "FireBossRightLand");
-			//	attackDelay = 1.f;
-			//	nextPatternDelay = 1.5f;
-			//}
 			break;
 		case FireBoss::AttackType::Meteor:
 			break;
@@ -424,6 +439,11 @@ void FireBoss::UpdateThirdAttack(float dt)
 				patternCount--;
 
 			thirdAttackCount--;
+			fireWing->SetActive(true);
+			fireWingAnimation.Play("FireBossWing");
+
+			firebossKick->SetActive(true);
+			kickAnimation.Play("FireBossKick");
 		}
 	}
 
@@ -434,7 +454,8 @@ void FireBoss::UpdateThirdAttack(float dt)
 	{
 		RandomPatternSet(AttackType::ThirdAttack);
 		PatternOptionSet();
-
+		fireWing->SetActive(false);
+		firebossKick->SetActive(false);
 		SetState(BossStates::Move);
 	}
 }

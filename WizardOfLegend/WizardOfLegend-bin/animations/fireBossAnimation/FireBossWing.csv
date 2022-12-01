@@ -1,0 +1,12 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FireBossWing,0,20,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FireWings0.png,0,0,96,96,48,48,0,0
+graphics/FireWings1.png,0,0,96,96,48,48,0,0
+graphics/FireWings2.png,0,0,96,96,48,48,0,0
+graphics/FireWings3.png,0,0,96,96,48,48,0,0
+graphics/FireWings4.png,0,0,96,96,48,48,0,0
+graphics/FireWings5.png,0,0,96,96,48,48,0,0
+graphics/FireWings6.png,0,0,96,96,48,48,0,0
+graphics/FireWings7.png,0,0,96,96,48,48,0,0
