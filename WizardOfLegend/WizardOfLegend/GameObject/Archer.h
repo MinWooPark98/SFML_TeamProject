@@ -37,4 +37,7 @@ public:
 
 	void SetAttackStartDelay(float delay) { attackStart = delay; };
 	float GetAttackStartDelay() { return attackStart; };
+
+	RectangleShape GetArrowDir() const { return arrowDir; };
+	SpriteObj* GetArrow() const { return arrow; };
 };
