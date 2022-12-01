@@ -241,6 +241,10 @@ void FireBoss::SetState(BossStates newState)
 					animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpFireballIdle" : "FireBossDownFireballIdle");
 					break;
 				}
+				fireWing->SetActive(true);
+				fireWing->SetPos({ GetPos().x, GetPos().y - (GetSize().y * 0.5f)});
+				fireWing->GetSprite().setRotation(Utils::Angle(GetPos(), GetPos()));
+				fireWingAnimation.Play("FireBossWing");
 			}
 			else
 			{
@@ -257,6 +261,8 @@ void FireBoss::SetState(BossStates newState)
 					animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpFireball" : "FireBossDownFireball");
 					break;
 				}
+
+				fireWing->SetActive(false);
 			}
 			break;
 		case FireBoss::AttackType::ThrowingKnife:
@@ -475,7 +481,6 @@ void FireBoss::UpdateFireball(float dt)
 
 			if (patternCount > 0)
 				patternCount--;
-
 			SetState(BossStates::Move);
 		}
 	}
