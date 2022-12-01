@@ -157,7 +157,7 @@ void PlayUiMgr::Init()
 		menuRec->setOrigin(menuRec->getSize().x * 0.5f, menuRec->getSize().y * 0.5f);
 		menuRec->setPosition({ windowSize.x * 0.5f, windowSize.y * 0.4f });
 		
-		vector<string> sceneNames = { "OPTION", "TITLE" ,"EXIT" };
+		vector<string> sceneNames = { "SKILL", "TITLE" ,"EXIT" };
 		for (int i = 0; i < 3; ++i)
 		{
 			Button2* button = new Button2();
