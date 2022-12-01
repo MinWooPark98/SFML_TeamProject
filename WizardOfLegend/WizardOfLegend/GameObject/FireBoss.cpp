@@ -215,7 +215,8 @@ void FireBoss::SetState(BossStates newState)
 				attackDelay = 0.3f;
 				nextPatternDelay = 1.5f;
 				fireWing->SetPos({ GetPos().x, GetPos().y - (GetSize().y * 0.5f)});
-				firebossKick->SetPos({ GetPos().x, GetPos().y });
+				isKick = true;
+				firebossKick->SetPos(GetPos());
 				switch (moveType)
 				{
 				case FireBoss::MoveType::LeftAndRight:

@@ -333,21 +333,6 @@ void PlayUiMgr::Draw(RenderWindow& window)
 
 void PlayUiMgr::HpBarSizeControl(float dt)
 {
-	// 데미지 받음
-	//if (InputMgr::GetKeyDown(Keyboard::Key::G)) // 충돌 조건으로 변경
-	//{
-	//	//monsterDamage = 50; // 몬스터 데미지로 변경
-
-	//	if (playerCurHp - monsterDamage <= 0.f)
-	//	{
-	//		playerCurHp = 0.f;
-	//		HpBarFill->SetSize({ 0, HpBarFill->GetSize().y * 4 });
-	//	}
-	//	else
-	//	{
-	//		playerCurHp -= monsterDamage;
-	//	}
-	//}
 	if (playerCurHp - monsterDamage <= 0.f)
 	{
 		playerCurHp = 0.f;
@@ -357,6 +342,7 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 	{
 		playerCurHp -= monsterDamage;
 	}
+
 	// 회복
 	if (InputMgr::GetKeyDown(Keyboard::Key::Z))
 	{

@@ -96,7 +96,6 @@ void PlayScene::Init()
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
 			objList[LayerType::Object][5].push_back(player);
-			collisionList[0][Object::ObjTypes::Player].push_back(player);
 			auto& skillSet = player->GetSkillSets();
 			skillSet[0]->Set("FireBall");
 			skillSet[1]->Set("JumpMeteor");
@@ -116,7 +115,6 @@ void PlayScene::Init()
 				lancer->SetObjType(Object::ObjTypes::Enemy);
 				lancer->SetActive(false);
 				objList[LayerType::Object][0].push_back(lancer);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(lancer);
 			}
 			else if (obj.path == "graphics/Map/ArcherNormal.png")
 			{
@@ -129,7 +127,6 @@ void PlayScene::Init()
 				archer->SetColor(3);
 				archer->SetActive(false);
 				objList[LayerType::Object][1].push_back(archer);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(archer);
 			}
 			else if (obj.path == "graphics/Map/ArcherBosspng.png")
 			{
@@ -142,7 +139,6 @@ void PlayScene::Init()
 				heavyBombingArcher->SetColor(2);
 				heavyBombingArcher->SetActive(false);
 				objList[LayerType::Object][2].push_back(heavyBombingArcher);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
 			}
 			else if (obj.path == "graphics/Map/FireBoss.png")
 			{
@@ -153,7 +149,6 @@ void PlayScene::Init()
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
 				fireBoss->SetActive(false);
 				objList[LayerType::Object][3].push_back(fireBoss);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(fireBoss);
 			}
 		}
 		else if (obj.type == "CLIFF")
@@ -194,9 +189,12 @@ void PlayScene::Init()
 	mapSize.width = (tiles.back())->GetPos().x + 16;
 	mapSize.height = (tiles.back())->GetPos().y;
 
-	for (auto& enemy : collisionList[0][Object::ObjTypes::Enemy])
+	for (int i = 0; i < room.size(); i++)
 	{
-		((Enemy*)enemy)->SetPlayer(player);
+		for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+		{
+			((Enemy*)enemy)->SetPlayer(player);
+		}
 	}
 
 	uiMgr = new PlayUiMgr();
@@ -300,6 +298,20 @@ void PlayScene::Update(float dt)
 				player->SetPos({ player->GetLastPosition().x, player->GetPos().y });
 			}
 		}
+	}
+
+	if (fireBoss->GetFireKick()->GetActive())
+	{
+		if (fireBoss->GetIsKick())
+		{
+			if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
+			{
+				((PlayUiMgr*)uiMgr)->SetMonsterDamage(50);
+				fireBoss->SetIsKick(false);
+			}
+		}
+		else
+			((PlayUiMgr*)uiMgr)->SetMonsterDamage(0);
 	}
 }
 

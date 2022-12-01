@@ -76,4 +76,6 @@ public:
 	void OverdriveBarControl(float dt);
 
 	void SetMonsterDamage(int damage) { monsterDamage = damage; };
+	void SetBossCurHp(int hp) { bossCurHp = hp; };
+	void SetBossMaxHp(int hp) { bossMaxHp = hp; };
 };

@@ -636,6 +636,6 @@ graphics/FireHitEffectLarge1.png,0
 graphics/FireHitEffectLarge2.png,0
 graphics/FireHitEffectLarge3.png,0
 graphics/FireHitEffectLarge4.png,0
-animations/skill/FireBossKick.csv,3
+animations/fireBossAnimation/FireBossKick.csv,3
 animations/player/GroundSlamDownEnd.csv,3
 animations/player/GroundSlamUpEnd.csv,3

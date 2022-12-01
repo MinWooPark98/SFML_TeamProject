@@ -45,6 +45,7 @@ protected:
 
 	SpriteObj* firebossKick;
 	Animator kickAnimation;
+	bool isKick = false;
 
 public:
 	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};
@@ -80,5 +81,9 @@ public:
 	void SetPlayerLastPos(Vector2f playerPos) { playerLastPos = playerPos; };
 
 	RectangleShape GetFireBossKickHitBox() const { return firebossKick->GetHitBox(); }; // OBB 충돌에 쓰기 위함
+	SpriteObj* GetFireKick() const { return firebossKick; };
+
+	void SetIsKick(bool set) { isKick = set; };
+	bool GetIsKick() const { return isKick; };
 };
 
