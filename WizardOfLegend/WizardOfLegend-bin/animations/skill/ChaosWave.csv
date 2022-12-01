@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-ChaosWave,1,10,,,,,,
+ChaosWave,0,10,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/ChaosWave_0.png,0,0,74,114,37,57,0,0
