@@ -220,17 +220,6 @@ void PlayScene::Update(float dt)
 						bool leftandRight = false;
 						bool topandLow = false;
 
-						// 적 히트박스 중점
-						Vector2f enemydddd = enemy->GetHitBox().getOrigin();
-						// 좌점
-						float enemylll = enemydddd.x - (enemy->GetHitBox().getOrigin().x * 0.5f);
-						// 우점
-						float enemyrrr = enemydddd.x + (enemy->GetHitBox().getOrigin().x * 0.5f);
-						// 상점
-						float enemyttt = enemydddd.y - (enemy->GetHitBox().getOrigin().y * 0.5f);
-						// 하점
-						float enemywww = enemydddd.y + (enemy->GetHitBox().getOrigin().y * 0.5f);
-
 						// 적 우점
 						float enemyRightPoint = enemy->GetLowHitBounds().width + enemy->GetLowHitBounds().left;
 						// 적 하점
@@ -243,26 +232,20 @@ void PlayScene::Update(float dt)
 
 						if (enemy->GetLowHitBounds().left >= collXPoint || enemyRightPoint <= collXPoint)
 						{
-							if (enemy->GetLowHitBounds().left - enemylll >= collXPoint ||
-								enemyRightPoint + enemyrrr <= collXPoint)
-								leftandRight = true;
+							leftandRight = true;
 						}
 						if (enemy->GetLowHitBounds().height <= collYPoint || enemyLowPoint >= collYPoint)
 						{
-							if (enemy->GetLowHitBounds().height + enemyttt >= collYPoint ||
-								enemyLowPoint - enemywww <= collYPoint)
-								topandLow = true;
+							topandLow = true;
 						}
 
 						if (topandLow)
 						{
 							enemy->SetPos({ enemy->GetPos().x, enemy->GetLastPosition().y });
-							//cout << "LR" << endl;
 						}
 						if (leftandRight)
 						{
 							enemy->SetPos({ enemy->GetLastPosition().x, enemy->GetPos().y });
-							//cout << "TB" << endl;
 						}
 					}
 				}
