@@ -10,14 +10,6 @@ Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
 	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false)
 {
-	SpriteObj tempSpearImage;
-	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerIdleDown.png"));
-	FloatRect rect = (FloatRect)tempSpearImage.GetTextureRect();
-	SetHitBox(rect);
-	hitbox.setOrigin(tempSpearImage.GetSize().x * 0.5f, tempSpearImage.GetSize().y * 0.5f);
-
-	SetMaxHp(525);
-	SetCurHp(GetMaxHp());
 }
 
 Player::~Player()
@@ -99,6 +91,7 @@ void Player::SetState(States state)
 		break;
 	case States::Jump:
 		{
+			SetHitBox(FloatRect(0.f, 0.f, 0.f, 0.f));
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle <= -45.f)
 				animator->Play("JumpUp");
@@ -210,6 +203,13 @@ void Player::Init()
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
 	playerShader.setUniform("paletteIndex", (float)paletteIdx / paletteSize);	// index 바꿔주어 색 변경 -> 속성 변경 추후 추가
+
+	hitboxSize = FloatRect(0.f, 0.f, 10.f, 25.f);
+	SetHitBox(hitboxSize);
+	SetHitBoxOrigin(Origins::MC);
+
+	SetMaxHp(525);
+	SetCurHp(maxHp);
 }
 
 void Player::Update(float dt)
@@ -396,6 +396,7 @@ void Player::UpdateJump(float dt)
 	if (jumpTimer >= jumpDuration)
 	{
 		jumpTimer = 0.f;
+		SetHitBox(hitboxSize);
 		FinishAction();
 	}
 }
@@ -458,7 +459,7 @@ void Player::FinishAction()
 		Skill* currSkill = currSkillSet->GetCurrSkill();
 		if (currSkill != nullptr)
 		{
-			if (currSkillSet->GetCurrSkill()->GetSetting()->stopMoving == Skill::StopMoving::Immovable)
+			if (currSkill->GetSetting()->stopMoving == Skill::StopMoving::Immovable)
 			{
 				SetState(States::Wait);
 				return;

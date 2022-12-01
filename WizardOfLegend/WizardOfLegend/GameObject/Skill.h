@@ -97,6 +97,7 @@ public:
 		None = -1,
 		Player,
 		Enemy,
+		FinalBoss,
 	};
 
 private:

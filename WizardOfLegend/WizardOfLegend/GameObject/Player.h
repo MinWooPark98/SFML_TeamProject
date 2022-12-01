@@ -63,6 +63,7 @@ protected:
 
 	int maxHp = 525;
 	int curHp = 525;
+	FloatRect hitboxSize;
 
 public:
 	Player();
