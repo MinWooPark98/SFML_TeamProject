@@ -17,6 +17,10 @@ protected:
 
 	int playerRoom;
 
+	float maxSpownDelay = 100.f;
+	float currSpownDelay = 100.f;
+	bool isSpownDelay;
+
 public:
 	PlayScene();
 	virtual ~PlayScene();
@@ -32,7 +36,7 @@ public:
 	virtual void Enter() override;
 	virtual void Exit() override;
 
-	void SpownEnemy(int i);
+	void SpownEnemy(int i, float dt);
 
 };
 

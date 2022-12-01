@@ -80,11 +80,18 @@ void PlayScene::Init()
 		{
 			SpriteObj* draw = new SpriteObj();
 			draw->SetName(obj.type);
+			draw->SetFileName(obj.path);
 			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
 			draw->SetOrigin(Origins::BC);
 			draw->SetPos(obj.position);
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::ETC);
+			if (obj.path == "graphics/Map/Object/GateFull.png" ||
+				obj.path == "graphics/Map/Palette/LeftGate.png" ||
+				obj.path == "graphics/Map/Palette/RightGate.png")
+			{
+				draw->SetActive(false);
+			}
 
 			objList[LayerType::Object][0].push_back(draw);
 		}
@@ -96,7 +103,6 @@ void PlayScene::Init()
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
 			objList[LayerType::Object][5].push_back(player);
-			collisionList[0][Object::ObjTypes::Player].push_back(player);
 			auto& skillSet = player->GetSkillSets();
 			skillSet[0]->Set("FireBall");
 			skillSet[1]->Set("JumpMeteor");
@@ -116,7 +122,6 @@ void PlayScene::Init()
 				lancer->SetObjType(Object::ObjTypes::Enemy);
 				lancer->SetActive(false);
 				objList[LayerType::Object][0].push_back(lancer);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(lancer);
 			}
 			else if (obj.path == "graphics/Map/ArcherNormal.png")
 			{
@@ -129,7 +134,6 @@ void PlayScene::Init()
 				archer->SetColor(3);
 				archer->SetActive(false);
 				objList[LayerType::Object][1].push_back(archer);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(archer);
 			}
 			else if (obj.path == "graphics/Map/ArcherBosspng.png")
 			{
@@ -142,7 +146,6 @@ void PlayScene::Init()
 				heavyBombingArcher->SetColor(2);
 				heavyBombingArcher->SetActive(false);
 				objList[LayerType::Object][2].push_back(heavyBombingArcher);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
 			}
 			else if (obj.path == "graphics/Map/FireBoss.png")
 			{
@@ -153,7 +156,6 @@ void PlayScene::Init()
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
 				fireBoss->SetActive(false);
 				objList[LayerType::Object][3].push_back(fireBoss);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(fireBoss);
 			}
 		}
 		else if (obj.type == "CLIFF")
@@ -165,8 +167,7 @@ void PlayScene::Init()
 			cliff->SetHitBox((FloatRect)cliff->GetCliffShape()->getGlobalBounds());
 			cliff->SetHitBox({100, 100, 100, 100}, Color::Blue);
 			cliff->SetObjType(Object::ObjTypes::Cliff);
-			objList[LayerType::Object][3].push_back(cliff);
-			collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
+			objList[LayerType::Cliff][0].push_back(cliff);
 		}
 	}
 
@@ -181,7 +182,6 @@ void PlayScene::Init()
 					if (Utils::OBB(c->GetHitBox(), room[i].GetHitBox()))
 					{
 						collisionList[i][c->GetObjType()].push_back(c);
-						cout << (int)c->GetObjType() << endl; // 5 = Sector
 					}
 				}
 			}
@@ -194,10 +194,14 @@ void PlayScene::Init()
 	mapSize.width = (tiles.back())->GetPos().x + 16;
 	mapSize.height = (tiles.back())->GetPos().y;
 
-	for (auto& enemy : collisionList[0][Object::ObjTypes::Enemy])
+	for (int i = 0; i < room.size();i++)
 	{
-		((Enemy*)enemy)->SetPlayer(player);
+		for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+		{
+			((Enemy*)enemy)->SetPlayer(player);
+		}
 	}
+	
 
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
@@ -222,6 +226,7 @@ void PlayScene::Update(float dt)
 		if (player->GetLowHitBounds().intersects(room[i].GetHitBounds()))
 		{
 			collisionList[i][player->GetObjType()].push_back(player);
+			SpownEnemy(i,dt);
 			playerRoom = i;
 		}
 		else
@@ -307,6 +312,7 @@ void PlayScene::Draw(RenderWindow& window)
 {
 	Vector2i min = { (int)(worldView.getCenter().x - (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y - (int)worldView.getSize().y * 0.5f) };
 	Vector2i max = { (int)(worldView.getCenter().x + (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y + (int)worldView.getSize().y * 0.5f) };
+	int extra = 80;
 	for (auto& layer : objList)
 	{
 		for (auto& obj_pair : layer.second)
@@ -314,7 +320,7 @@ void PlayScene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetPos().x<max.x + 32 && obj->GetPos().y < max.y + 32 && obj->GetPos().x > min.x - 32 && obj->GetPos().y > min.y - 32)
+				if (obj->GetPos().x<max.x + extra && obj->GetPos().y < max.y + extra && obj->GetPos().x > min.x - extra && obj->GetPos().y > min.y - extra)
 				{
 					obj->SetActive(true);
 				}
@@ -354,16 +360,36 @@ void PlayScene::Exit()
 	Scene::Exit();
 }
 
-void PlayScene::SpownEnemy(int i)
+void PlayScene::SpownEnemy(int i, float dt)
 {
-	for (auto& c_list : collisionList[i])
+	currSpownDelay -= dt;
+	if (currSpownDelay <= 0)
 	{
-		for (auto& obj : c_list.second)
+		for (auto& c_list : collisionList[i])
 		{
-			if (obj->GetObjType() == Object::ObjTypes::Enemy)
+			for (auto& obj : c_list.second)
 			{
-				obj->SetActive(true);
+				if (obj->GetObjType() == Object::ObjTypes::Enemy)
+				{
+					obj->SetActive(true);
+				}
 			}
 		}
+		for (auto& c_list : collisionList[i])
+		{
+			for (auto& obj : c_list.second)
+			{
+				if (obj->GetObjType() == Object::ObjTypes::ETC)
+				{
+					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+					{
+						obj->SetActive(true);
+					}
+				}
+			}
+		}
+		currSpownDelay = maxSpownDelay;
 	}
 }

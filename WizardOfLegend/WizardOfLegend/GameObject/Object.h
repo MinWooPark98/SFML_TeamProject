@@ -27,6 +27,7 @@ public:
 protected:
     int id;
     string name;
+    string fileName;
     bool enabled;
     ObjTypes objtype;
 
@@ -84,6 +85,9 @@ public:
 
     void SetName(string name) { this->name = name; }
     const string& GetName() const { return name; }
+
+    void SetFileName(string filename) { fileName = filename; }
+    const string& GetFileName() const { return fileName; }
 
     void SetDirection(const Vector2f& dir) { direction = dir; }
     const Vector2f& GetDirection() const { return direction; }
