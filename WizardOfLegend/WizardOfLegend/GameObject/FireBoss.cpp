@@ -123,6 +123,7 @@ void FireBoss::Update(float dt)
 		auto kick = Utils::Normalize(playerLastPos - lastPos);
 		firebossKick->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
 		firebossKick->GetHitBox().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
+		fireWing->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) - 90);
 		Translate({ (dt * speed * kick) / 5.f });
 	}
 
@@ -214,7 +215,7 @@ void FireBoss::SetState(BossStates newState)
 			{
 				attackDelay = 0.3f;
 				nextPatternDelay = 1.5f;
-				fireWing->SetPos({ GetPos().x, GetPos().y - (GetSize().y * 0.5f)});
+				fireWing->SetPos(GetPos());
 				isKick = true;
 				firebossKick->SetPos(GetPos());
 				switch (moveType)

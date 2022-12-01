@@ -307,7 +307,7 @@ void PlayScene::Update(float dt)
 
 	if (fireBoss->GetIsAlive())
 	{
-		((PlayUiMgr*)uiMgr)->SetBossName("FIRE BOSS");
+		((PlayUiMgr*)uiMgr)->SetBossName("FLAME QUEEN");
 		if (fireBoss->GetFireKick()->GetActive())
 		{
 			if (fireBoss->GetIsKick())
