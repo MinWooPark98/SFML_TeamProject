@@ -199,6 +199,11 @@ void PlayScene::Init()
 
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
+
+	((PlayUiMgr*)uiMgr)->SetBossMaxHp(2000);
+	((PlayUiMgr*)uiMgr)->SetBossCurHp(2000);
+	((PlayUiMgr*)uiMgr)->SetPlayerCurHp(525);
+	((PlayUiMgr*)uiMgr)->SetPlayerMaxHp(525);
 }
 
 void PlayScene::Update(float dt)
@@ -300,18 +305,22 @@ void PlayScene::Update(float dt)
 		}
 	}
 
-	if (fireBoss->GetFireKick()->GetActive())
+	if (fireBoss->GetIsAlive())
 	{
-		if (fireBoss->GetIsKick())
+		((PlayUiMgr*)uiMgr)->SetBossName("FIRE BOSS");
+		if (fireBoss->GetFireKick()->GetActive())
 		{
-			if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
+			if (fireBoss->GetIsKick())
 			{
-				((PlayUiMgr*)uiMgr)->SetMonsterDamage(50);
-				fireBoss->SetIsKick(false);
+				if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
+				{
+					((PlayUiMgr*)uiMgr)->SetMonsterDamage(30);
+					fireBoss->SetIsKick(false);
+				}
 			}
+			else
+				((PlayUiMgr*)uiMgr)->SetMonsterDamage(0);
 		}
-		else
-			((PlayUiMgr*)uiMgr)->SetMonsterDamage(0);
 	}
 }
 

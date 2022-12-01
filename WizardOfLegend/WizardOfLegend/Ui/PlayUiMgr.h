@@ -24,10 +24,9 @@ protected:
 
 	bool testOverdrive = false;
 
-	// 플레이어한테 받아와야 함
 	TextObj* hpText;
-	int playerCurHp = 525;
-	int playerMaxHp = 525;
+	int playerCurHp;
+	int playerMaxHp;
 
 	// 메뉴창
 	SpriteObj* menu;
@@ -78,4 +77,9 @@ public:
 	void SetMonsterDamage(int damage) { monsterDamage = damage; };
 	void SetBossCurHp(int hp) { bossCurHp = hp; };
 	void SetBossMaxHp(int hp) { bossMaxHp = hp; };
+
+	void SetPlayerCurHp(int hp) { playerCurHp = hp; };
+	void SetPlayerMaxHp(int hp) { playerMaxHp = hp; };
+
+	void SetBossName(string name);
 };

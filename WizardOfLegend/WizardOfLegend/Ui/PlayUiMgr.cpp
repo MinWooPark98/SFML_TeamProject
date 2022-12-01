@@ -401,16 +401,16 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 	{
 		if (InputMgr::GetKeyDown(Keyboard::Key::Q)) // 충돌 조건으로 변경
 		{
-			int damage = 100; // 플레이어 스킬 데미지로 변경
+			int playerDamage = 100; // 플레이어 스킬 데미지로 변경
 
-			if (bossCurHp - damage <= 0.f)
+			if (bossCurHp - playerDamage <= 0.f)
 			{
 				bossCurHp = 0.f;
 				bossHpBarFill->SetSize({ 0, bossHpBarFill->GetSize().y * 4 });
 			}
 			else
 			{
-				bossCurHp -= damage;
+				bossCurHp -= playerDamage;
 			}
 		}
 
@@ -449,4 +449,9 @@ void PlayUiMgr::OverdriveBarControl(float dt)
 		OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
 	else if (!testOverdrive && overdriveBarSize > 0)
 		OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
+}
+
+void PlayUiMgr::SetBossName(string name)
+{
+	bossName->SetText(name);
 }
