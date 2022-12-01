@@ -25,7 +25,6 @@ public:
 		NormalSpell,
 		SplitCast,
 		GroundSlam,
-		GroundSlamEnd,
 	};
 	enum class SkillAction
 	{

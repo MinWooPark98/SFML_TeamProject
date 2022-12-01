@@ -181,7 +181,6 @@ void PlayScene::Init()
 					if (Utils::OBB(c->GetHitBox(), room[i].GetHitBox()))
 					{
 						collisionList[i][c->GetObjType()].push_back(c);
-						cout << (int)c->GetObjType() << endl; // 5 = Sector
 					}
 				}
 			}

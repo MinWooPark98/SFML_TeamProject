@@ -35,5 +35,5 @@ public:
 	void SetDmgType(Skill::DamageType type) { dmgType = type; }
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	void SetAtkDelay(float delay) { atkDelay = delay; }
-	void SetSubjectType(Skill::SubjectType type) { subType = type; }
+	void SetSubjectType(Skill::SubjectType type);
 };
