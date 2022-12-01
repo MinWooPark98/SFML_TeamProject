@@ -45,8 +45,8 @@ void PlayScene::Init()
 			objList[LayerType::Sector][0].push_back(sector);
 		}
 	}
-
-	for (int i = 0; i < room.size(); i++)
+	//for (int i = 0; i < room.size(); i++)
+	for (int i = 0; i < 6; i++)
 	{
 		collisionList.push_back(map<Object::ObjTypes, list<Object*>>());
 	}
@@ -258,6 +258,26 @@ void PlayScene::Update(float dt)
 
 void PlayScene::Draw(RenderWindow& window)
 {
+	Vector2i min = { (int)(worldView.getCenter().x - (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y - (int)worldView.getSize().y * 0.5f) };
+	Vector2i max = { (int)(worldView.getCenter().x + (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y + (int)worldView.getSize().y * 0.5f) };
+	for (auto& layer : objList)
+	{
+		for (auto& obj_pair : layer.second)
+		{
+			auto& objs = obj_pair.second;
+			for (auto& obj : objs)
+			{
+				if (obj->GetPos().x<max.x + 16 && obj->GetPos().y < max.y + 16 && obj->GetPos().x > min.x - 16 && obj->GetPos().y > min.y - 16)
+				{
+					obj->SetActive(true);
+				}
+				else
+				{
+					obj->SetActive(false);
+				}
+			}
+		}
+	}
 	Scene::Draw(window);
 }
 

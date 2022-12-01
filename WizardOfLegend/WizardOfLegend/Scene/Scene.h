@@ -27,8 +27,10 @@ public:
 		None = -1,
 		Back,
 		Tile,
+		Wall,
 		Object,
 		Sector,
+		Cliff,
 		Count,
 	};
 

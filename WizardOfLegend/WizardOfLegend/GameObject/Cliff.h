@@ -6,10 +6,10 @@ using namespace sf;
 
 class DrawObj;
 
-class Sector : public Object
+class Cliff : public Object
 {
 protected:
-	Shape* sector;
+	Shape* cliff;
 	string type;
 	string path;
 	EditorObjs data;
@@ -22,12 +22,12 @@ protected:
 	bool isPlayerInToTheRoom;
 
 public:
-	Sector();
-	~Sector();
+	Cliff();
+	~Cliff();
 
 	virtual void Update(float dt);
 	virtual void Draw(RenderWindow& window);
-	
+
 	void UpdateNowDraw(float dt, DrawObj* nowDraw);
 	void SetType(string type) { this->type = type; }
 	void SetPath(string path) { this->path = path; }
@@ -37,13 +37,11 @@ public:
 	void SetData(EditorObjs d) { data = d; }
 	virtual void SetPos(const Vector2f& pos);
 
-	virtual void SetFillColor(Color color) { sector->setFillColor(color); }
-	virtual void SetOutlineColor(Color color) { sector->setOutlineColor(color); }
-	virtual void SetOutlineThickness(float t) { sector->setOutlineThickness(t); }
+	virtual void SetFillColor(Color color) { cliff->setFillColor(color); }
+	virtual void SetOutlineColor(Color color) { cliff->setOutlineColor(color); }
+	virtual void SetOutlineThickness(float t) { cliff->setOutlineThickness(t); }
 
-	void SetSize(const Vector2f& size) { ((RectangleShape*)sector)->setSize(size); }
-	const Vector2f& GetSize() const { return ((RectangleShape*)sector)->getSize(); }
-
-	Shape* GetSectorShape() const { return sector; };
+	void SetSize(const Vector2f& size) { ((RectangleShape*)cliff)->setSize(size); }
+	const Vector2f& GetSize() const { return ((RectangleShape*)cliff)->getSize(); }
 };
 
