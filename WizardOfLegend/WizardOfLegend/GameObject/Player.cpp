@@ -10,14 +10,6 @@ Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
 	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false)
 {
-	SpriteObj tempSpearImage;
-	tempSpearImage.SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerIdleDown.png"));
-	FloatRect rect = (FloatRect)tempSpearImage.GetTextureRect();
-	SetHitBox(rect);
-	hitbox.setOrigin(tempSpearImage.GetSize().x * 0.5f, tempSpearImage.GetSize().y * 0.5f);
-
-	SetMaxHp(525);
-	SetCurHp(GetMaxHp());
 }
 
 Player::~Player()
@@ -31,6 +23,7 @@ void Player::SetState(States state)
 	switch (state)
 	{
 	case States::Idle:
+		currSkillSet = nullptr;
 		{
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle < -45.f)
@@ -98,6 +91,7 @@ void Player::SetState(States state)
 		break;
 	case States::Jump:
 		{
+			SetHitBox(FloatRect(0.f, 0.f, 0.f, 0.f));
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle <= -45.f)
 				animator->Play("JumpUp");
@@ -114,6 +108,9 @@ void Player::SetState(States state)
 			lastDir.y >= 0.f ? animator->Play("JumpSlamDown") : animator->Play("JumpSlamUp");
 		else
 			lastDir.y >= 0.f ? animator->Play("GroundSlamDown") : animator->Play("GroundSlamUp");
+		break;
+	case States::GroundSlamEnd:
+			lastDir.y >= 0.f ? animator->Play("GroundSlamDownEnd") : animator->Play("GroundSlamUpEnd");
 		break;
 	default:
 		break;
@@ -169,8 +166,21 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamUp"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamDownEnd"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamUpEnd"));
 	{
-		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp", "PBAoERight", "PBAoELeft", "PBAoEDown", "PBAoEUp", "GroundSlamDown", "GroundSlamUp", "JumpSlamDown", "JumpSlamUp" };
+		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "GroundSlamDownEnd", "GroundSlamUpEnd" };
+		for (int i = 0; i < clipIds.size(); ++i)
+		{
+			AnimationEvent ev;
+			ev.clipId = clipIds[i];
+			ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
+			ev.onEvent = bind(&Player::SetState, this, States::Idle);
+			animator->AddEvent(ev);
+		}
+	}
+	{
+		vector<string> clipIds = { "BackHandRight", "BackHandLeft", "BackHandDown", "BackHandUp", "ForeHandRight", "ForeHandLeft", "ForeHandDown", "ForeHandUp", "PBAoERight", "PBAoELeft", "PBAoEDown", "PBAoEUp", "GroundSlamDown", "GroundSlamUp", "JumpSlamDown", "JumpSlamUp" };
 		for (int i = 0; i < clipIds.size(); ++i)
 		{
 			AnimationEvent ev;
@@ -193,8 +203,15 @@ void Player::Init()
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
 	playerShader.setUniform("paletteIndex", (float)paletteIdx / paletteSize);	// index 바꿔주어 색 변경 -> 속성 변경 추후 추가
+
+	hitboxSize = FloatRect(0.f, 0.f, 10.f, 25.f);
+	SetHitBox(hitboxSize);
+	SetHitBoxOrigin(Origins::MC);
 	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
+
+	SetMaxHp(525);
+	SetCurHp(maxHp);
 }
 
 void Player::Update(float dt)
@@ -285,6 +302,9 @@ void Player::Update(float dt)
 	case Player::States::Jump:
 		UpdateJump(dt);
 		break;
+	case Player::States::Wait:
+		UpdateWait(dt);
+		break;
 	default:
 		break;
 	}
@@ -352,7 +372,7 @@ void Player::UpdateDash(float dt)
 	if (dashTimer >= dashDuration)
 	{
 		dashTimer = 0.f;
-		SetState(States::Slide);
+		FinishAction();
 	}
 }
 
@@ -380,14 +400,25 @@ void Player::UpdateJump(float dt)
 	if (jumpTimer >= jumpDuration)
 	{
 		jumpTimer = 0.f;
-		if (!currSkillSet->Do())
-			SetState(States::Idle);
+		SetHitBox(hitboxSize);
+		FinishAction();
 	}
 }
 
-void Player::Action()
+void Player::UpdateWait(float dt)
 {
-	SkillAction action = currSkillSet->GetCurrSkill()->GetSetting()->playerAction;
+	if (currSkillSet->GetCurrSkill()->GetDoing())
+		return;
+	if (!currSkillSet->Do())
+	{
+		if (currSkillSet->GetCurrSkill()->GetSetting()->playerAction == SkillAction::GroundSlam)
+			SetState(States::GroundSlamEnd);
+	}
+}
+
+void Player::Action(Skill* currSkill)
+{
+	SkillAction action = currSkill->GetSetting()->playerAction;
 	if (action != SkillAction::Dash)
 	{
 		auto& mousePos = SCENE_MGR->GetCurrentScene()->GetObjMousePos();
@@ -397,8 +428,8 @@ void Player::Action()
 		if (action == SkillAction::Jump)
 		{
 			auto mouseDistance = Utils::Distance(mousePos, position);
-			if (mouseDistance >= currSkillSet->GetCurrSkill()->GetSetting()->distance * 0.5f)
-				jumpDistance = currSkillSet->GetCurrSkill()->GetSetting()->distance;
+			if (mouseDistance >= currSkill->GetSetting()->distance * 0.5f)
+				jumpDistance = currSkill->GetSetting()->distance;
 			else
 			{
 				jumpDistance = 0.f;
@@ -423,10 +454,34 @@ void Player::Action()
 	default:
 		break;
 	}
-}
+}                                                                                                                                                                                                                                                                               
 
 void Player::FinishAction()
 {
-	if (currSkillSet == nullptr || !currSkillSet->Do())
+	if (currSkillSet != nullptr)
+	{
+		Skill* currSkill = currSkillSet->GetCurrSkill();
+		if (currSkill != nullptr)
+		{
+			if (currSkill->GetSetting()->stopMoving == Skill::StopMoving::Immovable)
+			{
+				SetState(States::Wait);
+				return;
+			}
+			if (currSkillSet->Do())
+				return;
+		}
+	}
+	switch (currState)
+	{
+	case Player::States::Dash:
+		SetState(States::Slide);
+		break;
+	case Player::States::GroundSlam:
+		SetState(States::GroundSlamEnd);
+		break;
+	default:
 		SetState(States::Idle);
+		break;
+	}
 }

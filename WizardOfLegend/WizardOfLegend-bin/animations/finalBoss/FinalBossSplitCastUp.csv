@@ -1,0 +1,12 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FinalBossSplitCastUp,0,8,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FinalBossSplitCastUp0.png,0,0,48,48,24,24,0,0
+graphics/FinalBossSplitCastUp1.png,0,0,48,48,24,24,0,0
+graphics/FinalBossSplitCastUp2.png,0,0,48,48,24,24,0,0
+graphics/FinalBossSplitCastUp3.png,0,0,48,48,24,24,0,0
+graphics/FinalBossSplitCastUp4.png,0,0,48,48,24,24,0,0
+graphics/FinalBossSplitCastUp5.png,0,0,48,48,24,24,0,0
+graphics/FinalBossSplitCastUp6.png,0,0,48,48,24,24,0,0
+graphics/FinalBossSplitCastUp7.png,0,0,48,48,24,24,0,0

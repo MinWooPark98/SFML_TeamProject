@@ -43,6 +43,8 @@ protected:
 	Vector2f startPos;
 	float amplitude;
 
+	Skill::SubjectType subType;
+
 public:
 	Projectile();
 	virtual ~Projectile();
@@ -72,5 +74,6 @@ public:
 	void SetAmplitude(float amplitude) { this->amplitude = amplitude; }
 	void SetReverse(bool reverse) { this->reverse = reverse; }
 	void SetFrequency(float f) { frequency = f; }
+	void SetSubjectType(Skill::SubjectType type) { subType = type; }
 };
 

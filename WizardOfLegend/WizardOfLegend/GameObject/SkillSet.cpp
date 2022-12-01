@@ -15,6 +15,20 @@ SkillSet::~SkillSet()
 {
 }
 
+void SkillSet::ResetSkills()
+{
+	isOnCoolDown = false;
+	newCoolDownEntered = false;
+	newCoolDown = 0.f;
+	timer = 0.f;
+	for (auto skill : usingSkills)
+	{
+		skill->Reset();
+		unusingSkills.push_back(skill);
+	}
+	usingSkills.clear();
+}
+
 void SkillSet::Restart()
 {
 	if (isOnCoolDown)
@@ -30,12 +44,7 @@ void SkillSet::Restart()
 
 void SkillSet::Set(const string& setName)
 {
-	for (auto skill : usingSkills)
-	{
-		unusingSkills.push_back(skill);
-	}
-	usingSkills.clear();
-
+	ResetSkills();
 	SkillSetTable* table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	auto& skillSetInfo = table->Get(setName);
 	newCoolDown = skillSetInfo.first;
@@ -68,12 +77,7 @@ void SkillSet::Set(const string& setName)
 
 void SkillSet::SetOnlyOneSkill(const Skill::Set& set)
 {
-	for (auto skill : usingSkills)
-	{
-		unusingSkills.push_back(skill);
-	}
-	usingSkills.clear();
-
+	ResetSkills();
 	newCoolDown = set.skillCoolDown;
 	auto skill = unusingSkills.front();
 	unusingSkills.pop_front();
@@ -126,4 +130,11 @@ void SkillSet::Draw(RenderWindow& window)
 	{
 		skill->Draw(window);
 	}
+}
+
+Skill* SkillSet::GetCurrSkill()
+{
+	if(currSkillIt == usingSkills.rend())
+		return nullptr;
+	return *currSkillIt;
 }

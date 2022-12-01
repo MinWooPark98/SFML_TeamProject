@@ -2,97 +2,108 @@
 #include "SpriteObj.h"
 
 class Animator;
-class SkillSet;
 class Skill;
+class Player;
 
-class Player : public SpriteObj
+class FinalBoss : public SpriteObj
 {
 public:
+	enum class Phase
+	{
+		Phase0,
+		Phase1,
+		Phase2,
+		End,
+	};
 	enum class States
 	{
 		None = -1,
 		Idle,
-		Run,
 		Dash,
 		Slide,
 		Wait,
 		NormalSpell,
-		PBAoE,
-		Jump,
+		SplitCast,
 		GroundSlam,
 		GroundSlamEnd,
 	};
 	enum class SkillAction
 	{
 		NormalSpell,
-		Dash,
-		PBAoE,
-		Jump,
+		SplitCast,
 		GroundSlam,
 	};
+	enum class DashType
+	{
+		Evasion,
+		Chase,
+	};
 
-protected:
+private:
 	States currState;
 
 	Animator* animator;
-	Shader playerShader;
-	int paletteIdx;
-	int paletteSize;
-	
-	int attackDmg;
 
-	float walkingSpeed;
-	float runningSpeed;
-	float accelTime;
-	float accelTimer;
+	int attackDmg;
+	int attackCnt;
+	float attackRange;
+
+	float speed;
 	float dashDuration;
 	float dashTimer;
-	float jumpDuration;
-	float jumpTimer;
-	float jumpDistance;
-	float jumpOriginY;
+	int evasionCntLim;
+	int evasionCnt;
+	DashType dashType;
 
 	Vector2f lastDir;
 	Vector2f dashDir;
-	bool isBackHand;	// true일 시 Backhand, false일 시 Forehand
+	bool isBackHand;
 
-	vector<SkillSet*> skillSets;
-	SkillSet* currSkillSet;
+	vector<Skill*> normalSkills;
+	int vecIdx;
+	vector<Skill*> chaosSkills;
+	Skill* currSkill;
 
-	bool skillToolMode;
+	int maxHp;
+	int curHp;
 
-	int maxHp = 525;
-	int curHp = 525;
-	FloatRect hitboxSize;
+	bool superArmor;
+	float superArmorDelay;
+	float superArmorTimer;
+
+	Player* player;
 
 public:
-	Player();
-	virtual ~Player();
+	FinalBoss();
+	virtual ~FinalBoss();
 
 	void SetState(States state);
 	States GetState() const { return currState; }
 
 	virtual void Init() override;
+	virtual void Release() override;
+	virtual void Reset() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
 	void UpdateIdle(float dt);
-	void UpdateRun(float dt);
 	void UpdateDash(float dt);
-	void UpdateJump(float dt);
 	void UpdateWait(float dt);
+
+	void Dash(DashType type);
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
+	void SetAttackRange(float range) { attackRange = range; }
+	
+	void NextAction();
 
 	bool GetBackHand() const { return isBackHand; }
 
 	void Action(Skill* skill);
 	void FinishAction();
-	void SetCurrSkillSet(SkillSet* skillSet) { currSkillSet = skillSet; }
-	SkillSet* GetCurrSkillSet() { return currSkillSet; }
-
-	void SetSkillToolMode() { skillToolMode = true; }
+	void SetCurrSkill(Skill* skill) { currSkill = skill; }
+	Skill* GetCurrSkill() { return currSkill; }
 
 	int GetMaxHp() { return maxHp; };
 	void SetMaxHp(int hp) { maxHp = hp; };
@@ -100,6 +111,9 @@ public:
 	int GetCurHp() { return curHp; };
 	void SetCurHp(int hp) { curHp = hp; };
 
-	vector<SkillSet*>& GetSkillSets() { return skillSets; }
+	void SetPlayer(Player* player) { this->player = player; }
+
+	vector<Skill*>& GetNormalSkills() { return normalSkills; }
+	vector<Skill*>& GetChaosSkills() { return chaosSkills; }
 };
 

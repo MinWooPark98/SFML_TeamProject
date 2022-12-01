@@ -57,6 +57,7 @@
     <ClCompile Include="Ui\DataTableList.cpp" />
     <ClCompile Include="GameObject\Door.cpp" />
     <ClCompile Include="GameObject\Cliff.cpp" />
+    <ClCompile Include="GameObject\FinalBoss.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="Ui\DataTableList.h" />
     <ClInclude Include="GameObject\Door.h" />
     <ClInclude Include="GameObject\Cliff.h" />
+    <ClInclude Include="GameObject\FinalBoss.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

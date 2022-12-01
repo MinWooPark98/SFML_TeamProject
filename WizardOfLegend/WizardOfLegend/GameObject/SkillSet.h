@@ -25,6 +25,7 @@ public:
 	SkillSet();
 	~SkillSet();
 
+	void ResetSkills();
 	void Restart();
 	void Set(const string& setName);
 	void SetOnlyOneSkill(const Skill::Set& set);
@@ -33,6 +34,6 @@ public:
 	void Update(float dt);
 	void Draw(RenderWindow& window);
 
-	Skill* GetCurrSkill() { return *currSkillIt; }
+	Skill* GetCurrSkill();
 };
 
