@@ -17,8 +17,8 @@ protected:
 
 	int playerRoom;
 
-	float maxSpownDelay = 100.f;
-	float currSpownDelay = 100.f;
+	float maxSpownDelay = 3.f;
+	float currSpownDelay = 3.f;
 	bool isSpownDelay;
 
 public:

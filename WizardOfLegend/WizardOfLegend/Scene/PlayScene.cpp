@@ -13,6 +13,7 @@
 #include "../GameObject/SkillSet.h"
 #include "../GameObject/Sector.h"
 #include "../GameObject/Cliff.h"
+#include "../GameObject/SpriteObj.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -310,9 +311,7 @@ void PlayScene::Update(float dt)
 
 void PlayScene::Draw(RenderWindow& window)
 {
-	Vector2i min = { (int)(worldView.getCenter().x - (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y - (int)worldView.getSize().y * 0.5f) };
-	Vector2i max = { (int)(worldView.getCenter().x + (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y + (int)worldView.getSize().y * 0.5f) };
-	int extra = 80;
+
 	for (auto& layer : objList)
 	{
 		for (auto& obj_pair : layer.second)
@@ -320,14 +319,7 @@ void PlayScene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetPos().x<max.x + extra && obj->GetPos().y < max.y + extra && obj->GetPos().x > min.x - extra && obj->GetPos().y > min.y - extra)
-				{
-					obj->SetActive(true);
-				}
-				else
-				{
-					obj->SetActive(false);
-				}
+				((SpriteObj*)obj)->IsInView();
 			}
 		}
 	}

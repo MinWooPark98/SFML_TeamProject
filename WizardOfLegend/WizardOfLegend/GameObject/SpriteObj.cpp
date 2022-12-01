@@ -63,14 +63,14 @@ bool SpriteObj::IsInView()
         viewIn = true;
         return true;
     }
-
+    int extra = 80;
     auto& view = SCENE_MGR->GetCurrentScene()->GetWorldView();
     auto& viewSize = view.getSize();
     auto& viewCenter = view.getCenter();
     auto bound = GetGlobalBounds();
 
-    if (((bound.left > viewCenter.x + viewSize.x / 2) || (bound.left + bound.width < viewCenter.x - viewSize.x / 2)) ||
-        ((bound.top > viewCenter.y + viewSize.y / 2) || (bound.top + bound.height < viewCenter.y - viewSize.y / 2)))
+    if (((bound.left > viewCenter.x + viewSize.x / 2+extra) || (bound.left + bound.width < viewCenter.x - viewSize.x / 2- extra)) ||
+        ((bound.top > viewCenter.y + viewSize.y / 2+extra) || (bound.top + bound.height < viewCenter.y - viewSize.y / 2- extra)))
     {
         viewIn = false;
         return false;

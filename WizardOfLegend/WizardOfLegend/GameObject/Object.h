@@ -47,7 +47,6 @@ protected:
     bool isDevMode;
 
     bool isUi;
-    bool viewIn;
 
     Vector2f lastPosition;
 
@@ -79,7 +78,6 @@ public:
     virtual void SetRotation(float rotation) { this->rotation = rotation; }
 
     void SetUI(bool u) { isUi = u; }
-    bool IsInView();
     const int& GetObjId() const;
     void SetId(int id) { this->id = id; }
 

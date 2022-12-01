@@ -13,6 +13,9 @@ protected:
     int spritePaletteSize;
     Texture spriteColorTable;
 
+    bool isUi;
+    bool viewIn;
+
 public:
     SpriteObj();
     virtual ~SpriteObj();
