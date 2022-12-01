@@ -207,7 +207,6 @@ void PlayScene::Update(float dt)
 			SetPause(false);
 	}
 
-
 	for (int i = 0; i < room.size(); i++)
 	{
 		if (!collisionList[i].empty())
@@ -216,27 +215,43 @@ void PlayScene::Update(float dt)
 			{
 				for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
 				{
-					if (Utils::OBB(enemy->GetLowHitBox(), coll->GetHitBox()))
+					if (enemy->GetLowHitBounds().intersects(coll->GetHitBounds()))
 					{
 						bool leftandRight = false;
 						bool topandLow = false;
-						
+
+						// 적 히트박스 중점
+						Vector2f enemydddd = enemy->GetHitBox().getOrigin();
+						// 좌점
+						float enemylll = enemydddd.x - (enemy->GetHitBox().getOrigin().x * 0.5f);
+						// 우점
+						float enemyrrr = enemydddd.x + (enemy->GetHitBox().getOrigin().x * 0.5f);
+						// 상점
+						float enemyttt = enemydddd.y - (enemy->GetHitBox().getOrigin().y * 0.5f);
+						// 하점
+						float enemywww = enemydddd.y + (enemy->GetHitBox().getOrigin().y * 0.5f);
+
 						// 적 우점
 						float enemyRightPoint = enemy->GetLowHitBounds().width + enemy->GetLowHitBounds().left;
 						// 적 하점
 						float enemyLowPoint = enemy->GetLowHitBounds().height + enemy->GetLowHitBounds().top;
+
 						// 벽 x
 						float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
 						// 벽 y
 						float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
 
-						if (enemy->GetLowHitBounds().left >= collXPoint || enemyRightPoint <= collXPoint )
+						if (enemy->GetLowHitBounds().left >= collXPoint || enemyRightPoint <= collXPoint)
 						{
-							leftandRight = true;
+							if (enemy->GetLowHitBounds().left - enemylll >= collXPoint ||
+								enemyRightPoint + enemyrrr <= collXPoint)
+								leftandRight = true;
 						}
 						if (enemy->GetLowHitBounds().height <= collYPoint || enemyLowPoint >= collYPoint)
 						{
-							topandLow = true;
+							if (enemy->GetLowHitBounds().height + enemyttt >= collYPoint ||
+								enemyLowPoint - enemywww <= collYPoint)
+								topandLow = true;
 						}
 
 						if (topandLow)
@@ -267,7 +282,7 @@ void PlayScene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetPos().x<max.x + 16 && obj->GetPos().y < max.y + 16 && obj->GetPos().x > min.x - 16 && obj->GetPos().y > min.y - 16)
+				if (obj->GetPos().x<max.x + 32 && obj->GetPos().y < max.y + 32 && obj->GetPos().x > min.x - 32 && obj->GetPos().y > min.y - 32)
 				{
 					obj->SetActive(true);
 				}
