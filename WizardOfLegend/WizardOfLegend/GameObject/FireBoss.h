@@ -46,6 +46,7 @@ protected:
 	SpriteObj* firebossKick;
 	Animator kickAnimation;
 	bool isKick = false;
+	//bool isStart = false;
 
 public:
 	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};

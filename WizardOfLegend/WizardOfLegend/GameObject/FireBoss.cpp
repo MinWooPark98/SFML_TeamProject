@@ -62,7 +62,7 @@ void FireBoss::Init()
 	kickAnimation.SetTarget(&firebossKick->GetSprite());
 	kickAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossKick"));
 
-	SetPos({200, 200});
+	SetDamage(30);
 	SetSpeed(700.f);
 	SetMoveScale(10000.f);
 	SetAttackScale(0.f);
@@ -70,7 +70,7 @@ void FireBoss::Init()
 	SetMaxHp(2000);
 	SetCurHp(1);
 	RandomPatternSet(AttackType::None);
-	attackType = AttackType::ThirdAttack;
+	//attackType = AttackType::ThirdAttack;
 
 	for (int i = 0; i < 6; ++i)
 	{
@@ -93,10 +93,19 @@ void FireBoss::Update(float dt)
 {
 	Enemy::Update(dt);
 
+	//if (!isStart)
+	//{
+	//	SetState(BossStates::Idle);
+	//	if (InputMgr::GetKeyDown(Keyboard::Enter))
+	//		isStart = true;
+
+	//	animation.Update(dt);
+	//}
 	if (curHp <= 0 && isAlive)
 	{
 		isAlive = false;
 		SetState(BossStates::Die);
+			
 	}
 	else
 	{
@@ -221,7 +230,6 @@ void FireBoss::SetState(BossStates newState)
 				nextPatternDelay = 1.5f;
 				fireWing->SetPos(GetPos());
 				isKick = true;
-				firebossKick->SetPos(GetPos());
 				switch (moveType)
 				{
 				case FireBoss::MoveType::LeftAndRight:
@@ -372,8 +380,6 @@ void FireBoss::UpdateMove(int attackDelay)
 {
 	if (attackType == AttackType::ThirdAttack)
 		SetAttackScale(30.f);
-	//else if (attackType == AttackType::DragonAttack)
-	//	SetAttackScale(30.f);
 	else
 		SetAttackScale(10000.f);
 
@@ -404,7 +410,6 @@ void FireBoss::UpdateMove(int attackDelay)
 	{
 		direction.x = 0;
 		SetState(BossStates::Move);
-
 		return;
 	}
 }
@@ -449,6 +454,9 @@ void FireBoss::UpdateThirdAttack(float dt)
 		{
 			if (thirdAttackCount == 3 && patternCount > 0)
 				patternCount--;
+
+			firebossKick->SetPos(GetPos());
+			SOUND_MGR->Play("sounds/FireBlastODStart.wav");
 
 			thirdAttackCount--;
 			fireWing->SetActive(true);

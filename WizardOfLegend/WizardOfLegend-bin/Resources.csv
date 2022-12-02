@@ -665,3 +665,6 @@ graphics/ChaosCircle_13.png,0
 graphics/ChaosCircle_14.png,0
 animations/skill/ChaosCircle.csv,3
 animations/skill/ChaosWave.csv,3
+sounds/FireBlastODStart.wav,2
+sounds/FireBurn.wav,2
+sounds/RunSpeed.wav,2

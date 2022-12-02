@@ -275,7 +275,7 @@ void PlayScene::Update(float dt)
 			{
 				if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
 				{
-					((PlayUiMgr*)uiMgr)->SetMonsterDamage(30);
+					((PlayUiMgr*)uiMgr)->SetMonsterDamage(fireBoss->GetDamage());
 					fireBoss->SetIsKick(false);
 				}
 			}
