@@ -7,6 +7,7 @@
 #include "../GameObject/SpriteObj.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/InputMgr.h"
+#include "../GameObject/Player.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), windowSize()
@@ -361,47 +362,24 @@ void PlayUiMgr::Draw(RenderWindow& window)
 
 void PlayUiMgr::HpBarSizeControl(float dt)
 {
-	if (playerCurHp - monsterDamage <= 0.f)
+	// Hp Bar Control
+	float playerCurHpBarSet = (player->GetCurHp() * (maxHpBarSize / player->GetMaxHp())); // hp바 사이즈 비율
+	if (player->GetCurHp() <= 0.f)
 	{
-		playerCurHp = 0.f;
-		HpBarFill->SetSize({ 0, HpBarFill->GetSize().y * 4 });
+		HpBarFill->SetSize({ 0.f, 0.f });
+		hpText->SetText("0 / " + to_string(player->GetMaxHp()));
 	}
 	else
 	{
-		playerCurHp -= monsterDamage;
+		HpBarFill->SetSize({ playerCurHpBarSet, HpBarFill->GetSize().y * 4 });
+		hpText->SetText(to_string(player->GetCurHp()) + "/" + to_string(player->GetMaxHp()));
 	}
-
-	// 회복
-	if (InputMgr::GetKeyDown(Keyboard::Key::Z))
-	{
-		int heal = 50; // 회복율로 변경
-
-		if (playerCurHp + heal <= playerMaxHp)
-		{
-			playerCurHp += heal;
-		}
-		else
-		{
-			int overHeal = (playerCurHp + heal) - playerMaxHp;
-			playerCurHp += (heal - overHeal);
-		}
-	}
-
-	// Hp Bar Control
-	int playerCurHpBarSet = (playerMaxHp - playerCurHp) * (maxHpBarSize / playerMaxHp); // hp바 사이즈 비율
-	HpBarFill->SetSize({ (float)hpBarSize - playerCurHpBarSet, HpBarFill->GetSize().y * 4 });
-	hpText->SetText(to_string(playerCurHp) + "/" + to_string(playerMaxHp));
-
 
 	// HP Yellow Bar Control
-	if (hpBarSize - playerCurHpBarSet < hpBarHurtSize)
+	if (playerCurHpBarSet < hpBarHurtSize)
 	{
 		HpBarHurt->SetSize({ hpBarHurtSize -= (dt * 50), HpBarHurt->GetSize().y * 4 });
-	}
-	else if (hpBarSize - playerCurHpBarSet > hpBarHurtSize)
-	{
-		hpBarHurtSize = hpBarSize - playerCurHpBarSet;
-		HpBarHurt->SetSize({ hpBarHurtSize, HpBarHurt->GetSize().y * 4 });
+		cout << hpBarHurtSize << endl;
 	}
 }
 

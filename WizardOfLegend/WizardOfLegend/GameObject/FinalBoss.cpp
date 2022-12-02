@@ -190,6 +190,9 @@ void FinalBoss::Update(float dt)
 	case FinalBoss::States::Wait:
 		UpdateWait(dt);
 		break;
+	case FinalBoss::States::Hit:
+		UpdateHit(dt);
+		break;
 	default:
 		break;
 	}

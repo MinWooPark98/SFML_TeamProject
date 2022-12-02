@@ -3,6 +3,7 @@
 void Enemy::Init()
 {
 	Release();
+	SpriteObj::Init();
 	sprite.setScale({0, 1});
 	animation.SetTarget(&sprite);
 	position = { 0, 0 };

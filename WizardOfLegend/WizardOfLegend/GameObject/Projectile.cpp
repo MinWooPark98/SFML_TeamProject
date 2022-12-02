@@ -1,6 +1,9 @@
 #include "Projectile.h"
 #include "../Framework/Animator.h"
 #include "../Framework/ResourceMgr.h"
+#include "../Scene/PlayScene.h"
+#include "../Scene/SceneMgr.h"
+#include "FinalBoss.h"
 
 Projectile::Projectile()
 	:atkShape(Skill::AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(Skill::WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(Skill::RangeType::None), isComingBack(false),  attackDmg(0), dmgType(Skill::DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0), subType(Skill::SubjectType::None)
@@ -61,6 +64,7 @@ void Projectile::Update(float dt)
 	SpriteObj::Update(dt);
 	auto spriteBnd = sprite.getGlobalBounds();
 	SetHitBox(spriteBnd);
+	SetHitBoxOrigin(Origins::MC);
 
 	movingTimer += dt;
 	switch (atkShape)
@@ -119,11 +123,58 @@ void Projectile::Update(float dt)
 		movingTimer = 0.f;
 	}
 
-	if (dmgType != Skill::DamageType::NoDamage)
+	if (dmgType != Skill::DamageType::NoDamage && atkShape != Skill::AttackShape::Range)
 	{
 		if (!isOnAtkDelay)
 		{
-			// 충돌 검사 및 데미지
+			Scene* currScene = SCENE_MGR->GetCurrentScene();
+			if (currScene->GetType() != Scenes::Play)
+				return;
+			vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+			switch (subType)
+			{
+			case Skill::SubjectType::Player:
+				for (int i = 0; i < collisionList.size(); ++i)
+				{
+					if (collisionList[i][Object::ObjTypes::Player].empty())
+						continue;
+					for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+					{
+						if (GetHitBounds().intersects(enemy->GetHitBounds()))
+						{
+							((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
+							continue;
+						}
+					}
+					for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
+					{
+						if (GetHitBounds().intersects(boss->GetHitBounds()))
+						{
+							((FinalBoss*)boss)->OnHit(direction, attackDmg);
+							continue;
+						}
+					}
+				}
+				break;
+			case Skill::SubjectType::Enemy:
+			case Skill::SubjectType::FinalBoss:
+				for (int i = 0; i < collisionList.size(); ++i)
+				{
+					if (collisionList[i][Object::ObjTypes::Player].empty())
+						continue;
+					for (auto& player : collisionList[i][Object::ObjTypes::Player])
+					{
+						if (GetHitBounds().intersects(player->GetHitBounds()))
+						{
+							((Player*)player)->OnHit(direction, attackDmg);
+							continue;
+						}
+					}
+				}
+				break;
+			default:
+				break;
+			}
 		}
 		else if (dmgType == Skill::DamageType::Periodic)
 		{
