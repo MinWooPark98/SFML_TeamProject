@@ -238,33 +238,41 @@ void FinalBoss::UpdateDash(float dt)
 {
 	dashTimer += dt;
 	Translate(dashDir * speed * dt);
-	if (dashType == DashType::Chase && Utils::Distance(position, player->GetPos()) < currSkill->GetSetting()->distance)
+	if (dashType == DashType::Chase)
 	{
-		currSkill->Do();
-		if (vecIdx < normalSkills.size())
+		auto activateDistance = currSkill->GetSetting()->attackShape == Skill::AttackShape::Wave ? 100.f : currSkill->GetSetting()->distance;
+		if(Utils::Distance(position, player->GetPos()) < activateDistance)
 		{
-			++vecIdx;
-			if (vecIdx == normalSkills.size())
+			currSkill->Do();
+			cout << currSkill->GetSetting()->skillName << endl;
+			if (vecIdx < normalSkills.size())
 			{
-				currSkill = chaosSkills[Utils::RandomRange(0, chaosSkills.size())];
-				vecIdx = 0;
+				++vecIdx;
+				if (vecIdx == normalSkills.size())
+				{
+					currSkill = chaosSkills[Utils::RandomRange(0, chaosSkills.size())];
+				}
+				else
+					currSkill = normalSkills[vecIdx];
+				evasionCntLim = Utils::RandomRange(1, 3);
 			}
 			else
-				currSkill = normalSkills[vecIdx];
-			evasionCntLim = Utils::RandomRange(1, 3);
-		}
-		else
-		{
-			random_device rd;
-			mt19937 g(rd());
-			shuffle(normalSkills.begin(), normalSkills.end(), g);
+			{
+				random_device rd;
+				mt19937 g(rd());
+				shuffle(normalSkills.begin(), normalSkills.end(), g);
 
-			evasionCntLim = 2;
+				vecIdx = 0;
+				currSkill = normalSkills[vecIdx];
+
+				evasionCntLim = 2;
+			}
+			++attackCnt;
+			evasionCnt = 0;
+			dashTimer = 0.f;
 		}
-		++attackCnt;
-		evasionCnt = 0;
-		dashTimer = 0.f;
 	}
+	
 	if (dashTimer >= dashDuration)
 	{
 		dashTimer = 0.f;

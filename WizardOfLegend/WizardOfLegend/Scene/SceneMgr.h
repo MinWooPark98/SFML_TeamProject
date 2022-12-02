@@ -19,6 +19,7 @@ public:
 	Scene* GetScene(Scenes scene);
 	void ChangeScene(Scenes scene);
 	Scene* GetCurrentScene();
+
 	void Exit();
 
 	void Update(float dt);

@@ -6,6 +6,8 @@
 #include "CastingCircle.h"
 #include "../Framework/SoundMgr.h"
 #include "FinalBoss.h"
+#include "../Scene/PlayScene.h"
+#include "../FrameWork/RayCast.h"
 
 Skill::Skill()
 	:subject(nullptr), setting(nullptr), subType(SubjectType::None), isDoing(false), distance(0.f), attackCnt(0), attackTimer(0.f), skillTimer(0.f)
@@ -106,11 +108,17 @@ void Skill::Do()
 				}
 				if (!isDoing)
 				{
-					auto mouseVec = SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos();
+					auto currScene = SCENE_MGR->GetCurrentScene();
+					auto mouseVec = currScene->GetObjMousePos() - subject->GetPos();
 					auto mouseDistance = Utils::Magnitude(mouseVec);
 					skillDir = Utils::Normalize(mouseVec);
 					distance = mouseDistance <= setting->distance ? mouseDistance : setting->distance;
 					startPos = subject->GetPos() + skillDir * distance;
+					RayCast ray(subject->GetPos(), skillDir, distance);
+					ray.SetObjType(Object::ObjTypes::Wall);
+					ray.Update();
+					if (ray.RayHit())
+						startPos = ray.GetHittingPoint();
 				}
 				obj->SetDirection(skillDir);
 				obj->SetDistance(distance);
@@ -159,7 +167,7 @@ void Skill::Do()
 			if (!(setting->attackType == AttackType::Multiple && isDoing))
 			{
 				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
-				startPos = subject->GetPos() + skillDir * setting->distance;
+				startPos = subject->GetPos();
 			}
 			if (((Player*)subject)->GetBackHand())
 				obj->SetReverse(true);
@@ -197,7 +205,6 @@ void Skill::Do()
 		break;
 	case SubjectType::FinalBoss:
 		{
-
 			auto& playerPos = SCENE_MGR->GetCurrentScene()->FindGameObj("player")->GetPos();
 			if (!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
 				((FinalBoss*)subject)->Action(this);
@@ -273,7 +280,7 @@ void Skill::Do()
 				if (!(setting->attackType == AttackType::Multiple && isDoing))
 				{
 					skillDir = Utils::Normalize(playerPos - subject->GetPos());
-					startPos = subject->GetPos() + skillDir * setting->distance;
+					startPos = subject->GetPos();
 				}
 				if (((FinalBoss*)subject)->GetBackHand())
 					obj->SetReverse(true);
@@ -387,6 +394,11 @@ void Skill::Update(float dt)
 
 void Skill::Draw(RenderWindow& window)
 {
+	for (auto circle : castingCircles)
+	{
+		if (circle->GetActive())
+			circle->Draw(window);
+	}
 	for (auto projectile : projectiles)
 	{
 		if (projectile->GetActive())

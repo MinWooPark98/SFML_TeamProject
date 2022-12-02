@@ -93,11 +93,6 @@ void Scene::Draw(RenderWindow& window)
 	window.setView(worldView);
 
 	auto& usingCircles = circles->GetUseList();
-	for (auto circle : usingCircles)
-	{
-		if (circle->GetActive())
-			circle->Draw(window);
-	}
 
 	for (auto& layer : objList)
 	{

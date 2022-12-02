@@ -59,6 +59,8 @@ void Projectile::Update(float dt)
 
 	animator->Update(dt);
 	SpriteObj::Update(dt);
+	auto spriteBnd = sprite.getGlobalBounds();
+	SetHitBox(spriteBnd);
 
 	movingTimer += dt;
 	switch (atkShape)

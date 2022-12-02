@@ -542,6 +542,7 @@ void SelectOption::ApplyOptBtnIdx(Options opt, int vecIdx)
 				DeactivateOption(Options::RangeType);
 				break;
 			case Skill::AttackShape::Wave:
+				DeactivateOption(Options::Distance);
 				DeactivateOption(Options::FallingHeight);
 				DeactivateOption(Options::RangeType);
 				break;

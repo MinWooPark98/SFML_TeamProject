@@ -38,7 +38,7 @@ protected:
 	SpriteObj* playerMarkerGlow;
 	SpriteObj* playerMarkerOutLine;
 
-
+	TextObj* fps;
 
 	// bossHp
 	TextObj* bossName;

@@ -14,6 +14,7 @@ class Object
 public:
     enum class ObjTypes
     {
+        None = -1,
         Tile,
         Wall,
         Player,
@@ -22,6 +23,7 @@ public:
         Cliff,
         Sector,
         ETC,
+        Count,
     };
 
 protected:

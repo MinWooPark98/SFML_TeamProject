@@ -15,7 +15,7 @@ protected:
 	vector<Sector> room;
 	vector<map<Object::ObjTypes, list<Object*>>> collisionList;
 
-	int playerRoom;
+	list<int> playerRooms;
 
 public:
 	PlayScene();
@@ -34,5 +34,7 @@ public:
 
 	void SpownEnemy(int i);
 
+	vector<map<Object::ObjTypes, list<Object*>>>& GetCollisionList() { return collisionList; }
+	void OnCollisionWall(int roomVec, Object* obj);
 };
 

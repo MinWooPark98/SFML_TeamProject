@@ -91,7 +91,6 @@ void Player::SetState(States state)
 		break;
 	case States::Jump:
 		{
-			SetHitBox(FloatRect(0.f, 0.f, 0.f, 0.f));
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle <= -45.f)
 				animator->Play("JumpUp");
@@ -400,7 +399,6 @@ void Player::UpdateJump(float dt)
 	if (jumpTimer >= jumpDuration)
 	{
 		jumpTimer = 0.f;
-		SetHitBox(hitboxSize);
 		FinishAction();
 	}
 }

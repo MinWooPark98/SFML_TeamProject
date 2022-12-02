@@ -54,6 +54,8 @@ void CastingCircle::Update(float dt)
 {
 	SpriteObj::Update(dt);
 	animator->Update(dt);
+	auto spriteBnd = sprite.getGlobalBounds();
+	SetHitBox(spriteBnd);
 	timer += dt;
 	if (timer >= duration)
 	{
