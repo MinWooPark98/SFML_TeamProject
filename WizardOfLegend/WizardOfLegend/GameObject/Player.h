@@ -21,6 +21,7 @@ public:
 		Jump,
 		GroundSlam,
 		GroundSlamEnd,
+		Hit,
 	};
 	enum class SkillAction
 	{
@@ -61,8 +62,10 @@ protected:
 
 	bool skillToolMode;
 
-	int maxHp = 525;
-	int curHp = 525;
+	int maxHp;
+	int curHp;
+	float hitDuration;
+	float hitTimer;
 	FloatRect hitboxSize;
 
 public:
@@ -81,6 +84,7 @@ public:
 	void UpdateDash(float dt);
 	void UpdateJump(float dt);
 	void UpdateWait(float dt);
+	void UpdateHit(float dt);
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
@@ -96,6 +100,7 @@ public:
 
 	int GetMaxHp() { return maxHp; };
 	void SetMaxHp(int hp) { maxHp = hp; };
+	void OnHit(const Vector2f& atkDir, int dmg);
 
 	int GetCurHp() { return curHp; };
 	void SetCurHp(int hp) { curHp = hp; };

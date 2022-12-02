@@ -8,7 +8,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false)
+	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.3f), hitTimer(0.f)
 {
 }
 
@@ -111,6 +111,19 @@ void Player::SetState(States state)
 	case States::GroundSlamEnd:
 			lastDir.y >= 0.f ? animator->Play("GroundSlamDownEnd") : animator->Play("GroundSlamUpEnd");
 		break;
+	case States::Hit:
+		{
+			auto angle = Utils::Angle(lastDir);
+			if (angle > -135.f && angle <= -45.f)
+				animator->Play("HurtUp");
+			else if (angle > 45.f && angle <= 135.f)
+				animator->Play("HurtDown");
+			else if (angle > -45.f && angle <= 45.f)
+				animator->Play("HurtRight");
+			else
+				animator->Play("HurtLeft");
+		}
+		break;
 	default:
 		break;
 	}
@@ -167,6 +180,10 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("JumpSlamUp"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamDownEnd"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("GroundSlamUpEnd"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtRight"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtLeft"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtDown"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtUp"));
 	{
 		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "GroundSlamDownEnd", "GroundSlamUpEnd" };
 		for (int i = 0; i < clipIds.size(); ++i)
@@ -209,7 +226,6 @@ void Player::Init()
 	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
 
-	SetMaxHp(525);
 	SetCurHp(maxHp);
 }
 
@@ -414,6 +430,17 @@ void Player::UpdateWait(float dt)
 	}
 }
 
+void Player::UpdateHit(float dt)
+{
+	hitTimer += dt;
+	Translate(-lastDir * walkingSpeed * dt);
+	if (hitTimer >= hitDuration)
+	{
+		hitTimer = 0.f;
+		SetState(States::Idle);
+	}
+}
+
 void Player::Action(Skill* currSkill)
 {
 	SkillAction action = currSkill->GetSetting()->playerAction;
@@ -482,4 +509,13 @@ void Player::FinishAction()
 		SetState(States::Idle);
 		break;
 	}
+}
+
+void Player::OnHit(const Vector2f& atkDir, int dmg)
+{
+	direction = -atkDir;
+	lastDir = direction;
+	dashDir = direction;
+	curHp -= dmg;
+	SetState(States::Hit);
 }
