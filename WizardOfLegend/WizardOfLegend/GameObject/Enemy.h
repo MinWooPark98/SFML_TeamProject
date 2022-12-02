@@ -45,7 +45,6 @@ public:
 protected:
 	Animator spawnAnimation;
 	SpriteObj* spawn;
-	float spawnTimer = 2.f;
 	float deleteTimer = 0.3f;
 	bool isSpawn = false;
 	bool isActionStart = false;

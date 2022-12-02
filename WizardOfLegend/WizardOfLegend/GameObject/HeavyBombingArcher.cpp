@@ -13,7 +13,6 @@ void HeavyBombingArcher::Init()
 	arrowSpeed = 400.f;
 	arrowDir.setSize({ 1, 400 });
 	SetMonsterType(MonsterType::StageBoss);
-	SetPos({200, 200});
 
 	SetMoveScale(400.f);
 	SetAttackScale(300.f);
@@ -27,7 +26,7 @@ void HeavyBombingArcher::Init()
 	for (auto it : smollArrow)
 	{
 		it->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Arrow.png"));
-		it->SetHitBox((FloatRect)it->GetTextureRect());
+		it->SetHitBox({20, 20, 10, 40}, Color::Red);
 		it->SetScale({1.5, 1.5});
 		it->SetOrigin(Origins::MC);
 	}
@@ -47,8 +46,10 @@ void HeavyBombingArcher::Update(float dt)
 	if (attackDelay <= 0.f)
 		count = 0;
 
-	if (InputMgr::GetKeyDown(Keyboard::Key::J))
-		SetCurHp(0);
+	for (auto& arrows : smollArrow)
+	{
+		arrows->GetHitBox().setPosition(arrows->GetPos());
+	}
 
 	Archer::Update(dt);
 }
@@ -60,7 +61,12 @@ void HeavyBombingArcher::Draw(RenderWindow& window)
 	if (curState == States::MoveAttack)
 	{
 		for (auto it : smollArrow)
+		{
+			if (isDevMode)
+				window.draw(it->GetHitBox());
+
 			it->Draw(window);
+		}
 
 		arrowDir.setScale({ 1, 1 });
 	}
@@ -104,6 +110,7 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 			{
 				it->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 				it->SetPos(GetPos());
+				it->GetHitBox().setRotation(it->GetSprite().getRotation());
 			}
 		}
 		else if (attackDelay <= attackStart)

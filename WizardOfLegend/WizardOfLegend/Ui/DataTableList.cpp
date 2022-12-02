@@ -53,6 +53,7 @@ void DataTableList::SetActive(bool active)
 	{
 		window.close();
 		InputMgr::Clear();
+		FRAMEWORK->ClockRestart();
 	}
 }
 

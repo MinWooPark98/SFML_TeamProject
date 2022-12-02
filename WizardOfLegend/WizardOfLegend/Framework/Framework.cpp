@@ -51,8 +51,6 @@ bool Framework::Do()
     {
         deltaTime = clock.restart();
         float dt = GetDT();
-        if (dt > 0.05f)
-            dt = 0.05f;
 
         InputMgr::Update(dt);
         sf::Event ev;

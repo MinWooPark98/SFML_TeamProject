@@ -37,7 +37,6 @@ public:
 protected:
 	Scenes type;
 
-	vector<list<Object*>*> layOut;
 	map<LayerType, map<int, vector<Object*>>> objList;
 
 	ObjectPool<Projectile>* projectiles;
@@ -88,9 +87,10 @@ public:
 	UiMgr* GetUiMgr() { return uiMgr; }
 	const Vector2f& GetObjMousePos() const { return objMousePos; }
 	const Vector2f& GetUiMousePos() const { return uiMousePos; }
-	vector<list<Object*>*>& GetLayout() { return layOut; }
 	ObjectPool<Projectile>* GetProjectiles() { return projectiles; }
 	ObjectPool<CastingCircle>* GetCastingCircles() { return circles; }
+
+	Scenes GetType() { return type; }
 	//virtual void LayerSort();
 };
 //bool sorting(Object* p1, Object* p2);

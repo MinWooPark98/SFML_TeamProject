@@ -21,6 +21,7 @@ public:
 
 	float GetDT() const;
 	float GetRealDT() const;
+	void ClockRestart() { deltaTime = clock.restart(); }
 	const Vector2i& GetWindowSize() const;
 
 	bool Init(int width, int height);

@@ -37,8 +37,7 @@ public:
     Color GetColor();
     Sprite& GetSprite() { return sprite; }
     void SetUI(bool u) { isUi = u; }
-    void IsInView();
-    bool GetIsView() { return viewIn; }
+    bool IsInView();
     void SetTextureRect(const IntRect& rect);
     const IntRect& GetTextureRect()const;
     void SetHitBoxOrigin(Origins origin) { Utils::SetOrigin(hitbox, origin); }

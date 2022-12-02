@@ -4,6 +4,8 @@
 #include "../Ui/SkillToolUiMgr.h"
 #include "../Framework/InputMgr.h"
 #include "SceneMgr.h"
+#include "../GameObject/FinalBoss.h"
+#include "../GameObject/Skill.h"
 
 SkillToolScene::SkillToolScene()
 	:Scene(Scenes::SkillTool)
@@ -23,6 +25,11 @@ void SkillToolScene::Init()
 	player->SetSkillToolMode();
 	player->SetName("player");
 	objList[LayerType::Object][0].push_back(player);
+	// 다른 오브젝트가 없는 skilltoolscene에서 테스트
+	FinalBoss* boss = new FinalBoss();
+	boss->Init();
+	boss->SetPlayer(player);
+	objList[LayerType::Object][0].push_back(boss);
 
 	uiMgr = new SkillToolUiMgr();
 	uiMgr->Init();

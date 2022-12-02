@@ -17,7 +17,6 @@ protected:
 
 	list<int> playerRooms;
 
-
 	float maxSpownDelay = 3.f;
 	float currSpownDelay = 3.f;
 	bool isSpownDelay;
@@ -37,9 +36,9 @@ public:
 	virtual void Enter() override;
 	virtual void Exit() override;
 
-	void SpownEnemy(int i, float dt);
-	void AllDieEnemy(int i);
-
+	vector<map<Object::ObjTypes, list<Object*>>>& GetCollisionList() { return collisionList; }
 	void OnCollisionWall(int roomVec, Object* obj);
+	void SpawnEnemy(int i);
+	void OnCollisionETC(int roomVec, Object* obj);
 };
 

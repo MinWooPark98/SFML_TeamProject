@@ -1,8 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <list>
+#include "../GameObject/Object.h"
 
-class Object;
+//class Object;
 
 using namespace sf;
 using namespace std;
@@ -25,7 +26,9 @@ private:
 	Vertex drawRay[2];
 
 	bool rayHit;
-	int layerMask;
+	//int layerMask;
+	Object::ObjTypes objType;
+
 	CollidedInfo* closestObj;
 	list<CollidedInfo*> rayCollidedObjs;
 
@@ -34,7 +37,7 @@ public:
 	~RayCast();
 
 	void Reset();
-	void Update(float dt);
+	void Update();
 	void Draw(RenderWindow& window) { window.draw(drawRay, 2, Lines); }
 
 	bool RayHit() const { return rayHit; }
@@ -45,7 +48,8 @@ public:
 	void SetStartPos(const Vector2f& pos);
 	void SetDirection(const Vector2f& dir);
 	void SetRayLength(float len);
-	void SetLayerMask(int layer) { layerMask = layer; }
+	//void SetLayerMask(int layer) { layerMask = layer; }
+	void SetObjType(Object::ObjTypes type) { objType = type; }
 
 	void SetDrawRay();
 

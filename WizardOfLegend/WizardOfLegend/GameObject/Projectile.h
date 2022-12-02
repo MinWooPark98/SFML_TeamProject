@@ -54,6 +54,7 @@ public:
 	virtual void Update(float dt) override;
 
 	void SetAtkShape(Skill::AttackShape shape) { atkShape = shape; }
+	Skill::AttackShape GetAtkShape() { return atkShape; }
 	void SetAnimClip(const vector<string>& clipName);
 	void Fire();
 	void SetMoving(bool moving) { isMoving = moving; }

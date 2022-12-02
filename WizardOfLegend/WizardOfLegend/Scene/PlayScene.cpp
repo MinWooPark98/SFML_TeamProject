@@ -14,6 +14,7 @@
 #include "../GameObject/Sector.h"
 #include "../GameObject/Cliff.h"
 #include "../GameObject/SpriteObj.h"
+#include "../GameObject/CastingCircle.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -197,24 +198,31 @@ void PlayScene::Init()
 	mapSize.width = (tiles.back())->GetPos().x + 16;
 	mapSize.height = (tiles.back())->GetPos().y;
 
-	for (int i = 0; i < room.size();i++)
+
+	for (int i = 0; i < room.size(); i++)
 	{
 		for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 		{
 			((Enemy*)enemy)->SetPlayer(player);
 		}
 	}
-	
+	fireBoss->SetPlayerLastPos(player->GetPos());
 
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
+
+	((PlayUiMgr*)uiMgr)->SetBossCurHp(fireBoss->GetCurHp());
+	((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
+
+	((PlayUiMgr*)uiMgr)->SetPlayerCurHp(player->GetMaxHp());
+	((PlayUiMgr*)uiMgr)->SetPlayerMaxHp(player->GetMaxHp());
 }
 
 void PlayScene::Update(float dt)
 {
 	worldView.setCenter(player->GetPos());
 	Scene::Update(dt);
-
+	
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
 		if (!GetPause())
@@ -265,6 +273,49 @@ void PlayScene::Update(float dt)
 			break;
 		default:
 			break;
+		}
+	}
+	
+	auto& usingProjectiles = projectiles->GetUseList();
+	for (auto& projectile : usingProjectiles)
+	{
+		if (((Projectile*)projectile)->GetAtkShape() != Skill::AttackShape::Wave)
+			continue;
+		for (int i = 0; i < collisionList.size(); ++i)
+		{
+			if (collisionList[i][Object::ObjTypes::Player].empty())
+				continue;
+			for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
+			{
+				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
+				{
+					projectile->SetMoving(false);
+					continue;
+				}
+			}
+		}
+	}
+
+	if (fireBoss->GetIsAlive())
+	{
+		((PlayUiMgr*)uiMgr)->SetBossName("FLAME QUEEN");
+		if (fireBoss->GetFireKick()->GetActive())
+		{
+			if (fireBoss->GetIsKick())
+			{
+				if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
+				{
+					((PlayUiMgr*)uiMgr)->SetMonsterDamage(fireBoss->GetDamage());
+					fireBoss->SetIsKick(false);
+				}
+			}
+			else
+				((PlayUiMgr*)uiMgr)->SetMonsterDamage(0);
+		}
+
+		if (((PlayUiMgr*)uiMgr)->GetBossCurHp() <= 0)
+		{
+			fireBoss->SetCurHp(0);
 		}
 	}
 }
@@ -321,41 +372,8 @@ void PlayScene::Exit()
 	Scene::Exit();
 }
 
-void PlayScene::SpownEnemy(int i, float dt)
-{
-	currSpownDelay -= dt;
-	if (currSpownDelay <= 0)
-	{
-		for (auto& c_list : collisionList[i])
-		{
-			for (auto& obj : c_list.second)
-			{
-				if (obj->GetObjType() == Object::ObjTypes::Enemy)
-				{
-					obj->SetActive(true);
-				}
-			}
-		}
-		for (auto& c_list : collisionList[i])
-		{
-			for (auto& obj : c_list.second)
-			{
-				if (obj->GetObjType() == Object::ObjTypes::ETC)
-				{
-					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
-						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-						obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
-					{
-						obj->SetActive(true);
-					}
-				}
-			}
-		}
-		currSpownDelay = maxSpownDelay;
-	}
-}
 
-void PlayScene::AllDieEnemy(int i)
+void PlayScene::SpawnEnemy(int i)
 {
 	for (auto& c_list : collisionList[i])
 	{
@@ -426,3 +444,34 @@ void PlayScene::OnCollisionWall(int roomVec, Object* obj)
 	}
 }
 
+void PlayScene::OnCollisionETC(int roomVec, Object* obj)
+{
+	for (auto& coll : collisionList[roomVec][Object::ObjTypes::ETC])
+	{
+		if (obj->GetLowHitBounds().intersects(coll->GetHitBounds()))
+		{
+			bool leftandRight = false;
+			bool topandLow = false;
+
+			float objRightPoint = obj->GetLowHitBounds().width + obj->GetLowHitBounds().left;
+			float objLowPoint = obj->GetLowHitBounds().height + obj->GetLowHitBounds().top;
+
+			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
+			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+
+			if (obj->GetLowHitBounds().height <= collYPoint || objLowPoint >= collYPoint)
+				topandLow = true;
+			if (obj->GetLowHitBounds().left >= collXPoint || objRightPoint <= collXPoint)
+				leftandRight = true;
+
+			if (topandLow)
+			{
+				obj->SetPos({ obj->GetPos().x, obj->GetLastPosition().y });
+			}
+			if (leftandRight)
+			{
+				obj->SetPos({ obj->GetLastPosition().x, obj->GetPos().y });
+			}
+		}
+	}
+}

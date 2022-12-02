@@ -25,7 +25,7 @@ public:
 		NormalSpell,
 		SplitCast,
 		GroundSlam,
-		GroundSlamEnd,
+		Hit,
 	};
 	enum class SkillAction
 	{
@@ -66,6 +66,8 @@ private:
 
 	int maxHp;
 	int curHp;
+	float hitDuration;
+	float hitTimer;
 
 	bool superArmor;
 	float superArmorDelay;
@@ -89,6 +91,7 @@ public:
 	void UpdateIdle(float dt);
 	void UpdateDash(float dt);
 	void UpdateWait(float dt);
+	void UpdateHit(float dt);
 
 	void Dash(DashType type);
 
@@ -110,6 +113,7 @@ public:
 
 	int GetCurHp() { return curHp; };
 	void SetCurHp(int hp) { curHp = hp; };
+	void OnHit(const Vector2f& atkDir, int dmg);
 
 	void SetPlayer(Player* player) { this->player = player; }
 

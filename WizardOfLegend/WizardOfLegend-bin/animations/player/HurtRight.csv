@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-FinalBossDashLeft,0,1,,,,,,
+HurtRight,1,10,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
-graphics/FinalBossDashRight.png,0,0,48,48,24,24,1,0
+graphics/WizardHurtRight.png,0,0,20,34,10,17,0,0

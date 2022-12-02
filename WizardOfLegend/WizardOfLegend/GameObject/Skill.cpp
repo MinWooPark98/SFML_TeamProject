@@ -5,6 +5,9 @@
 #include "Projectile.h"
 #include "CastingCircle.h"
 #include "../Framework/SoundMgr.h"
+#include "FinalBoss.h"
+#include "../Scene/PlayScene.h"
+#include "../FrameWork/RayCast.h"
 
 Skill::Skill()
 	:subject(nullptr), setting(nullptr), subType(SubjectType::None), isDoing(false), distance(0.f), attackCnt(0), attackTimer(0.f), skillTimer(0.f)
@@ -105,11 +108,17 @@ void Skill::Do()
 				}
 				if (!isDoing)
 				{
-					auto mouseVec = SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos();
+					auto currScene = SCENE_MGR->GetCurrentScene();
+					auto mouseVec = currScene->GetObjMousePos() - subject->GetPos();
 					auto mouseDistance = Utils::Magnitude(mouseVec);
 					skillDir = Utils::Normalize(mouseVec);
 					distance = mouseDistance <= setting->distance ? mouseDistance : setting->distance;
 					startPos = subject->GetPos() + skillDir * distance;
+					RayCast ray(subject->GetPos(), skillDir, distance);
+					ray.SetObjType(Object::ObjTypes::Wall);
+					ray.Update();
+					if (ray.RayHit())
+						startPos = ray.GetHittingPoint();
 				}
 				obj->SetDirection(skillDir);
 				obj->SetDistance(distance);
@@ -158,7 +167,7 @@ void Skill::Do()
 			if (!(setting->attackType == AttackType::Multiple && isDoing))
 			{
 				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
-				startPos = subject->GetPos() + skillDir * setting->distance;
+				startPos = subject->GetPos();
 			}
 			if (((Player*)subject)->GetBackHand())
 				obj->SetReverse(true);
@@ -193,6 +202,94 @@ void Skill::Do()
 			break;
 		}
 		obj->SetAtkDmg(setting->dmgRatio * ((Enemy*)subject)->GetDamage());
+		break;
+	case SubjectType::FinalBoss:
+		{
+			auto& playerPos = SCENE_MGR->GetCurrentScene()->FindGameObj("player")->GetPos();
+			if (!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
+				((FinalBoss*)subject)->Action(this);
+			obj->SetAtkDmg(setting->dmgRatio * ((FinalBoss*)subject)->GetAtkDmg());
+			switch (setting->attackShape)
+			{
+			case AttackShape::Surrounded:
+				obj->SetDirection({ 0.f, 0.f });
+				obj->SetPos(subject->GetPos());
+				break;
+			case AttackShape::Range:
+				{
+					if (setting->rangeType == RangeType::Default)
+					{
+						obj->SetDirection({ 0.f, 0.f });
+						obj->SetDistance(0.f);
+						obj->SetPos(subject->GetPos());
+						break;
+					}
+					if (!isDoing)
+					{
+						auto dir = playerPos - subject->GetPos();
+						auto dist = Utils::Magnitude(dir);
+						skillDir = Utils::Normalize(dir);
+						distance = dist <= setting->distance ? dist : setting->distance;
+						startPos = subject->GetPos() + skillDir * distance;
+					}
+					obj->SetDirection(skillDir);
+					obj->SetDistance(distance);
+					obj->SetPos(setting->rangeType == RangeType::FromAbovePlayer ? subject->GetPos() : startPos);
+					Vector2f translation = Utils::RandAreaPoint() * setting->amplitude;
+					if (setting->rangeType == RangeType::FromAbovePlayer && setting->attackType == AttackType::Multiple)
+						translation *= setting->frequency;
+					if (isDoing)
+					{
+						obj->Translate(translation);
+						if (setting->rangeType == RangeType::VerticalDescent)
+						{
+							for (auto circle : castingCircles)
+								circle->SetTimer(0.f);
+							break;
+						}
+					}
+					CastingCircle* circle = SCENE_MGR->GetCurrentScene()->GetCastingCircles()->Get();
+					circle->SetSubjectType(subType);
+					circle->SetPos(startPos);
+					circle->SetDuration(setting->duration);
+					circle->Do();
+					circle->SetSize({ setting->amplitude * 2.f, setting->amplitude * 2.f });
+					castingCircles.push_back(circle);
+					if (setting->rangeType == RangeType::FromAbovePlayer)
+					{
+						obj->SetFallingHeight(setting->fallingHeight);
+						obj->SetPos(startPos);
+						if (setting->attackType != AttackType::Single)
+							circle->SetColor({ 255, 255, 255, 0 });
+						if (isDoing)
+						{
+							obj->Translate(translation);
+							circle->Translate(translation);
+						}
+					}
+					break;
+				}
+				break;
+			case AttackShape::Rotate:
+				if (isDoing)
+					obj->SetAngle(projectiles.back()->GetAngle() + 360.f / setting->attackCntLim);
+				startPos = subject->GetPos();
+				obj->SetStartPos(startPos);
+				break;
+			case AttackShape::Wave:
+				if (!(setting->attackType == AttackType::Multiple && isDoing))
+				{
+					skillDir = Utils::Normalize(playerPos - subject->GetPos());
+					startPos = subject->GetPos();
+				}
+				if (((FinalBoss*)subject)->GetBackHand())
+					obj->SetReverse(true);
+				obj->SetStartPos(startPos);
+				obj->SetDirection(skillDir);
+				obj->SetAmplitude(setting->amplitude);
+				break;
+			}
+		}
 		break;
 	default:
 		break;
@@ -297,6 +394,11 @@ void Skill::Update(float dt)
 
 void Skill::Draw(RenderWindow& window)
 {
+	for (auto circle : castingCircles)
+	{
+		if (circle->GetActive())
+			circle->Draw(window);
+	}
 	for (auto projectile : projectiles)
 	{
 		if (projectile->GetActive())
