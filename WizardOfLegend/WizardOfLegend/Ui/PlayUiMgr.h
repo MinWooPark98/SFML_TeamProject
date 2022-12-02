@@ -4,12 +4,15 @@
 class SpriteObj;
 class TextObj;
 class Button2;
+class Player;
+
 class PlayUiMgr : public UiMgr
 {
 protected:
 	map<int, vector<Object*>> uiObjList;
 	Vector2i windowSize;
 
+	Player* player;
 	SpriteObj* HpBarFill;
 	SpriteObj* HpBarHurt;
 	SpriteObj* OverdriveActiveBar;
@@ -25,8 +28,6 @@ protected:
 	bool testOverdrive = false;
 
 	TextObj* hpText;
-	int playerCurHp;
-	int playerMaxHp;
 
 	// ¸Þ´ºÃ¢
 	SpriteObj* menu;
@@ -77,11 +78,9 @@ public:
 	void SetBossCurHp(int hp) { bossCurHp = hp; };
 	void SetBossMaxHp(int hp) { bossMaxHp = hp; };
 
-	void SetPlayerCurHp(int hp) { playerCurHp = hp; };
-	void SetPlayerMaxHp(int hp) { playerMaxHp = hp; };
+	void SetPlayer(Player* player) { this->player = player; }
 
 	int GetBossCurHp() { return bossCurHp; };
-	int GetPlayerCurHp() { return playerCurHp; };
 
 	void SetBossName(string name);
 };

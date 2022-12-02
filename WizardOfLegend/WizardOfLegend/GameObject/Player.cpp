@@ -320,6 +320,9 @@ void Player::Update(float dt)
 	case Player::States::Wait:
 		UpdateWait(dt);
 		break;
+	case Player::States::Hit:
+		UpdateHit(dt);
+		break;
 	default:
 		break;
 	}
@@ -514,6 +517,12 @@ void Player::FinishAction()
 void Player::OnHit(const Vector2f& atkDir, int dmg)
 {
 	curHp -= dmg;
+	if (curHp <= 0.f)
+	{
+		curHp = 0.f;
+		SetActive(false);
+		return;
+	}
 	direction = -atkDir;
 	lastDir = direction;
 	dashDir = direction;

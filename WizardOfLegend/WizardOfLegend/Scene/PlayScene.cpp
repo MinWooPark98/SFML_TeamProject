@@ -29,6 +29,9 @@ void PlayScene::Init()
 {
 	Scene::Init();
 
+	uiMgr = new PlayUiMgr();
+	uiMgr->Init();
+
 	isMap = true;
 	auto& data = FILE_MGR->GetMap("TUTORIAL");
 
@@ -58,6 +61,7 @@ void PlayScene::Init()
 		if (obj.type == "WALL")
 		{
 			SpriteObj* draw = new SpriteObj();
+			draw->Init();
 			draw->SetName(obj.type);
 			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
 			draw->SetOrigin(Origins::BC);
@@ -70,6 +74,7 @@ void PlayScene::Init()
 		else if (obj.type == "TILE")
 		{
 			SpriteObj* draw = new SpriteObj();
+			draw->Init();
 			draw->SetName(obj.type);
 			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
 			draw->SetOrigin(Origins::BC);
@@ -81,6 +86,7 @@ void PlayScene::Init()
 		else if (obj.type == "OBJECT")
 		{
 			SpriteObj* draw = new SpriteObj();
+			draw->Init();
 			draw->SetName(obj.type);
 			draw->SetFileName(obj.path);
 			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
@@ -100,6 +106,7 @@ void PlayScene::Init()
 		else if (obj.type == "PLAYER")
 		{
 			player = new Player();
+			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 			player->Init();
 			player->SetName(obj.type);
 			player->SetPos(obj.position);
@@ -163,6 +170,7 @@ void PlayScene::Init()
 		else if (obj.type == "CLIFF")
 		{
 			Cliff* cliff = new Cliff();
+			cliff->Init();
 			cliff->SetName(obj.type);
 			cliff->SetPos(obj.position);
 			cliff->SetSize(obj.size);
@@ -208,14 +216,8 @@ void PlayScene::Init()
 	}
 	fireBoss->SetPlayerLastPos(player->GetPos());
 
-	uiMgr = new PlayUiMgr();
-	uiMgr->Init();
-
 	((PlayUiMgr*)uiMgr)->SetBossCurHp(fireBoss->GetCurHp());
 	((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
-
-	((PlayUiMgr*)uiMgr)->SetPlayerCurHp(player->GetMaxHp());
-	((PlayUiMgr*)uiMgr)->SetPlayerMaxHp(player->GetMaxHp());
 }
 
 void PlayScene::Update(float dt)
@@ -242,7 +244,7 @@ void PlayScene::Update(float dt)
 				collisionList[i][Object::ObjTypes::Player].push_back(player);
 				playerRooms.push_back(i);
 			}
-				SpawnEnemy(i);
+			SpawnEnemy(i);
 		}
 		else
 		{
@@ -325,6 +327,7 @@ void PlayScene::Draw(RenderWindow& window)
 	Vector2i min = { (int)(worldView.getCenter().x - (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y - (int)worldView.getSize().y * 0.5f) };
 	Vector2i max = { (int)(worldView.getCenter().x + (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y + (int)worldView.getSize().y * 0.5f) };
 	int extra = 80;
+	window.setView(worldView);
 	for (auto& layer : objList)
 	{
 		for (auto& obj_pair : layer.second)
@@ -334,14 +337,18 @@ void PlayScene::Draw(RenderWindow& window)
 			{
 				if (obj->GetPos().x<max.x + extra && obj->GetPos().y < max.y + extra && obj->GetPos().x > min.x - extra && obj->GetPos().y > min.y - extra)
 				{
-					((SpriteObj*)obj)->IsInView();
-				}
-				else
-				{
-					obj->SetActive(false);
+					if (obj->GetActive())
+					{
+						obj->Draw(window);
+					}
 				}
 			}
 		}
+	}
+	if (uiMgr != nullptr && uiMgr->GetActive())
+	{
+		window.setView(uiView);
+		uiMgr->Draw(window);
 	}
 }
 
@@ -378,7 +385,7 @@ void PlayScene::SpawnEnemy(int i)
 	{
 		for (auto& obj : c_list.second)
 		{
-			if (obj->GetObjType() == Object::ObjTypes::Enemy)
+			if (obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive())
 			{
 				if (((Enemy*)obj)->GetIsAlive())
 				{

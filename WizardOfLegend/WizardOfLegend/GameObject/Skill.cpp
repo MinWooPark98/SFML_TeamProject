@@ -114,11 +114,14 @@ void Skill::Do()
 					skillDir = Utils::Normalize(mouseVec);
 					distance = mouseDistance <= setting->distance ? mouseDistance : setting->distance;
 					startPos = subject->GetPos() + skillDir * distance;
-					RayCast ray(subject->GetPos(), skillDir, distance);
-					ray.SetObjType(Object::ObjTypes::Wall);
-					ray.Update();
-					if (ray.RayHit())
-						startPos = ray.GetHittingPoint();
+					if (currScene->GetType() == Scenes::Play)
+					{
+						RayCast ray(subject->GetPos(), skillDir, distance);
+						ray.SetObjType(Object::ObjTypes::Wall);
+						ray.Update();
+						if (ray.RayHit())
+							startPos = ray.GetHittingPoint();
+					}
 				}
 				obj->SetDirection(skillDir);
 				obj->SetDistance(distance);
