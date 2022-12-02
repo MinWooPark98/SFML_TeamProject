@@ -34,5 +34,6 @@ public:
 
 	void SpawnEnemy(int i);
 	void OnCollisionWall(int roomVec, Object* obj);
+	void OnCollisionETC(int roomVec, Object* obj);
 };
 

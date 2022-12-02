@@ -13,7 +13,6 @@ void HeavyBombingArcher::Init()
 	arrowSpeed = 400.f;
 	arrowDir.setSize({ 1, 400 });
 	SetMonsterType(MonsterType::StageBoss);
-	SetPos({200, 200});
 
 	SetMoveScale(400.f);
 	SetAttackScale(300.f);

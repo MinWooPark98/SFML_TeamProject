@@ -256,6 +256,7 @@ void PlayScene::Update(float dt)
 				for (auto& obj : collisionList[j][(Object::ObjTypes)i])
 				{
 					OnCollisionWall(j, obj);
+					OnCollisionETC(j, obj);
 				}
 			}
 			break;
@@ -356,6 +357,38 @@ void PlayScene::SpawnEnemy(int i)
 void PlayScene::OnCollisionWall(int roomVec, Object* obj)
 {
 	for (auto& coll : collisionList[roomVec][Object::ObjTypes::Wall])
+	{
+		if (obj->GetLowHitBounds().intersects(coll->GetHitBounds()))
+		{
+			bool leftandRight = false;
+			bool topandLow = false;
+
+			float objRightPoint = obj->GetLowHitBounds().width + obj->GetLowHitBounds().left;
+			float objLowPoint = obj->GetLowHitBounds().height + obj->GetLowHitBounds().top;
+
+			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
+			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+
+			if (obj->GetLowHitBounds().height <= collYPoint || objLowPoint >= collYPoint)
+				topandLow = true;
+			if (obj->GetLowHitBounds().left >= collXPoint || objRightPoint <= collXPoint)
+				leftandRight = true;
+
+			if (topandLow)
+			{
+				obj->SetPos({ obj->GetPos().x, obj->GetLastPosition().y });
+			}
+			if (leftandRight)
+			{
+				obj->SetPos({ obj->GetLastPosition().x, obj->GetPos().y });
+			}
+		}
+	}
+}
+
+void PlayScene::OnCollisionETC(int roomVec, Object* obj)
+{
+	for (auto& coll : collisionList[roomVec][Object::ObjTypes::ETC])
 	{
 		if (obj->GetLowHitBounds().intersects(coll->GetHitBounds()))
 		{

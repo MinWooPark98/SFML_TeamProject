@@ -104,6 +104,9 @@ void Lancer::Draw(RenderWindow& window)
 
 		if (attackDelay <= 1.f)
 			window.draw(lancerAttackEffect->GetSprite(), &shader);
+
+		if (isDevMode && lancerAttackEffect->GetActive())
+			window.draw(lancerAttackEffect->GetHitBox());
 	}
 
 	Enemy::Draw(window);
@@ -143,6 +146,7 @@ void Lancer::SetState(States newState)
 	case States::Attack:
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 		lancerAttackEffect->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
+		lancerAttackEffect->GetHitBox().setRotation(lancerAttackEffect->GetSprite().getRotation());
 
 		angle = Utils::Angle(player->GetPos(), GetPos());
 		attackDelay = 2.f;
@@ -197,12 +201,15 @@ void Lancer::UpdateAttack(float dt)
 		}
 
 		lancerAttackEffect->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 50.f);
+		lancerAttackEffect->GetHitBox().setPosition(lancerAttackEffect->GetPos());
+		lancerAttackEffect->SetActive(true);
 		spearAnimation.Play("SpearMotion");
 		SOUND_MGR->Play("sounds/KnightAttack.wav");
 		spearWait = false;
 	}
 	else if (attackDelay >= 1.f && !spearWait)
 	{
+		lancerAttackEffect->SetActive(false);
 		weapon->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
 		weapon->SetPos({ GetPos().x, GetPos().y });
 		if (spearPos == 3 || spearPos == 4)
