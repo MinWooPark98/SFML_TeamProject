@@ -257,7 +257,7 @@ void PlayScene::Update(float dt)
 				for (auto& obj : collisionList[j][(Object::ObjTypes)i])
 				{
 					OnCollisionWall(j, obj);
-					OnCollisionETC(j, obj);
+					//OnCollisionETC(j, obj);
 				}
 			}
 			break;
