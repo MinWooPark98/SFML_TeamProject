@@ -205,8 +205,8 @@ void PlayScene::Init()
 	((PlayUiMgr*)uiMgr)->SetBossCurHp(fireBoss->GetCurHp());
 	((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
 
-	((PlayUiMgr*)uiMgr)->SetPlayerCurHp(525);
-	((PlayUiMgr*)uiMgr)->SetPlayerMaxHp(525);
+	((PlayUiMgr*)uiMgr)->SetPlayerCurHp(player->GetMaxHp());
+	((PlayUiMgr*)uiMgr)->SetPlayerMaxHp(player->GetMaxHp());
 }
 
 void PlayScene::Update(float dt)
