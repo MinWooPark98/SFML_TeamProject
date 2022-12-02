@@ -200,8 +200,6 @@ void PlayScene::Init()
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
 
-	//((PlayUiMgr*)uiMgr)->SetBossCurHp(0);
-	//((PlayUiMgr*)uiMgr)->SetBossMaxHp(2000);
 	((PlayUiMgr*)uiMgr)->SetBossCurHp(fireBoss->GetCurHp());
 	((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
 
