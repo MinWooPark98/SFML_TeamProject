@@ -60,6 +60,30 @@ void SpriteObj::SetPos(const Vector2f& pos)
     sprite.setPosition(position);
 }
 
+bool SpriteObj::IsInView()
+{
+    if (isUi)
+    {
+        viewIn = true;
+        return true;
+    }
+
+    auto& view = SCENE_MGR->GetCurrentScene()->GetWorldView();
+    auto& viewSize = view.getSize();
+    auto& viewCenter = view.getCenter();
+    auto bound = GetGlobalBounds();
+
+    if (((bound.left > viewCenter.x + viewSize.x / 2) || (bound.left + bound.width < viewCenter.x - viewSize.x / 2)) ||
+        ((bound.top > viewCenter.y + viewSize.y / 2) || (bound.top + bound.height < viewCenter.y - viewSize.y / 2)))
+    {
+        viewIn = false;
+        return false;
+    }
+    viewIn = true;
+    return true;
+}
+
+
 void SpriteObj::SetTextureRect(const IntRect& rect)
 {
     sprite.setTextureRect(rect);

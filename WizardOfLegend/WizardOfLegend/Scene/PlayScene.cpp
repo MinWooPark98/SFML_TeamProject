@@ -242,7 +242,7 @@ void PlayScene::Update(float dt)
 				collisionList[i][Object::ObjTypes::Player].push_back(player);
 				playerRooms.push_back(i);
 			}
-				SpownEnemy(i, dt);
+				SpawnEnemy(i);
 		}
 		else
 		{
@@ -343,7 +343,6 @@ void PlayScene::Draw(RenderWindow& window)
 			}
 		}
 	}
-	Scene::Draw(window);
 }
 
 void PlayScene::Release()

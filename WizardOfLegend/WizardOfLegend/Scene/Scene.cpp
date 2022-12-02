@@ -92,7 +92,6 @@ void Scene::Draw(RenderWindow& window)
 {
 	window.setView(worldView);
 
-	auto& usingCircles = circles->GetUseList();
 
 	for (auto& layer : objList)
 	{
@@ -101,7 +100,7 @@ void Scene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetActive()&&((SpriteObj*)obj)->IsInView())
+				if (obj->GetActive())
 				{
 					obj->Draw(window);
 				}
