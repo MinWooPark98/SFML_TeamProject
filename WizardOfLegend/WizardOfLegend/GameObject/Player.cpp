@@ -513,9 +513,9 @@ void Player::FinishAction()
 
 void Player::OnHit(const Vector2f& atkDir, int dmg)
 {
+	curHp -= dmg;
 	direction = -atkDir;
 	lastDir = direction;
 	dashDir = direction;
-	curHp -= dmg;
 	SetState(States::Hit);
 }

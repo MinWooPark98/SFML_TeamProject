@@ -8,7 +8,7 @@
 #include "Player.h"
 
 FinalBoss::FinalBoss()
-	:currState(States::None), animator(nullptr), attackDmg(0), attackCnt(0), attackRange(0.f), speed(400.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
+	:currState(States::None), animator(nullptr), attackDmg(0), attackCnt(0), attackRange(0.f), speed(400.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
 {
 	direction = {0.f, 1.f};
 }
@@ -75,6 +75,9 @@ void FinalBoss::SetState(States state)
 	case States::GroundSlam:
 		animator->Play("FinalBossGroundSlamDown");
 		break;
+	case States::Hit:
+		lastDir.x < 0.f ? animator->Play("FinalBossHurtLeft") : animator->Play("FinalBossHurtRight");
+		break;
 	default:
 		break;
 	}
@@ -111,6 +114,8 @@ void FinalBoss::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossSlideDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossSlideUp"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossGroundSlamDown"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossHurtRight"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossHurtLeft"));
 	{
 		vector<string> clipIds = { "FinalBossSlideRight", "FinalBossSlideLeft", "FinalBossSlideDown", "FinalBossSlideUp" };
 		for (int i = 0; i < clipIds.size(); ++i)
@@ -355,6 +360,18 @@ void FinalBoss::FinishAction()
 	NextAction();
 }
 
+void FinalBoss::UpdateHit(float dt)
+{
+	hitTimer += dt;
+	superArmorTimer += dt;
+	Translate(-lastDir * speed * 0.5f * dt);
+	if (hitTimer >= hitDuration)
+	{
+		hitTimer = 0.f;
+		SetState(States::Idle);
+	}
+}
+
 void FinalBoss::NextAction()
 {
 	if (superArmor)
@@ -377,4 +394,15 @@ void FinalBoss::NextAction()
 	}
 	else
 		SetState(States::Idle);
+}
+
+void FinalBoss::OnHit(const Vector2f& atkDir, int dmg)
+{
+	curHp -= dmg;
+	if (superArmor)
+		return;
+	direction = -atkDir;
+	lastDir = direction;
+	dashDir = direction;
+	SetState(States::Hit);
 }
