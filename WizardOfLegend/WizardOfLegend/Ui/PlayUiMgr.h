@@ -61,6 +61,8 @@ protected:
 
 	int monsterDamage = 0;
 
+	TextObj* fps;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();

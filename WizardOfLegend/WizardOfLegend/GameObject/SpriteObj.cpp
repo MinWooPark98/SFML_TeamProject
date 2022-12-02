@@ -20,12 +20,12 @@ void SpriteObj::Update(float dt)
 
 void SpriteObj::Draw(RenderWindow& window)
 {
-    IsInView();
-    if(viewIn)
-    { 
+    //IsInView();
+	//if(viewIn)
+	//{ 
 		window.draw(sprite, &spriteShader);
-		Object::Draw(window);
-    }
+		Object::Draw(window);/*
+    }*/
 }
 
 void SpriteObj::SetTexture(const Texture& tex)
@@ -65,9 +65,9 @@ void SpriteObj::IsInView()
     if (isUi)
     {
         viewIn = true;
-        return;
+        return true;
     }
-    int extra = 80;
+    int extra = -32;
     auto& view = SCENE_MGR->GetCurrentScene()->GetWorldView();
 
     Vector2i min = { (int)(view.getCenter().x - (int)view.getSize().x * 0.5f), (int)(view.getCenter().y - (int)view.getSize().y * 0.5f) };
@@ -76,13 +76,13 @@ void SpriteObj::IsInView()
     if (position.x<max.x + extra && position.y < max.y + extra && position.x > min.x - extra && position.y > min.y - extra)
     {
         viewIn = true;
+        return true;
     }
     else
     {
 		viewIn = false;
-
+        return false;
     }
-
 }
 
 void SpriteObj::SetTextureRect(const IntRect& rect)

@@ -106,7 +106,7 @@ void Scene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetActive())
+				if (obj->GetActive()&&((SpriteObj*)obj)->IsInView())
 				{
 					obj->Draw(window);
 				}

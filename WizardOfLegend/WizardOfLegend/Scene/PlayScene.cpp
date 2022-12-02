@@ -187,8 +187,8 @@ void PlayScene::Init()
 				}
 			}
 		}
-		/*room[i].SetAliveEnemyCount(collisionList[i][Object::ObjTypes::Enemy].size()+ collisionList[i][Object::ObjTypes::FinalBoss].size());
-		cout<<i<<"방 에너미 숫자 : " << collisionList[i][Object::ObjTypes::Enemy].size() << endl;*/
+		room[i].SetAliveEnemyCount(collisionList[i][Object::ObjTypes::Enemy].size()+ collisionList[i][Object::ObjTypes::FinalBoss].size());
+		cout<<i<<"방 에너미 숫자 : " << collisionList[i][Object::ObjTypes::Enemy].size() << endl;
 	}
 
 	auto& tiles = objList[LayerType::Tile][0];
@@ -271,6 +271,27 @@ void PlayScene::Update(float dt)
 
 void PlayScene::Draw(RenderWindow& window)
 {
+	Vector2i min = { (int)(worldView.getCenter().x - (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y - (int)worldView.getSize().y * 0.5f) };
+	Vector2i max = { (int)(worldView.getCenter().x + (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y + (int)worldView.getSize().y * 0.5f) };
+	int extra = 80;
+	for (auto& layer : objList)
+	{
+		for (auto& obj_pair : layer.second)
+		{
+			auto& objs = obj_pair.second;
+			for (auto& obj : objs)
+			{
+				if (obj->GetPos().x<max.x + extra && obj->GetPos().y < max.y + extra && obj->GetPos().x > min.x - extra && obj->GetPos().y > min.y - extra)
+				{
+					((SpriteObj*)obj)->IsInView();
+				}
+				else
+				{
+					obj->SetActive(false);
+				}
+			}
+		}
+	}
 	Scene::Draw(window);
 }
 
