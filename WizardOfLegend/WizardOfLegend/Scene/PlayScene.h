@@ -15,7 +15,7 @@ protected:
 	vector<Sector> room;
 	vector<map<Object::ObjTypes, list<Object*>>> collisionList;
 
-	int playerRoom;
+	list<int> playerRooms;
 
 public:
 	PlayScene();
@@ -32,7 +32,7 @@ public:
 	virtual void Enter() override;
 	virtual void Exit() override;
 
-	void SpownEnemy(int i);
-
+	void SpawnEnemy(int i);
+	void OnCollisionWall(int roomVec, Object* obj);
 };
 

@@ -22,6 +22,7 @@ public:
         Cliff,
         Sector,
         ETC,
+        Count,
     };
 
 protected:

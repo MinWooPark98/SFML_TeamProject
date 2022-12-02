@@ -94,9 +94,6 @@ void Archer::Update(float dt)
 		else
 			moveSoundTimer = 0.f;
 
-		if (InputMgr::GetKeyDown(Keyboard::Key::L) && type == MonsterType::Normal)
-			SetCurHp(0);
-
 		if (curHp <= 0 && isAlive)
 		{
 			dieTimer = 1.f;

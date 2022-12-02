@@ -67,8 +67,8 @@ void FireBoss::Init()
 	SetMoveScale(10000.f);
 	SetAttackScale(0.f);
 	SetMonsterType(MonsterType::MiddleBoss);
-	SetMaxHp(1);
-	SetCurHp(GetMaxHp());
+	SetMaxHp(2000);
+	SetCurHp(1);
 	RandomPatternSet(AttackType::None);
 	attackType = AttackType::ThirdAttack;
 
@@ -93,78 +93,82 @@ void FireBoss::Update(float dt)
 {
 	Enemy::Update(dt);
 
-	if (InputMgr::GetKeyDown(Keyboard::Key::H))
-	{
-		SetCurHp(0);
-	}
-
 	if (curHp <= 0 && isAlive)
 	{
 		isAlive = false;
+		SetState(BossStates::Die);
 	}
-
-	if (curBossState == BossStates::Move || attackType != AttackType::ThirdAttack)
+	else
 	{
-		float angle = Utils::Angle(player->GetPos(), GetPos());
-
-		if ((angle >= -44 && angle <= 45) || (angle >= -180 && angle <= -130 || angle >= 130 && angle <= 180))
-			moveType = MoveType::LeftAndRight;
-		if ((angle > 45 && angle < 130) || (angle <= -45 && angle > -130))
-			moveType = MoveType::TopAndBottom;
-
-		if (curBossState == BossStates::Move && patternCount != 0)
+		if (curBossState == BossStates::Move || attackType != AttackType::ThirdAttack)
 		{
-			BossMonsterMove(dt);
+			float angle = Utils::Angle(player->GetPos(), GetPos());
+
+			if ((angle >= -44 && angle <= 45) || (angle >= -180 && angle <= -130 || angle >= 130 && angle <= 180))
+				moveType = MoveType::LeftAndRight;
+			if ((angle > 45 && angle < 130) || (angle <= -45 && angle > -130))
+				moveType = MoveType::TopAndBottom;
+
+			if (curBossState == BossStates::Move && patternCount != 0)
+			{
+				BossMonsterMove(dt);
+			}
+		}
+
+		if (attackType == AttackType::ThirdAttack && curBossState == BossStates::Attack && thirdAttackCount > 0 && patternDelay <= 0.f)
+		{
+			auto kick = Utils::Normalize(playerLastPos - lastPos);
+			firebossKick->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
+			firebossKick->GetHitBox().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
+			fireWing->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) - 90);
+			Translate({ (dt * speed * kick) / 5.f });
+		}
+
+		if (attackType == AttackType::ThrowingKnife && isThrowingKnife)
+		{
+			auto throwing = Utils::Normalize(playerLastPos - lastPos);
+			Translate({ (dt * speed * throwing) / 4.f * -1.f });
+		}
+		if (isThrowingKnife && nextPatternDelay <= 1.3f)
+			isThrowingKnife = false;
+
+		if (curBossState == BossStates::Idle)
+			hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.2f);
+		else
+			hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
+
+		if (curBossState == BossStates::Idle && patternDelay <= 0.f)
+			curBossState = BossStates::Move;
+
+
+		if (curBossState != BossStates::Idle)
+			nextPatternDelay -= dt;
+
+		patternDelay -= dt;
+		animation.Update(dt);
+		fireWingAnimation.Update(dt);
+		kickAnimation.Update(dt);
+
+		for (auto skill : skills)
+		{
+			skill->Update(dt);
 		}
 	}
 
-	if (attackType == AttackType::ThirdAttack && curBossState == BossStates::Attack && thirdAttackCount > 0 && patternDelay <= 0.f)
+	if (!isAlive)
 	{
-		auto kick = Utils::Normalize(playerLastPos - lastPos);
-		firebossKick->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
-		firebossKick->GetHitBox().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
-		fireWing->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) - 90);
-		Translate({ (dt * speed * kick) / 5.f });
-	}
-
-	if (attackType == AttackType::ThrowingKnife && isThrowingKnife)
-	{
-		auto throwing = Utils::Normalize(playerLastPos - lastPos);
-		Translate({ (dt * speed * throwing) / 4.f * -1.f });
-	}
-	if (isThrowingKnife && nextPatternDelay <= 1.3f)
-		isThrowingKnife = false;
-
-	if (curBossState == BossStates::Idle)
-		hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.2f);
-	else
-		hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
-
-	if (curBossState == BossStates::Idle && patternDelay <= 0.f)
-		curBossState = BossStates::Move;
-
-
-	if (curBossState != BossStates::Idle)
-		nextPatternDelay -= dt;
-
-	patternDelay -= dt;
-	animation.Update(dt);
-	fireWingAnimation.Update(dt);
-	kickAnimation.Update(dt);
-
-	for (auto skill : skills)
-	{
-		skill->Update(dt);
+		if (InputMgr::GetKeyDown(Keyboard::Enter))
+			SetState(BossStates::Clear);
 	}
 }
 
 void FireBoss::Draw(RenderWindow& window)
 {
+	Enemy::Draw(window);
+	window.draw(sprite);
+
 	if (isAlive)
 	{
-		Enemy::Draw(window);
-		window.draw(sprite);
-
 		if (fireWing->GetActive())
 			fireWing->Draw(window);
 		if (firebossKick->GetActive())

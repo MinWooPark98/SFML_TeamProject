@@ -37,8 +37,6 @@ protected:
 	SpriteObj* playerMarkerGlow;
 	SpriteObj* playerMarkerOutLine;
 
-
-
 	// bossHp
 	TextObj* bossName;
 	SpriteObj* bossHpBarFill;
@@ -58,6 +56,8 @@ protected:
 	float dieTimer = 1.f;
 
 	int monsterDamage = 0;
+
+	TextObj* fps;
 
 public:
 	PlayUiMgr();
@@ -79,6 +79,9 @@ public:
 
 	void SetPlayerCurHp(int hp) { playerCurHp = hp; };
 	void SetPlayerMaxHp(int hp) { playerMaxHp = hp; };
+
+	int GetBossCurHp() { return bossCurHp; };
+	int GetPlayerCurHp() { return playerCurHp; };
 
 	void SetBossName(string name);
 };

@@ -235,6 +235,16 @@ void PlayUiMgr::Init()
 		uiObjList[2].push_back(bossHpBarFill);
 		uiObjList[2].push_back(bossName);
 	}
+
+	fps = new TextObj();
+	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	fps->SetSize(35);
+	fps->SetFillColor(Color::White);
+	fps->SetOutlineColor(Color::Black);
+	fps->SetOutlineThickness(2.f);
+	fps->SetText("");
+	fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
+	uiObjList[0].push_back(fps);
 }
 
 void PlayUiMgr::Release()
@@ -302,6 +312,12 @@ void PlayUiMgr::Update(float dt)
 		playerMarkerOutLine->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 		playerMarkerGlow->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 	}
+
+	float fpsi = 1.f / dt;
+	if (fpsi < 30.f)
+		fps->SetSize(100.f);
+
+	fps->SetString(to_string(fpsi));
 }
 
 void PlayUiMgr::Draw(RenderWindow& window)

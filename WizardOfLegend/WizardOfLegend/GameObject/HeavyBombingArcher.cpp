@@ -47,9 +47,6 @@ void HeavyBombingArcher::Update(float dt)
 	if (attackDelay <= 0.f)
 		count = 0;
 
-	if (InputMgr::GetKeyDown(Keyboard::Key::J))
-		SetCurHp(0);
-
 	Archer::Update(dt);
 }
 
