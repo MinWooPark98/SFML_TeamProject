@@ -49,13 +49,12 @@ protected:
 	float bossHpBarSize = 89.f * 4.f;
 	float bossHpBarHurtSize = 89.f * 4.f;
 
-	// 보스마다 받아와야함
-	int bossCurHp = 1;
-	int bossMaxHp = 2000;
+	int bossCurHp;
+	int bossMaxHp;
 
 	// 보스 임시 생존여부 설정
+	bool isStart = false;
 	bool isAlive = true;
-	float spawnTimer = 2.f;
 	float dieTimer = 1.f;
 
 	int monsterDamage = 0;

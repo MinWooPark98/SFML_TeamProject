@@ -381,21 +381,23 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 {
 	bossName->SetOrigin(Origins::MC);
 
-	if (spawnTimer > 0.f)
+	if (!isStart)
 	{
 		if (bossCurHp < bossMaxHp)
 		{
-			bossCurHp += 10;
+			bossCurHp += 5;
+
+			if (bossCurHp >= bossMaxHp)
+			{
+				bossCurHp = bossMaxHp;
+				isStart = true;
+			}
+
+			// Hp Bar Control
+			int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
+			bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+			bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
 		}
-		else
-			bossCurHp = bossMaxHp;
-
-		spawnTimer -= dt;
-
-		// Hp Bar Control
-		int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
-		bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
-		bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
 	}
 	else
 	{
@@ -423,18 +425,18 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 		{
 			bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarFill->GetSize().y * 4.f });
 		}
-	}
 
-
-	if (bossCurHp <= 0 && isAlive)
-	{
-		dieTimer -= dt;
-		if (dieTimer <= 0.f)
+		if (bossCurHp <= 0 && isAlive)
 		{
-			uiObjList[2].clear();
-			isAlive = false;
+			dieTimer -= dt;
+			if (dieTimer <= 0.f)
+			{
+				uiObjList[2].clear();
+				isAlive = false;
+			}
 		}
 	}
+
 }
 
 void PlayUiMgr::OverdriveBarControl(float dt)
