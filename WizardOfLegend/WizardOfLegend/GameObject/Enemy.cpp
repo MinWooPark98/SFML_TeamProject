@@ -79,9 +79,9 @@ void Enemy::Update(float dt)
 	if (curState == States::Die && dieTimer >= 0.f)
 		dieTimer -= dt;
 
-	if (isSpawn && !isActionStart)
+	if (type == MonsterType::Normal || type == MonsterType::StageBoss)
 	{
-		if (spawnTimer <= 1.3f)
+		if (isSpawn && !isActionStart)
 		{
 			if (spawn->GetSprite().getScale().x <= 0.f && spawn->GetSprite().getScale().x > -0.1f)
 			{
@@ -95,17 +95,11 @@ void Enemy::Update(float dt)
 				SpawnScale(1.5f, dt);
 		}
 
-		spawnTimer -= dt;
-	}
-
-	if (deleteTimer >= 0.f)
-	{
 		if (isActionStart)
 		{
-			deleteTimer -= dt;
 			isShader = false;
+			deleteTimer -= dt;
 		}
-
 		spawnAnimation.Update(dt);
 	}
 
@@ -227,7 +221,7 @@ void Enemy::SpawnScale(float scale, float dt)
 	{
 		spawn->SetScale({ spawn->GetSprite().getScale().x - (dt * 7) , scale });
 
-		if (spawn->GetSprite().getScale().x <= 0.f)
+		if (spawn->GetSprite().getScale().x <= 0.f && sprite.getScale().x <= scale)
 			sprite.setScale({ sprite.getScale().x + (dt * 7), scale });
 	}
 	else if (spawn->GetSprite().getScale().x <= -scale)

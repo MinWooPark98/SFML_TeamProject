@@ -24,10 +24,9 @@ protected:
 
 	bool testOverdrive = false;
 
-	// 플레이어한테 받아와야 함
 	TextObj* hpText;
-	int playerCurHp = 525;
-	int playerMaxHp = 525;
+	int playerCurHp;
+	int playerMaxHp;
 
 	// 메뉴창
 	SpriteObj* menu;
@@ -37,8 +36,6 @@ protected:
 	SpriteObj* playerMarker;
 	SpriteObj* playerMarkerGlow;
 	SpriteObj* playerMarkerOutLine;
-
-	TextObj* fps;
 
 	// bossHp
 	TextObj* bossName;
@@ -50,16 +47,17 @@ protected:
 	float bossHpBarSize = 89.f * 4.f;
 	float bossHpBarHurtSize = 89.f * 4.f;
 
-	// 보스마다 받아와야함
-	int bossCurHp = 1;
-	int bossMaxHp = 2000;
+	int bossCurHp;
+	int bossMaxHp;
 
 	// 보스 임시 생존여부 설정
+	bool isStart = false;
 	bool isAlive = true;
-	float spawnTimer = 2.f;
 	float dieTimer = 1.f;
 
 	int monsterDamage = 0;
+
+	TextObj* fps;
 
 public:
 	PlayUiMgr();
@@ -76,4 +74,14 @@ public:
 	void OverdriveBarControl(float dt);
 
 	void SetMonsterDamage(int damage) { monsterDamage = damage; };
+	void SetBossCurHp(int hp) { bossCurHp = hp; };
+	void SetBossMaxHp(int hp) { bossMaxHp = hp; };
+
+	void SetPlayerCurHp(int hp) { playerCurHp = hp; };
+	void SetPlayerMaxHp(int hp) { playerMaxHp = hp; };
+
+	int GetBossCurHp() { return bossCurHp; };
+	int GetPlayerCurHp() { return playerCurHp; };
+
+	void SetBossName(string name);
 };

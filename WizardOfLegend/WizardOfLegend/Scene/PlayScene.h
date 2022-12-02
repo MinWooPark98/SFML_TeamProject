@@ -32,9 +32,9 @@ public:
 	virtual void Enter() override;
 	virtual void Exit() override;
 
-	void SpownEnemy(int i);
-
 	vector<map<Object::ObjTypes, list<Object*>>>& GetCollisionList() { return collisionList; }
 	void OnCollisionWall(int roomVec, Object* obj);
+	void SpawnEnemy(int i);
+	void OnCollisionETC(int roomVec, Object* obj);
 };
 

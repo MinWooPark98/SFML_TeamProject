@@ -245,6 +245,16 @@ void PlayUiMgr::Init()
 		fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
 		uiObjList[0].push_back(fps);
 	}
+
+	fps = new TextObj();
+	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	fps->SetSize(35);
+	fps->SetFillColor(Color::White);
+	fps->SetOutlineColor(Color::Black);
+	fps->SetOutlineThickness(2.f);
+	fps->SetText("");
+	fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
+	uiObjList[0].push_back(fps);
 }
 
 void PlayUiMgr::Release()
@@ -312,10 +322,14 @@ void PlayUiMgr::Update(float dt)
 		playerMarkerOutLine->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 		playerMarkerGlow->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 	}
-	float fpsi = 1.f / dt;
-	if (fpsi <	 30.f)
-		fps->SetSize(100.f);
-	fps->SetString(to_string(fpsi));
+	if (isDevMode)
+	{
+		float fpsi = 1.f / dt;
+		if (fpsi < 30.f)
+			fps->SetSize(100.f);
+
+		fps->SetString(to_string(fpsi));
+	}
 }
 
 void PlayUiMgr::Draw(RenderWindow& window)
@@ -347,21 +361,6 @@ void PlayUiMgr::Draw(RenderWindow& window)
 
 void PlayUiMgr::HpBarSizeControl(float dt)
 {
-	// 데미지 받음
-	//if (InputMgr::GetKeyDown(Keyboard::Key::G)) // 충돌 조건으로 변경
-	//{
-	//	//monsterDamage = 50; // 몬스터 데미지로 변경
-
-	//	if (playerCurHp - monsterDamage <= 0.f)
-	//	{
-	//		playerCurHp = 0.f;
-	//		HpBarFill->SetSize({ 0, HpBarFill->GetSize().y * 4 });
-	//	}
-	//	else
-	//	{
-	//		playerCurHp -= monsterDamage;
-	//	}
-	//}
 	if (playerCurHp - monsterDamage <= 0.f)
 	{
 		playerCurHp = 0.f;
@@ -371,6 +370,7 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 	{
 		playerCurHp -= monsterDamage;
 	}
+
 	// 회복
 	if (InputMgr::GetKeyDown(Keyboard::Key::Z))
 	{
@@ -409,36 +409,38 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 {
 	bossName->SetOrigin(Origins::MC);
 
-	if (spawnTimer > 0.f)
+	if (!isStart)
 	{
 		if (bossCurHp < bossMaxHp)
 		{
-			bossCurHp += 10;
+			bossCurHp += 5;
+
+			if (bossCurHp >= bossMaxHp)
+			{
+				bossCurHp = bossMaxHp;
+				isStart = true;
+			}
+
+			// Hp Bar Control
+			int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
+			bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+			bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
 		}
-		else
-			bossCurHp = bossMaxHp;
-
-		spawnTimer -= dt;
-
-		// Hp Bar Control
-		int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
-		bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
-		bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
 	}
 	else
 	{
 		if (InputMgr::GetKeyDown(Keyboard::Key::Q)) // 충돌 조건으로 변경
 		{
-			int damage = 100; // 플레이어 스킬 데미지로 변경
+			int playerDamage = 100; // 플레이어 스킬 데미지로 변경
 
-			if (bossCurHp - damage <= 0.f)
+			if (bossCurHp - playerDamage <= 0.f)
 			{
 				bossCurHp = 0.f;
 				bossHpBarFill->SetSize({ 0, bossHpBarFill->GetSize().y * 4 });
 			}
 			else
 			{
-				bossCurHp -= damage;
+				bossCurHp -= playerDamage;
 			}
 		}
 
@@ -451,18 +453,18 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 		{
 			bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarFill->GetSize().y * 4.f });
 		}
-	}
 
-
-	if (bossCurHp <= 0 && isAlive)
-	{
-		dieTimer -= dt;
-		if (dieTimer <= 0.f)
+		if (bossCurHp <= 0 && isAlive)
 		{
-			uiObjList[2].clear();
-			isAlive = false;
+			dieTimer -= dt;
+			if (dieTimer <= 0.f)
+			{
+				uiObjList[2].clear();
+				isAlive = false;
+			}
 		}
 	}
+
 }
 
 void PlayUiMgr::OverdriveBarControl(float dt)
@@ -477,4 +479,9 @@ void PlayUiMgr::OverdriveBarControl(float dt)
 		OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
 	else if (!testOverdrive && overdriveBarSize > 0)
 		OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
+}
+
+void PlayUiMgr::SetBossName(string name)
+{
+	bossName->SetText(name);
 }

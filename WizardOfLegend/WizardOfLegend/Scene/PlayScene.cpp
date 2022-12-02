@@ -97,7 +97,6 @@ void PlayScene::Init()
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
 			objList[LayerType::Object][5].push_back(player);
-			collisionList[0][Object::ObjTypes::Player].push_back(player);
 			auto& skillSet = player->GetSkillSets();
 			skillSet[0]->Set("FireBall");
 			skillSet[1]->Set("JumpMeteor");
@@ -117,7 +116,6 @@ void PlayScene::Init()
 				lancer->SetObjType(Object::ObjTypes::Enemy);
 				lancer->SetActive(false);
 				objList[LayerType::Object][0].push_back(lancer);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(lancer);
 			}
 			else if (obj.path == "graphics/Map/ArcherNormal.png")
 			{
@@ -130,7 +128,6 @@ void PlayScene::Init()
 				archer->SetColor(3);
 				archer->SetActive(false);
 				objList[LayerType::Object][1].push_back(archer);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(archer);
 			}
 			else if (obj.path == "graphics/Map/ArcherBosspng.png")
 			{
@@ -143,7 +140,6 @@ void PlayScene::Init()
 				heavyBombingArcher->SetColor(2);
 				heavyBombingArcher->SetActive(false);
 				objList[LayerType::Object][2].push_back(heavyBombingArcher);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(heavyBombingArcher);
 			}
 			else if (obj.path == "graphics/Map/FireBoss.png")
 			{
@@ -154,7 +150,6 @@ void PlayScene::Init()
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
 				fireBoss->SetActive(false);
 				objList[LayerType::Object][3].push_back(fireBoss);
-				collisionList[0][Object::ObjTypes::Enemy].push_back(fireBoss);
 			}
 		}
 		else if (obj.type == "CLIFF")
@@ -194,13 +189,23 @@ void PlayScene::Init()
 	mapSize.width = (tiles.back())->GetPos().x + 16;
 	mapSize.height = (tiles.back())->GetPos().y;
 
-	for (auto& enemy : collisionList[0][Object::ObjTypes::Enemy])
+	for (int i = 0; i < room.size(); i++)
 	{
-		((Enemy*)enemy)->SetPlayer(player);
+		for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+		{
+			((Enemy*)enemy)->SetPlayer(player);
+		}
 	}
+	fireBoss->SetPlayerLastPos(player->GetPos());
 
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
+
+	((PlayUiMgr*)uiMgr)->SetBossCurHp(fireBoss->GetCurHp());
+	((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
+
+	((PlayUiMgr*)uiMgr)->SetPlayerCurHp(player->GetMaxHp());
+	((PlayUiMgr*)uiMgr)->SetPlayerMaxHp(player->GetMaxHp());
 }
 
 void PlayScene::Update(float dt)
@@ -252,6 +257,7 @@ void PlayScene::Update(float dt)
 				for (auto& obj : collisionList[j][(Object::ObjTypes)i])
 				{
 					OnCollisionWall(j, obj);
+					OnCollisionETC(j, obj);
 				}
 			}
 			break;
@@ -277,7 +283,30 @@ void PlayScene::Update(float dt)
 					continue;
 				}
 			}
-		}		
+		}
+	}
+
+	if (fireBoss->GetIsAlive())
+	{
+		((PlayUiMgr*)uiMgr)->SetBossName("FLAME QUEEN");
+		if (fireBoss->GetFireKick()->GetActive())
+		{
+			if (fireBoss->GetIsKick())
+			{
+				if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
+				{
+					((PlayUiMgr*)uiMgr)->SetMonsterDamage(fireBoss->GetDamage());
+					fireBoss->SetIsKick(false);
+				}
+			}
+			else
+				((PlayUiMgr*)uiMgr)->SetMonsterDamage(0);
+		}
+
+		if (((PlayUiMgr*)uiMgr)->GetBossCurHp() <= 0)
+		{
+			fireBoss->SetCurHp(0);
+		}
 	}
 }
 
@@ -332,7 +361,7 @@ void PlayScene::Exit()
 	Scene::Exit();
 }
 
-void PlayScene::SpownEnemy(int i)
+void PlayScene::SpawnEnemy(int i)
 {
 	for (auto& c_list : collisionList[i])
 	{
@@ -349,6 +378,38 @@ void PlayScene::SpownEnemy(int i)
 void PlayScene::OnCollisionWall(int roomVec, Object* obj)
 {
 	for (auto& coll : collisionList[roomVec][Object::ObjTypes::Wall])
+	{
+		if (obj->GetLowHitBounds().intersects(coll->GetHitBounds()))
+		{
+			bool leftandRight = false;
+			bool topandLow = false;
+
+			float objRightPoint = obj->GetLowHitBounds().width + obj->GetLowHitBounds().left;
+			float objLowPoint = obj->GetLowHitBounds().height + obj->GetLowHitBounds().top;
+
+			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
+			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+
+			if (obj->GetLowHitBounds().height <= collYPoint || objLowPoint >= collYPoint)
+				topandLow = true;
+			if (obj->GetLowHitBounds().left >= collXPoint || objRightPoint <= collXPoint)
+				leftandRight = true;
+
+			if (topandLow)
+			{
+				obj->SetPos({ obj->GetPos().x, obj->GetLastPosition().y });
+			}
+			if (leftandRight)
+			{
+				obj->SetPos({ obj->GetLastPosition().x, obj->GetPos().y });
+			}
+		}
+	}
+}
+
+void PlayScene::OnCollisionETC(int roomVec, Object* obj)
+{
+	for (auto& coll : collisionList[roomVec][Object::ObjTypes::ETC])
 	{
 		if (obj->GetLowHitBounds().intersects(coll->GetHitBounds()))
 		{
