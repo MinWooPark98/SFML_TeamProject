@@ -196,7 +196,7 @@ void Lancer::UpdateAttack(float dt)
 			break;
 		}
 
-		lancerAttackEffect->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 100.f);
+		lancerAttackEffect->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 50.f);
 		spearAnimation.Play("SpearMotion");
 		SOUND_MGR->Play("sounds/KnightAttack.wav");
 		spearWait = false;
