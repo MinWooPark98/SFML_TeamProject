@@ -28,7 +28,7 @@ void Archer::Init()
 
 	arrow = new SpriteObj();
 	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Arrow.png"));
-	arrow->SetHitBox((FloatRect)arrow->GetTextureRect());
+	arrow->SetHitBox({ 20, 20, 5, 30 }, Color::Red);
 	arrow->SetOrigin(Origins::MC);
 	SetArrowSpeed(400.f);
 	arrowDir.setFillColor(Color::Red);
@@ -116,6 +116,7 @@ void Archer::Update(float dt)
 		else
 			arrowDir.setFillColor(Color::Red);
 
+		arrow->GetHitBox().setPosition(arrow->GetPos());
 		animation.Update(dt);
 		archerPullArmAnimation.Update(dt);
 		bowAnimation.Update(dt);
@@ -147,7 +148,12 @@ void Archer::Draw(RenderWindow& window)
 			window.draw(arrowDir);
 
 		if (curState == States::Attack)
+		{
+			if (isDevMode)
+				window.draw(arrow->GetHitBox());
+
 			arrow->Draw(window);
+		}
 
 		window.draw(archerPullArm->GetSprite(), &shader);
 	}
@@ -202,6 +208,7 @@ void Archer::UpdateAttack(float dt)
 		{
 			arrow->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 			arrow->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 8.f);
+			arrow->GetHitBox().setRotation(arrow->GetSprite().getRotation());
 		}
 
 		if (player->GetPos().x >= GetPos().x)
