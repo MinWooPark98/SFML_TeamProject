@@ -37,7 +37,7 @@ public:
     Color GetColor();
     Sprite& GetSprite() { return sprite; }
     void SetUI(bool u) { isUi = u; }
-    bool IsInView();
+    void IsInView();
     bool GetIsView() { return viewIn; }
     void SetTextureRect(const IntRect& rect);
     const IntRect& GetTextureRect()const;

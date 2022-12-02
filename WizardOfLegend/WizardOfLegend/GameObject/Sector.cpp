@@ -7,12 +7,12 @@
 using namespace sf;
 
 Sector::Sector()
+	:aliveEnemyCount(0)
 {
 	sector = new RectangleShape();
 	sector->setFillColor({ 0,0,0,0 });
 	sector->setOutlineColor(Color::Red);
 	sector->setOutlineThickness(4.f);
-	isPlayerInToTheRoom = false;
 	Init();
 }
 

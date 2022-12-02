@@ -20,8 +20,12 @@ void SpriteObj::Update(float dt)
 
 void SpriteObj::Draw(RenderWindow& window)
 {
-    window.draw(sprite, &spriteShader);
-    Object::Draw(window);
+    IsInView();
+    if(viewIn)
+    { 
+		window.draw(sprite, &spriteShader);
+		Object::Draw(window);
+    }
 }
 
 void SpriteObj::SetTexture(const Texture& tex)
@@ -56,27 +60,29 @@ void SpriteObj::SetPos(const Vector2f& pos)
     sprite.setPosition(position);
 }
 
-bool SpriteObj::IsInView()
+void SpriteObj::IsInView()
 {
     if (isUi)
     {
         viewIn = true;
-        return true;
+        return;
     }
     int extra = 80;
     auto& view = SCENE_MGR->GetCurrentScene()->GetWorldView();
-    auto& viewSize = view.getSize();
-    auto& viewCenter = view.getCenter();
-    auto bound = GetGlobalBounds();
 
-    if (((bound.left > viewCenter.x + viewSize.x / 2+extra) || (bound.left + bound.width < viewCenter.x - viewSize.x / 2- extra)) ||
-        ((bound.top > viewCenter.y + viewSize.y / 2+extra) || (bound.top + bound.height < viewCenter.y - viewSize.y / 2- extra)))
+    Vector2i min = { (int)(view.getCenter().x - (int)view.getSize().x * 0.5f), (int)(view.getCenter().y - (int)view.getSize().y * 0.5f) };
+    Vector2i max = { (int)(view.getCenter().x + (int)view.getSize().x * 0.5f), (int)(view.getCenter().y + (int)view.getSize().y * 0.5f) };
+
+    if (position.x<max.x + extra && position.y < max.y + extra && position.x > min.x - extra && position.y > min.y - extra)
     {
-        viewIn = false;
-        return false;
+        viewIn = true;
     }
-    viewIn = true;
-    return true;
+    else
+    {
+		viewIn = false;
+
+    }
+
 }
 
 void SpriteObj::SetTextureRect(const IntRect& rect)

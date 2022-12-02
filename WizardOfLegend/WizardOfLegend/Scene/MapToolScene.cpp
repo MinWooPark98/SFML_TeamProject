@@ -38,7 +38,7 @@ void MapToolScene::Init()
 
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
-	nowType = LayerType::Tile;
+	nowType = LayerType::Object;
 }
 
 void MapToolScene::Reset()

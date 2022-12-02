@@ -15,7 +15,8 @@ protected:
 	vector<Sector> room;
 	vector<map<Object::ObjTypes, list<Object*>>> collisionList;
 
-	int playerRoom;
+	list<int> playerRooms;
+
 
 	float maxSpownDelay = 3.f;
 	float currSpownDelay = 3.f;
@@ -37,6 +38,8 @@ public:
 	virtual void Exit() override;
 
 	void SpownEnemy(int i, float dt);
+	void AllDieEnemy(int i);
 
+	void OnCollisionWall(int roomVec, Object* obj);
 };
 
