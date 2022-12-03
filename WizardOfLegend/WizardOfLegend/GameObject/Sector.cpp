@@ -12,7 +12,6 @@ Sector::Sector()
 	sector->setFillColor({ 0,0,0,0 });
 	sector->setOutlineColor(Color::Red);
 	sector->setOutlineThickness(4.f);
-	isPlayerInToTheRoom = false;
 	Init();
 }
 

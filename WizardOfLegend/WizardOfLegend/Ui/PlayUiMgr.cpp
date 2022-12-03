@@ -323,7 +323,7 @@ void PlayUiMgr::Update(float dt)
 		playerMarkerOutLine->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 		playerMarkerGlow->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 	}
-	if (isDevMode)
+	if (1)
 	{
 		float fpsi = 1.f / dt;
 		if (fpsi < 30.f)

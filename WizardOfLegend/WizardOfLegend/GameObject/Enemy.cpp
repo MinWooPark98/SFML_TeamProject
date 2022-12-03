@@ -79,6 +79,8 @@ void Enemy::Update(float dt)
 
 	if (curState == States::Die && dieTimer >= 0.f)
 		dieTimer -= dt;
+	if (dieTimer < 0)
+		SetActive(false);
 
 	if (type == MonsterType::Normal || type == MonsterType::StageBoss)
 	{

@@ -17,7 +17,8 @@ protected:
 
 	list<int> playerRooms;
 
-
+	float currSpownDelay = 5.f;
+	float maxSpownDelay = 5.f;
 
 public:
 	PlayScene();
@@ -37,6 +38,7 @@ public:
 	vector<map<Object::ObjTypes, list<Object*>>>& GetCollisionList() { return collisionList; }
 	void OnCollisionWall(int roomVec, Object* obj);
 	void SpawnEnemy(int i, float dt);
+	void AllDieEnemy(int i);
 	void OnCollisionETC(int roomVec, Object* obj);
 };
 

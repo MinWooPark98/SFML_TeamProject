@@ -45,6 +45,7 @@ void PlayScene::Init()
 			sector->SetSize(obj.size);
 			sector->SetHitBox((FloatRect)sector->GetSectorShape()->getGlobalBounds());
 			sector->SetObjType(Object::ObjTypes::Sector);
+			sector->SetOutlineColor({ 0, 0, 0, 0 });
 			room.push_back(*sector);
 			objList[LayerType::Sector][0].push_back(sector);
 		}
@@ -56,8 +57,7 @@ void PlayScene::Init()
 	}
 
 	for (auto& obj : data)
-		{
-
+	{
 		if (obj.type == "WALL")
 		{
 			SpriteObj* draw = new SpriteObj();
@@ -88,12 +88,18 @@ void PlayScene::Init()
 			SpriteObj* draw = new SpriteObj();
 			draw->Init();
 			draw->SetName(obj.type);
+			draw->SetFileName(obj.path);
 			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
 			draw->SetOrigin(Origins::BC);
 			draw->SetPos(obj.position);
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::ETC);
-
+			if (obj.path == "graphics/Map/Object/GateFull.png" ||
+				obj.path == "graphics/Map/Palette/LeftGate.png" ||
+				obj.path == "graphics/Map/Palette/RightGate.png")
+			{
+				draw->SetActive(false);
+			}
 			objList[LayerType::Object][0].push_back(draw);
 		}
 		else if (obj.type == "PLAYER")
@@ -104,6 +110,7 @@ void PlayScene::Init()
 			player->SetName(obj.type);
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
+			player->SetLastPosition({ 0,0 });
 			objList[LayerType::Object][5].push_back(player);
 			auto& skillSet = player->GetSkillSets();
 			skillSet[0]->Set("FireBall");
@@ -123,7 +130,10 @@ void PlayScene::Init()
 				lancer->SetCardPos(lancer->GetPos());
 				lancer->SetObjType(Object::ObjTypes::Enemy);
 				lancer->SetActive(false);
+				lancer->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][0].push_back(lancer);
+				//cout << obj.position.x <<","<<obj.position.y<< endl;
+
 			}
 			else if (obj.path == "graphics/Map/ArcherNormal.png")
 			{
@@ -135,6 +145,7 @@ void PlayScene::Init()
 				archer->SetObjType(Object::ObjTypes::Enemy);
 				archer->SetColor(3);
 				archer->SetActive(false);
+				archer->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][1].push_back(archer);
 			}
 			else if (obj.path == "graphics/Map/ArcherBosspng.png")
@@ -147,6 +158,7 @@ void PlayScene::Init()
 				heavyBombingArcher->SetObjType(Object::ObjTypes::Enemy);
 				heavyBombingArcher->SetColor(2);
 				heavyBombingArcher->SetActive(false);
+				heavyBombingArcher->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][2].push_back(heavyBombingArcher);
 			}
 			else if (obj.path == "graphics/Map/FireBoss.png")
@@ -157,6 +169,7 @@ void PlayScene::Init()
 				fireBoss->SetPos(obj.position);
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
 				fireBoss->SetActive(false);
+				fireBoss->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][3].push_back(fireBoss);
 			}
 			else if (obj.path == "graphics/Map/FinalBoss.png")
@@ -167,6 +180,7 @@ void PlayScene::Init()
 				finalBoss->SetPos(obj.position);
 				finalBoss->SetObjType(Object::ObjTypes::FinalBoss);
 				finalBoss->SetActive(false);
+				finalBoss->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][0].push_back(finalBoss);
 			}
 		}
@@ -185,13 +199,13 @@ void PlayScene::Init()
 		}
 	}
 
-	for (auto& a : objList)
+	for (int i = 0; i < room.size(); i++)
 	{
-		for (auto& b : a.second)
+		for (auto& a : objList)
 		{
-			for (auto& c : b.second)
+			for (auto& b : a.second)
 			{
-				for (int i = 0; i < room.size(); i++)
+				for (auto& c : b.second)
 				{
 					if (Utils::OBB(c->GetHitBox(), room[i].GetHitBox()))
 					{
@@ -200,6 +214,8 @@ void PlayScene::Init()
 				}
 			}
 		}
+		room[i].SetAliveEnemyCount(collisionList[i][Object::ObjTypes::Enemy].size() + collisionList[i][Object::ObjTypes::FinalBoss].size());
+		//cout << i << "방 에너미 수 : " << collisionList[i][Object::ObjTypes::Enemy].size() << endl;
 	}
 
 	auto& tiles = objList[LayerType::Tile][0];
@@ -249,7 +265,8 @@ void PlayScene::Update(float dt)
 				collisionList[i][Object::ObjTypes::Player].push_back(player);
 				playerRooms.push_back(i);
 			}
-			SpawnEnemy(i);
+			SpawnEnemy(i,dt);
+			AllDieEnemy(i);
 		}
 		else
 		{
@@ -387,14 +404,71 @@ void PlayScene::Exit()
 
 void PlayScene::SpawnEnemy(int i, float dt)
 {
-
-	for (auto& c_list : collisionList[i])
+	currSpownDelay -= dt;
+	if (currSpownDelay <= 0)
 	{
+		for (auto& c_list : collisionList[i])
+		{
+			for (auto& obj : c_list.second)
+			{
+				if ((obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((Enemy*)obj)->GetIsAlive())
+				{
+					obj->SetActive(true);
+				}
+			}
+		}		for (auto& c_list : collisionList[i])
+		{
+			for (auto& obj : c_list.second)
+			{
+				if (obj->GetObjType() == Object::ObjTypes::ETC)
+				{
+					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+					{
+						obj->SetActive(true);
+					}
+				}
+			}
+		}
+		currSpownDelay = maxSpownDelay;
+	}
+}
+
+void PlayScene::AllDieEnemy(int i)
+{
+	for (auto& c_list : collisionList[i])
+	{		
 		for (auto& obj : c_list.second)
 		{
-			if ((obj->GetObjType() == Object::ObjTypes::Enemy|| obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((Enemy*)obj)->GetIsAlive())
+			if (obj->GetObjType() == Object::ObjTypes::Enemy)
 			{
-				obj->SetActive(true);
+				if (((Enemy*)obj)->GetIsAlive())
+				{
+					return;
+				}
+				else
+				{
+					room[i].SetAllEnemyDead(true);
+				}
+			}
+		}
+	}
+	if (room[i].GetAllEnemyDead())
+	{
+		for (auto& c_list : collisionList[i])
+		{
+			for (auto& obj : c_list.second)
+			{
+				if (obj->GetObjType() == Object::ObjTypes::ETC)
+				{
+					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+					{
+						obj->SetActive(false);
+					}
+				}
 			}
 		}
 	}
@@ -436,6 +510,8 @@ void PlayScene::OnCollisionETC(int roomVec, Object* obj)
 {
 	for (auto& coll : collisionList[roomVec][Object::ObjTypes::ETC])
 	{
+		if(!coll->GetActive())
+			continue;
 		if (obj->GetLowHitBounds().intersects(coll->GetHitBounds()))
 		{
 			bool leftandRight = false;

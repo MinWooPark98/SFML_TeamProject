@@ -51,48 +51,50 @@ void Lancer::Init()
 void Lancer::Update(float dt)
 {
 	Enemy::Update(dt);
-	
-	if (!isSpawn)
+	if (isAlive)
 	{
-		spawnAnimation.Play("MonsterSpawnCard");
-		animation.Play("LancerRightIdle");
-		isSpawn = true;
-	}
-	else if (isActionStart)
-	{
-		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
+		if (!isSpawn)
 		{
-			NormalMonsterMove(dt);
-
-			moveSoundTimer -= dt;
-			if (moveSoundTimer <= 0.f)
+			spawnAnimation.Play("MonsterSpawnCard");
+			animation.Play("LancerRightIdle");
+			isSpawn = true;
+		}
+		else if (isActionStart)
+		{
+			if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
 			{
-				SOUND_MGR->Play("sounds/MetalFootstep.wav");
-				moveSoundTimer = 0.4f;
+				NormalMonsterMove(dt);
+
+				moveSoundTimer -= dt;
+				if (moveSoundTimer <= 0.f)
+				{
+					SOUND_MGR->Play("sounds/MetalFootstep.wav");
+					moveSoundTimer = 0.4f;
+				}
 			}
-		}
-		else
-			moveSoundTimer = 0.f;
+			else
+				moveSoundTimer = 0.f;
 
-		if (InputMgr::GetKeyDown(Keyboard::Key::K))
-		{
-			SetCurHp(0);
-		}
+			if (InputMgr::GetKeyDown(Keyboard::Key::K))
+			{
+				SetCurHp(0);
+			}
 
-		if (curHp <= 0 && isAlive)
-		{
-			dieTimer = 1.f;
-			SetState(States::Die);
-			isAlive = false;
-		}
+			if (curHp <= 0 && isAlive)
+			{
+				dieTimer = 1.f;
+				SetState(States::Die);
+				isAlive = false;
+			}
 
-		if (!Utils::EqualFloat(direction.x, 0.f))
-		{
-			lastDir = direction;
-		}
+			if (!Utils::EqualFloat(direction.x, 0.f))
+			{
+				lastDir = direction;
+			}
 
-		animation.Update(dt);
-		spearAnimation.Update(dt);
+			animation.Update(dt);
+			spearAnimation.Update(dt);
+		}
 	}
 }
 

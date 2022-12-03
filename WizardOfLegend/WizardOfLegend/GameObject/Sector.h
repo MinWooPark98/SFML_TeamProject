@@ -19,7 +19,8 @@ protected:
 
 	DrawObj* nowDraw;
 
-	bool isPlayerInToTheRoom;
+	int aliveEnemyCount;
+	bool allEnemyDead = false;
 
 public:
 	Sector();
@@ -45,5 +46,11 @@ public:
 	const Vector2f& GetSize() const { return ((RectangleShape*)sector)->getSize(); }
 
 	Shape* GetSectorShape() const { return sector; };
+
+	int GetAliveEnemyCount() { return aliveEnemyCount; }
+	void SetAliveEnemyCount(int count) { aliveEnemyCount = count; }
+
+	bool GetAllEnemyDead() { return allEnemyDead; }
+	void SetAllEnemyDead(bool alldead) { allEnemyDead = alldead; }
 };
 
