@@ -1,4 +1,6 @@
 #include "HeavyBombingArcher.h"
+#include "../Scene/SceneMgr.h"
+#include "../Scene/PlayScene.h"
 
 void HeavyBombingArcher::Init()
 {
@@ -65,10 +67,13 @@ void HeavyBombingArcher::Draw(RenderWindow& window)
 	{
 		for (auto it : smollArrow)
 		{
-			if (isDevMode)
-				window.draw(it->GetHitBox());
+			if (it->GetActive())
+			{
+				if (isDevMode)
+					window.draw(it->GetHitBox());
 
-			it->Draw(window);
+				it->Draw(window);
+			}
 		}
 
 		arrowDir.setScale({ 1, 1 });
@@ -114,6 +119,7 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 				it->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 				it->SetPos(GetPos());
 				it->GetHitBox().setRotation(it->GetSprite().getRotation());
+				it->SetActive(true);
 			}
 		}
 		else if (attackDelay <= attackStart)
@@ -121,7 +127,10 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 			if (pattern == Pattern::MovingAttack || pattern == Pattern::EscapeAttack)
 			{
 				for (int i = smollArrow.size() - 1; i > count; i--)
+				{
 					smollArrow[i]->SetPos(GetPos());
+					smollArrow[i]->SetActive(true);
+				}
 
 				weapon->SetPos(GetPos() - Utils::Normalize((playerLastPos - lastPos)) * -3.f);
 				archerAttackArm->SetPos(weapon->GetPos());
@@ -156,6 +165,7 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 					if (isAttack)
 					{
 						player->SetCurHp(player->GetCurHp() - GetDamage());
+						smollArrow[i]->SetActive(false);
 						isAttack = false;
 					}
 				}
@@ -168,6 +178,25 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 				SOUND_MGR->Play("sounds/ArcherAttackRelease.wav");
 				SOUND_MGR->Play("sounds/ArcherArrow.wav");
 				count++;
+			}
+		}
+	}
+
+	auto& collisionList = ((PlayScene*)SCENE_MGR->GetCurrentScene())->GetCollisionList();
+
+	for (int i = 0; i < collisionList.size(); i++)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+
+		for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
+		{
+			for (int a = 0; a < smollArrow.size(); a++)
+			{
+				if (smollArrow[a]->GetHitBounds().intersects(coll->GetHitBounds()))
+				{
+					smollArrow[a]->SetActive(false);
+				}
 			}
 		}
 	}

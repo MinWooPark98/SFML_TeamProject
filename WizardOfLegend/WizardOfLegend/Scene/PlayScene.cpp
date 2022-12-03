@@ -284,7 +284,7 @@ void PlayScene::Update(float dt)
 			}
 		}
 	}
-	
+
 	// 플레이어 방이랑 fireBoss 방이랑 똑같을 때의 조건문에 넣어주기
 	if (fireBoss->GetIsAlive())
 	{
