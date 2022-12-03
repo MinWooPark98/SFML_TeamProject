@@ -36,6 +36,9 @@ void HeavyBombingArcher::Init()
 	spawn->SetPos(GetPos());
 	SetCardColor(1);
 
+	SetMaxHp(500);
+	SetCurHp(500);
+	SetDamage(20);
 
 	SetHitBox({ 20.f, 20.f, 20.f, 40.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
@@ -147,11 +150,21 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 			for (int i = 0; i <= count; ++i)
 			{
 				smollArrow[i]->Translate({ dt * arrowSpeed * shot * 2.f });
+
+				if (Utils::OBB(player->GetHitBox(), smollArrow[i]->GetHitBox()))
+				{
+					if (isAttack)
+					{
+						player->SetCurHp(player->GetCurHp() - GetDamage());
+						isAttack = false;
+					}
+				}
 			}
 
 			if (smollArrowDelay <= 0.f && count < 4)
 			{
 				smollArrowDelay = 0.1f;
+				isAttack = true;
 				SOUND_MGR->Play("sounds/ArcherAttackRelease.wav");
 				SOUND_MGR->Play("sounds/ArcherArrow.wav");
 				count++;

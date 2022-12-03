@@ -36,11 +36,12 @@ void Lancer::Init()
 	SetMoveScale(200.f);
 	SetAttackScale(100.f);
 	SetMonsterType(MonsterType::Normal);
-	SetMaxHp(1);
+	SetMaxHp(150);
 	SetCurHp(GetMaxHp());
 	weapon->SetOrigin(Origins::MC);
 	spawn->SetPos(GetPos());
 	SetCardColor(2);
+	SetDamage(15);
 
 	SetHitBox({ 20.f, 20.f, 20.f, 30.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
@@ -205,6 +206,12 @@ void Lancer::UpdateAttack(float dt)
 		lancerAttackEffect->SetActive(true);
 		spearAnimation.Play("SpearMotion");
 		SOUND_MGR->Play("sounds/KnightAttack.wav");
+
+		if (Utils::OBB(player->GetHitBox(), lancerAttackEffect->GetHitBox()))
+		{
+			player->SetCurHp(player->GetCurHp() - GetDamage());
+		}
+
 		spearWait = false;
 	}
 	else if (attackDelay >= 1.f && !spearWait)

@@ -61,7 +61,7 @@ void Archer::Init()
 	weapon->SetOrigin(Origins::MC);
 	spawn->SetPos(GetPos());
 	SetCardColor(2);
-
+	SetDamage(15);
 	SetHitBox({ 20.f, 20.f, 10.f, 30.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 	SetLowHitBox({ 20.f, 20.f, 10.f, 5.f }, Color::White);
@@ -226,6 +226,8 @@ void Archer::UpdateAttack(float dt)
 		archerPullArm->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
 		archerPullArmAnimation.Play("ArcherArm");
 		playerLastPos = player->GetPos();
+
+		isAttack = true;
 	}
 	else if (attackDelay <= attackStart)
 	{
@@ -234,6 +236,15 @@ void Archer::UpdateAttack(float dt)
 			auto shot = Utils::Normalize(playerLastPos - GetPos());
 			arrow->Translate({ dt * arrowSpeed * shot * 2.f });
 			// 히트박스 구현되면 화살 멈추게 해야함
+		}
+
+		if (Utils::OBB(player->GetHitBox(), arrow->GetHitBox()))
+		{
+			if (isAttack)
+			{
+				player->SetCurHp(player->GetCurHp() - GetDamage());
+				isAttack = false;
+			}
 		}
 	}
 

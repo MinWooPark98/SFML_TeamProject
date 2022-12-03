@@ -18,6 +18,8 @@ protected:
 	SpriteObj* archerPullArm;
 	Animator archerPullArmAnimation;
 
+	bool isAttack = true;
+
 public:
 	Archer();
 	virtual ~Archer() { Release(); };

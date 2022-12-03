@@ -31,6 +31,9 @@ void PlayScene::Init()
 	isMap = true;
 	auto& data = FILE_MGR->GetMap("TUTORIAL");
 
+	uiMgr = new PlayUiMgr();
+	uiMgr->Init();
+
 	for (auto& obj : data)
 	{
 		if (obj.type == "SECTOR")
@@ -93,6 +96,7 @@ void PlayScene::Init()
 		{
 			player = new Player();
 			player->Init();
+			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 			player->SetName(obj.type);
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
@@ -145,6 +149,7 @@ void PlayScene::Init()
 			{
 				fireBoss = new FireBoss();
 				fireBoss->Init();
+				((PlayUiMgr*)uiMgr)->SetFireBoss(fireBoss);
 				fireBoss->SetName(obj.type);
 				fireBoss->SetPos(obj.position);
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
@@ -198,14 +203,8 @@ void PlayScene::Init()
 	}
 	fireBoss->SetPlayerLastPos(player->GetPos());
 
-	uiMgr = new PlayUiMgr();
-	uiMgr->Init();
-
-	((PlayUiMgr*)uiMgr)->SetBossCurHp(fireBoss->GetCurHp());
+	((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FireBoss);
 	((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
-
-	((PlayUiMgr*)uiMgr)->SetPlayerCurHp(player->GetMaxHp());
-	((PlayUiMgr*)uiMgr)->SetPlayerMaxHp(player->GetMaxHp());
 }
 
 void PlayScene::Update(float dt)
@@ -285,7 +284,8 @@ void PlayScene::Update(float dt)
 			}
 		}
 	}
-
+	
+	// 플레이어 방이랑 fireBoss 방이랑 똑같을 때의 조건문에 넣어주기
 	if (fireBoss->GetIsAlive())
 	{
 		((PlayUiMgr*)uiMgr)->SetBossName("FLAME QUEEN");
@@ -295,7 +295,7 @@ void PlayScene::Update(float dt)
 			{
 				if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
 				{
-					((PlayUiMgr*)uiMgr)->SetMonsterDamage(fireBoss->GetDamage());
+					player->SetCurHp(player->GetCurHp() - fireBoss->GetDamage());
 					fireBoss->SetIsKick(false);
 				}
 			}

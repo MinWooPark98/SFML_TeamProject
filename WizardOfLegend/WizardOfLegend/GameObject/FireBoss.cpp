@@ -67,8 +67,8 @@ void FireBoss::Init()
 	SetMoveScale(10000.f);
 	SetAttackScale(0.f);
 	SetMonsterType(MonsterType::MiddleBoss);
-	SetMaxHp(2000);
-	SetCurHp(1);
+	SetMaxHp(700);
+	SetCurHp(700);
 	RandomPatternSet(AttackType::None);
 	attackType = AttackType::ThrowingKnife;
 

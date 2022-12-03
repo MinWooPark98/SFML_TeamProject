@@ -4,12 +4,25 @@
 class SpriteObj;
 class TextObj;
 class Button2;
+class Player;
+class FireBoss;
+class HeavyBombingArcher;
+class FinalBoss;
 class PlayUiMgr : public UiMgr
 {
+public:
+	enum class BossType
+	{
+		Archer,
+		FireBoss,
+		FinalBoss,
+	};
+
 protected:
 	map<int, vector<Object*>> uiObjList;
 	Vector2i windowSize;
 
+	Player* player;
 	SpriteObj* HpBarFill;
 	SpriteObj* HpBarHurt;
 	SpriteObj* OverdriveActiveBar;
@@ -25,8 +38,6 @@ protected:
 	bool testOverdrive = false;
 
 	TextObj* hpText;
-	int playerCurHp;
-	int playerMaxHp;
 
 	// ¸Þ´ºÃ¢
 	SpriteObj* menu;
@@ -47,6 +58,10 @@ protected:
 	float bossHpBarSize = 89.f * 4.f;
 	float bossHpBarHurtSize = 89.f * 4.f;
 
+	BossType bossType;
+	FireBoss* fireBoss;
+	FinalBoss* finalBoss;
+	HeavyBombingArcher* heavyBombingArcher;
 	int bossCurHp;
 	int bossMaxHp;
 
@@ -77,11 +92,12 @@ public:
 	void SetBossCurHp(int hp) { bossCurHp = hp; };
 	void SetBossMaxHp(int hp) { bossMaxHp = hp; };
 
-	void SetPlayerCurHp(int hp) { playerCurHp = hp; };
-	void SetPlayerMaxHp(int hp) { playerMaxHp = hp; };
+	void SetPlayer(Player* player) { this->player = player; }
+	void SetFireBoss(FireBoss* boss) { this->fireBoss = boss; }
+
+	void SetBossType(BossType type) { bossType = type; };
 
 	int GetBossCurHp() { return bossCurHp; };
-	int GetPlayerCurHp() { return playerCurHp; };
 
 	void SetBossName(string name);
 };

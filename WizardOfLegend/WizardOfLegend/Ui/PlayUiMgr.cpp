@@ -7,6 +7,10 @@
 #include "../GameObject/SpriteObj.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/InputMgr.h"
+#include "../GameObject/FireBoss.h"
+#include "../GameObject/Player.h"
+#include "../GameObject/HeavyBombingArcher.h"
+#include "../GameObject/FinalBoss.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), windowSize()
@@ -361,47 +365,23 @@ void PlayUiMgr::Draw(RenderWindow& window)
 
 void PlayUiMgr::HpBarSizeControl(float dt)
 {
-	if (playerCurHp - monsterDamage <= 0.f)
+	// Hp Bar Control
+	float playerCurHpBarSet = (player->GetCurHp() * (maxHpBarSize / player->GetMaxHp())); // hp
+	if (player->GetCurHp() <= 0.f)
 	{
-		playerCurHp = 0.f;
-		HpBarFill->SetSize({ 0, HpBarFill->GetSize().y * 4 });
+		HpBarFill->SetSize({ 0.f, 0.f });
+		hpText->SetText("0 / " + to_string(player->GetMaxHp()));
 	}
 	else
 	{
-		playerCurHp -= monsterDamage;
+		HpBarFill->SetSize({ playerCurHpBarSet, HpBarFill->GetSize().y * 4 });
+		hpText->SetText(to_string(player->GetCurHp()) + "/" + to_string(player->GetMaxHp()));
 	}
-
-	// 회복
-	if (InputMgr::GetKeyDown(Keyboard::Key::Z))
-	{
-		int heal = 50; // 회복율로 변경
-
-		if (playerCurHp + heal <= playerMaxHp)
-		{
-			playerCurHp += heal;
-		}
-		else
-		{
-			int overHeal = (playerCurHp + heal) - playerMaxHp;
-			playerCurHp += (heal - overHeal);
-		}
-	}
-
-	// Hp Bar Control
-	int playerCurHpBarSet = (playerMaxHp - playerCurHp) * (maxHpBarSize / playerMaxHp); // hp바 사이즈 비율
-	HpBarFill->SetSize({ (float)hpBarSize - playerCurHpBarSet, HpBarFill->GetSize().y * 4 });
-	hpText->SetText(to_string(playerCurHp) + "/" + to_string(playerMaxHp));
-
 
 	// HP Yellow Bar Control
-	if (hpBarSize - playerCurHpBarSet < hpBarHurtSize)
+	if (playerCurHpBarSet < hpBarHurtSize)
 	{
 		HpBarHurt->SetSize({ hpBarHurtSize -= (dt * 50), HpBarHurt->GetSize().y * 4 });
-	}
-	else if (hpBarSize - playerCurHpBarSet > hpBarHurtSize)
-	{
-		hpBarHurtSize = hpBarSize - playerCurHpBarSet;
-		HpBarHurt->SetSize({ hpBarHurtSize, HpBarHurt->GetSize().y * 4 });
 	}
 }
 
@@ -420,38 +400,43 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 				bossCurHp = bossMaxHp;
 				isStart = true;
 			}
-
-			// Hp Bar Control
-			int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
-			bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
-			bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
-		}
-	}
-	else
-	{
-		if (InputMgr::GetKeyDown(Keyboard::Key::Q)) // 충돌 조건으로 변경
-		{
-			int playerDamage = 100; // 플레이어 스킬 데미지로 변경
-
-			if (bossCurHp - playerDamage <= 0.f)
-			{
-				bossCurHp = 0.f;
-				bossHpBarFill->SetSize({ 0, bossHpBarFill->GetSize().y * 4 });
-			}
-			else
-			{
-				bossCurHp -= playerDamage;
-			}
 		}
 
 		// Hp Bar Control
-		int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
-		bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4 });
+		float bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
+		bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+		bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+	}
+	else
+	{
+		switch (bossType)
+		{
+		case PlayUiMgr::BossType::Archer:
+			bossCurHp = heavyBombingArcher->GetCurHp();
+			break;
+		case PlayUiMgr::BossType::FireBoss:
+			bossCurHp = fireBoss->GetCurHp();
+			break;
+		case PlayUiMgr::BossType::FinalBoss:
+			bossCurHp = finalBoss->GetCurHp();
+			break;
+		}
+
+		// Hp Bar Control
+		float bossCurHpBarSet = bossCurHp * (bossMaxHpBarSize / bossMaxHp);
+		if (bossCurHp <= 0.f)
+		{
+			bossHpBarFill->SetSize({ 0.f, 0.f });
+		}
+		else
+		{
+			bossHpBarFill->SetSize({ bossCurHpBarSet, bossHpBarHurt->GetSize().y * 4.f });
+		}
 
 		// HP Yellow Bar Control
-		if (bossHpBarSize - bossCurHpBarSet < bossHpBarHurtSize)
+		if (bossCurHpBarSet < bossHpBarHurtSize)
 		{
-			bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarFill->GetSize().y * 4.f });
+			bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarHurt->GetSize().y * 4.f });
 		}
 
 		if (bossCurHp <= 0 && isAlive)
