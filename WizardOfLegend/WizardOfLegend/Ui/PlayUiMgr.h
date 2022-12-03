@@ -5,6 +5,7 @@ class SpriteObj;
 class TextObj;
 class Button2;
 class Player;
+class PlaySceneSkillOptions;
 
 class PlayUiMgr : public UiMgr
 {
@@ -58,6 +59,8 @@ protected:
 
 	int monsterDamage = 0;
 
+	PlaySceneSkillOptions* options;
+
 	TextObj* fps;
 
 public:
@@ -69,6 +72,8 @@ public:
 	virtual void SetPos(const Vector2f& pos) override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
+
+	bool IsOption() { return isOption; }
 
 	void HpBarSizeControl(float dt);
 	void BossHpBraSizeControl(float dt);

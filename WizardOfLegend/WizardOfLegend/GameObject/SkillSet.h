@@ -22,6 +22,8 @@ private:
 	float newCoolDown;
 	float timer;
 
+	string skillSetName;
+
 public:
 	SkillSet();
 	~SkillSet();
@@ -36,5 +38,6 @@ public:
 	void Draw(RenderWindow& window);
 
 	Skill* GetCurrSkill();
+	string GetSkillSetName() { return skillSetName; }
 };
 

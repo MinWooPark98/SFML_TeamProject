@@ -217,10 +217,13 @@ void PlayScene::Update(float dt)
 	
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
-		if (!GetPause())
-			SetPause(true);
+		if (GetPause())
+		{
+			if (!((PlayUiMgr*)uiMgr)->IsOption())
+				SetPause(false);
+		}
 		else
-			SetPause(false);
+			SetPause(true);
 	}
 
 	//플레이어 방 위치 
@@ -326,7 +329,7 @@ void PlayScene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetPos().x<max.x + 32 && obj->GetPos().y < max.y + 32 && obj->GetPos().x > min.x - 32 && obj->GetPos().y > min.y - 32)
+				if (obj->GetPos().x<max.x + 80 && obj->GetPos().y < max.y + 80 && obj->GetPos().x > min.x - 80 && obj->GetPos().y > min.y - 80)
 				{
 					if (obj->GetActive())
 					{

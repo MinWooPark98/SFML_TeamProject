@@ -149,6 +149,7 @@
     <ClCompile Include="GameObject\Cliff.cpp" />
     <ClCompile Include="GameObject\Door.cpp" />
     <ClCompile Include="GameObject\FinalBoss.cpp" />
+    <ClCompile Include="Ui\PlaySceneSkillOptions.cpp" />
     <ClCompile Include="Ui\DataTableList.cpp" />
     <ClCompile Include="GameObject\CastingCircle.cpp" />
     <ClCompile Include="GameObject\Button2.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="GameObject\Cliff.h" />
     <ClInclude Include="GameObject\Door.h" />
     <ClInclude Include="GameObject\FinalBoss.h" />
+    <ClInclude Include="Ui\PlaySceneSkillOptions.h" />
     <ClInclude Include="Ui\DataTableList.h" />
     <ClInclude Include="GameObject\CastingCircle.h" />
     <ClInclude Include="GameObject\Button2.h" />

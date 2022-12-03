@@ -44,7 +44,7 @@ void TitleUiMgr::Init()
 		else
 			button->SetText("fonts/NotoSansKR-Bold.otf", 60, Color(255, 255, 255, 180), sceneNames[i]);
 
-		button->SetHitBox(button->GetText()->GetSFMLText().getGlobalBounds(), Color::Transparent);
+		button->SetButtonBox(button->GetText()->GetSFMLText().getGlobalBounds(), Color::Transparent);
 		button->GetText()->SetOutlineColor(Color::Black);
 		button->GetText()->SetOutlineThickness(2.f);
 

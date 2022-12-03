@@ -47,6 +47,7 @@ void SkillSet::Restart()
 
 void SkillSet::Set(const string& setName)
 {
+	skillSetName = setName;
 	ResetSkills();
 	SkillSetTable* table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	auto& skillSetInfo = table->Get(setName);
@@ -89,6 +90,7 @@ void SkillSet::Set(const string& setName)
 
 void SkillSet::SetOnlyOneSkill(const Skill::Set& set)
 {
+	skillSetName = set.skillName;
 	ResetSkills();
 	isSingleSkill = true;
 	if (set.attackType == Skill::AttackType::SaveAttacks)
