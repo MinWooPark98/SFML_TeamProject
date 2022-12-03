@@ -3,7 +3,7 @@
 #include "../DataTable/SkillSetTable.h"
 
 SkillSet::SkillSet()
-	:subject(nullptr), subType(Skill::SubjectType::None), isOnCoolDown(false), newCoolDownEntered(false), newCoolDown(0.f), timer(0.f)
+	:subject(nullptr), subType(Skill::SubjectType::None), isSingleSkill(false), isOnCoolDown(false), newCoolDownEntered(false), newCoolDown(0.f), timer(0.f)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -35,9 +35,12 @@ void SkillSet::Restart()
 		return;
 	isOnCoolDown = true;
 	currSkillIt = usingSkills.rend();
-	for (auto skill : usingSkills)
+	if (!isSingleSkill)
 	{
-		skill->Reprepare();
+		for (auto skill : usingSkills)
+		{
+			skill->Reprepare();
+		}
 	}
 	Do();
 }
@@ -51,6 +54,10 @@ void SkillSet::Set(const string& setName)
 	if (!Utils::EqualFloat(newCoolDown, -1.f))
 		newCoolDownEntered = true;
 	auto& skillNames = skillSetInfo.second;
+	if (skillNames.size() == 1)
+		isSingleSkill = true;
+	else
+		isSingleSkill = false;
 	for (auto& skillName : skillNames)
 	{
 		if (unusingSkills.empty())
@@ -67,9 +74,14 @@ void SkillSet::Set(const string& setName)
 		skill->SetSkill(skillName);
 		if (!newCoolDownEntered)
 		{
-			float coolDown = skill->GetSetting()->skillCoolDown;
-			if(newCoolDown < coolDown)
-				newCoolDown = coolDown;
+			if (isSingleSkill && skill->GetSetting()->attackType == Skill::AttackType::SaveAttacks)
+				newCoolDown = 0.f;
+			else
+			{
+				float coolDown = skill->GetSetting()->skillCoolDown;
+				if (newCoolDown < coolDown)
+					newCoolDown = coolDown;
+			}
 		}
 		usingSkills.push_back(skill);
 	}
@@ -78,7 +90,11 @@ void SkillSet::Set(const string& setName)
 void SkillSet::SetOnlyOneSkill(const Skill::Set& set)
 {
 	ResetSkills();
-	newCoolDown = set.skillCoolDown;
+	isSingleSkill = true;
+	if (set.attackType == Skill::AttackType::SaveAttacks)
+		newCoolDown = 0.f;
+	else
+		newCoolDown = set.skillCoolDown;
 	auto skill = unusingSkills.front();
 	unusingSkills.pop_front();
 	skill->SetSkill(set);

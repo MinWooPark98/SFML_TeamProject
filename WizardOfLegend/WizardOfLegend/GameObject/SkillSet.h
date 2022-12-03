@@ -16,6 +16,7 @@ private:
 	Object* subject;
 	Skill::SubjectType subType;
 
+	bool isSingleSkill;
 	bool isOnCoolDown;
 	bool newCoolDownEntered;
 	float newCoolDown;

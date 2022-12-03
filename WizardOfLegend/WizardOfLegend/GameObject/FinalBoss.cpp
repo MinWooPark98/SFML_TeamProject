@@ -8,7 +8,7 @@
 #include "Player.h"
 
 FinalBoss::FinalBoss()
-	:currState(States::None), animator(nullptr), attackDmg(0), attackCnt(0), attackRange(0.f), speed(400.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
+	:currState(States::None), animator(nullptr), attackDmg(40), attackCnt(0), attackRange(0.f), speed(400.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
 {
 	direction = {0.f, 1.f};
 }
@@ -141,7 +141,7 @@ void FinalBoss::Init()
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
 
-	vector<string> skills = { "DragonArc", "FireFull", "FireBall", "FlameWolf", "WideAreaMeteor" };
+	vector<string> skills = { "DragonArc", "FireFull", "FireBall", "FlameWolf", "PointMeteor" };
 	for (int i = 0; i < skills.size(); ++i)
 	{
 		Skill* skill1 = new Skill();
@@ -252,7 +252,6 @@ void FinalBoss::UpdateDash(float dt)
 		if(Utils::Distance(position, player->GetPos()) < activateDistance)
 		{
 			currSkill->Do();
-			cout << currSkill->GetSetting()->skillName << endl;
 			if (vecIdx < normalSkills.size())
 			{
 				++vecIdx;
@@ -297,7 +296,7 @@ void FinalBoss::UpdateWait(float dt)
 
 void FinalBoss::Action(Skill* skill)
 {
-	switch (currSkill->GetSetting()->playerAction)
+	switch (skill->GetSetting()->playerAction)
 	{
 	case Player::SkillAction::NormalSpell:
 		SetState(States::NormalSpell);
