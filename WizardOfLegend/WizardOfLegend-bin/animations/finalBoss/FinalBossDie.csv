@@ -1,0 +1,9 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FinalBossDie,0,5,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/FinalBossDead0.png,0,0,48,48,24,24,0,0
+graphics/FinalBossDead1.png,0,0,48,48,24,24,0,0
+graphics/FinalBossDead2.png,0,0,48,48,24,24,0,0
+graphics/FinalBossDead3.png,0,0,48,48,24,24,0,0
+graphics/FinalBossDead3.png,0,0,48,48,24,24,0,0

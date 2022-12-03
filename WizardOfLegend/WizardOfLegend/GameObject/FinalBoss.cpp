@@ -78,6 +78,9 @@ void FinalBoss::SetState(States state)
 	case States::Hit:
 		lastDir.x < 0.f ? animator->Play("FinalBossHurtLeft") : animator->Play("FinalBossHurtRight");
 		break;
+	case States::Die:
+		animator->Play("FinalBossDie");
+		break;
 	default:
 		break;
 	}
@@ -116,6 +119,7 @@ void FinalBoss::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossGroundSlamDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossHurtRight"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossHurtLeft"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossDie"));
 	{
 		vector<string> clipIds = { "FinalBossSlideRight", "FinalBossSlideLeft", "FinalBossSlideDown", "FinalBossSlideUp" };
 		for (int i = 0; i < clipIds.size(); ++i)
@@ -137,6 +141,13 @@ void FinalBoss::Init()
 			ev.onEvent = bind(&FinalBoss::FinishAction, this);
 			animator->AddEvent(ev);
 		}
+	}
+	{
+		AnimationEvent ev;
+		ev.clipId = "FinalBossDie";
+		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
+		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
+		animator->AddEvent(ev);
 	}
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
@@ -401,6 +412,12 @@ void FinalBoss::NextAction()
 void FinalBoss::OnHit(const Vector2f& atkDir, int dmg)
 {
 	curHp -= dmg;
+	if (curHp <= 0)
+	{
+		curHp = 0;
+		SetState(States::Die);
+		return;
+	}
 	if (superArmor)
 		return;
 	direction = -atkDir;

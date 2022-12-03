@@ -22,6 +22,7 @@ public:
 		GroundSlam,
 		GroundSlamEnd,
 		Hit,
+		Die,
 	};
 	enum class SkillAction
 	{

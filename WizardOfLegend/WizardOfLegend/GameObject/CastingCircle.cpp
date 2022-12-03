@@ -78,19 +78,17 @@ void CastingCircle::Update(float dt)
 							continue;
 						for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 						{
-							if (GetHitBounds().intersects(enemy->GetHitBounds()))
-							{
-								((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
+							if (!((Enemy*)enemy)->GetIsAlive())
 								continue;
-							}
+							if (GetHitBounds().intersects(enemy->GetHitBounds()))
+								((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
 						}
 						for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
 						{
-							if (GetHitBounds().intersects(boss->GetHitBounds()))
-							{
-								((FinalBoss*)boss)->OnHit(direction, attackDmg);
+							if (((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
 								continue;
-							}
+							if (GetHitBounds().intersects(boss->GetHitBounds()))
+								((FinalBoss*)boss)->OnHit(direction, attackDmg);
 						}
 					}
 					break;
@@ -102,11 +100,10 @@ void CastingCircle::Update(float dt)
 							continue;
 						for (auto& player : collisionList[i][Object::ObjTypes::Player])
 						{
-							if (GetHitBounds().intersects(player->GetHitBounds()))
-							{
-								((Player*)player)->OnHit(direction, attackDmg);
+							if (((Player*)player)->GetState() == Player::States::Die)
 								continue;
-							}
+							if (GetHitBounds().intersects(player->GetHitBounds()))
+								((Player*)player)->OnHit(direction, attackDmg);
 						}
 					}
 					break;
@@ -135,19 +132,17 @@ void CastingCircle::Update(float dt)
 						continue;
 					for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 					{
-						if (GetHitBounds().intersects(enemy->GetHitBounds()))
-						{
-							((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
+						if (!((Enemy*)enemy)->GetIsAlive())
 							continue;
-						}
+						if (GetHitBounds().intersects(enemy->GetHitBounds()))
+							((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
 					}
 					for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
 					{
-						if (GetHitBounds().intersects(boss->GetHitBounds()))
-						{
-							((FinalBoss*)boss)->OnHit(direction, attackDmg);
+						if (((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
 							continue;
-						}
+						if (GetHitBounds().intersects(boss->GetHitBounds()))
+							((FinalBoss*)boss)->OnHit(direction, attackDmg);
 					}
 				}
 				break;
@@ -159,11 +154,10 @@ void CastingCircle::Update(float dt)
 						continue;
 					for (auto& player : collisionList[i][Object::ObjTypes::Player])
 					{
-						if (GetHitBounds().intersects(player->GetHitBounds()))
-						{
-							((Player*)player)->OnHit(direction, attackDmg);
+						if (((Player*)player)->GetState() == Player::States::Die)
 							continue;
-						}
+						if (GetHitBounds().intersects(player->GetHitBounds()))
+							((Player*)player)->OnHit(direction, attackDmg);
 					}
 				}
 				break;

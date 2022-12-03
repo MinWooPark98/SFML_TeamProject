@@ -124,6 +124,9 @@ void Player::SetState(States state)
 				animator->Play("HurtLeft");
 		}
 		break;
+	case States::Die:
+		animator->Play("Die");
+		break;
 	default:
 		break;
 	}
@@ -184,6 +187,7 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtLeft"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("Die"));
 	{
 		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "GroundSlamDownEnd", "GroundSlamUpEnd" };
 		for (int i = 0; i < clipIds.size(); ++i)
@@ -205,6 +209,13 @@ void Player::Init()
 			ev.onEvent = bind(&Player::FinishAction, this);
 			animator->AddEvent(ev);
 		}
+	}
+	{
+		AnimationEvent ev;
+		ev.clipId = "Die";
+		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
+		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
+		animator->AddEvent(ev);
 	}
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
@@ -235,6 +246,9 @@ void Player::Update(float dt)
 
 	SpriteObj::Update(dt);
 	animator->Update(dt);
+
+	if (currState == States::Die)
+		return;
 
 	auto& windowSize = FRAMEWORK->GetWindowSize();
 	
@@ -517,10 +531,10 @@ void Player::FinishAction()
 void Player::OnHit(const Vector2f& atkDir, int dmg)
 {
 	curHp -= dmg;
-	if (curHp <= 0.f)
+	if (curHp <= 0)
 	{
-		curHp = 0.f;
-		SetActive(false);
+		curHp = 0;
+		SetState(States::Die);
 		return;
 	}
 	direction = -atkDir;
