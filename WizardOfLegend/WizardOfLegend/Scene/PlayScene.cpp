@@ -106,8 +106,8 @@ void PlayScene::Init()
 			objList[LayerType::Object][5].push_back(player);
 			auto& skillSet = player->GetSkillSets();
 			skillSet[0]->Set("FireBall");
-			skillSet[1]->Set("JumpMeteor");
-			skillSet[2]->Set("FireDash");
+			skillSet[1]->Set("FireDash");
+			skillSet[2]->Set("JumpMeteor");
 			skillSet[4]->Set("DragonArc");
 			skillSet[5]->Set("FireFull");
 		}

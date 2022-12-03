@@ -276,8 +276,8 @@ void Player::Update(float dt)
 					skillSets[0]->Restart();
 					break;
 				case Mouse::Right:
-					SetCurrSkillSet(skillSets[1]);
-					skillSets[1]->Restart();
+					SetCurrSkillSet(skillSets[2]);
+					skillSets[2]->Restart();
 					break;
 				default:
 					break;
@@ -294,8 +294,8 @@ void Player::Update(float dt)
 				switch (keyDown)
 				{
 				case Keyboard::Space:
-					SetCurrSkillSet(skillSets[2]);
-					skillSets[2]->Restart();
+					SetCurrSkillSet(skillSets[1]);
+					skillSets[1]->Restart();
 					SetState(States::Dash);
 					break;
 				case Keyboard::Q:
