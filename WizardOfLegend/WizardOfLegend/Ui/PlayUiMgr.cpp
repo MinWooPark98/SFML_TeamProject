@@ -250,6 +250,55 @@ void PlayUiMgr::Init()
 		uiObjList[0].push_back(fps);
 	}
 
+	for (int i = 0; i < 6; i++)
+	{
+		skillSelects.push_back(new SpriteObj());
+		skillKeys.push_back(new SpriteObj());
+	}
+
+	for (int i = 0; i < skillSelects.size(); i++)
+	{
+		skillSelects[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/InactiveCooldownPanel.png"));
+		skillSelects[i]->SetScale({4, 4});
+		skillSelects[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.94f });
+		skillSelects[i]->SetOrigin(Origins::MC);
+
+		uiObjList[2].push_back(skillSelects[i]);
+	}
+
+	for (int i = 0; i < skillKeys.size(); i++)
+	{
+		switch (i)
+		{
+		case 0:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/M0.png"));
+			break;
+		case 1:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Space.png"));
+			break;
+		case 2:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/M1.png"));
+			break;
+		case 3:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Q.png"));
+			break;
+		case 4:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/E.png"));
+			break;
+		case 5:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/R.png"));
+			break;
+		}
+		
+		skillKeys[i]->SetScale({ 4, 4 });
+		skillKeys[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.87f });
+		skillKeys[i]->SetOrigin(Origins::MC);
+
+		uiObjList[2].push_back(skillKeys[i]);
+	}
+
+
+
 	fps = new TextObj();
 	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	fps->SetSize(35);

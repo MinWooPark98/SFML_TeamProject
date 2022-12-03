@@ -74,6 +74,9 @@ protected:
 
 	TextObj* fps;
 
+	vector<SpriteObj*> skillSelects;
+	vector<SpriteObj*> skillKeys;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();
