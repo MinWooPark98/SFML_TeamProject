@@ -162,6 +162,18 @@ void FireBoss::Update(float dt)
 		{
 			skill->Update(dt);
 		}
+
+		if (GetFireKick()->GetActive())
+		{
+			if (GetIsKick())
+			{
+				if (Utils::OBB(player->GetHitBox(), GetFireBossKickHitBox()))
+				{
+					player->SetCurHp(player->GetCurHp() - GetDamage());
+					SetIsKick(false);
+				}
+			}
+		}
 	}
 
 	if (!isAlive)

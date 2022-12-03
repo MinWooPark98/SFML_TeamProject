@@ -289,19 +289,6 @@ void PlayScene::Update(float dt)
 	if (fireBoss->GetIsAlive())
 	{
 		((PlayUiMgr*)uiMgr)->SetBossName("FLAME QUEEN");
-		if (fireBoss->GetFireKick()->GetActive())
-		{
-			if (fireBoss->GetIsKick())
-			{
-				if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
-				{
-					player->SetCurHp(player->GetCurHp() - fireBoss->GetDamage());
-					fireBoss->SetIsKick(false);
-				}
-			}
-			else
-				((PlayUiMgr*)uiMgr)->SetMonsterDamage(0);
-		}
 
 		if (((PlayUiMgr*)uiMgr)->GetBossCurHp() <= 0)
 		{
