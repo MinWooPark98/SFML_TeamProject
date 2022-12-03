@@ -285,7 +285,7 @@ void SelectOption::Update(float dt)
 	auto& windowSize = FRAMEWORK->GetWindowSize();
 	if (InputMgr::GetMouseButtonDown(Mouse::Left) && InputMgr::GetMousePos().x < windowSize.x * 0.7f)
 	{
-		Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
+		Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 		auto skill = player->GetSkillSets()[0]->GetCurrSkill();
 		if(skill != nullptr && skill->GetSetting()->playerAction == Player::SkillAction::Dash &&
 			(player->GetState() == Player::States::Idle || player->GetState() == Player::States::Run))
@@ -727,7 +727,7 @@ void SelectOption::SaveSetToCSV()
 
 void SelectOption::SetPlayer1stSkill()
 {
-	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
+	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 	player->GetSkillSets()[0]->SetOnlyOneSkill(selectedSet);
 }
 
@@ -846,6 +846,6 @@ void SelectOption::Load(const string& skillName)
 
 void SelectOption::LoadSkillSet(const string& skillSetName)
 {
-	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("player");
+	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 	player->GetSkillSets()[0]->Set(skillSetName);
 }

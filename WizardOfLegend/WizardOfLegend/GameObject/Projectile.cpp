@@ -45,7 +45,6 @@ void Projectile::Reset()
 
 void Projectile::Update(float dt)
 {
-
 	if (!isMoving)
 		return;
 
@@ -63,7 +62,6 @@ void Projectile::Update(float dt)
 
 	animator->Update(dt);
 	SpriteObj::Update(dt);
-
 	auto spriteBnd = sprite.getGlobalBounds();
 	SetHitBox(spriteBnd);
 	SetHitBoxOrigin(Origins::MC);

@@ -22,7 +22,7 @@ void Enemy::Init()
 }
 
 void Enemy::Update(float dt)
-{
+{ 
 	SpriteObj::Update(dt);
 
 	if (isActionStart)
@@ -84,17 +84,27 @@ void Enemy::Update(float dt)
 	{
 		if (isSpawn && !isActionStart)
 		{
-			spawn->SetTexture(*RESOURCE_MGR->GetTexture("graphics/CardSpawnUnindexed_25.png"));
-			spawnAnimation.Stop();
+			if (spawn->GetSprite().getScale().x <= 0.f && spawn->GetSprite().getScale().x > -0.1f)
+			{
+				spawn->SetTexture(*RESOURCE_MGR->GetTexture("graphics/CardSpawnUnindexed_25.png"));
+				spawnAnimation.Stop();
+			}
+
+			if (type == MonsterType::Normal)
+				SpawnScale(1.f, dt);
+			else if (type == MonsterType::StageBoss)
+				SpawnScale(1.5f, dt);
 		}
+
 		if (isActionStart)
 		{
 			isShader = false;
 			deleteTimer -= dt;
 		}
 		spawnAnimation.Update(dt);
-		SetLastPosition(GetPos());
 	}
+
+	SetLastPosition(GetPos());
 }
 
 void Enemy::SetColor(int index)
@@ -211,7 +221,6 @@ void Enemy::SpawnScale(float scale, float dt)
 	if (spawn->GetSprite().getScale().x > -scale)
 	{
 		spawn->SetScale({ spawn->GetSprite().getScale().x - (dt * 7) , scale });
-
 
 		if (spawn->GetSprite().getScale().x <= 0.f && sprite.getScale().x <= scale)
 			sprite.setScale({ sprite.getScale().x + (dt * 7), scale });

@@ -19,8 +19,7 @@ protected:
 
 	DrawObj* nowDraw;
 
-	int aliveEnemyCount;
-	bool allEnemyDead = false;
+	bool isPlayerInToTheRoom;
 
 public:
 	Sector();
@@ -37,7 +36,7 @@ public:
 	EditorObjs GetData() { return data; }
 	void SetData(EditorObjs d) { data = d; }
 	virtual void SetPos(const Vector2f& pos);
-	
+
 	virtual void SetFillColor(Color color) { sector->setFillColor(color); }
 	virtual void SetOutlineColor(Color color) { sector->setOutlineColor(color); }
 	virtual void SetOutlineThickness(float t) { sector->setOutlineThickness(t); }
@@ -46,11 +45,5 @@ public:
 	const Vector2f& GetSize() const { return ((RectangleShape*)sector)->getSize(); }
 
 	Shape* GetSectorShape() const { return sector; };
-
-	int GetAliveEnemyCount() { return aliveEnemyCount; }
-	void SetAliveEnemyCount(int count) { aliveEnemyCount = count; }
-
-	bool GetAllEnemyDead() { return allEnemyDead; }
-	void SetAllEnemyDead(bool alldead) { allEnemyDead = alldead; }
 };
 

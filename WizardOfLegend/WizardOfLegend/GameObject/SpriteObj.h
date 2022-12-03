@@ -13,9 +13,6 @@ protected:
     int spritePaletteSize;
     Texture spriteColorTable;
 
-    bool isUi;
-    bool viewIn;
-
 public:
     SpriteObj();
     virtual ~SpriteObj();
@@ -38,6 +35,7 @@ public:
     Sprite& GetSprite() { return sprite; }
     void SetUI(bool u) { isUi = u; }
     bool IsInView();
+    //bool GetIsView() { return viewIn; }
     void SetTextureRect(const IntRect& rect);
     const IntRect& GetTextureRect()const;
     void SetHitBoxOrigin(Origins origin) { Utils::SetOrigin(hitbox, origin); }

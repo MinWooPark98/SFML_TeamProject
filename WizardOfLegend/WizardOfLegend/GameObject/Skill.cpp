@@ -208,7 +208,7 @@ void Skill::Do()
 		break;
 	case SubjectType::FinalBoss:
 		{
-			auto& playerPos = SCENE_MGR->GetCurrentScene()->FindGameObj("player")->GetPos();
+		auto& playerPos = SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER")->GetPos();
 			if (!(isDoing && (setting->attackType == AttackType::Multiple || setting->playerAction != Player::SkillAction::NormalSpell)))
 				((FinalBoss*)subject)->Action(this);
 			obj->SetAtkDmg(setting->dmgRatio * ((FinalBoss*)subject)->GetAtkDmg());

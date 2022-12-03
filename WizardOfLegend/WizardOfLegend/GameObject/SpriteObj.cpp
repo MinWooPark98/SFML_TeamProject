@@ -20,12 +20,8 @@ void SpriteObj::Update(float dt)
 
 void SpriteObj::Draw(RenderWindow& window)
 {
-    //IsInView();
-	//if(viewIn)
-	//{ 
-		window.draw(sprite, &spriteShader);
-		Object::Draw(window);/*
-    }*/
+    window.draw(sprite, &spriteShader);
+    Object::Draw(window);
 }
 
 void SpriteObj::SetTexture(const Texture& tex)
@@ -59,7 +55,6 @@ void SpriteObj::SetPos(const Vector2f& pos)
     Object::SetPos(pos);
     sprite.setPosition(position);
 }
-
 
 void SpriteObj::SetTextureRect(const IntRect& rect)
 {

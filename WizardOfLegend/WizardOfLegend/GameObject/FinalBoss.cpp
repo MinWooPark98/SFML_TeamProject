@@ -157,6 +157,8 @@ void FinalBoss::Init()
 
 	SetHitBox(FloatRect(0.f, 0.f, 10.f, 25.f));
 	SetHitBoxOrigin(Origins::MC);
+	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
+	SetLowHitBoxOrigin(Origins::MC);
 
 	SetMaxHp(825);
 	SetCurHp(maxHp);

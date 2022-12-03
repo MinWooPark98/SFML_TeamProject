@@ -38,7 +38,7 @@ void MapToolScene::Init()
 
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
-	nowType = LayerType::Object;
+	nowType = LayerType::Tile;
 }
 
 void MapToolScene::Reset()
@@ -696,7 +696,7 @@ void MapToolScene::Load(string path)
 
 		int i = ((int)obj.position.x - 8) / 16;
 		int j = (int)obj.position.y / 16 - 1;
-		if (obj.type == "OBJECT" || obj.type == "ENEMY")
+		if (obj.type == "OBJECT" || obj.type == "ENEMY" || obj.type == "PLAYER")
 		{
 			objList[LayerType::Object][j].push_back(draw);
 			gridObjs[LayerType::Object][j][i] = draw;

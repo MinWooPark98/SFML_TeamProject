@@ -13,8 +13,8 @@
 #include "../GameObject/SkillSet.h"
 #include "../GameObject/Sector.h"
 #include "../GameObject/Cliff.h"
-#include "../GameObject/SpriteObj.h"
 #include "../GameObject/CastingCircle.h"
+#include "../GameObject/FinalBoss.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -88,18 +88,11 @@ void PlayScene::Init()
 			SpriteObj* draw = new SpriteObj();
 			draw->Init();
 			draw->SetName(obj.type);
-			draw->SetFileName(obj.path);
 			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
 			draw->SetOrigin(Origins::BC);
 			draw->SetPos(obj.position);
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::ETC);
-			if (obj.path == "graphics/Map/Object/GateFull.png" ||
-				obj.path == "graphics/Map/Palette/LeftGate.png" ||
-				obj.path == "graphics/Map/Palette/RightGate.png")
-			{
-				draw->SetActive(false);
-			}
 
 			objList[LayerType::Object][0].push_back(draw);
 		}
@@ -166,6 +159,16 @@ void PlayScene::Init()
 				fireBoss->SetActive(false);
 				objList[LayerType::Object][3].push_back(fireBoss);
 			}
+			else if (obj.path == "graphics/Map/FinalBoss.png")
+			{
+				FinalBoss* finalBoss = new FinalBoss();
+				finalBoss->Init();
+				finalBoss->SetName(obj.type);
+				finalBoss->SetPos(obj.position);
+				finalBoss->SetObjType(Object::ObjTypes::FinalBoss);
+				finalBoss->SetActive(false);
+				objList[LayerType::Object][0].push_back(finalBoss);
+			}
 		}
 		else if (obj.type == "CLIFF")
 		{
@@ -177,17 +180,18 @@ void PlayScene::Init()
 			cliff->SetHitBox((FloatRect)cliff->GetCliffShape()->getGlobalBounds());
 			cliff->SetHitBox({100, 100, 100, 100}, Color::Blue);
 			cliff->SetObjType(Object::ObjTypes::Cliff);
-			objList[LayerType::Cliff][0].push_back(cliff);
+			objList[LayerType::Object][3].push_back(cliff);
+			collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
 		}
 	}
 
-	for (int i = 0; i < room.size(); i++)
+	for (auto& a : objList)
 	{
-		for (auto& a : objList)
+		for (auto& b : a.second)
 		{
-			for (auto& b : a.second)
+			for (auto& c : b.second)
 			{
-				for (auto& c : b.second)
+				for (int i = 0; i < room.size(); i++)
 				{
 					if (Utils::OBB(c->GetHitBox(), room[i].GetHitBox()))
 					{
@@ -196,8 +200,6 @@ void PlayScene::Init()
 				}
 			}
 		}
-		room[i].SetAliveEnemyCount(collisionList[i][Object::ObjTypes::Enemy].size()+ collisionList[i][Object::ObjTypes::FinalBoss].size());
-		cout<<i<<"방 에너미 숫자 : " << collisionList[i][Object::ObjTypes::Enemy].size() << endl;
 	}
 
 	auto& tiles = objList[LayerType::Tile][0];
@@ -206,12 +208,15 @@ void PlayScene::Init()
 	mapSize.width = (tiles.back())->GetPos().x + 16;
 	mapSize.height = (tiles.back())->GetPos().y;
 
-
 	for (int i = 0; i < room.size(); i++)
 	{
 		for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 		{
 			((Enemy*)enemy)->SetPlayer(player);
+		}
+		for (auto& finalBoss : collisionList[i][Object::ObjTypes::FinalBoss])
+		{
+			((FinalBoss*)finalBoss)->SetPlayer(player);
 		}
 	}
 	fireBoss->SetPlayerLastPos(player->GetPos());
@@ -270,6 +275,7 @@ void PlayScene::Update(float dt)
 				for (auto& obj : collisionList[j][(Object::ObjTypes)i])
 				{
 					OnCollisionWall(j, obj);
+					OnCollisionETC(j, obj);
 				}
 			}
 			break;
@@ -326,7 +332,7 @@ void PlayScene::Draw(RenderWindow& window)
 {
 	Vector2i min = { (int)(worldView.getCenter().x - (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y - (int)worldView.getSize().y * 0.5f) };
 	Vector2i max = { (int)(worldView.getCenter().x + (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y + (int)worldView.getSize().y * 0.5f) };
-	int extra = 80;
+
 	window.setView(worldView);
 	for (auto& layer : objList)
 	{
@@ -335,7 +341,7 @@ void PlayScene::Draw(RenderWindow& window)
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetPos().x<max.x + extra && obj->GetPos().y < max.y + extra && obj->GetPos().x > min.x - extra && obj->GetPos().y > min.y - extra)
+				if (obj->GetPos().x<max.x + 80 && obj->GetPos().y < max.y + 80 && obj->GetPos().x > min.x - 80 && obj->GetPos().y > min.y - 80)
 				{
 					if (obj->GetActive())
 					{
@@ -345,6 +351,7 @@ void PlayScene::Draw(RenderWindow& window)
 			}
 		}
 	}
+
 	if (uiMgr != nullptr && uiMgr->GetActive())
 	{
 		window.setView(uiView);
@@ -378,41 +385,16 @@ void PlayScene::Exit()
 	Scene::Exit();
 }
 
-
-void PlayScene::SpawnEnemy(int i)
+void PlayScene::SpawnEnemy(int i, float dt)
 {
+
 	for (auto& c_list : collisionList[i])
 	{
 		for (auto& obj : c_list.second)
 		{
-			if (obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive())
+			if ((obj->GetObjType() == Object::ObjTypes::Enemy|| obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((Enemy*)obj)->GetIsAlive())
 			{
-				if (((Enemy*)obj)->GetIsAlive())
-				{
-					return;
-				}
-				else
-				{
-					room[i].SetAllEnemyDead(true);
-				}
-			}
-		}
-	}
-	if (room[i].GetAllEnemyDead())
-	{
-		for (auto& c_list : collisionList[i])
-		{
-			for (auto& obj : c_list.second)
-			{
-				if (obj->GetObjType() == Object::ObjTypes::ETC)
-				{
-					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
-						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-						obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
-					{
-						obj->SetActive(false);
-					}
-				}
+				obj->SetActive(true);
 			}
 		}
 	}

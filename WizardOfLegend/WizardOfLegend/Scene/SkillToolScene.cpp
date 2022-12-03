@@ -23,7 +23,7 @@ void SkillToolScene::Init()
 	Player* player = new Player();
 	player->Init();
 	player->SetSkillToolMode();
-	player->SetName("player");
+	player->SetName("PLAYER");
 	objList[LayerType::Object][0].push_back(player);
 	// 다른 오브젝트가 없는 skilltoolscene에서 테스트
 	FinalBoss* boss = new FinalBoss();
