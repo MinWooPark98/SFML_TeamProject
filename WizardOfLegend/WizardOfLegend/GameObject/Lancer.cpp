@@ -39,6 +39,8 @@ void Lancer::Init()
 	SetMaxHp(150);
 	SetCurHp(GetMaxHp());
 	weapon->SetOrigin(Origins::MC);
+	weapon->SetHitBox({20, 20, 5, 35}, Color::Red);
+	weapon->GetHitBox().setOrigin(weapon->GetHitBox().getSize().x * 0.5f, weapon->GetHitBox().getSize().y * 0.5f);
 	spawn->SetPos(GetPos());
 	SetCardColor(2);
 	SetDamage(15);
@@ -107,7 +109,10 @@ void Lancer::Draw(RenderWindow& window)
 			window.draw(lancerAttackEffect->GetSprite(), &shader);
 
 		if (isDevMode && lancerAttackEffect->GetActive())
+		{
 			window.draw(lancerAttackEffect->GetHitBox());
+			window.draw(weapon->GetHitBox());
+		}
 	}
 
 	Enemy::Draw(window);
@@ -146,6 +151,7 @@ void Lancer::SetState(States newState)
 		break;
 	case States::Attack:
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
+		weapon->GetHitBox().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 		lancerAttackEffect->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()) + 90);
 		lancerAttackEffect->GetHitBox().setRotation(lancerAttackEffect->GetSprite().getRotation());
 
@@ -191,13 +197,16 @@ void Lancer::UpdateAttack(float dt)
 	{
 		weapon->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpearWithArm.png"));
 		weapon->SetPos(GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 20.f);
+		weapon->GetHitBox().setPosition(weapon->GetPos());
 		switch (spearPos)
 		{
 		case 1: case 2:
 			weapon->SetPos({ weapon->GetPos().x, weapon->GetPos().y - 5.f}); // �¿�
+			weapon->GetHitBox().setPosition(weapon->GetPos());
 			break;
 		case 3: case 4:
 			weapon->SetPos({ weapon->GetPos().x + 5.f, weapon->GetPos().y - 5.f }); // ����
+			weapon->GetHitBox().setPosition(weapon->GetPos());
 			break;
 		}
 
@@ -207,7 +216,8 @@ void Lancer::UpdateAttack(float dt)
 		spearAnimation.Play("SpearMotion");
 		SOUND_MGR->Play("sounds/KnightAttack.wav");
 
-		if (Utils::OBB(player->GetHitBox(), lancerAttackEffect->GetHitBox()))
+		if (Utils::OBB(player->GetHitBox(), lancerAttackEffect->GetHitBox()) ||
+			Utils::OBB(player->GetHitBox(), weapon->GetHitBox()))
 		{
 			player->SetCurHp(player->GetCurHp() - GetDamage());
 		}
@@ -219,6 +229,7 @@ void Lancer::UpdateAttack(float dt)
 		lancerAttackEffect->SetActive(false);
 		weapon->SetTexture(*RESOURCE_MGR->GetTexture("graphics/LancerSpear.png"));
 		weapon->SetPos({ GetPos().x, GetPos().y });
+		weapon->GetHitBox().setPosition(weapon->GetPos());
 		if (spearPos == 3 || spearPos == 4)
 			weapon->SetPos({ weapon->GetPos().x + 7.f, weapon->GetPos().y });
 		playerLastPos = player->GetPos();
