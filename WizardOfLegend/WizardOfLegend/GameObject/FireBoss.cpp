@@ -175,7 +175,7 @@ void FireBoss::Update(float dt)
 			{
 				if (Utils::OBB(player->GetHitBox(), GetFireBossKickHitBox()))
 				{
-					player->SetCurHp(player->GetCurHp() - GetDamage());
+					player->OnHit(Utils::Normalize(playerLastPos - position), GetDamage());
 					SetIsKick(false);
 				}
 			}

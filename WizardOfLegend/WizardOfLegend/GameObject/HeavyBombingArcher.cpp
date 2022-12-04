@@ -169,7 +169,7 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 				{
 					if (isAttack)
 					{
-						player->SetCurHp(player->GetCurHp() - GetDamage());
+						player->OnHit(shot, GetDamage());
 						smollArrow[i]->SetActive(false);
 						isAttack = false;
 					}
