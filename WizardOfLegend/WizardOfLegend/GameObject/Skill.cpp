@@ -143,6 +143,8 @@ void Skill::Do()
 				circle->SetSubjectType(subType);
 				circle->SetPos(startPos);
 				circle->SetDuration(setting->duration);
+				circle->SetAtkDmg(setting->dmgRatio * ((Player*)subject)->GetAtkDmg());
+				circle->SetAtkDelay(setting->dmgDelay);
 				circle->Do();
 				circle->SetSize({ setting->amplitude * 2.f, setting->amplitude * 2.f });
 				castingCircles.push_back(circle);
@@ -226,6 +228,8 @@ void Skill::Do()
 					circle->SetSubjectType(subType);
 					circle->SetPos(startPos);
 					circle->SetDuration(setting->duration);
+					circle->SetAtkDmg(setting->dmgRatio* ((Enemy*)subject)->GetDamage());
+					circle->SetAtkDelay(setting->dmgDelay);
 					circle->Do();
 					circle->SetSize({ setting->amplitude * 2.f, setting->amplitude * 2.f });
 					castingCircles.push_back(circle);
@@ -312,6 +316,8 @@ void Skill::Do()
 					circle->SetSubjectType(subType);
 					circle->SetPos(startPos);
 					circle->SetDuration(setting->duration);
+					circle->SetAtkDmg(setting->dmgRatio* ((FinalBoss*)subject)->GetAtkDmg());
+					circle->SetAtkDelay(setting->dmgDelay);
 					circle->Do();
 					circle->SetSize({ setting->amplitude * 2.f, setting->amplitude * 2.f });
 					castingCircles.push_back(circle);
