@@ -255,14 +255,14 @@ void MapToolUiMgr::Update(float dt)
 	    nowEvObj = nullptr;
 	}
 
-	if (1)
-	{
-		float fpsi = 1.f / dt;
-		if (fpsi < 30.f)
-			fps->SetSize(100.f);
+	//if (1)
+	//{
+	//	float fpsi = 1.f / dt;
+	//	if (fpsi < 30.f)
+	//		fps->SetSize(100.f);
 
-		fps->SetString(to_string(fpsi));
-	}
+	//	fps->SetString(to_string(fpsi));
+	//}
 }
 
 void MapToolUiMgr::Draw(RenderWindow& window)
