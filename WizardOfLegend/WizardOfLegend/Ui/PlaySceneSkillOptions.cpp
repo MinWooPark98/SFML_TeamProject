@@ -52,7 +52,7 @@ void PlaySceneSkillOptions::Init()
 	Utils::SetOrigin(border, Origins::MC);
 	border.setPosition({ windowSize.x * 0.5f, windowSize.y * 0.2f });
 
-	vector<pair<string, string>> skillSetNames = { { "SKILL1 : ", "LeftMouse" }, { "SKILL2 : ", "SpaceBar" }, { "SKILL3 : ", "RightMouse" }, { "SKILL4 : ", "Q" }, { "SKILL5 : ", "E" }, { "SKILL6 : ", "R" } };
+	vector<pair<string, string>> skillSetNames = { { "   SKILL1 : ", "LeftMouse" }, { "  SKILL2 : ", "SpaceBar" }, { "   SKILL3 : ", "RightMouse" }, { "   SKILL4 : ", "Q" }, { "   SKILL5 : ", "E" }, { "   SKILL6 : ", "R" } };
 	for (int i = 0; i < skillSetNames.size(); ++i)
 	{
 		TextObj* text = new TextObj();
@@ -72,8 +72,8 @@ void PlaySceneSkillOptions::Init()
 		text2->SetText(skillSetNames[i].second);
 		text2->SetSize(20);
 		text2->SetFillColor({ 255, 255, 255, 153 });
-		text2->SetPos({ windowSize.x * 0.4f, windowSize.y * (0.3f + 0.1f * i) - 17.5f });
-		text2->SetOrigin(Origins::BR);
+		text2->SetPos({ text->GetGlobalBounds().left + text->GetGlobalBounds().width * 0.5f, windowSize.y * (0.3f + 0.1f * i) - 25.f });
+		text2->SetOrigin(Origins::MC);
 		text2->SetUI(true);
 		selectSkillSet.push_back(text2);
 

@@ -6,6 +6,8 @@
 #include "../Scene/SceneMgr.h"
 #include "Skill.h"
 #include "Player.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/FinalBossSkillTable.h"
 
 FinalBoss::FinalBoss()
 	:currState(States::None), animator(nullptr), attackDmg(40), attackCnt(0), attackRange(0.f), speed(400.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
@@ -151,19 +153,24 @@ void FinalBoss::Init()
 	}
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
-
-	vector<string> skills = { "DragonArc", "FireFull", "FireBall", "FlameWolf", "PointMeteor" };
-	for (int i = 0; i < skills.size(); ++i)
+	
+	FinalBossSkillTable* table = DATATABLE_MGR->Get<FinalBossSkillTable>(DataTable::Types::FinalBossSkill);
+	auto& normalSkillNames = table->Get("Normal");
+	for (auto& skillName : normalSkillNames)
 	{
-		Skill* skill1 = new Skill();
-		skill1->SetSkill(skills[i]);
-		skill1->SetSubject(this, Skill::SubjectType::FinalBoss);
-		normalSkills.push_back(skill1);
+		Skill* skill = new Skill();
+		skill->SetSkill(skillName);
+		skill->SetSubject(this, Skill::SubjectType::FinalBoss);
+		normalSkills.push_back(skill);
 	}
-	Skill* skill2 = new Skill();
-	skill2->SetSkill("FireFull");
-	skill2->SetSubject(this, Skill::SubjectType::FinalBoss);
-	chaosSkills.push_back(skill2);
+	auto& chaosSkillNames = table->Get("Chaos");
+	for (auto& skillName : chaosSkillNames)
+	{
+		Skill* skill = new Skill();
+		skill->SetSkill(skillName);
+		skill->SetSubject(this, Skill::SubjectType::FinalBoss);
+		chaosSkills.push_back(skill);
+	}
 	currSkill = normalSkills[0];
 
 	SetHitBox(FloatRect(0.f, 0.f, 10.f, 25.f));

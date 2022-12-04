@@ -59,6 +59,7 @@
     <ClCompile Include="GameObject\Cliff.cpp" />
     <ClCompile Include="GameObject\FinalBoss.cpp" />
     <ClCompile Include="Ui\PlaySceneSkillOptions.cpp" />
+    <ClCompile Include="DataTable\FinalBossSkillTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -123,6 +124,7 @@
     <ClInclude Include="GameObject\Cliff.h" />
     <ClInclude Include="GameObject\FinalBoss.h" />
     <ClInclude Include="Ui\PlaySceneSkillOptions.h" />
+    <ClInclude Include="DataTable\FinalBossSkillTable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

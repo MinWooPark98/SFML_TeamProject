@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataTable\FinalBossSkillTable.cpp" />
     <ClCompile Include="GameObject\Cliff.cpp" />
     <ClCompile Include="GameObject\Door.cpp" />
     <ClCompile Include="GameObject\FinalBoss.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="3rd\OBB.h" />
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="DataTable\FinalBossSkillTable.h" />
     <ClInclude Include="GameObject\Cliff.h" />
     <ClInclude Include="GameObject\Door.h" />
     <ClInclude Include="GameObject\FinalBoss.h" />

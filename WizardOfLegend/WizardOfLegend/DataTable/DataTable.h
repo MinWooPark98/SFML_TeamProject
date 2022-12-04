@@ -13,6 +13,7 @@ public:
 		Language,
 		Skill,
 		SkillSet,
+		FinalBossSkill,
 	};
 protected:
 	Types type;
