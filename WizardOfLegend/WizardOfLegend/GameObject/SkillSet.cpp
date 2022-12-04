@@ -51,10 +51,11 @@ void SkillSet::Set(const string& setName)
 	ResetSkills();
 	SkillSetTable* table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	auto& skillSetInfo = table->Get(setName);
-	newCoolDown = skillSetInfo.first;
+	newCoolDown = skillSetInfo.newCoolDown;
 	if (!Utils::EqualFloat(newCoolDown, -1.f))
 		newCoolDownEntered = true;
-	auto& skillNames = skillSetInfo.second;
+	iconDir = skillSetInfo.iconDir;
+	auto& skillNames = skillSetInfo.skillNames;
 	if (skillNames.size() == 1)
 		isSingleSkill = true;
 	else
