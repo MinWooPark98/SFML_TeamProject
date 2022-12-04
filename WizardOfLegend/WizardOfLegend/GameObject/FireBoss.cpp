@@ -69,7 +69,6 @@ void FireBoss::Init()
 	SetAttackScale(0.f);
 	SetMonsterType(MonsterType::MiddleBoss);
 	RandomPatternSet(AttackType::None);
-	attackType = AttackType::ThrowingKnife;
 
 	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
 	auto& stat = statTable->Get("FireBoss");
@@ -321,8 +320,6 @@ void FireBoss::SetState(BossStates newState)
 					skills[0]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
 					break;
 				}
-				skills[0]->Reprepare();
-				skills[0]->Do();
 
 				attackDelay = 1.f;
 				nextPatternDelay = 1.5f;
@@ -336,6 +333,8 @@ void FireBoss::SetState(BossStates newState)
 					break;
 				}
 				isThrowingKnife = true;
+				skills[0]->Reprepare();
+				skills[0]->Do();
 			}
 			break;
 		case FireBoss::AttackType::DragonAttack:
@@ -386,6 +385,7 @@ void FireBoss::UpdateAttack(float dt)
 		{
 			SetState(BossStates::Idle);
 			RandomPatternSet(AttackType::Meteor); // 처음부터 메테오 패턴 안 나오게
+			fireWing->SetActive(false);
 			thirdAttackCount = 3;
 			patternCount = 3;
 			nextPatternDelay = 1.5f;
@@ -503,8 +503,6 @@ void FireBoss::UpdateFireball(float dt)
 {
 	if (nextPatternDelay <= 0.f)
 	{
-		SetState(BossStates::None);
-		SetState(BossStates::Attack);
 		if (patternDelay <= 0.f)
 		{
 			RandomPatternSet(AttackType::FireBall);
@@ -513,7 +511,11 @@ void FireBoss::UpdateFireball(float dt)
 			if (patternCount > 0)
 				patternCount--;
 			SetState(BossStates::Move);
+			return;
 		}
+
+		SetState(BossStates::None);
+		SetState(BossStates::Attack);
 	}
 }
 
@@ -521,9 +523,6 @@ void FireBoss::UpdateThrowingKnife(float dt)
 {
 	if (nextPatternDelay <= 0.f)
 	{
-		SetState(BossStates::None);
-		SetState(BossStates::Attack);
-
 		if (patternDelay <= 0.f)
 		{
 			RandomPatternSet(AttackType::ThrowingKnife);
@@ -531,9 +530,13 @@ void FireBoss::UpdateThrowingKnife(float dt)
 
 			if (patternCount > 0)
 				patternCount--;
-			
+
 			SetState(BossStates::Move);
+			return;
 		}
+
+		SetState(BossStates::None);
+		SetState(BossStates::Attack);
 	}
 }
 
@@ -608,4 +611,29 @@ void FireBoss::UpdateMeteor(float dt)
 	//	else
 	//		animation.Play("FireBossRightStomp");
 	//}
+}
+
+void FireBoss::Reset()
+{
+	Enemy::Reset();
+
+	thirdAttackCount = 3;
+	patternCount = 3;
+	isThrowingKnife = false;
+	patternDelay = 0.5f;
+	nextPatternDelay = 0.5f;
+	angles = 0.f;
+	isKick = false;
+
+	SetMoveScale(10000.f);
+	SetAttackScale(0.f);
+	SetMonsterType(MonsterType::MiddleBoss);
+	RandomPatternSet(AttackType::None);
+
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("FireBoss");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(maxHp);
 }

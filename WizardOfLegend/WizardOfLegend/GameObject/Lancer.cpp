@@ -267,3 +267,16 @@ void Lancer::UpdateAttack(float dt)
 		}
 	}
 }
+
+void Lancer::Reset()
+{
+	Enemy::Reset();
+	spearWait = false;
+	spearPos = 0;
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("Lancer");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(GetMaxHp());
+}

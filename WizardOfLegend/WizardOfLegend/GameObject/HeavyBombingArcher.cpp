@@ -214,3 +214,17 @@ void HeavyBombingArcher::SetState(States newState)
 	if (newState == States::MoveAttack)
 		smollArrowDelay = 0.1f;
 }
+
+void HeavyBombingArcher::Reset()
+{
+	Archer::Reset();
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("HeavyBombingArcher");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(GetMaxHp());
+	smollArrowCount = 5;
+	smollArrowDelay = 0.1f;
+	count = 0;
+}

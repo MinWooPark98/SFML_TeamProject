@@ -257,3 +257,14 @@ void Enemy::Draw(RenderWindow& window)
 		SpriteObj::Draw(window);
 	}
 }
+
+void Enemy::Reset()
+{
+	SpriteObj::Reset();
+	deleteTimer = 0.3f;
+	isSpawn = false;
+	isActionStart = false;
+	isShader = true;
+	isAlive = true;
+	moveSoundTimer = 0.f;
+}

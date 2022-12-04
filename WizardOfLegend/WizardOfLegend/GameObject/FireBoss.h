@@ -46,7 +46,6 @@ protected:
 	SpriteObj* firebossKick;
 	Animator kickAnimation;
 	bool isKick = false;
-	//bool isStart = false;
 
 public:
 	FireBoss() : attackType(AttackType::None), moveType(MoveType::None) {};
@@ -61,7 +60,7 @@ public:
 		}
 		skills.clear();
 	};
-	virtual void Reset() override { Enemy::Reset(); };
+	virtual void Reset() override;
 	virtual void Init() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
