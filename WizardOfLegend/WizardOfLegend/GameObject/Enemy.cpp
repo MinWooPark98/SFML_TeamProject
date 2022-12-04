@@ -64,7 +64,7 @@ void Enemy::Update(float dt)
 			UpdateAttack(dt);
 			break;
 		case Enemy::BossStates::Hit:
-			SetState(BossStates::Hit);
+			UpdateHit(dt);
 			break;
 		case Enemy::BossStates::Die:
 			SetState(BossStates::Die);
@@ -163,7 +163,7 @@ void Enemy::BossMonsterMove(float dt)
 	player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
 	player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
 
-	if (curBossState == BossStates::Die || curBossState == BossStates::Clear)
+	if (curBossState == BossStates::Die || curBossState == BossStates::Clear || curBossState == BossStates::Hit)
 		return;
 
 	if (!Utils::EqualFloat(direction.x, 0.f))
@@ -278,13 +278,25 @@ void Enemy::UpdateHit(float dt)
 	if (type == MonsterType::Normal)
 		Translate(-lastDir * speed * 0.3f * dt);
 	
-	if (hitTimer >= 0.5f)
+	if (type == MonsterType::Normal || type == MonsterType::StageBoss)
 	{
-		hitTimer = 0.f;
-		if (lastDir.x > 0.f)
-			SetState(States::LeftIdle);
-		if (lastDir.x < 0.f)
-			SetState(States::RightIdle);
+		if (hitTimer >= 0.5f)
+		{
+			hitTimer = 0.f;
+
+			if (lastDir.x > 0.f)
+				SetState(States::LeftIdle);
+			if (lastDir.x < 0.f)
+				SetState(States::RightIdle);
+		}
+	}
+	if (type == MonsterType::MiddleBoss)
+	{
+		if (hitTimer >= 1.5f)
+		{
+			hitTimer = 0.f;
+			SetState(BossStates::Move);
+		}
 	}
 }
 
@@ -300,5 +312,10 @@ void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 	{
 		if (curState == States::MoveAttack)
 			SetState(States::Hit);
+	}
+	else if (type == MonsterType::MiddleBoss)
+	{
+		if (curBossState == BossStates::Idle)
+			SetState(BossStates::Hit);
 	}
 }
