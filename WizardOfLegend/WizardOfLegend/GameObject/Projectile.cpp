@@ -122,7 +122,7 @@ void Projectile::Update(float dt)
 		movingTimer = 0.f;
 	}
 
-	if (dmgType != Skill::DamageType::NoDamage || atkShape != Skill::AttackShape::Range)
+	if (dmgType != Skill::DamageType::NoDamage && atkShape != Skill::AttackShape::Range)
 	{
 		Scene* currScene = SCENE_MGR->GetCurrentScene();
 		if (currScene->GetType() != Scenes::Play)
