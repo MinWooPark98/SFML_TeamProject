@@ -11,6 +11,7 @@
 #include "SaveWindowBox.h"
 #include "LoadWindowBox.h"
 #include "../Framework/Framework.h"
+#include "../GameObject/TextObj.h"
 
 MapToolUiMgr::MapToolUiMgr(Scene* scene)
 	:UiMgr(scene)
@@ -103,6 +104,17 @@ void MapToolUiMgr::Init()
 	loadWindow->SetPos({ 350,50 });
 	loadWindow->Init();
 	uiObjList[1].push_back(loadWindow);
+
+	windowSize = FRAMEWORK->GetWindowSize();
+	fps = new TextObj();
+	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	fps->SetSize(35);
+	fps->SetFillColor(Color::White);
+	fps->SetOutlineColor(Color::Black);
+	fps->SetOutlineThickness(2.f);
+	fps->SetText("");
+	fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
+	
 }
 
 void MapToolUiMgr::Release()
@@ -242,7 +254,15 @@ void MapToolUiMgr::Update(float dt)
 	    }
 	    nowEvObj = nullptr;
 	}
-	
+
+	if (1)
+	{
+		float fpsi = 1.f / dt;
+		if (fpsi < 30.f)
+			fps->SetSize(100.f);
+
+		fps->SetString(to_string(fpsi));
+	}
 }
 
 void MapToolUiMgr::Draw(RenderWindow& window)
@@ -259,6 +279,7 @@ void MapToolUiMgr::Draw(RenderWindow& window)
 		for (auto& obj : uiObjs.second)
 			obj->Draw(window);
 	}
+	window.draw(fps->GetText());
 }
 
 void MapToolUiMgr::SetPos(const Vector2f& pos)

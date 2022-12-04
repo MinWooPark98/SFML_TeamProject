@@ -39,6 +39,8 @@ void MapToolScene::Init()
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
 	nowType = LayerType::Tile;
+
+
 }
 
 void MapToolScene::Reset()
@@ -150,7 +152,7 @@ void MapToolScene::Update(float dt)
 		auto& nowsectorObjs = sectors[nowType];
 		if (grids[j][i]->IsClick())
 		{
-			cout << i << "," << j << endl;
+			//cout << i << "," << j << endl;
 			if (nowType == LayerType::Object && playerPos == Vector2i{ j,i })
 				return;
 
@@ -215,7 +217,7 @@ void MapToolScene::Update(float dt)
 				{
 					sector = new Sector();
 					sector->SetPos(grids[j][i]->GetPos());
-					cout << "sector1 " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
+					cout << "sector1 " << endl;
 					isNowSectorDraw = true;
 					sectorJ = j;
 					sectorI = i;
@@ -224,8 +226,8 @@ void MapToolScene::Update(float dt)
 					return;
 				sector->UpdateNowDraw(dt, nowDraw);
 				sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
-				cout << "grids " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
-				cout << "sector2 " << sector->GetPos().x << "," << sector->GetPos().y << endl;
+				//cout << "grids " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
+				//cout << "sector2 " << sector->GetPos().x << "," << sector->GetPos().y << endl;
 
 			}
 			if (nowDraw->GetType() == "CLIFF" && nowDraw != nullptr)
@@ -238,8 +240,11 @@ void MapToolScene::Update(float dt)
 					sectorJ = j;
 					sectorI = i;
 				}
-				cliff->UpdateNowDraw(dt, nowDraw);
-				cliff->SetSize({ grids[j][i]->GetPos().x - cliff->GetPos().x + 16,grids[j][i]->GetPos().y - cliff->GetPos().y + 16 });
+				if (cliff != nullptr)
+				{
+					cliff->UpdateNowDraw(dt, nowDraw);
+					cliff->SetSize({ grids[j][i]->GetPos().x - cliff->GetPos().x + 16,grids[j][i]->GetPos().y - cliff->GetPos().y + 16 });
+				}
 			}
 			if (nowDraw->GetType() != "SECTOR" && nowDraw->GetType() != "CLIFF" && nowDraw != nullptr)
 			{
@@ -261,14 +266,14 @@ void MapToolScene::Update(float dt)
 		}
 		if (nowDraw != nullptr && isNowSectorDraw)
 		{
-			cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
+			//cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
 			if (nowDraw->GetType() == "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
 			{
 				isNowSectorDraw = false;
 
 				objList[nowType][sectorJ].push_back(sector);
 				sectors[nowType][sectorJ][sectorI] = sector;
-				cout << "up" << endl;
+				//cout << "up" << endl;
 
 				if (sector != nullptr)
 				{
@@ -278,14 +283,14 @@ void MapToolScene::Update(float dt)
 		}
 		if (nowDraw != nullptr && isNowCliffDraw)
 		{
-			cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
+			//cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
 			if (nowDraw->GetType() == "CLIFF" && InputMgr::GetMouseButtonUp(Mouse::Left))
 			{
 				isNowCliffDraw = false;
 
 				objList[nowType][sectorJ].push_back(cliff);
 				cliffs[nowType][sectorJ][sectorI] = cliff;
-				cout << "up" << endl;
+				//cout << "up" << endl;
 
 				if (cliff != nullptr)
 				{
@@ -295,8 +300,8 @@ void MapToolScene::Update(float dt)
 		}
 		if (nowDraw != nullptr && isNowObjDraw)
 		{
-			cout << nowDraw->GetType() << endl;
-			cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
+			//cout << nowDraw->GetType() << endl;
+			//cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
 			if (nowDraw->GetType() != "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
 			{
 				isNowObjDraw = false;

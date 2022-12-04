@@ -8,6 +8,7 @@ class DrawObj;
 class SaveWindowBox;
 class LoadWindowBox;
 class UiObject;
+class TextObj;
 
 class MapToolUiMgr : public UiMgr
 {
@@ -34,6 +35,9 @@ private:
 	LoadWindowBox* loadWindow;
 
 	UiObject* nowEvObj;
+
+	Vector2i windowSize;
+	TextObj* fps;
 
 public:
 	MapToolUiMgr(Scene* scene);
