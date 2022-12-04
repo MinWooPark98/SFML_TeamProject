@@ -26,6 +26,8 @@ public:
 	void StopAll();
 
 	void Update();
+
+	void SetVolume(float v) { volume = v; }
 };
 
 #define SOUND_MGR (SoundMgr::GetInstance())

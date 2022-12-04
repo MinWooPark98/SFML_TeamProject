@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "MapToolScene.h"
 #include "SkillToolScene.h"
+#include "EndingScene.h"
 
 bool SceneMgr::Init()
 {
@@ -10,7 +11,8 @@ bool SceneMgr::Init()
     sceneMap[Scenes::Play] = new PlayScene();
     sceneMap[Scenes::MapTool] = new MapToolScene();
     sceneMap[Scenes::SkillTool] = new SkillToolScene();
-    currScene = Scenes::Title;
+    sceneMap[Scenes::Ending] = new EndingScene();
+    currScene = Scenes::Ending;
 
     for (auto& pair : sceneMap)
     {
