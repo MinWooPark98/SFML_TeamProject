@@ -19,6 +19,7 @@ private:
 	bool isSingleSkill;
 	bool isOnCoolDown;
 	bool newCoolDownEntered;
+	bool newCoolDownApplied;
 	float newCoolDown;
 	float timer;
 
@@ -38,8 +39,15 @@ public:
 	void Update(float dt);
 	void Draw(RenderWindow& window);
 
+	bool IsSingleSkill() const { return isSingleSkill; }
+	bool IsOnCoolDown() const { return isOnCoolDown; }
+	bool NewCoolDownApplied() const { return newCoolDownApplied; }
+	float GetCoolDown() const { return newCoolDown; }
+	float GetTimer() const { return timer; }
+	list<Skill*> GetUsingSkills() const { return usingSkills; }
+
 	Skill* GetCurrSkill();
 	string GetIconDir() { return iconDir; }
-	string GetSkillSetName() { return skillSetName; }
+	string GetSkillSetName() const { return skillSetName; }
 };
 

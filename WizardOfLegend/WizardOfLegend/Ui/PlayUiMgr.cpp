@@ -12,6 +12,7 @@
 #include "../GameObject/HeavyBombingArcher.h"
 #include "../GameObject/FinalBoss.h"
 #include "PlaySceneSkillOptions.h"
+#include "SkillCoolDownUi.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -244,7 +245,6 @@ void PlayUiMgr::Init()
 		fps->SetOutlineThickness(2.f);
 		fps->SetText("");
 		fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
-		uiObjList[0].push_back(fps);
 	}
 
 	for (int i = 0; i < 6; i++)
@@ -253,6 +253,7 @@ void PlayUiMgr::Init()
 		skillKeys.push_back(new SpriteObj());
 		skills.push_back(new SpriteObj());
 		SetSkillIcon(i, "graphics/Disabled.png");
+		coolDownUis.push_back(new SkillCoolDownUi());
 	}
 
 	for (int i = 0; i < skillSelects.size(); i++)
@@ -261,7 +262,6 @@ void PlayUiMgr::Init()
 		skillSelects[i]->SetScale({4, 4});
 		skillSelects[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.94f });
 		skillSelects[i]->SetOrigin(Origins::MC);
-
 		uiObjList[0].push_back(skillSelects[i]);
 	}
 
@@ -298,6 +298,13 @@ void PlayUiMgr::Init()
 
 		uiObjList[0].push_back(skillKeys[i]);
 		uiObjList[0].push_back(skills[i]);
+	}
+
+	for (int i = 0; i < coolDownUis.size(); ++i)
+	{
+		coolDownUis[i]->Init();
+		coolDownUis[i]->SetPos(skillSelects[i]->GetPos());
+		uiObjList[0].push_back(coolDownUis[i]);
 	}
 
 	fps = new TextObj();
@@ -382,12 +389,12 @@ void PlayUiMgr::Update(float dt)
 		playerMarkerOutLine->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 		playerMarkerGlow->GetSprite().setRotation(playerMarker->GetSprite().getRotation());
 	}
-	if (1)
+
+	if (isDevMode)
 	{
 		float fpsi = 1.f / dt;
 		if (fpsi < 30.f)
 			fps->SetSize(100.f);
-
 		fps->SetString(to_string(fpsi));
 	}
 }
@@ -419,6 +426,9 @@ void PlayUiMgr::Draw(RenderWindow& window)
 	}
 	if (options->GetActive())
 		options->Draw(window);
+
+	if (isDevMode)
+		fps->Draw(window);
 }
 
 void PlayUiMgr::HpBarSizeControl(float dt)
@@ -556,6 +566,15 @@ void PlayUiMgr::OverdriveBarControl(float dt)
 		OverdriveActiveBar->SetSize({ overdriveBarSize += (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
 	else if (!testOverdrive && overdriveBarSize > 0)
 		OverdriveActiveBar->SetSize({ overdriveBarSize -= (OverdriveActiveBar->GetSize().x / 100), OverdriveActiveBar->GetSize().y * 4 });
+}
+
+void PlayUiMgr::SetPlayer(Player* player)
+{
+	this->player = player;
+	for (int i = 0; i < coolDownUis.size(); ++i)
+	{
+		coolDownUis[i]->SetSkillSet(player->GetSkillSets()[i]);
+	}
 }
 
 void PlayUiMgr::SetBossName(string name)

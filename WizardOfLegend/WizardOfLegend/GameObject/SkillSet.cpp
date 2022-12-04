@@ -5,7 +5,7 @@
 #include "../Ui/PlayUiMgr.h"
 
 SkillSet::SkillSet()
-	:subject(nullptr), subType(Skill::SubjectType::None), isSingleSkill(false), isOnCoolDown(false), newCoolDownEntered(false), newCoolDown(0.f), timer(0.f)
+	:subject(nullptr), subType(Skill::SubjectType::None), isSingleSkill(false), isOnCoolDown(false), newCoolDownEntered(false), newCoolDownApplied(false), newCoolDown(0.f), timer(0.f)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -21,6 +21,7 @@ void SkillSet::ResetSkills()
 {
 	isOnCoolDown = false;
 	newCoolDownEntered = false;
+	newCoolDownApplied = false;
 	newCoolDown = 0.f;
 	timer = 0.f;
 	for (auto skill : usingSkills)
@@ -29,6 +30,7 @@ void SkillSet::ResetSkills()
 		unusingSkills.push_back(skill);
 	}
 	usingSkills.clear();
+	skillSetName.clear();
 }
 
 void SkillSet::Restart()
@@ -49,13 +51,16 @@ void SkillSet::Restart()
 
 void SkillSet::Set(const string& setName)
 {
-	skillSetName = setName;
 	ResetSkills();
+	skillSetName = setName;
 	SkillSetTable* table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	auto& skillSetInfo = table->Get(setName);
 	newCoolDown = skillSetInfo.newCoolDown;
 	if (!Utils::EqualFloat(newCoolDown, -1.f))
+	{
 		newCoolDownEntered = true;
+		newCoolDownApplied = true;
+	}
 	iconDir = skillSetInfo.iconDir;
 	auto& skillNames = skillSetInfo.skillNames;
 	if (skillNames.size() == 1)
@@ -79,12 +84,18 @@ void SkillSet::Set(const string& setName)
 		if (!newCoolDownEntered)
 		{
 			if (isSingleSkill && skill->GetSetting()->attackType == Skill::AttackType::SaveAttacks)
+			{
 				newCoolDown = 0.f;
+				newCoolDownApplied = false;
+			}
 			else
 			{
 				float coolDown = skill->GetSetting()->skillCoolDown;
 				if (newCoolDown < coolDown)
+				{
 					newCoolDown = coolDown;
+					newCoolDownApplied = true;
+				}
 			}
 		}
 		usingSkills.push_back(skill);
@@ -93,13 +104,19 @@ void SkillSet::Set(const string& setName)
 
 void SkillSet::SetOnlyOneSkill(const Skill::Set& set)
 {
-	skillSetName = set.skillName;
 	ResetSkills();
+	skillSetName = set.skillName;
 	isSingleSkill = true;
 	if (set.attackType == Skill::AttackType::SaveAttacks)
+	{
 		newCoolDown = 0.f;
+		newCoolDownApplied = false;
+	}
 	else
+	{
 		newCoolDown = set.skillCoolDown;
+		newCoolDownApplied = true;
+	}
 	auto skill = unusingSkills.front();
 	unusingSkills.pop_front();
 	skill->SetSkill(set);

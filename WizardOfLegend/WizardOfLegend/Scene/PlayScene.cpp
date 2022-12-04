@@ -108,9 +108,7 @@ void PlayScene::Init()
 		else if (obj.type == "PLAYER")
 		{
 			player = new Player();
-			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 			player->Init();
-			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 			player->SetName(obj.type);
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
@@ -122,6 +120,7 @@ void PlayScene::Init()
 			player->SetSkillSet(2, "JumpMeteor", true);
 			player->SetSkillSet(4, "DragonArc", true);
 			player->SetSkillSet(5, "FireFull", true);
+			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 		}
 		else if (obj.type == "ENEMY")
 		{

@@ -50,6 +50,7 @@ void CastingCircle::Reset()
 		sprite.setColor({ 255, 255, 255, 255 });
 		break;
 	}
+	damagedObjs.clear();
 }
 
 void CastingCircle::Update(float dt)
