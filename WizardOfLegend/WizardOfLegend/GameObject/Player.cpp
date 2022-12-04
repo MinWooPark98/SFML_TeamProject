@@ -8,10 +8,11 @@
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/StatTable.h"
 #include "../Ui/PlayUiMgr.h"
+#include "../Scene/PlayScene.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
-	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f)
+	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale(1.f, 1.f)
 {
 }
 
@@ -115,6 +116,19 @@ void Player::SetState(States state)
 			lastDir.y >= 0.f ? animator->Play("GroundSlamDownEnd") : animator->Play("GroundSlamUpEnd");
 		break;
 	case States::Hit:
+		{
+			auto angle = Utils::Angle(lastDir);
+			if (angle > -135.f && angle <= -45.f)
+				animator->Play("HurtUp");
+			else if (angle > 45.f && angle <= 135.f)
+				animator->Play("HurtDown");
+			else if (angle > -45.f && angle <= 45.f)
+				animator->Play("HurtRight");
+			else
+				animator->Play("HurtLeft");
+		}
+		break;
+	case States::Fall:
 		{
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle <= -45.f)
@@ -345,6 +359,9 @@ void Player::Update(float dt)
 	case Player::States::Hit:
 		UpdateHit(dt);
 		break;
+	case Player::States::Fall:
+		UpdateFall(dt);
+		break;
 	default:
 		break;
 	}
@@ -361,6 +378,26 @@ void Player::Update(float dt)
 	{
 		skillSet->Update(dt);
 	}
+
+	Scene* currScene = SCENE_MGR->GetCurrentScene();
+	if (currScene->GetType() != Scenes::Play || currState == States::Fall)
+		return;
+	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+	for (int i = 0; i < collisionList.size(); ++i)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
+		{
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			{
+				if (currState != States::Hit && currState != States::Dash)
+					SetPos(lastPosition);
+				return;
+			}
+		}
+	}
+	lastStandingPos = position;
 }
 
 void Player::Draw(RenderWindow& window)
@@ -412,7 +449,8 @@ void Player::UpdateDash(float dt)
 	if (dashTimer >= dashDuration)
 	{
 		dashTimer = 0.f;
-		FinishAction();
+		if (IsStanding())
+			FinishAction();
 	}
 }
 
@@ -462,6 +500,30 @@ void Player::UpdateHit(float dt)
 	if (hitTimer >= hitDuration)
 	{
 		hitTimer = 0.f;
+		if(IsStanding())
+			SetState(States::Idle);
+	}
+}
+
+void Player::UpdateFall(float dt)
+{
+	fallingScale.x -= dt * 0.5f;
+	fallingScale.y -= dt * 0.5f;
+	sprite.setScale(fallingScale);
+	fallTimer += dt;
+	if (fallTimer >= fallDuration)
+	{
+		fallingScale = { 1.f, 1.f };
+		fallTimer = 0.f;
+		sprite.setScale(1.f, 1.f);
+		SetPos(lastStandingPos);
+		curHp -= maxHp * 0.05f;
+		if (curHp <= 0)
+		{
+			curHp = 0;
+			SetState(States::Die);
+			return;
+		}
 		SetState(States::Idle);
 	}
 }
@@ -470,6 +532,26 @@ void Player::SetSpeed(float speed)
 {
 	walkingSpeed = speed;
 	runningSpeed = speed * 1.5f;
+}
+
+bool Player::IsStanding()
+{
+	auto currScene = SCENE_MGR->GetCurrentScene();
+	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+	for (int i = 0; i < collisionList.size(); ++i)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
+		{
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			{
+				SetState(States::Fall);
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 void Player::Action(Skill* currSkill)
