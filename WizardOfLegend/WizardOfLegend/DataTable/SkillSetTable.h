@@ -5,14 +5,21 @@
 
 class SkillSetTable : public DataTable
 {
+public:
+	struct SetInfo
+	{
+		float newCoolDown;
+		string iconDir;
+		list<string> skillNames;
+	};
 protected:
-	map<string, pair<float, list<string>>> table;
+	map<string, SetInfo> table;
 
 public:
 	SkillSetTable();
 	virtual ~SkillSetTable();
 
-	const pair<float, list<string>>& Get(const string& setName);
+	const SetInfo& Get(const string& setName);
 
 	virtual void Release() override;
 	virtual bool Load() override;

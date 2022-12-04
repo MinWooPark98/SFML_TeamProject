@@ -212,7 +212,8 @@ void Lancer::UpdateAttack(float dt)
 			break;
 		}
 
-		lancerAttackEffect->SetPos(weapon->GetPos() + Utils::Normalize((playerLastPos - GetPos())) * 50.f);
+		auto lanceDir = Utils::Normalize(playerLastPos - GetPos());
+		lancerAttackEffect->SetPos(weapon->GetPos() + lanceDir * 50.f);
 		lancerAttackEffect->GetHitBox().setPosition(lancerAttackEffect->GetPos());
 		lancerAttackEffect->SetActive(true);
 		spearAnimation.Play("SpearMotion");
@@ -221,7 +222,7 @@ void Lancer::UpdateAttack(float dt)
 		if (Utils::OBB(player->GetHitBox(), lancerAttackEffect->GetHitBox()) ||
 			Utils::OBB(player->GetHitBox(), weapon->GetHitBox()))
 		{
-			player->SetCurHp(player->GetCurHp() - GetDamage());
+			player->OnHit(lanceDir, GetDamage());
 		}
 
 		spearWait = false;

@@ -10,7 +10,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
-	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.3f), hitTimer(0.f)
+	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f)
 {
 }
 
@@ -457,7 +457,7 @@ void Player::UpdateWait(float dt)
 void Player::UpdateHit(float dt)
 {
 	hitTimer += dt;
-	Translate(-lastDir * walkingSpeed * dt);
+	Translate(-lastDir * walkingSpeed * 0.5f * dt);
 	if (hitTimer >= hitDuration)
 	{
 		hitTimer = 0.f;

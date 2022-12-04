@@ -1,7 +1,6 @@
-SetName,SetCoolDown (유효한 쿨타임 입력 시 해당 쿨타임으로 작동 / 유효하지 않은 쿨타임 또는 비워둘 시 모든 스킬 중 가장 쿨타임이 긴 값으로 설정),Skill 1,Skill 2,Skill 3,Skill 4,…
-DragonArc,-1,DragonArc,,,,
-FireFull,-1,FireFull,,,,
-FireBall,-1,FireBall,,,,
-FireDash,-1,FireDash,,,,
-JumpMeteor,-1,FlameWolf,PointMeteor,,,
-Temp,-1,FireFull,DragonArc,,,
+SetName,SetCoolDown (유효한 쿨타임 입력 시 해당 쿨타임으로 작동 / 유효하지 않은 쿨타임 또는 비워둘 시 모든 스킬 중 가장 쿨타임이 긴 값으로 설정),IconDir(스킬셋 아이콘 주소),Skill 1,Skill 2,Skill 3,Skill 4,…
+DragonArc,-1,graphics/ShootFireArc.png,DragonArc,,,,
+FireFull,-1,graphics/UseFireFull.png,FireFull,,,,
+FireBall,-1,graphics/UseFireBlast.png,FireBall,,,,
+FireDash,-1,graphics/FireDash.png,FireDash,,,,
+JumpMeteor,-1,graphics/SummonMeteorStrike.png,FlameWolf,PointMeteor,,,

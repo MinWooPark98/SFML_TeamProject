@@ -251,7 +251,7 @@ void Archer::UpdateAttack(float dt)
 		{
 			if (isAttack)
 			{
-				player->SetCurHp(player->GetCurHp() - GetDamage());
+				player->OnHit(Utils::Normalize(playerLastPos - GetPos()), GetDamage());
 				arrow->SetActive(false);
 				isAttack = false;
 			}

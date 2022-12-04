@@ -395,7 +395,8 @@ void PlayScene::SpawnEnemy(int i, float dt)
 		{
 			for (auto& obj : c_list.second)
 			{
-				if ((obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((Enemy*)obj)->GetIsAlive())
+				if ((obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive()) || 
+					((obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((FinalBoss*)obj)->GetState() != FinalBoss::States::Die))
 				{
 					obj->SetActive(true);
 				}

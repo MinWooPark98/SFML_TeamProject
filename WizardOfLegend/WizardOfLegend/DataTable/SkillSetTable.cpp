@@ -11,7 +11,7 @@ SkillSetTable::~SkillSetTable()
 {
 }
 
-const pair<float, list<string>>& SkillSetTable::Get(const string& setName)
+const SkillSetTable::SetInfo& SkillSetTable::Get(const string& setName)
 {
 	auto find = table.find(setName);
 	if (find == table.end())
@@ -40,8 +40,6 @@ bool SkillSetTable::Load()
 			return false;
 		}
 		float coolDown = 0.f;
-		list<string> skillNames;
-		string str;
 		try
 		{
 			coolDown = doc.GetCell<float>(1, j);
@@ -52,14 +50,17 @@ bool SkillSetTable::Load()
 		{
 			coolDown = -1.f;
 		}
-		for(int i = 2; i < columnCount;++i)
+		string iconDir = doc.GetCell<string>(2, j);
+		list<string> skillNames;
+		string str;
+		for(int i = 3; i < columnCount;++i)
 		{
 			str = doc.GetCell<string>(i, j);
 			if (str.empty())
 				break;
 			skillNames.push_back(str);
 		}
-		table[setName[j]] = { coolDown, skillNames };
+		table[setName[j]] = { coolDown, iconDir, skillNames };
 	}
 	return true;
 }

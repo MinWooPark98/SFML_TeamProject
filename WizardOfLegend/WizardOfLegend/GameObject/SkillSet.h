@@ -22,6 +22,7 @@ private:
 	float newCoolDown;
 	float timer;
 
+	string iconDir;
 	string skillSetName;
 
 public:
