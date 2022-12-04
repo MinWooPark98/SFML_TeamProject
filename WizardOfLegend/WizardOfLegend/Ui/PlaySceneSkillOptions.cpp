@@ -25,6 +25,7 @@ void PlaySceneSkillOptions::Init()
 	auto& windowSize = FRAMEWORK->GetWindowSize();
 
 	SpriteObj* frame = new SpriteObj();
+	frame->Init();
 	frame->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ItemInfoPanel.png"));
 	frame->SetColor(Color(50, 50, 50, 255));
 	frame->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.5f });
@@ -34,37 +35,47 @@ void PlaySceneSkillOptions::Init()
 	selectSkillSet.push_back(frame);
 
 	TextObj* optionText = new TextObj();
+	optionText->Init();
 	optionText->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	optionText->SetSize(40);
 	optionText->SetFillColor(Color::White);
 	optionText->SetOutlineColor(Color::Black);
 	optionText->SetOutlineThickness(2.f);
-	optionText->SetText("P A U S E");
+	optionText->SetText("SKILL SET");
 	optionText->SetOrigin(Origins::MC);
 	optionText->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.15f });
 	optionText->SetUI(true);
 	selectSkillSet.push_back(optionText);
 
-	Object* border = new Object();
-	border->SetHitBox({ 0.f, 0.f, frame->GetSize().x * 2.5f, 2.f }, Color::White);
-	border->SetHitBoxOrigin(Origins::MC);
-	border->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.25f });
-	border->SetUI(true);
-	selectSkillSet.push_back(border);
+	border.setSize({ frame->GetSize().x * 8.f, 2.f });
+	border.setFillColor(Color::White);
+	Utils::SetOrigin(border, Origins::MC);
+	border.setPosition({ windowSize.x * 0.5f, windowSize.y * 0.2f });
 
-	vector<string> sceneNames = { "SKILL1 : ", "SKILL2 : " ,"SKILL3 : ", "SKILL4 : ", "SKILL5 : ", "SKILL6 : " };
-	for (int i = 0; i < sceneNames.size(); ++i)
+	vector<pair<string, string>> skillSetNames = { { "SKILL1 : ", "LeftMouse" }, { "SKILL2 : ", "SpaceBar" }, { "SKILL3 : ", "RightMouse" }, { "SKILL4 : ", "Q" }, { "SKILL5 : ", "E" }, { "SKILL6 : ", "R" } };
+	for (int i = 0; i < skillSetNames.size(); ++i)
 	{
 		TextObj* text = new TextObj();
 		text->Init();
 		text->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-		text->SetText(sceneNames[i]);
+		text->SetText(skillSetNames[i].first);
 		text->SetSize(35);
 		text->SetFillColor(Color::White);
 		text->SetPos({ windowSize.x * 0.4f, windowSize.y * (0.3f + 0.1f * i) });
 		text->SetOrigin(Origins::MR);
 		text->SetUI(true);
 		selectSkillSet.push_back(text);
+
+		TextObj* text2 = new TextObj();
+		text2->Init();
+		text2->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+		text2->SetText(skillSetNames[i].second);
+		text2->SetSize(20);
+		text2->SetFillColor({ 255, 255, 255, 153 });
+		text2->SetPos({ windowSize.x * 0.4f, windowSize.y * (0.3f + 0.1f * i) - 17.5f });
+		text2->SetOrigin(Origins::BR);
+		text2->SetUI(true);
+		selectSkillSet.push_back(text2);
 
 		Button2* button = new Button2();
 		button->Init();
@@ -143,6 +154,7 @@ void PlaySceneSkillOptions::Draw(RenderWindow& window)
 	{
 		obj->Draw(window);
 	}
+	window.draw(border);
 	for (auto obj : currSkillSets)
 	{
 		obj->Draw(window);

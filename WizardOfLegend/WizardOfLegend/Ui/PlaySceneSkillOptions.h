@@ -8,6 +8,7 @@ class PlaySceneSkillOptions : public Object
 {
 protected:
 	list<Object*> selectSkillSet;
+	RectangleShape border;
 	vector<DataTableList*> skillSetLists;
 	vector<Button2*> currSkillSets;
 	int vecIdx;
