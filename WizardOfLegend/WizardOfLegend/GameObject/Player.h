@@ -95,6 +95,7 @@ public:
 
 	void Action(Skill* skill);
 	void FinishAction();
+	void SetSkillSet(int idx, const string& skillSetName, bool isPlayScene = false);
 	void SetCurrSkillSet(SkillSet* skillSet) { currSkillSet = skillSet; }
 	SkillSet* GetCurrSkillSet() { return currSkillSet; }
 

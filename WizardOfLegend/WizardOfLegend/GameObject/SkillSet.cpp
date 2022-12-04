@@ -1,6 +1,8 @@
 #include "SkillSet.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/SkillSetTable.h"
+#include "../Scene/SceneMgr.h"
+#include "../Ui/PlayUiMgr.h"
 
 SkillSet::SkillSet()
 	:subject(nullptr), subType(Skill::SubjectType::None), isSingleSkill(false), isOnCoolDown(false), newCoolDownEntered(false), newCoolDown(0.f), timer(0.f)

@@ -847,5 +847,5 @@ void SelectOption::Load(const string& skillName)
 void SelectOption::LoadSkillSet(const string& skillSetName)
 {
 	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
-	player->GetSkillSets()[0]->Set(skillSetName);
+	player->SetSkillSet(0, skillSetName);
 }

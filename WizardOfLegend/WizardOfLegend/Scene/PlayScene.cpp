@@ -117,11 +117,11 @@ void PlayScene::Init()
 			player->SetLastPosition({ 0,0 });
 			objList[LayerType::Object][5].push_back(player);
 			auto& skillSet = player->GetSkillSets();
-			skillSet[0]->Set("FireBall");
-			skillSet[1]->Set("FireDash");
-			skillSet[2]->Set("JumpMeteor");
-			skillSet[4]->Set("DragonArc");
-			skillSet[5]->Set("FireFull");
+			player->SetSkillSet(0, "FireBall", true);
+			player->SetSkillSet(1, "FireDash", true);
+			player->SetSkillSet(2, "JumpMeteor", true);
+			player->SetSkillSet(4, "DragonArc", true);
+			player->SetSkillSet(5, "FireFull", true);
 		}
 		else if (obj.type == "ENEMY")
 		{

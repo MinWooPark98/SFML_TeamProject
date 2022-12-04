@@ -39,6 +39,7 @@ public:
 	void Draw(RenderWindow& window);
 
 	Skill* GetCurrSkill();
+	string GetIconDir() { return iconDir; }
 	string GetSkillSetName() { return skillSetName; }
 };
 

@@ -7,6 +7,7 @@
 #include "SkillSet.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/StatTable.h"
+#include "../Ui/PlayUiMgr.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
@@ -539,6 +540,15 @@ void Player::FinishAction()
 		SetState(States::Idle);
 		break;
 	}
+}
+
+void Player::SetSkillSet(int idx, const string& skillSetName, bool isPlayScene)
+{
+	skillSets[idx]->Set(skillSetName);
+
+	auto currScene = SCENE_MGR->GetCurrentScene();
+	if (isPlayScene || currScene->GetType() == Scenes::Play)
+		((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr())->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
 }
 
 void Player::OnHit(const Vector2f& atkDir, int dmg)

@@ -252,6 +252,7 @@ void PlayUiMgr::Init()
 		skillSelects.push_back(new SpriteObj());
 		skillKeys.push_back(new SpriteObj());
 		skills.push_back(new SpriteObj());
+		SetSkillIcon(i, "graphics/Disabled.png");
 	}
 
 	for (int i = 0; i < skillSelects.size(); i++)
