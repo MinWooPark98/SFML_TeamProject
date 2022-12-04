@@ -1,4 +1,6 @@
 #include "Archer.h"
+#include "../Scene/SceneMgr.h"
+#include "../Scene/PlayScene.h"
 
 Archer::Archer()
 	: bowDir(0, 0)
@@ -61,7 +63,7 @@ void Archer::Init()
 	weapon->SetOrigin(Origins::MC);
 	spawn->SetPos(GetPos());
 	SetCardColor(2);
-
+	SetDamage(15);
 	SetHitBox({ 20.f, 20.f, 10.f, 30.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 	SetLowHitBox({ 20.f, 20.f, 10.f, 5.f }, Color::White);
@@ -152,7 +154,8 @@ void Archer::Draw(RenderWindow& window)
 			if (isDevMode)
 				window.draw(arrow->GetHitBox());
 
-			arrow->Draw(window);
+			if (arrow->GetActive())
+				arrow->Draw(window);
 		}
 
 		window.draw(archerPullArm->GetSprite(), &shader);
@@ -199,6 +202,8 @@ void Archer::UpdateAttack(float dt)
 
 	if (attackDelay >= attackStart + 0.2f)
 	{
+		arrow->SetActive(true);
+
 		weapon->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
 		weapon->SetPos(GetPos() - Utils::Normalize((player->GetPos() - GetPos())) * -3.f);
 		arrowDir.setPosition(GetPos());
@@ -226,6 +231,8 @@ void Archer::UpdateAttack(float dt)
 		archerPullArm->GetSprite().setRotation(Utils::Angle(GetPos(), player->GetPos()));
 		archerPullArmAnimation.Play("ArcherArm");
 		playerLastPos = player->GetPos();
+
+		isAttack = true;
 	}
 	else if (attackDelay <= attackStart)
 	{
@@ -233,7 +240,16 @@ void Archer::UpdateAttack(float dt)
 		{
 			auto shot = Utils::Normalize(playerLastPos - GetPos());
 			arrow->Translate({ dt * arrowSpeed * shot * 2.f });
-			// 히트박스 구현되면 화살 멈추게 해야함
+		}
+
+		if (Utils::OBB(player->GetHitBox(), arrow->GetHitBox()))
+		{
+			if (isAttack)
+			{
+				player->SetCurHp(player->GetCurHp() - GetDamage());
+				arrow->SetActive(false);
+				isAttack = false;
+			}
 		}
 	}
 
@@ -285,6 +301,22 @@ void Archer::UpdateAttack(float dt)
 				SetState(States::RightIdle);
 
 			return;
+		}
+	}
+
+	auto& collisionList = ((PlayScene*)SCENE_MGR->GetCurrentScene())->GetCollisionList();
+	
+	for (int i = 0; i < collisionList.size(); i++)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+
+		for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
+		{
+			if (arrow->GetHitBounds().intersects(coll->GetHitBounds()))
+			{
+				arrow->SetActive(false);
+			}
 		}
 	}
 }

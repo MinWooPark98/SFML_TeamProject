@@ -67,8 +67,8 @@ void FireBoss::Init()
 	SetMoveScale(10000.f);
 	SetAttackScale(0.f);
 	SetMonsterType(MonsterType::MiddleBoss);
-	SetMaxHp(2000);
-	SetCurHp(1);
+	SetMaxHp(700);
+	SetCurHp(700);
 	RandomPatternSet(AttackType::None);
 	attackType = AttackType::ThrowingKnife;
 
@@ -161,6 +161,18 @@ void FireBoss::Update(float dt)
 		for (auto skill : skills)
 		{
 			skill->Update(dt);
+		}
+
+		if (GetFireKick()->GetActive())
+		{
+			if (GetIsKick())
+			{
+				if (Utils::OBB(player->GetHitBox(), GetFireBossKickHitBox()))
+				{
+					player->SetCurHp(player->GetCurHp() - GetDamage());
+					SetIsKick(false);
+				}
+			}
 		}
 	}
 
@@ -260,6 +272,7 @@ void FireBoss::SetState(BossStates newState)
 			}
 			else
 			{
+				skills[1]->Reprepare();
 				skills[1]->Do();
 
 				attackDelay = 1.f;
@@ -302,6 +315,7 @@ void FireBoss::SetState(BossStates newState)
 					skills[0]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
 					break;
 				}
+				skills[0]->Reprepare();
 				skills[0]->Do();
 
 				attackDelay = 1.f;
@@ -364,7 +378,6 @@ void FireBoss::UpdateAttack(float dt)
 
 		if (patternCount == 0 && attackDelay <= 0.f)
 		{
-			std::cout << "pattern reset" << endl;
 			SetState(BossStates::Idle);
 			RandomPatternSet(AttackType::Meteor); // 처음부터 메테오 패턴 안 나오게
 			thirdAttackCount = 3;

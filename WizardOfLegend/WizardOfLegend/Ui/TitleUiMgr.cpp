@@ -127,6 +127,9 @@ void TitleUiMgr::Update(float dt)
 		{
 			titleLogo->Translate({ 0, titleLogo->GetPos().y * (dt * 2) * -1 });
 			startTextActiveTimer = 0.f;
+
+			if (titleLogo->GetPos().y <= windowSize.y * 0.3f)
+				titleLogo->SetPos({titleLogo->GetPos().x, windowSize.y * 0.3f});
 		}
 
 		if (backgroundShadowValue < 170)

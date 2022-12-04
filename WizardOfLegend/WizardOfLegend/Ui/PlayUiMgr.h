@@ -5,9 +5,20 @@ class SpriteObj;
 class TextObj;
 class Button2;
 class Player;
+class FireBoss;
+class HeavyBombingArcher;
+class FinalBoss;
 
 class PlayUiMgr : public UiMgr
 {
+public:
+	enum class BossType
+	{
+		Archer,
+		FireBoss,
+		FinalBoss,
+	};
+
 protected:
 	map<int, vector<Object*>> uiObjList;
 	Vector2i windowSize;
@@ -48,6 +59,10 @@ protected:
 	float bossHpBarSize = 89.f * 4.f;
 	float bossHpBarHurtSize = 89.f * 4.f;
 
+	BossType bossType;
+	FireBoss* fireBoss;
+	FinalBoss* finalBoss;
+	HeavyBombingArcher* heavyBombingArcher;
 	int bossCurHp;
 	int bossMaxHp;
 
@@ -59,6 +74,9 @@ protected:
 	int monsterDamage = 0;
 
 	TextObj* fps;
+
+	vector<SpriteObj*> skillSelects;
+	vector<SpriteObj*> skillKeys;
 
 public:
 	PlayUiMgr();
@@ -79,6 +97,8 @@ public:
 	void SetBossMaxHp(int hp) { bossMaxHp = hp; };
 
 	void SetPlayer(Player* player) { this->player = player; }
+	void SetFireBoss(FireBoss* boss) { this->fireBoss = boss; }
+	void SetBossType(BossType type) { bossType = type; };
 
 	int GetBossCurHp() { return bossCurHp; };
 

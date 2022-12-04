@@ -35,6 +35,9 @@ void PlayScene::Init()
 	isMap = true;
 	auto& data = FILE_MGR->GetMap("TUTORIAL");
 
+	uiMgr = new PlayUiMgr();
+	uiMgr->Init();
+
 	for (auto& obj : data)
 	{
 		if (obj.type == "SECTOR")
@@ -107,6 +110,7 @@ void PlayScene::Init()
 			player = new Player();
 			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 			player->Init();
+			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 			player->SetName(obj.type);
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
@@ -165,6 +169,7 @@ void PlayScene::Init()
 			{
 				fireBoss = new FireBoss();
 				fireBoss->Init();
+				((PlayUiMgr*)uiMgr)->SetFireBoss(fireBoss);
 				fireBoss->SetName(obj.type);
 				fireBoss->SetPos(obj.position);
 				fireBoss->SetObjType(Object::ObjTypes::Enemy);
@@ -215,7 +220,7 @@ void PlayScene::Init()
 			}
 		}
 		room[i].SetAliveEnemyCount(collisionList[i][Object::ObjTypes::Enemy].size() + collisionList[i][Object::ObjTypes::FinalBoss].size());
-		//cout << i << "¹æ ¿¡³Ê¹Ì ¼ö : " << collisionList[i][Object::ObjTypes::Enemy].size() << endl;
+		//cout << i << "ï¿½ï¿½ ï¿½ï¿½ï¿½Ê¹ï¿½ ï¿½ï¿½ : " << collisionList[i][Object::ObjTypes::Enemy].size() << endl;
 	}
 
 	auto& tiles = objList[LayerType::Tile][0];
@@ -237,7 +242,8 @@ void PlayScene::Init()
 	}
 	fireBoss->SetPlayerLastPos(player->GetPos());
 
-	((PlayUiMgr*)uiMgr)->SetBossCurHp(fireBoss->GetCurHp());
+
+	((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FireBoss);
 	((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
 }
 
@@ -254,7 +260,7 @@ void PlayScene::Update(float dt)
 			SetPause(false);
 	}
 
-	//ÇÃ·¹ÀÌ¾î ¹æ À§Ä¡ 
+	//ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ 
 	for (int i = 0; i < room.size(); i++)
 	{
 		auto& collListPlayer = collisionList[i][Object::ObjTypes::Player];
@@ -292,7 +298,7 @@ void PlayScene::Update(float dt)
 				for (auto& obj : collisionList[j][(Object::ObjTypes)i])
 				{
 					OnCollisionWall(j, obj);
-					OnCollisionETC(j, obj);
+					//OnCollisionETC(j, obj);
 				}
 			}
 			break;
@@ -321,22 +327,10 @@ void PlayScene::Update(float dt)
 		}
 	}
 
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ fireBoss ï¿½ï¿½ï¿½Ì¶ï¿½ ï¿½È°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç¹ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö±ï¿½
 	if (fireBoss->GetIsAlive())
 	{
 		((PlayUiMgr*)uiMgr)->SetBossName("FLAME QUEEN");
-		if (fireBoss->GetFireKick()->GetActive())
-		{
-			if (fireBoss->GetIsKick())
-			{
-				if (Utils::OBB(player->GetHitBox(), fireBoss->GetFireBossKickHitBox()))
-				{
-					((PlayUiMgr*)uiMgr)->SetMonsterDamage(fireBoss->GetDamage());
-					fireBoss->SetIsKick(false);
-				}
-			}
-			else
-				((PlayUiMgr*)uiMgr)->SetMonsterDamage(0);
-		}
 
 		if (((PlayUiMgr*)uiMgr)->GetBossCurHp() <= 0)
 		{

@@ -7,7 +7,10 @@
 #include "../GameObject/SpriteObj.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/InputMgr.h"
+#include "../GameObject/FireBoss.h"
 #include "../GameObject/Player.h"
+#include "../GameObject/HeavyBombingArcher.h"
+#include "../GameObject/FinalBoss.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), windowSize()
@@ -103,7 +106,7 @@ void PlayUiMgr::Init()
 		hpText->SetFillColor(Color::White);
 		hpText->SetOutlineColor(Color::Black);
 		hpText->SetOutlineThickness(1.5f);
-		hpText->SetText(to_string(525) + "/" + to_string(525)); // ÇÃ·¹ÀÌ¾î maxhp·Î º¯°æ
+		hpText->SetText(to_string(525) + "/" + to_string(525)); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ maxhpï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		hpText->SetPos({ 250, 50 });
 
 		uiObjList[0].push_back(HpBarHurt);
@@ -126,7 +129,7 @@ void PlayUiMgr::Init()
 		playerStatusBarPortrait->SetScale({ 4, 4 });
 		playerStatusBarPortrait->SetSpriteShader();
 		playerStatusBarPortrait->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
-		playerStatusBarPortrait->SetSpriteColor(1); // ÇÃ·¹ÀÌ¾î¶û »ö±ò ¿¬µ¿ÇØ¾ßÇÔ
+		playerStatusBarPortrait->SetSpriteColor(1); // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½
 		uiObjList[0].push_back(playerStatusBarPortrait);
 	}
 
@@ -175,7 +178,7 @@ void PlayUiMgr::Init()
 			button->MousePointerOn = bind(&TextObj::SetFillColor, button->GetText(), Color::White);
 			button->MousePointerOff = bind(&TextObj::SetFillColor, button->GetText(), Color(255, 255, 255, 153));
 
-			// ¿É¼Ç È­¸éÀÌ¶û ¿¬°á
+			// ï¿½É¼ï¿½ È­ï¿½ï¿½ï¿½Ì¶ï¿½ ï¿½ï¿½ï¿½ï¿½
 			//if (i == 0)
 				//button->ClickOn = bind(&SceneMgr::ChangeScene, SCENE_MGR, (Scenes)(i + 1));
 			if (i == 1)
@@ -246,6 +249,55 @@ void PlayUiMgr::Init()
 		fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
 		uiObjList[0].push_back(fps);
 	}
+
+	for (int i = 0; i < 6; i++)
+	{
+		skillSelects.push_back(new SpriteObj());
+		skillKeys.push_back(new SpriteObj());
+	}
+
+	for (int i = 0; i < skillSelects.size(); i++)
+	{
+		skillSelects[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/InactiveCooldownPanel.png"));
+		skillSelects[i]->SetScale({4, 4});
+		skillSelects[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.94f });
+		skillSelects[i]->SetOrigin(Origins::MC);
+
+		uiObjList[2].push_back(skillSelects[i]);
+	}
+
+	for (int i = 0; i < skillKeys.size(); i++)
+	{
+		switch (i)
+		{
+		case 0:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/M0.png"));
+			break;
+		case 1:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Space.png"));
+			break;
+		case 2:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/M1.png"));
+			break;
+		case 3:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Q.png"));
+			break;
+		case 4:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/E.png"));
+			break;
+		case 5:
+			skillKeys[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/R.png"));
+			break;
+		}
+		
+		skillKeys[i]->SetScale({ 4, 4 });
+		skillKeys[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.87f });
+		skillKeys[i]->SetOrigin(Origins::MC);
+
+		uiObjList[2].push_back(skillKeys[i]);
+	}
+
+
 
 	fps = new TextObj();
 	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
@@ -363,7 +415,7 @@ void PlayUiMgr::Draw(RenderWindow& window)
 void PlayUiMgr::HpBarSizeControl(float dt)
 {
 	// Hp Bar Control
-	float playerCurHpBarSet = (player->GetCurHp() * (maxHpBarSize / player->GetMaxHp())); // hp¹Ù »çÀÌÁî ºñÀ²
+	float playerCurHpBarSet = (player->GetCurHp() * (maxHpBarSize / player->GetMaxHp())); // hp
 	if (player->GetCurHp() <= 0.f)
 	{
 		HpBarFill->SetSize({ 0.f, 0.f });
@@ -379,7 +431,6 @@ void PlayUiMgr::HpBarSizeControl(float dt)
 	if (playerCurHpBarSet < hpBarHurtSize)
 	{
 		HpBarHurt->SetSize({ hpBarHurtSize -= (dt * 50), HpBarHurt->GetSize().y * 4 });
-		cout << hpBarHurtSize << endl;
 	}
 }
 
@@ -398,38 +449,43 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 				bossCurHp = bossMaxHp;
 				isStart = true;
 			}
-
-			// Hp Bar Control
-			int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
-			bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
-			bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
-		}
-	}
-	else
-	{
-		if (InputMgr::GetKeyDown(Keyboard::Key::Q)) // Ãæµ¹ Á¶°ÇÀ¸·Î º¯°æ
-		{
-			int playerDamage = 100; // ÇÃ·¹ÀÌ¾î ½ºÅ³ µ¥¹ÌÁö·Î º¯°æ
-
-			if (bossCurHp - playerDamage <= 0.f)
-			{
-				bossCurHp = 0.f;
-				bossHpBarFill->SetSize({ 0, bossHpBarFill->GetSize().y * 4 });
-			}
-			else
-			{
-				bossCurHp -= playerDamage;
-			}
 		}
 
 		// Hp Bar Control
-		int bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
-		bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4 });
+		float bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
+		bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+		bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+	}
+	else
+	{
+		switch (bossType)
+		{
+		case PlayUiMgr::BossType::Archer:
+			bossCurHp = heavyBombingArcher->GetCurHp();
+			break;
+		case PlayUiMgr::BossType::FireBoss:
+			bossCurHp = fireBoss->GetCurHp();
+			break;
+		case PlayUiMgr::BossType::FinalBoss:
+			bossCurHp = finalBoss->GetCurHp();
+			break;
+		}
+
+		// Hp Bar Control
+		float bossCurHpBarSet = bossCurHp * (bossMaxHpBarSize / bossMaxHp);
+		if (bossCurHp <= 0.f)
+		{
+			bossHpBarFill->SetSize({ 0.f, 0.f });
+		}
+		else
+		{
+			bossHpBarFill->SetSize({ bossCurHpBarSet, bossHpBarHurt->GetSize().y * 4.f });
+		}
 
 		// HP Yellow Bar Control
-		if (bossHpBarSize - bossCurHpBarSet < bossHpBarHurtSize)
+		if (bossCurHpBarSet < bossHpBarHurtSize)
 		{
-			bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarFill->GetSize().y * 4.f });
+			bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarHurt->GetSize().y * 4.f });
 		}
 
 		if (bossCurHp <= 0 && isAlive)
