@@ -203,7 +203,7 @@ void PlayUiMgr::Init()
 		bossHpBarBG->SetOrigin(Origins::MC);
 		bossHpBarBG->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.12f });
 		bossHpBarBG->SetScale({ 4, 3.8 });
-		uiObjList[2].push_back(bossHpBarBG);
+		//uiObjList[2].push_back(bossHpBarBG);
 
 		for (int i = 0; i < 2; i++)
 		{
@@ -212,7 +212,6 @@ void PlayUiMgr::Init()
 			if (i == 0)
 			{
 				hp->SetTexture(*RESOURCE_MGR->GetTexture("graphics/EnemyHealthBarFill.png"));
-				//hp->SetSize({ bossMaxHpBarSize, 7.f * 4.f});
 				hp->SetSize({ 0, 7.f * 4.f});
 				hp->SetOrigin(Origins::ML);
 				hp->SetPos({ windowSize.x * 0.5f - (hp->GetSize().x * 2) + 2.7f, windowSize.y * 0.12f + 2.f});
@@ -221,7 +220,6 @@ void PlayUiMgr::Init()
 			else
 			{
 				hp->SetTexture(*RESOURCE_MGR->GetTexture("graphics/HPBarHurtFill.png"));
-				//hp->SetSize({ bossHpBarFill->GetSize().x * 4.f + 5.f, bossHpBarFill->GetSize().y * 4.f });
 				hp->SetSize({ 0, bossHpBarFill->GetSize().y * 4.f });
 				hp->SetOrigin(Origins::ML);
 				hp->SetPos(bossHpBarFill->GetPos());
@@ -238,10 +236,6 @@ void PlayUiMgr::Init()
 		bossName->SetText("BOSS NAME");
 		bossName->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.07f });
 
-		uiObjList[2].push_back(bossHpBarHurt);
-		uiObjList[2].push_back(bossHpBarFill);
-		uiObjList[2].push_back(bossName);
-
 		fps = new TextObj();
 		fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 		fps->SetSize(35);
@@ -257,6 +251,7 @@ void PlayUiMgr::Init()
 	{
 		skillSelects.push_back(new SpriteObj());
 		skillKeys.push_back(new SpriteObj());
+		skills.push_back(new SpriteObj());
 	}
 
 	for (int i = 0; i < skillSelects.size(); i++)
@@ -266,7 +261,7 @@ void PlayUiMgr::Init()
 		skillSelects[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.94f });
 		skillSelects[i]->SetOrigin(Origins::MC);
 
-		uiObjList[2].push_back(skillSelects[i]);
+		uiObjList[0].push_back(skillSelects[i]);
 	}
 
 	for (int i = 0; i < skillKeys.size(); i++)
@@ -297,10 +292,12 @@ void PlayUiMgr::Init()
 		skillKeys[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.87f });
 		skillKeys[i]->SetOrigin(Origins::MC);
 
-		uiObjList[2].push_back(skillKeys[i]);
+		skills[i]->SetScale({4, 4});
+		skills[i]->SetPos(skillSelects[i]->GetPos());
+
+		uiObjList[0].push_back(skillKeys[i]);
+		uiObjList[0].push_back(skills[i]);
 	}
-
-
 
 	fps = new TextObj();
 	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
@@ -451,21 +448,54 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 
 	if (!isStart)
 	{
-		if (bossCurHp < bossMaxHp)
+		bool set = false;
+		bool alive = false;
+		switch (bossType)
 		{
-			bossCurHp += 5;
-
-			if (bossCurHp >= bossMaxHp)
-			{
-				bossCurHp = bossMaxHp;
-				isStart = true;
-			}
+		case PlayUiMgr::BossType::Archer:
+			set = heavyBombingArcher->GetIsAlive();
+			alive = heavyBombingArcher->GetActive();
+			break;
+		case PlayUiMgr::BossType::FireBoss:
+			set = fireBoss->GetIsAlive();
+			alive = fireBoss->GetActive();
+			break;
+		case PlayUiMgr::BossType::FinalBoss:
+			set = finalBoss->GetState() != FinalBoss::States::Die;
+			alive = finalBoss->GetActive();
+			break;
 		}
 
-		// Hp Bar Control
-		float bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
-		bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
-		bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+		if (set)
+		{
+			if (alive)
+			{
+				if (uiObjList[2].empty())
+				{
+					uiObjList[2].push_back(bossHpBarBG);
+					uiObjList[2].push_back(bossHpBarHurt);
+					uiObjList[2].push_back(bossHpBarFill);
+					uiObjList[2].push_back(bossName);
+				}
+			}
+
+			if (bossCurHp < bossMaxHp)
+			{
+				bossCurHp += 10;
+
+				if (bossCurHp >= bossMaxHp)
+				{
+					bossCurHp = bossMaxHp;
+					isAlive = true;
+					isStart = true;
+				}
+			}
+
+			// Hp Bar Control
+			float bossCurHpBarSet = (bossMaxHp - bossCurHp) * (bossMaxHpBarSize / bossMaxHp);
+			bossHpBarFill->SetSize({ (float)bossHpBarSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+			bossHpBarHurt->SetSize({ (float)bossHpBarHurtSize - bossCurHpBarSet, bossHpBarFill->GetSize().y * 4.f });
+		}
 	}
 	else
 	{
@@ -506,6 +536,7 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 			{
 				uiObjList[2].clear();
 				isAlive = false;
+				isStart = false;
 			}
 		}
 	}
@@ -529,4 +560,10 @@ void PlayUiMgr::OverdriveBarControl(float dt)
 void PlayUiMgr::SetBossName(string name)
 {
 	bossName->SetText(name);
+}
+
+void PlayUiMgr::SetSkillIcon(int idx, const string& texture)
+{
+	skills[idx]->SetTexture(*RESOURCE_MGR->GetTexture(texture));
+	skills[idx]->SetOrigin(Origins::MC);
 }

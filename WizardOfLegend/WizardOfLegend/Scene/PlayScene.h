@@ -5,10 +5,14 @@
 class FireBoss;
 class Player;
 class Sector;
+class FinalBoss;
+class HeavyBombingArcher;
 class PlayScene : public Scene
 {
 protected:
 	FireBoss* fireBoss;
+	FinalBoss* finalBoss;
+	HeavyBombingArcher* heavyBombingArcher;
 	Player* player;
 	IntRect mapSize;
 
@@ -19,6 +23,8 @@ protected:
 
 	float currSpownDelay = 5.f;
 	float maxSpownDelay = 5.f;
+
+	bool hpBarSet = true;
 
 public:
 	PlayScene();

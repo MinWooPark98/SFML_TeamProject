@@ -80,6 +80,7 @@ protected:
 
 	vector<SpriteObj*> skillSelects;
 	vector<SpriteObj*> skillKeys;
+	vector<SpriteObj*> skills;
 
 public:
 	PlayUiMgr();
@@ -103,9 +104,15 @@ public:
 
 	void SetPlayer(Player* player) { this->player = player; }
 	void SetFireBoss(FireBoss* boss) { this->fireBoss = boss; }
+	void SetHeavyBombingArcher(HeavyBombingArcher* boss) { this->heavyBombingArcher = boss; }
+	void SetFinalBoss(FinalBoss* boss) { this->finalBoss = boss; }
 	void SetBossType(BossType type) { bossType = type; };
 
 	int GetBossCurHp() { return bossCurHp; };
 
 	void SetBossName(string name);
+
+	void SetSkillIcon(int idx, const string& texture);
+
+	bool GetIsStart() { return isStart; };
 };
