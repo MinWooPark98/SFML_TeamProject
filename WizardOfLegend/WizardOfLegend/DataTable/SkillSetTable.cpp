@@ -4,7 +4,7 @@
 SkillSetTable::SkillSetTable()
 	:DataTable(Types::SkillSet)
 {
-	fileName = "tables/skillset.csv";
+	fileName = "tables/skillSet.csv";
 }
 
 SkillSetTable::~SkillSetTable()

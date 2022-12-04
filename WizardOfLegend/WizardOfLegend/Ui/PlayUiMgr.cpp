@@ -11,9 +11,10 @@
 #include "../GameObject/Player.h"
 #include "../GameObject/HeavyBombingArcher.h"
 #include "../GameObject/FinalBoss.h"
+#include "PlaySceneSkillOptions.h"
 
 PlayUiMgr::PlayUiMgr()
-	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), windowSize()
+	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
 {
 }
 
@@ -161,6 +162,9 @@ void PlayUiMgr::Init()
 		menuRec->setOrigin(menuRec->getSize().x * 0.5f, menuRec->getSize().y * 0.5f);
 		menuRec->setPosition({ windowSize.x * 0.5f, windowSize.y * 0.4f });
 		
+		options = new PlaySceneSkillOptions();
+		options->Init();
+
 		vector<string> sceneNames = { "SKILL", "TITLE" ,"EXIT" };
 		for (int i = 0; i < 3; ++i)
 		{
@@ -178,9 +182,8 @@ void PlayUiMgr::Init()
 			button->MousePointerOn = bind(&TextObj::SetFillColor, button->GetText(), Color::White);
 			button->MousePointerOff = bind(&TextObj::SetFillColor, button->GetText(), Color(255, 255, 255, 153));
 
-			// �ɼ� ȭ���̶� ����
-			//if (i == 0)
-				//button->ClickOn = bind(&SceneMgr::ChangeScene, SCENE_MGR, (Scenes)(i + 1));
+			if (i == 0)
+				button->ClickOn = bind(&PlaySceneSkillOptions::SetActive, options, true);
 			if (i == 1)
 				button->ClickOn = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
 			else if (i == 2)
@@ -340,6 +343,12 @@ void PlayUiMgr::SetPos(const Vector2f& pos)
 void PlayUiMgr::Update(float dt)
 {
 	UiMgr::Update(dt);
+	if (options->GetActive())
+	{
+		options->Update(dt);
+		return;
+	}
+
 	for (auto& uiObjs : uiObjList)
 	{
 		for (auto& obj : uiObjs.second)
@@ -410,6 +419,8 @@ void PlayUiMgr::Draw(RenderWindow& window)
 		}
 		window.draw(*menuRec);
 	}
+	if (options->GetActive())
+		options->Draw(window);
 }
 
 void PlayUiMgr::HpBarSizeControl(float dt)

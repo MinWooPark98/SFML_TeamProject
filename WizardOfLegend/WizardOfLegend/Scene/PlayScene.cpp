@@ -118,8 +118,8 @@ void PlayScene::Init()
 			objList[LayerType::Object][5].push_back(player);
 			auto& skillSet = player->GetSkillSets();
 			skillSet[0]->Set("FireBall");
-			skillSet[1]->Set("JumpMeteor");
-			skillSet[2]->Set("FireDash");
+			skillSet[1]->Set("FireDash");
+			skillSet[2]->Set("JumpMeteor");
 			skillSet[4]->Set("DragonArc");
 			skillSet[5]->Set("FireFull");
 		}
@@ -254,10 +254,13 @@ void PlayScene::Update(float dt)
 	
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
-		if (!GetPause())
-			SetPause(true);
+		if (GetPause())
+		{
+			if (!((PlayUiMgr*)uiMgr)->IsOption())
+				SetPause(false);
+		}
 		else
-			SetPause(false);
+			SetPause(true);
 	}
 
 	//�÷��̾� �� ��ġ 

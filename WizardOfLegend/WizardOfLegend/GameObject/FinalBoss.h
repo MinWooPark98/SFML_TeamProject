@@ -26,6 +26,7 @@ public:
 		SplitCast,
 		GroundSlam,
 		Hit,
+		Die,
 	};
 	enum class SkillAction
 	{

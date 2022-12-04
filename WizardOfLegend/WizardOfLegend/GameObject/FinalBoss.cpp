@@ -6,9 +6,11 @@
 #include "../Scene/SceneMgr.h"
 #include "Skill.h"
 #include "Player.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/FinalBossSkillTable.h"
 
 FinalBoss::FinalBoss()
-	:currState(States::None), animator(nullptr), attackDmg(0), attackCnt(0), attackRange(0.f), speed(400.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
+	:currState(States::None), animator(nullptr), attackDmg(40), attackCnt(0), attackRange(0.f), speed(400.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
 {
 	direction = {0.f, 1.f};
 }
@@ -78,6 +80,9 @@ void FinalBoss::SetState(States state)
 	case States::Hit:
 		lastDir.x < 0.f ? animator->Play("FinalBossHurtLeft") : animator->Play("FinalBossHurtRight");
 		break;
+	case States::Die:
+		animator->Play("FinalBossDie");
+		break;
 	default:
 		break;
 	}
@@ -116,6 +121,7 @@ void FinalBoss::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossGroundSlamDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossHurtRight"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossHurtLeft"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("FinalBossDie"));
 	{
 		vector<string> clipIds = { "FinalBossSlideRight", "FinalBossSlideLeft", "FinalBossSlideDown", "FinalBossSlideUp" };
 		for (int i = 0; i < clipIds.size(); ++i)
@@ -138,21 +144,33 @@ void FinalBoss::Init()
 			animator->AddEvent(ev);
 		}
 	}
+	{
+		AnimationEvent ev;
+		ev.clipId = "FinalBossDie";
+		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
+		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
+		animator->AddEvent(ev);
+	}
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
-
-	vector<string> skills = { "DragonArc", "FireFull", "FireBall", "FlameWolf", "WideAreaMeteor" };
-	for (int i = 0; i < skills.size(); ++i)
+	
+	FinalBossSkillTable* table = DATATABLE_MGR->Get<FinalBossSkillTable>(DataTable::Types::FinalBossSkill);
+	auto& normalSkillNames = table->Get("Normal");
+	for (auto& skillName : normalSkillNames)
 	{
-		Skill* skill1 = new Skill();
-		skill1->SetSkill(skills[i]);
-		skill1->SetSubject(this, Skill::SubjectType::FinalBoss);
-		normalSkills.push_back(skill1);
+		Skill* skill = new Skill();
+		skill->SetSkill(skillName);
+		skill->SetSubject(this, Skill::SubjectType::FinalBoss);
+		normalSkills.push_back(skill);
 	}
-	Skill* skill2 = new Skill();
-	skill2->SetSkill("FireFull");
-	skill2->SetSubject(this, Skill::SubjectType::FinalBoss);
-	chaosSkills.push_back(skill2);
+	auto& chaosSkillNames = table->Get("Chaos");
+	for (auto& skillName : chaosSkillNames)
+	{
+		Skill* skill = new Skill();
+		skill->SetSkill(skillName);
+		skill->SetSubject(this, Skill::SubjectType::FinalBoss);
+		chaosSkills.push_back(skill);
+	}
 	currSkill = normalSkills[0];
 
 	SetHitBox(FloatRect(0.f, 0.f, 10.f, 25.f));
@@ -254,7 +272,6 @@ void FinalBoss::UpdateDash(float dt)
 		if(Utils::Distance(position, player->GetPos()) < activateDistance)
 		{
 			currSkill->Do();
-			cout << currSkill->GetSetting()->skillName << endl;
 			if (vecIdx < normalSkills.size())
 			{
 				++vecIdx;
@@ -299,7 +316,7 @@ void FinalBoss::UpdateWait(float dt)
 
 void FinalBoss::Action(Skill* skill)
 {
-	switch (currSkill->GetSetting()->playerAction)
+	switch (skill->GetSetting()->playerAction)
 	{
 	case Player::SkillAction::NormalSpell:
 		SetState(States::NormalSpell);
@@ -404,6 +421,12 @@ void FinalBoss::NextAction()
 void FinalBoss::OnHit(const Vector2f& atkDir, int dmg)
 {
 	curHp -= dmg;
+	if (curHp <= 0)
+	{
+		curHp = 0;
+		SetState(States::Die);
+		return;
+	}
 	if (superArmor)
 		return;
 	direction = -atkDir;

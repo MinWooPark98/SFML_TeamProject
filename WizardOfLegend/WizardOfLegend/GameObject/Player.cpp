@@ -7,7 +7,7 @@
 #include "SkillSet.h"
 
 Player::Player()
-	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20.f),
+	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
 	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.3f), hitTimer(0.f)
 {
 }
@@ -124,6 +124,9 @@ void Player::SetState(States state)
 				animator->Play("HurtLeft");
 		}
 		break;
+	case States::Die:
+		animator->Play("Die");
+		break;
 	default:
 		break;
 	}
@@ -184,6 +187,7 @@ void Player::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtLeft"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("HurtUp"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("Die"));
 	{
 		vector<string> clipIds = { "SlideRight", "SlideLeft", "SlideDown", "SlideUp", "GroundSlamDownEnd", "GroundSlamUpEnd" };
 		for (int i = 0; i < clipIds.size(); ++i)
@@ -205,6 +209,13 @@ void Player::Init()
 			ev.onEvent = bind(&Player::FinishAction, this);
 			animator->AddEvent(ev);
 		}
+	}
+	{
+		AnimationEvent ev;
+		ev.clipId = "Die";
+		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
+		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
+		animator->AddEvent(ev);
 	}
 	animator->SetTarget(&sprite);
 	SetState(States::Idle);
@@ -236,6 +247,9 @@ void Player::Update(float dt)
 	SpriteObj::Update(dt);
 	animator->Update(dt);
 
+	if (currState == States::Die)
+		return;
+
 	auto& windowSize = FRAMEWORK->GetWindowSize();
 	
 	if (currState == States::Idle || currState == States::Run)
@@ -262,8 +276,8 @@ void Player::Update(float dt)
 					skillSets[0]->Restart();
 					break;
 				case Mouse::Right:
-					SetCurrSkillSet(skillSets[1]);
-					skillSets[1]->Restart();
+					SetCurrSkillSet(skillSets[2]);
+					skillSets[2]->Restart();
 					break;
 				default:
 					break;
@@ -280,8 +294,8 @@ void Player::Update(float dt)
 				switch (keyDown)
 				{
 				case Keyboard::Space:
-					SetCurrSkillSet(skillSets[2]);
-					skillSets[2]->Restart();
+					SetCurrSkillSet(skillSets[1]);
+					skillSets[1]->Restart();
 					SetState(States::Dash);
 					break;
 				case Keyboard::Q:
@@ -517,10 +531,10 @@ void Player::FinishAction()
 void Player::OnHit(const Vector2f& atkDir, int dmg)
 {
 	curHp -= dmg;
-	if (curHp <= 0.f)
+	if (curHp <= 0)
 	{
-		curHp = 0.f;
-		SetActive(false);
+		curHp = 0;
+		SetState(States::Die);
 		return;
 	}
 	direction = -atkDir;

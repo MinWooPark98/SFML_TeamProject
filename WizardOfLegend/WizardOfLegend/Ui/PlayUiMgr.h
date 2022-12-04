@@ -8,6 +8,7 @@ class Player;
 class FireBoss;
 class HeavyBombingArcher;
 class FinalBoss;
+class PlaySceneSkillOptions;
 
 class PlayUiMgr : public UiMgr
 {
@@ -73,6 +74,8 @@ protected:
 
 	int monsterDamage = 0;
 
+	PlaySceneSkillOptions* options;
+
 	TextObj* fps;
 
 	vector<SpriteObj*> skillSelects;
@@ -87,6 +90,8 @@ public:
 	virtual void SetPos(const Vector2f& pos) override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
+
+	bool IsOption() { return isOption; }
 
 	void HpBarSizeControl(float dt);
 	void BossHpBraSizeControl(float dt);

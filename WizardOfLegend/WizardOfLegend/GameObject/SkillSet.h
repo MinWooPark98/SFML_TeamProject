@@ -16,10 +16,13 @@ private:
 	Object* subject;
 	Skill::SubjectType subType;
 
+	bool isSingleSkill;
 	bool isOnCoolDown;
 	bool newCoolDownEntered;
 	float newCoolDown;
 	float timer;
+
+	string skillSetName;
 
 public:
 	SkillSet();
@@ -35,5 +38,6 @@ public:
 	void Draw(RenderWindow& window);
 
 	Skill* GetCurrSkill();
+	string GetSkillSetName() { return skillSetName; }
 };
 

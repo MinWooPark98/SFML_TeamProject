@@ -36,8 +36,6 @@ public:
     void SetUI(bool u) { isUi = u; }
     void SetTextureRect(const IntRect& rect);
     const IntRect& GetTextureRect()const;
-    void SetHitBoxOrigin(Origins origin) { Utils::SetOrigin(hitbox, origin); }
-    void SetHitBoxOrigin(const Vector2f& origin) { hitbox.setOrigin(origin); }
     void SetLowHitBoxOrigin(Origins origin) { Utils::SetOrigin(lowhitbox, origin); }
     void Rotate() { sprite.rotate(rotation); }
 

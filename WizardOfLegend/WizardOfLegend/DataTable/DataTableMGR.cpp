@@ -2,6 +2,7 @@
 #include "LanguageTable.h"
 #include "SkillTable.h"
 #include "SkillSetTable.h"
+#include "FinalBossSkillTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -35,6 +36,10 @@ void DataTableMgr::Init()
     table = new SkillSetTable();
     table->Load();
     tables.insert({ DataTable::Types::SkillSet, table });
+
+    table = new FinalBossSkillTable();
+    table->Load();
+    tables.insert({ DataTable::Types::FinalBossSkill, table });
 }
 
 void DataTableMgr::Release()
