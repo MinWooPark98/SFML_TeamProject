@@ -272,6 +272,7 @@ void FireBoss::SetState(BossStates newState)
 			}
 			else
 			{
+				skills[1]->Reprepare();
 				skills[1]->Do();
 
 				attackDelay = 1.f;
@@ -314,6 +315,7 @@ void FireBoss::SetState(BossStates newState)
 					skills[0]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
 					break;
 				}
+				skills[0]->Reprepare();
 				skills[0]->Do();
 
 				attackDelay = 1.f;
@@ -376,7 +378,6 @@ void FireBoss::UpdateAttack(float dt)
 
 		if (patternCount == 0 && attackDelay <= 0.f)
 		{
-			std::cout << "pattern reset" << endl;
 			SetState(BossStates::Idle);
 			RandomPatternSet(AttackType::Meteor); // 처음부터 메테오 패턴 안 나오게
 			thirdAttackCount = 3;
