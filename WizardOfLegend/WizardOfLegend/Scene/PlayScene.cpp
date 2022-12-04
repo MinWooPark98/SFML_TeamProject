@@ -436,21 +436,21 @@ void PlayScene::AllDieEnemy(int i)
 						{
 							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FireBoss);
 							((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
-							((PlayUiMgr*)uiMgr)->SetBossName("FLAME QUEEN");
+							((PlayUiMgr*)uiMgr)->SetBossName("Flame Queen");
 							hpBarSet = false;
 						}
 						if (heavyBombingArcher->GetActive())
 						{
 							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::Archer);
 							((PlayUiMgr*)uiMgr)->SetBossMaxHp(heavyBombingArcher->GetMaxHp());
-							((PlayUiMgr*)uiMgr)->SetBossName("HEAVY BOMBING ARCHER");
+							((PlayUiMgr*)uiMgr)->SetBossName("Heavy Bombing Archer");
 							hpBarSet = false;
 						}
 						if (finalBoss->GetActive())
 						{
 							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
 							((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
-							((PlayUiMgr*)uiMgr)->SetBossName("FINAL BOSS");
+							((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
 							hpBarSet = false;
 						}
 					}

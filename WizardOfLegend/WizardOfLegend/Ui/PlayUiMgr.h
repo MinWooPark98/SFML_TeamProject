@@ -80,6 +80,7 @@ protected:
 
 	vector<SpriteObj*> skillSelects;
 	vector<SpriteObj*> skillKeys;
+	vector<SpriteObj*> skills;
 
 public:
 	PlayUiMgr();
@@ -110,6 +111,8 @@ public:
 	int GetBossCurHp() { return bossCurHp; };
 
 	void SetBossName(string name);
+
+	void SetSkillIcon(int idx, const string& texture);
 
 	bool GetIsStart() { return isStart; };
 };

@@ -236,11 +236,6 @@ void PlayUiMgr::Init()
 		bossName->SetText("BOSS NAME");
 		bossName->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.07f });
 
-		//uiObjList[2].push_back(bossHpBarBG);
-		//uiObjList[2].push_back(bossHpBarHurt);
-		//uiObjList[2].push_back(bossHpBarFill);
-		//uiObjList[2].push_back(bossName);
-
 		fps = new TextObj();
 		fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 		fps->SetSize(35);
@@ -256,6 +251,7 @@ void PlayUiMgr::Init()
 	{
 		skillSelects.push_back(new SpriteObj());
 		skillKeys.push_back(new SpriteObj());
+		skills.push_back(new SpriteObj());
 	}
 
 	for (int i = 0; i < skillSelects.size(); i++)
@@ -265,7 +261,7 @@ void PlayUiMgr::Init()
 		skillSelects[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.94f });
 		skillSelects[i]->SetOrigin(Origins::MC);
 
-		uiObjList[1].push_back(skillSelects[i]);
+		uiObjList[0].push_back(skillSelects[i]);
 	}
 
 	for (int i = 0; i < skillKeys.size(); i++)
@@ -296,10 +292,12 @@ void PlayUiMgr::Init()
 		skillKeys[i]->SetPos({ windowSize.x * (0.05f + (0.04f * i)), windowSize.y * 0.87f });
 		skillKeys[i]->SetOrigin(Origins::MC);
 
-		uiObjList[1].push_back(skillKeys[i]);
+		skills[i]->SetScale({4, 4});
+		skills[i]->SetPos(skillSelects[i]->GetPos());
+
+		uiObjList[0].push_back(skillKeys[i]);
+		uiObjList[0].push_back(skills[i]);
 	}
-
-
 
 	fps = new TextObj();
 	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
@@ -562,4 +560,10 @@ void PlayUiMgr::OverdriveBarControl(float dt)
 void PlayUiMgr::SetBossName(string name)
 {
 	bossName->SetText(name);
+}
+
+void PlayUiMgr::SetSkillIcon(int idx, const string& texture)
+{
+	skills[idx]->SetTexture(*RESOURCE_MGR->GetTexture(texture));
+	skills[idx]->SetOrigin(Origins::MC);
 }
