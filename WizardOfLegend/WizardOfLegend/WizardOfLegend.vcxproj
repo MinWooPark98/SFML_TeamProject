@@ -150,6 +150,7 @@
     <ClCompile Include="GameObject\Cliff.cpp" />
     <ClCompile Include="GameObject\Door.cpp" />
     <ClCompile Include="GameObject\FinalBoss.cpp" />
+    <ClCompile Include="DataTable\StatTable.cpp" />
     <ClCompile Include="Ui\PlaySceneSkillOptions.cpp" />
     <ClCompile Include="Ui\DataTableList.cpp" />
     <ClCompile Include="GameObject\CastingCircle.cpp" />
@@ -179,7 +180,6 @@
     <ClCompile Include="Framework\RayCast.cpp" />
     <ClCompile Include="DataTable\DataTable.cpp" />
     <ClCompile Include="DataTable\DataTableMGR.cpp" />
-    <ClCompile Include="DataTable\LanguageTable.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Framework\InputMgr.cpp" />
     <ClCompile Include="Framework\ResourceMgr.cpp" />
@@ -220,6 +220,7 @@
     <ClInclude Include="GameObject\Cliff.h" />
     <ClInclude Include="GameObject\Door.h" />
     <ClInclude Include="GameObject\FinalBoss.h" />
+    <ClInclude Include="DataTable\StatTable.h" />
     <ClInclude Include="Ui\PlaySceneSkillOptions.h" />
     <ClInclude Include="Ui\DataTableList.h" />
     <ClInclude Include="GameObject\CastingCircle.h" />
@@ -250,7 +251,6 @@
     <ClInclude Include="Framework\RayCast.h" />
     <ClInclude Include="DataTable\DataTable.h" />
     <ClInclude Include="DataTable\DataTableMGR.h" />
-    <ClInclude Include="DataTable\LanguageTable.h" />
     <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Framework\InputMgr.h" />
     <ClInclude Include="Framework\ObjectPool.h" />

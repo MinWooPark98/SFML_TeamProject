@@ -1,6 +1,9 @@
 #include "FireBoss.h"
 #include "Skill.h"
 #include "../Framework/Framework.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/StatTable.h"
+
 void FireBoss::Init()
 {
 	Release();
@@ -62,15 +65,18 @@ void FireBoss::Init()
 	kickAnimation.SetTarget(&firebossKick->GetSprite());
 	kickAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("FireBossKick"));
 
-	SetDamage(30);
-	SetSpeed(700.f);
 	SetMoveScale(10000.f);
 	SetAttackScale(0.f);
 	SetMonsterType(MonsterType::MiddleBoss);
-	SetMaxHp(700);
-	SetCurHp(700);
 	RandomPatternSet(AttackType::None);
 	attackType = AttackType::ThrowingKnife;
+
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("FireBoss");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(maxHp);
 
 	for (int i = 0; i < 6; ++i)
 	{

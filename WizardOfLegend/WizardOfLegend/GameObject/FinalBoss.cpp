@@ -8,9 +8,10 @@
 #include "Player.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/FinalBossSkillTable.h"
+#include "../DataTable/StatTable.h"
 
 FinalBoss::FinalBoss()
-	:currState(States::None), animator(nullptr), attackDmg(40), attackCnt(0), attackRange(0.f), speed(400.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
+	:currState(States::None), animator(nullptr), attackDmg(40), attackCnt(0), attackRange(0.f), speed(0.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
 {
 	direction = {0.f, 1.f};
 }
@@ -178,7 +179,11 @@ void FinalBoss::Init()
 	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
 
-	SetMaxHp(825);
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("FinalBoss");
+	SetAtkDmg(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
 	SetCurHp(maxHp);
 }
 

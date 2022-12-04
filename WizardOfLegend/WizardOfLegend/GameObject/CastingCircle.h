@@ -14,9 +14,9 @@ protected:
 
 	Skill::DamageType dmgType;
 	int attackDmg;
-	bool isOnAtkDelay;
 	float atkDelay;
 	float atkTimer;
+	list<Object*> damagedObjs;
 
 	Skill::SubjectType subType;
 

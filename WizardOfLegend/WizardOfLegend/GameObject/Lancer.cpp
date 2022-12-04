@@ -1,4 +1,6 @@
 #include "Lancer.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/StatTable.h"
 
 void Lancer::Init()
 {
@@ -32,18 +34,21 @@ void Lancer::Init()
 	SetpaletteSize(9);
 	SetColorTable("graphics/LancerColorIndex.png");
 	SetColor(3);
-	SetSpeed(200.f);
 	SetMoveScale(200.f);
 	SetAttackScale(100.f);
 	SetMonsterType(MonsterType::Normal);
-	SetMaxHp(150);
-	SetCurHp(GetMaxHp());
 	weapon->SetOrigin(Origins::MC);
 	weapon->SetHitBox({20, 20, 5, 35}, Color::Red);
 	weapon->GetHitBox().setOrigin(weapon->GetHitBox().getSize().x * 0.5f, weapon->GetHitBox().getSize().y * 0.5f);
 	spawn->SetPos(GetPos());
 	SetCardColor(2);
-	SetDamage(15);
+
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("Lancer");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(GetMaxHp());
 
 	SetHitBox({ 20.f, 20.f, 20.f, 30.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);

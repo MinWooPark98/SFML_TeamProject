@@ -10,7 +10,7 @@ public:
 	enum class Types
 	{
 		None = -1,
-		Language,
+		Stat,
 		Skill,
 		SkillSet,
 		FinalBossSkill,

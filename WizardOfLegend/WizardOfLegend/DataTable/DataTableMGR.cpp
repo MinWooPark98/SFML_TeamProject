@@ -1,5 +1,5 @@
 #include "DataTableMgr.h"
-#include "LanguageTable.h"
+#include "StatTable.h"
 #include "SkillTable.h"
 #include "SkillSetTable.h"
 #include "FinalBossSkillTable.h"
@@ -25,9 +25,9 @@ DataTableMgr::~DataTableMgr()
 
 void DataTableMgr::Init()
 {
-    DataTable* table = new LanguageTable();
+    DataTable* table = new StatTable();
     table->Load();
-    tables.insert({ DataTable::Types::Language, table });
+    tables.insert({ DataTable::Types::Stat, table });
 
     table = new SkillTable();
     table->Load();

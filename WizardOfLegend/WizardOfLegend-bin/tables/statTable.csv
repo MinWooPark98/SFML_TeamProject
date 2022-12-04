@@ -1,0 +1,7 @@
+ObjType,AttackDmg,MaxHp,Speed
+Player,20,525,200
+Archer,15,150,100
+Lancer,20,200,200
+HeavyBombingArcher,25,500,200
+FireBoss,30,700,700
+FinalBoss,40,825,400

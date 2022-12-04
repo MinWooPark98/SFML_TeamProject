@@ -4,9 +4,10 @@
 #include "../GameObject/Button2.h"
 #include "../Framework/InputMgr.h"
 #include "../DataTable/DataTableMGR.h"
-#include "../DataTable/LanguageTable.h"
+#include "../DataTable/StatTable.h"
 #include "../DataTable/SkillTable.h"
 #include "../DataTable/SkillSetTable.h"
+#include "../DataTable/FinalBossSkillTable.h"
 
 DataTableList::DataTableList()
 	:buttons(nullptr), dataType(DataTable::Types::None)
@@ -118,14 +119,17 @@ void DataTableList::SetDataTable(DataTable::Types type)
 	vector<string> keys;
 	switch (type)
 	{
-	case DataTable::Types::Language:
-		keys = DATATABLE_MGR->Get<LanguageTable>(type)->GetKeys();
+	case DataTable::Types::Stat:
+		keys = DATATABLE_MGR->Get<StatTable>(type)->GetKeys();
 		break;
 	case DataTable::Types::Skill:
 		keys = DATATABLE_MGR->Get<SkillTable>(type)->GetKeys();
 		break;
 	case DataTable::Types::SkillSet:
 		keys = DATATABLE_MGR->Get<SkillSetTable>(type)->GetKeys();
+		break;
+	case DataTable::Types::FinalBossSkill:
+		keys = DATATABLE_MGR->Get<FinalBossSkillTable>(type)->GetKeys();
 		break;
 	default:
 		break;

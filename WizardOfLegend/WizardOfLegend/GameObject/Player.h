@@ -89,6 +89,7 @@ public:
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
+	void SetSpeed(float speed);
 
 	bool GetBackHand() const { return isBackHand; }
 

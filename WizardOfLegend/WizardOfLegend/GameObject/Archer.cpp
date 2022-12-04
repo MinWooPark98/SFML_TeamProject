@@ -1,6 +1,8 @@
 #include "Archer.h"
 #include "../Scene/SceneMgr.h"
 #include "../Scene/PlayScene.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/StatTable.h"
 
 Archer::Archer()
 	: bowDir(0, 0)
@@ -53,21 +55,24 @@ void Archer::Init()
 	SetpaletteSize(9);
 	SetColorTable("graphics/ArcherColorIndex.png");
 
-	SetSpeed(100.f);
 	SetMoveScale(200.f);
 	SetAttackScale(100.f);
 	SetAttackStartDelay(1.f);
 	SetMonsterType(MonsterType::Normal);
-	SetMaxHp(1);
-	SetCurHp(GetMaxHp());
 	weapon->SetOrigin(Origins::MC);
 	spawn->SetPos(GetPos());
 	SetCardColor(2);
-	SetDamage(15);
 	SetHitBox({ 20.f, 20.f, 10.f, 30.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 	SetLowHitBox({ 20.f, 20.f, 10.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
+
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("Archer");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(maxHp);
 }
 
 void Archer::Update(float dt)

@@ -413,7 +413,8 @@ void PlayScene::SpawnEnemy(int i, float dt)
 					obj->SetActive(true);
 				}
 			}
-		}		for (auto& c_list : collisionList[i])
+		}
+		for (auto& c_list : collisionList[i])
 		{
 			for (auto& obj : c_list.second)
 			{
@@ -444,14 +445,16 @@ void PlayScene::AllDieEnemy(int i)
 				{
 					return;
 				}
-				else
+			}
+			if (obj->GetObjType() == Object::ObjTypes::FinalBoss)
+			{
+				if (((FinalBoss*)obj)->GetState() != FinalBoss::States::Die)
 				{
-					room[i].SetAllEnemyDead(true);
+					return;
 				}
 			}
-			else
-				room[i].SetAllEnemyDead(true);
 		}
+		room[i].SetAllEnemyDead(true);
 	}
 	if (room[i].GetAllEnemyDead())
 	{

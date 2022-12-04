@@ -6,7 +6,7 @@
 #include "FinalBoss.h"
 
 Projectile::Projectile()
-	:atkShape(Skill::AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(Skill::WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(Skill::RangeType::None), isComingBack(false),  attackDmg(0), dmgType(Skill::DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0), subType(Skill::SubjectType::None)
+	:atkShape(Skill::AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(Skill::WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(Skill::RangeType::None), isComingBack(false),  attackDmg(0), dmgType(Skill::DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0), subType(Skill::SubjectType::None)
 {
 }
 
@@ -32,7 +32,6 @@ void Projectile::Reset()
 	atkTimer = 0.f;
 	isOnDelay = true;
 	timer = 0.f;
-	isOnAtkDelay = false;
 	cumulativeFallingHeight = 0.f;
 	angle = 0.f;
 	isComingBack = false;
@@ -61,10 +60,10 @@ void Projectile::Update(float dt)
 	}
 
 	animator->Update(dt);
-	SpriteObj::Update(dt);
 	auto spriteBnd = sprite.getGlobalBounds();
 	SetHitBox(spriteBnd);
 	SetHitBoxOrigin(Origins::MC);
+	SpriteObj::Update(dt);
 
 	movingTimer += dt;
 	switch (atkShape)
@@ -123,63 +122,69 @@ void Projectile::Update(float dt)
 		movingTimer = 0.f;
 	}
 
-	if (dmgType != Skill::DamageType::NoDamage && atkShape != Skill::AttackShape::Range)
+	if (dmgType != Skill::DamageType::NoDamage || atkShape != Skill::AttackShape::Range)
 	{
-		if (!isOnAtkDelay)
+		Scene* currScene = SCENE_MGR->GetCurrentScene();
+		if (currScene->GetType() != Scenes::Play)
+			return;
+		vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+		switch (subType)
 		{
-			Scene* currScene = SCENE_MGR->GetCurrentScene();
-			if (currScene->GetType() != Scenes::Play)
-				return;
-			vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
-			switch (subType)
+		case Skill::SubjectType::Player:
+			for (int i = 0; i < collisionList.size(); ++i)
 			{
-			case Skill::SubjectType::Player:
-				for (int i = 0; i < collisionList.size(); ++i)
+				if (collisionList[i][Object::ObjTypes::Player].empty())
+					continue;
+				for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 				{
-					if (collisionList[i][Object::ObjTypes::Player].empty())
+					if (!((Enemy*)enemy)->GetIsAlive())
 						continue;
-					for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+					if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
 					{
-						if (!((Enemy*)enemy)->GetIsAlive())
-							continue;
-						if (GetHitBounds().intersects(enemy->GetHitBounds()))
-							((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
-					}
-					for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
-					{
-						if (((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
-							continue;
-						if (GetHitBounds().intersects(boss->GetHitBounds()))
-							((FinalBoss*)boss)->OnHit(direction, attackDmg);
+						((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
+						damagedObjs.push_back(enemy);
 					}
 				}
-				break;
-			case Skill::SubjectType::Enemy:
-			case Skill::SubjectType::FinalBoss:
-				for (int i = 0; i < collisionList.size(); ++i)
+				for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
 				{
-					if (collisionList[i][Object::ObjTypes::Player].empty())
+					if (((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
 						continue;
-					for (auto& player : collisionList[i][Object::ObjTypes::Player])
+					if (GetHitBounds().intersects(boss->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), boss) == damagedObjs.end())
 					{
-						if (((Player*)player)->GetState() == Player::States::Die)
-							continue;
-						if (GetHitBounds().intersects(player->GetHitBounds()))
-							((Player*)player)->OnHit(direction, attackDmg);
+						((FinalBoss*)boss)->OnHit(direction, attackDmg);
+						damagedObjs.push_back(boss);
 					}
 				}
-				break;
-			default:
-				break;
 			}
+			break;
+		case Skill::SubjectType::Enemy:
+		case Skill::SubjectType::FinalBoss:
+			for (int i = 0; i < collisionList.size(); ++i)
+			{
+				if (collisionList[i][Object::ObjTypes::Player].empty())
+					continue;
+				for (auto& player : collisionList[i][Object::ObjTypes::Player])
+				{
+					if (((Player*)player)->GetState() == Player::States::Die)
+						continue;
+					if (GetHitBounds().intersects(player->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), player) == damagedObjs.end())
+					{
+						((Player*)player)->OnHit(direction, attackDmg);
+						damagedObjs.push_back(player);
+					}
+				}
+			}
+			break;
+		default:
+			break;
 		}
-		else if (dmgType == Skill::DamageType::Periodic)
+		if (dmgType == Skill::DamageType::Periodic)
 		{
 			atkTimer += dt;
 			if (atkTimer >= atkDelay)
 			{
-				isOnAtkDelay = false;
 				atkTimer = 0.f;
+				damagedObjs.clear();
 			}
 		}
 	}

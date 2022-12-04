@@ -5,10 +5,12 @@
 #include "../Framework/Framework.h"
 #include "../Scene/SceneMgr.h"
 #include "SkillSet.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/StatTable.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
-	walkingSpeed(200.f), runningSpeed(300.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.3f), hitTimer(0.f)
+	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.25f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.3f), hitTimer(0.f)
 {
 }
 
@@ -237,6 +239,11 @@ void Player::Init()
 	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
 
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("Player");
+	SetAtkDmg(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
 	SetCurHp(maxHp);
 }
 
@@ -456,6 +463,12 @@ void Player::UpdateHit(float dt)
 		hitTimer = 0.f;
 		SetState(States::Idle);
 	}
+}
+
+void Player::SetSpeed(float speed)
+{
+	walkingSpeed = speed;
+	runningSpeed = speed * 1.5f;
 }
 
 void Player::Action(Skill* currSkill)

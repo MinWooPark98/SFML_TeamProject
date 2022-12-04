@@ -99,6 +99,8 @@ public:
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
 	void SetAttackRange(float range) { attackRange = range; }
+
+	void SetSpeed(float speed) { this->speed = speed; }
 	
 	void NextAction();
 

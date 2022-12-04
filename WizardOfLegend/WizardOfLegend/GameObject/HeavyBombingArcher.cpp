@@ -1,6 +1,8 @@
 #include "HeavyBombingArcher.h"
 #include "../Scene/SceneMgr.h"
 #include "../Scene/PlayScene.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/StatTable.h"
 
 void HeavyBombingArcher::Init()
 {
@@ -38,9 +40,12 @@ void HeavyBombingArcher::Init()
 	spawn->SetPos(GetPos());
 	SetCardColor(1);
 
-	SetMaxHp(500);
-	SetCurHp(500);
-	SetDamage(20);
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("HeavyBombingArcher");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(GetMaxHp());
 
 	SetHitBox({ 20.f, 20.f, 20.f, 40.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);

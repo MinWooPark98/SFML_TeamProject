@@ -28,9 +28,9 @@ protected:
 	float delay;
 	float timer;
 
-	bool isOnAtkDelay;
 	float atkDelay;
 	float atkTimer;
+	list<Object*> damagedObjs;
 
 	float distance;		// 주체로부터의 거리
 

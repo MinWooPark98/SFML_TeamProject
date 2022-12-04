@@ -6,7 +6,7 @@
 #include "FinalBoss.h"
 
 CastingCircle::CastingCircle()
-	:animator(nullptr), duration(0.f), timer(0.f), dmgType(Skill::DamageType::Once), attackDmg(0), isOnAtkDelay(false), atkDelay(0.f), atkTimer(0.f), subType(Skill::SubjectType::None)
+	:animator(nullptr), duration(0.f), timer(0.f), dmgType(Skill::DamageType::Once), attackDmg(0), atkDelay(0.f), atkTimer(0.f), subType(Skill::SubjectType::None)
 {
 }
 
@@ -34,7 +34,6 @@ void CastingCircle::Reset()
 {
 	SpriteObj::Reset();
 	timer = 0.f;
-	isOnAtkDelay = false;
 	atkTimer = 0.f;
 	switch (subType)
 	{
@@ -55,11 +54,11 @@ void CastingCircle::Reset()
 
 void CastingCircle::Update(float dt)
 {
-	SpriteObj::Update(dt);
 	animator->Update(dt);
 	auto spriteBnd = sprite.getGlobalBounds();
 	SetHitBox(spriteBnd);
 	SetHitBoxOrigin(Origins::MC);
+	SpriteObj::Update(dt);
 	timer += dt;
 	if (timer >= duration)
 	{
@@ -117,62 +116,65 @@ void CastingCircle::Update(float dt)
 
 	if (dmgType == Skill::DamageType::Periodic)
 	{
-		if (!isOnAtkDelay)
+		Scene* currScene = SCENE_MGR->GetCurrentScene();
+		if (currScene->GetType() != Scenes::Play)
+			return;
+		vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+		switch (subType)
 		{
-			Scene* currScene = SCENE_MGR->GetCurrentScene();
-			if (currScene->GetType() != Scenes::Play)
-				return;
-			vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
-			switch (subType)
+		case Skill::SubjectType::Player:
+			for (int i = 0; i < collisionList.size(); ++i)
 			{
-			case Skill::SubjectType::Player:
-				for (int i = 0; i < collisionList.size(); ++i)
+				if (collisionList[i][Object::ObjTypes::Player].empty())
+					continue;
+				for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 				{
-					if (collisionList[i][Object::ObjTypes::Player].empty())
+					if (!((Enemy*)enemy)->GetIsAlive())
 						continue;
-					for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+					if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
 					{
-						if (!((Enemy*)enemy)->GetIsAlive())
-							continue;
-						if (GetHitBounds().intersects(enemy->GetHitBounds()))
-							((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
-					}
-					for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
-					{
-						if (((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
-							continue;
-						if (GetHitBounds().intersects(boss->GetHitBounds()))
-							((FinalBoss*)boss)->OnHit(direction, attackDmg);
+						((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
+						damagedObjs.push_back(enemy);
 					}
 				}
-				break;
-			case Skill::SubjectType::Enemy:
-			case Skill::SubjectType::FinalBoss:
-				for (int i = 0; i < collisionList.size(); ++i)
+				for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
 				{
-					if (collisionList[i][Object::ObjTypes::Player].empty())
+					if (((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
 						continue;
-					for (auto& player : collisionList[i][Object::ObjTypes::Player])
+					if (GetHitBounds().intersects(boss->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), boss) == damagedObjs.end())
 					{
-						if (((Player*)player)->GetState() == Player::States::Die)
-							continue;
-						if (GetHitBounds().intersects(player->GetHitBounds()))
-							((Player*)player)->OnHit(direction, attackDmg);
+						((FinalBoss*)boss)->OnHit(direction, attackDmg);
+						damagedObjs.push_back(boss);
 					}
 				}
-				break;
-			default:
-				break;
 			}
+			break;
+		case Skill::SubjectType::Enemy:
+		case Skill::SubjectType::FinalBoss:
+			for (int i = 0; i < collisionList.size(); ++i)
+			{
+				if (collisionList[i][Object::ObjTypes::Player].empty())
+					continue;
+				for (auto& player : collisionList[i][Object::ObjTypes::Player])
+				{
+					if (((Player*)player)->GetState() == Player::States::Die)
+						continue;
+					if (GetHitBounds().intersects(player->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), player) == damagedObjs.end())
+					{
+						((Player*)player)->OnHit(direction, attackDmg);
+						damagedObjs.push_back(player);
+					}
+				}
+			}
+			break;
+		default:
+			break;
 		}
-		else
+		atkTimer += dt;
+		if (atkTimer >= atkDelay)
 		{
-			atkTimer += dt;
-			if (atkTimer >= atkDelay)
-			{
-				isOnAtkDelay = false;
-				atkTimer = 0.f;
-			}
+			atkTimer = 0.f;
+			damagedObjs.clear();
 		}
 	}
 }
