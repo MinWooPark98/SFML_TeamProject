@@ -292,7 +292,7 @@ void Enemy::UpdateHit(float dt)
 	}
 	if (type == MonsterType::MiddleBoss)
 	{
-		if (hitTimer >= 1.5f)
+		if (hitTimer >= 2.f)
 		{
 			hitTimer = 0.f;
 			SetState(BossStates::Move);
