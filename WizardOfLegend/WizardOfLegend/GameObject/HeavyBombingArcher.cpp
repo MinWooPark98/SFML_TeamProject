@@ -48,6 +48,8 @@ void HeavyBombingArcher::Init()
 
 void HeavyBombingArcher::Update(float dt)
 {
+	Archer::Update(dt);
+
 	if (attackDelay <= 0.f)
 		count = 0;
 
@@ -55,8 +57,6 @@ void HeavyBombingArcher::Update(float dt)
 	{
 		arrows->GetHitBox().setPosition(arrows->GetPos());
 	}
-
-	Archer::Update(dt);
 }
 
 void HeavyBombingArcher::Draw(RenderWindow& window)

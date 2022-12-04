@@ -25,6 +25,8 @@ void Enemy::Update(float dt)
 { 
 	SpriteObj::Update(dt);
 
+	SetLastPosition(GetPos());
+
 	if (isActionStart)
 	{
 		if (type == MonsterType::Normal || type == MonsterType::StageBoss)
@@ -73,7 +75,6 @@ void Enemy::Update(float dt)
 		}
 	}
 
-
 	if (curState == States::Attack || curState == States::MoveAttack || curBossState == BossStates::Attack)
 		attackDelay -= dt;
 
@@ -105,8 +106,6 @@ void Enemy::Update(float dt)
 		}
 		spawnAnimation.Update(dt);
 	}
-
-	SetLastPosition(GetPos());
 }
 
 void Enemy::SetColor(int index)

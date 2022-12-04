@@ -78,11 +78,6 @@ void Lancer::Update(float dt)
 			else
 				moveSoundTimer = 0.f;
 
-			if (InputMgr::GetKeyDown(Keyboard::Key::K))
-			{
-				SetCurHp(0);
-			}
-
 			if (curHp <= 0 && isAlive)
 			{
 				dieTimer = 1.f;
@@ -95,10 +90,10 @@ void Lancer::Update(float dt)
 				lastDir = direction;
 			}
 
-			animation.Update(dt);
 			spearAnimation.Update(dt);
 		}
 	}
+	animation.Update(dt);
 }
 
 void Lancer::Draw(RenderWindow& window)

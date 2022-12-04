@@ -298,7 +298,7 @@ void PlayScene::Update(float dt)
 				for (auto& obj : collisionList[j][(Object::ObjTypes)i])
 				{
 					OnCollisionWall(j, obj);
-					//OnCollisionETC(j, obj);
+					OnCollisionETC(j, obj);
 				}
 			}
 			break;
@@ -446,6 +446,8 @@ void PlayScene::AllDieEnemy(int i)
 					room[i].SetAllEnemyDead(true);
 				}
 			}
+			else
+				room[i].SetAllEnemyDead(true);
 		}
 	}
 	if (room[i].GetAllEnemyDead())
