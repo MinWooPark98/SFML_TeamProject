@@ -38,7 +38,7 @@ void MapToolScene::Init()
 
 	uiMgr = new MapToolUiMgr(this);
 	uiMgr->Init();
-	nowType = LayerType::Tile;
+	nowType = LayerType::Object;
 
 
 }
@@ -46,6 +46,7 @@ void MapToolScene::Init()
 void MapToolScene::Reset()
 {
 	Release();
+	((MapToolUiMgr*)uiMgr)->Reset();
 }
 
 void MapToolScene::Update(float dt)
@@ -422,6 +423,10 @@ void MapToolScene::Enter()
 	SCENE_MGR->GetCurrentScene()->GetWorldView().setSize({ WindowWidth , WindowHeight });
 	SCENE_MGR->GetCurrentScene()->GetUiView().setCenter({ WindowWidth / 2.f, WindowHeight / 2.f });
 	SCENE_MGR->GetCurrentScene()->GetUiView().setSize({ WindowWidth , WindowHeight });
+
+	uiMgr = new MapToolUiMgr(this);
+	uiMgr->Init();
+	nowType = LayerType::Object;
 }
 
 void MapToolScene::Exit()

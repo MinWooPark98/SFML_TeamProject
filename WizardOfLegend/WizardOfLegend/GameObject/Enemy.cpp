@@ -21,6 +21,14 @@ void Enemy::Init()
 	SetCardPalette(19, 2, "graphics/CardColorIndex.png");
 }
 
+void Enemy::Reset()
+{
+	SpriteObj::Reset();
+	curHp = maxHp;
+	isAlive = true;
+	curState = States::RightIdle;
+}
+
 void Enemy::Update(float dt)
 { 
 	SpriteObj::Update(dt);

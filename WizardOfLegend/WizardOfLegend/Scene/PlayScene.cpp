@@ -368,6 +368,22 @@ void PlayScene::Release()
 void PlayScene::Reset()
 {
 	Scene::Reset();
+	((Player*)player)->Reset();
+	((FinalBoss*)finalBoss)->Reset();
+	for (auto& layer : objList)
+	{
+		for (auto& obj_pair : layer.second)
+		{
+			auto& objs = obj_pair.second;
+			for (auto& obj : objs)
+			{
+				if (obj->GetObjType()== Object::ObjTypes::Enemy)
+				{
+					((Enemy*)obj)->Reset();
+				}
+			}
+		}
+	}
 }
 
 void PlayScene::Enter()

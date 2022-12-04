@@ -119,6 +119,12 @@ void MapToolUiMgr::Init()
 
 void MapToolUiMgr::Release()
 {
+
+	Object::Release();	
+}
+
+void MapToolUiMgr::Reset()
+{
 	for (auto& uiObjs : uiObjList)
 	{
 		for (auto& obj : uiObjs.second)
@@ -129,11 +135,8 @@ void MapToolUiMgr::Release()
 		}
 	}
 	uiObjList.clear();
-	Object::Release();
-}
-
-void MapToolUiMgr::Reset()
-{
+	saveBtn->SetState(UiState::None);
+	loadBtn->SetState(UiState::None);
 }
 
 void MapToolUiMgr::Update(float dt)

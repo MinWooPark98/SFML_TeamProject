@@ -40,7 +40,6 @@ private:
 public:
 	MapToolScene();
 	virtual ~MapToolScene();
-
 	virtual void Init() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
