@@ -43,7 +43,7 @@ void Enemy::Update(float dt)
 				UpdateAttack(dt);
 				break;
 			case States::Hit:
-				SetState(States::Hit);
+				UpdateHit(dt);
 				break;
 			case States::Die:
 				SetState(States::Die);
@@ -117,40 +117,43 @@ void Enemy::SetColor(int index)
 
 void Enemy::NormalMonsterMove(float dt)
 {
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale())
+	if (curState != States::Hit)
 	{
-		player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
-		player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
-	}
-	else
-		direction.x = 0;
-
-	if (curState == States::Die)
-		return;
-
-	if (type == MonsterType::Normal || type == MonsterType::StageBoss)
-	{
-		if (!Utils::EqualFloat(direction.x, 0.f))
+		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale())
 		{
-			auto move = Utils::Normalize(player->GetPos() - GetPos());
-			Translate({ dt * speed * move });
-
-			if (lastDir.x < 0.f)
-				SetState(States::LeftMove);
-			if (lastDir.x > 0.f)
-				SetState(States::RightMove);
-
-			return;
+			player->GetPos().x > GetPos().x ? direction.x = 1 : direction.x = -1;
+			player->GetPos().y > GetPos().y ? direction.y = 1 : direction.y = -1;
 		}
+		else
+			direction.x = 0;
 
-		if (Utils::EqualFloat(direction.x, 0.f))
-		{
-			if (lastDir.x < 0.f)
-				SetState(States::LeftIdle);
-			if (lastDir.x > 0.f)
-				SetState(States::RightIdle);
-
+		if (curState == States::Die)
 			return;
+
+		if (type == MonsterType::Normal || type == MonsterType::StageBoss)
+		{
+			if (!Utils::EqualFloat(direction.x, 0.f))
+			{
+				auto move = Utils::Normalize(player->GetPos() - GetPos());
+				Translate({ dt * speed * move });
+
+				if (lastDir.x < 0.f)
+					SetState(States::LeftMove);
+				if (lastDir.x > 0.f)
+					SetState(States::RightMove);
+
+				return;
+			}
+
+			if (Utils::EqualFloat(direction.x, 0.f))
+			{
+				if (lastDir.x < 0.f)
+					SetState(States::LeftIdle);
+				if (lastDir.x > 0.f)
+					SetState(States::RightIdle);
+
+				return;
+			}
 		}
 	}
 }
@@ -267,4 +270,35 @@ void Enemy::Reset()
 	isShader = true;
 	isAlive = true;
 	moveSoundTimer = 0.f;
+}
+
+void Enemy::UpdateHit(float dt)
+{
+	hitTimer += dt;
+	if (type == MonsterType::Normal)
+		Translate(-lastDir * speed * 0.3f * dt);
+	
+	if (hitTimer >= 0.5f)
+	{
+		hitTimer = 0.f;
+		if (lastDir.x > 0.f)
+			SetState(States::LeftIdle);
+		if (lastDir.x < 0.f)
+			SetState(States::RightIdle);
+	}
+}
+
+void Enemy::OnHit(const Vector2f& atkDir, int dmg)
+{
+	curHp -= dmg;
+	direction = -atkDir;
+	lastDir = direction;
+
+	if (type == MonsterType::Normal)
+		SetState(States::Hit);
+	else if (type == MonsterType::StageBoss)
+	{
+		if (curState == States::MoveAttack)
+			SetState(States::Hit);
+	}
 }
