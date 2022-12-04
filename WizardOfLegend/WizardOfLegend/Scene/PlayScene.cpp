@@ -199,7 +199,7 @@ void PlayScene::Init()
 			cliff->SetPos(obj.position);
 			cliff->SetSize(obj.size);
 			cliff->SetHitBox((FloatRect)cliff->GetCliffShape()->getGlobalBounds());
-			cliff->SetHitBox({100, 100, 100, 100}, Color::Blue);
+			cliff->SetOutlineColor({ 0, 0, 0, 0 });
 			cliff->SetObjType(Object::ObjTypes::Cliff);
 			objList[LayerType::Object][3].push_back(cliff);
 			collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
