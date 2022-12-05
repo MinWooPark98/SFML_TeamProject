@@ -20,7 +20,6 @@ public:
 
 	virtual void SetPos(Vector2f pos);
 	void SetDamage(int dmg);
-	virtual void SetFillColor(Color color);
 	void ShowDamageFire();
 };
 
