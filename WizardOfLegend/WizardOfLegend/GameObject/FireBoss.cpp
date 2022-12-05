@@ -84,7 +84,7 @@ void FireBoss::Init()
 		skills.push_back(newSkill);
 	}
 	skills[0]->SetSkill("DragonArc");
-	skills[1]->SetSkill("FireFull");
+	skills[1]->SetSkill("UltimateFireBall");
 
 	lastPos = GetPos();
 
@@ -280,6 +280,16 @@ void FireBoss::SetState(BossStates newState)
 			}
 			else
 			{
+				switch (skills[1]->GetSetting()->attackShape)
+				{
+				case Skill::AttackShape::Range:
+					skills[1]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
+					break;
+				case Skill::AttackShape::Wave:
+					skills[1]->SetSkillDir(Utils::Normalize(playerLastPos - lastPos));
+					break;
+				}
+
 				skills[1]->Reprepare();
 				skills[1]->Do();
 

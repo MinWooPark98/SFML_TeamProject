@@ -750,3 +750,10 @@ graphics/UseFireFull.png,0
 graphics/UseFireBlast.png,0
 graphics/FireDash.png,0
 graphics/SummonMeteorStrike.png,0
+graphics/Fireball_0.png,0
+graphics/Fireball_1.png,0
+graphics/Fireball_2.png,0
+graphics/Fireball_3.png,0
+graphics/Fireball_4.png,0
+animations/skill/FireBallRight.csv,3
+animations/skill/FireBallLeft.csv,3
