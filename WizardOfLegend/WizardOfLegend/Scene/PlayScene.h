@@ -26,6 +26,8 @@ protected:
 
 	bool hpBarSet = true;
 
+	string mapName;
+
 public:
 	PlayScene();
 	virtual ~PlayScene();
@@ -46,5 +48,7 @@ public:
 	void SpawnEnemy(int i, float dt);
 	void AllDieEnemy(int i);
 	void OnCollisionETC(int roomVec, Object* obj);
+
+	void SetMapName(const string& name) { mapName = name; }
 };
 

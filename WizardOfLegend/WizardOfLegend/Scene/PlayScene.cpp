@@ -33,7 +33,7 @@ void PlayScene::Init()
 	uiMgr->Init();
 
 	isMap = true;
-	auto& data = FILE_MGR->GetMap("TUTORIAL");
+	auto& data = FILE_MGR->GetMap(mapName);
 
 	for (auto& obj : data)
 	{

@@ -14,6 +14,7 @@ public:
 		Skill,
 		SkillSet,
 		FinalBossSkill,
+		MapName,
 	};
 protected:
 	Types type;

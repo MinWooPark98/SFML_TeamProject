@@ -6,6 +6,8 @@
 #include "../GameObject/SpriteObj.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/InputMgr.h"
+#include "DataTableList.h"
+#include "../Scene/PlayScene.h"
 
 TitleUiMgr::TitleUiMgr()
 	:UiMgr(SCENE_MGR->GetScene(Scenes::Title)), windowSize()
@@ -32,6 +34,11 @@ void TitleUiMgr::Init()
 	backgrondShadow->setSize({ 2000, 1500 });
 	backgrondShadow->setFillColor({ 0, 0, 0, 0 });
 
+	mapList = new DataTableList();
+	mapList->Init();
+	mapList->SetDataTable(DataTable::Types::MapName);
+	mapList->Selected = bind(&TitleUiMgr::LoadPlayScene, this, placeholders::_1);
+
 	vector<string> sceneNames = { "PLAY", "MAP TOOL", "SKILL TOOL", "EXIT", "Press Any Key To Start" };
 	for (int i = 0; i < 5; ++i)
 	{
@@ -57,7 +64,9 @@ void TitleUiMgr::Init()
 		else
 			button->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.6f});
 		
-		if (i < 3)
+		if(i == 0)
+			button->ClickOn = bind(&DataTableList::SetActive, mapList, true);
+		else if (i < 3)
 			button->ClickOn = bind(&SceneMgr::ChangeScene, SCENE_MGR, (Scenes)(i + 1));
 		else if (i == 3)
 			button->ClickOn = bind(&SceneMgr::Exit, SCENE_MGR);
@@ -179,4 +188,11 @@ void TitleUiMgr::Draw(RenderWindow& window)
 		for (auto& uiObjs : uiObjList[2])
 			uiObjs->Draw(window);
 	}
+}
+
+void TitleUiMgr::LoadPlayScene(const string& mapName)
+{
+	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetScene(Scenes::Play);
+	playScene->SetMapName(mapName);
+	SCENE_MGR->ChangeScene(Scenes::Play);
 }

@@ -3,6 +3,7 @@
 #include "SkillTable.h"
 #include "SkillSetTable.h"
 #include "FinalBossSkillTable.h"
+#include "MapNameTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -40,6 +41,10 @@ void DataTableMgr::Init()
     table = new FinalBossSkillTable();
     table->Load();
     tables.insert({ DataTable::Types::FinalBossSkill, table });
+
+    table = new MapNameTable();
+    table->Load();
+    tables.insert({ DataTable::Types::MapName, table });
 }
 
 void DataTableMgr::Release()

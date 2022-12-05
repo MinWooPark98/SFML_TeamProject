@@ -2,6 +2,8 @@
 #include "UiMgr.h"
 
 class SpriteObj;
+class DataTableList;
+
 class TitleUiMgr : public UiMgr
 {
 protected:
@@ -12,7 +14,9 @@ protected:
 	float backgroundShadowValue = 0.f;
 
 	SpriteObj* titleLogo;
-	bool logoMove;
+	bool logoMove; 
+	
+	DataTableList* mapList;
 
 	float startTextActiveTimer = 0.f;
 
@@ -25,4 +29,6 @@ public:
 	virtual void SetPos(const Vector2f& pos) override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
+
+	void LoadPlayScene(const string& mapName);
 };

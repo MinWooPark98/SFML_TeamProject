@@ -8,6 +8,7 @@
 #include "../DataTable/SkillTable.h"
 #include "../DataTable/SkillSetTable.h"
 #include "../DataTable/FinalBossSkillTable.h"
+#include "../DataTable/MapNameTable.h"
 
 DataTableList::DataTableList()
 	:buttons(nullptr), dataType(DataTable::Types::None)
@@ -130,6 +131,9 @@ void DataTableList::SetDataTable(DataTable::Types type)
 		break;
 	case DataTable::Types::FinalBossSkill:
 		keys = DATATABLE_MGR->Get<FinalBossSkillTable>(type)->GetKeys();
+		break;
+	case DataTable::Types::MapName:
+		keys = DATATABLE_MGR->Get<MapNameTable>(type)->GetKeys();
 		break;
 	default:
 		break;
