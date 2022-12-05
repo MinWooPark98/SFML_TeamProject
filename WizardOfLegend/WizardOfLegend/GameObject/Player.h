@@ -75,6 +75,9 @@ protected:
 	float hitTimer;
 	FloatRect hitboxSize;
 
+	float moveSoundTimer = 0.f;
+	bool isRunning = true;
+
 public:
 	Player();
 	virtual ~Player();

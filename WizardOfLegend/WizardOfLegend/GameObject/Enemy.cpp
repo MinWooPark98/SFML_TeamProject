@@ -311,7 +311,7 @@ void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 	curHp -= dmg;
 	direction = -atkDir;
 	lastDir = direction;
-
+	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
 	if (type == MonsterType::Normal)
 		SetState(States::Hit);
 	else if (type == MonsterType::StageBoss)
@@ -322,6 +322,26 @@ void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 	else if (type == MonsterType::MiddleBoss)
 	{
 		if (curBossState == BossStates::Idle)
+		{
 			SetState(BossStates::Hit);
+		}
+		if (curBossState == BossStates::Idle ||
+			curBossState == BossStates::Hit)
+		{
+			int i = Utils::RandomRange(0, 3);
+
+			switch (i)
+			{
+			case 0:
+				SOUND_MGR->Play("sounds/FireBossHurt0.wav");
+				break;
+			case 1:
+				SOUND_MGR->Play("sounds/FireBossHurt1.wav");
+				break;
+			case 2:
+				SOUND_MGR->Play("sounds/FireBossHurt2.wav");
+				break;
+			}
+		}
 	}
 }

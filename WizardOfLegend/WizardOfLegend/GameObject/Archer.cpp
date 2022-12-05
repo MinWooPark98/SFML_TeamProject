@@ -198,6 +198,7 @@ void Archer::SetState(States newState)
 		break;
 	case Archer::States::Die:
 		lastDir.x < 0.f ? animation.Play("ArcherLeftDie") : animation.Play("ArcherRightDie");
+		SOUND_MGR->Play("sounds/EnemyDead.wav");
 		break;
 	}
 }
