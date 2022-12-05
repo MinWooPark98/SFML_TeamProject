@@ -537,7 +537,7 @@ void PlayScene::OnCollisionETC(int roomVec, Object* obj)
 			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
 			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
 
-			if (obj->GetLowHitBounds().height <= collYPoint || objLowPoint >= collYPoint)
+			if (obj->GetLowHitBounds().top >= collYPoint || objLowPoint <= collYPoint)
 				topandLow = true;
 			if (obj->GetLowHitBounds().left >= collXPoint || objRightPoint <= collXPoint)
 				leftandRight = true;

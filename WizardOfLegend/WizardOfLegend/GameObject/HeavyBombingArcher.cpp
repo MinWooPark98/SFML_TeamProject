@@ -19,9 +19,9 @@ void HeavyBombingArcher::Init()
 	SetMonsterType(MonsterType::StageBoss);
 
 	SetMoveScale(400.f);
-	SetAttackScale(300.f);
-	SetMoveAttackScale(200.f);
-	SetEscapeScale(100.f);
+	SetAttackScale(200.f);
+	SetMoveAttackScale(100.f);
+	SetEscapeScale(50.f);
 	SetNormalAttackCount(2);
 	
 	for (int i = 0; i < smollArrowCount; i++)
@@ -49,6 +49,8 @@ void HeavyBombingArcher::Init()
 
 	SetHitBox({ 20.f, 20.f, 20.f, 40.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
+	SetLowHitBox({ 20.f, 20.f, 20.f, 5.f }, Color::White);
+	SetLowHitBoxOrigin(Origins::MC);
 }
 
 void HeavyBombingArcher::Update(float dt)
