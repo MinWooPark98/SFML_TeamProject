@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-RunDown,1,10,,,,,,
+RunDown,1,7,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/WizardRunDown0.png,0,0,48,48,24,24,0,0

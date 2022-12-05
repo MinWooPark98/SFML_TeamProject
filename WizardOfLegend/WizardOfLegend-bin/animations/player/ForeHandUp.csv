@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-ForeHandUp,0,10,,,,,,
+ForeHandUp,0,12,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/WizardForeHandUp0.png,0,0,48,48,24,24,0,0
