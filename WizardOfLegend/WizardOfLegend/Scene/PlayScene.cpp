@@ -448,15 +448,16 @@ void PlayScene::AllDieEnemy(int i)
 							((PlayUiMgr*)uiMgr)->SetBossName("Heavy Bombing Archer");
 							hpBarSet = false;
 						}
-						if (finalBoss->GetActive())
-						{
-							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
-							((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
-							((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
-							hpBarSet = false;
-						}
 					}
-					return;
+				}
+				if (obj->GetObjType() == Object::ObjTypes::FinalBoss)
+				{
+					if (finalBoss->GetActive())
+					{
+						((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
+						((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
+						((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
+					}
 				}
 			}
 			if (obj->GetObjType() == Object::ObjTypes::FinalBoss)

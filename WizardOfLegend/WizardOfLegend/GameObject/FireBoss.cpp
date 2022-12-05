@@ -163,9 +163,12 @@ void FireBoss::Update(float dt)
 			fireWingAnimation.Update(dt);
 			kickAnimation.Update(dt);
 
-			for (auto skill : skills)
+			if (curBossState != BossStates::Die)
 			{
-				skill->Update(dt);
+				for (auto skill : skills)
+				{
+					skill->Update(dt);
+				}
 			}
 
 			if (GetFireKick()->GetActive())

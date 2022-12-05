@@ -470,6 +470,7 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 		{
 			if (alive)
 			{
+				cout << "alive" << endl;
 				if (uiObjList[2].empty())
 				{
 					uiObjList[2].push_back(bossHpBarBG);
