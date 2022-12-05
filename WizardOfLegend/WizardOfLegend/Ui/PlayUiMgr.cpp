@@ -472,7 +472,7 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 			alive = fireBoss->GetActive();
 			break;
 		case PlayUiMgr::BossType::FinalBoss:
-			set = finalBoss->GetState() != FinalBoss::States::Die;
+			set = true;
 			alive = true;
 			break;
 		}
