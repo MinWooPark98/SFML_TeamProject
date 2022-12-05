@@ -142,7 +142,7 @@ void Projectile::Update(float dt)
 						continue;
 					if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
 					{
-						((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
+						((Enemy*)enemy)->OnHit(direction, attackDmg);
 						damagedObjs.push_back(enemy);
 					}
 				}

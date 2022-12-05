@@ -481,6 +481,7 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 		{
 			if (alive)
 			{
+				cout << "alive" << endl;
 				if (uiObjList[2].empty())
 				{
 					uiObjList[2].push_back(bossHpBarBG);
@@ -537,7 +538,10 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 		// HP Yellow Bar Control
 		if (bossCurHpBarSet < bossHpBarHurtSize)
 		{
-			bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarHurt->GetSize().y * 4.f });
+			if (bossHpBarHurt->GetSize().x >= 0.f)
+				bossHpBarHurt->SetSize({ bossHpBarHurtSize -= (dt * 50), bossHpBarHurt->GetSize().y * 4.f });
+			else
+				bossHpBarHurt->SetSize({ 0.f, bossHpBarHurt->GetSize().y * 4.f });
 		}
 
 		if (bossCurHp <= 0 && isAlive)
@@ -546,6 +550,7 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 			if (dieTimer <= 0.f)
 			{
 				uiObjList[2].clear();
+				bossHpBarHurtSize = 89.f * 4.f;
 				isAlive = false;
 				isStart = false;
 			}

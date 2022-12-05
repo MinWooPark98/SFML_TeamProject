@@ -35,9 +35,6 @@ void PlayScene::Init()
 	isMap = true;
 	auto& data = FILE_MGR->GetMap("TUTORIAL");
 
-	uiMgr = new PlayUiMgr();
-	uiMgr->Init();
-
 	for (auto& obj : data)
 	{
 		if (obj.type == "SECTOR")
@@ -445,6 +442,16 @@ void PlayScene::AllDieEnemy(int i)
 			if (obj->GetObjType() == Object::ObjTypes::Enemy ||
 				obj->GetObjType() == Object::ObjTypes::FinalBoss)
 			{
+				if (obj->GetObjType() == Object::ObjTypes::FinalBoss)
+				{
+					if (finalBoss->GetActive())
+					{
+						((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
+						((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
+						((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
+					}
+				}
+
 				if (((Enemy*)obj)->GetIsAlive())
 				{
 					if (hpBarSet)
@@ -461,13 +468,6 @@ void PlayScene::AllDieEnemy(int i)
 							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::Archer);
 							((PlayUiMgr*)uiMgr)->SetBossMaxHp(heavyBombingArcher->GetMaxHp());
 							((PlayUiMgr*)uiMgr)->SetBossName("Heavy Bombing Archer");
-							hpBarSet = false;
-						}
-						if (finalBoss->GetActive())
-						{
-							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
-							((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
-							((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
 							hpBarSet = false;
 						}
 					}
@@ -518,7 +518,7 @@ void PlayScene::OnCollisionWall(int roomVec, Object* obj)
 			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
 			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
 
-			if (obj->GetLowHitBounds().height <= collYPoint || objLowPoint >= collYPoint)
+			if (obj->GetLowHitBounds().top >= collYPoint || objLowPoint <= collYPoint)
 				topandLow = true;
 			if (obj->GetLowHitBounds().left >= collXPoint || objRightPoint <= collXPoint)
 				leftandRight = true;

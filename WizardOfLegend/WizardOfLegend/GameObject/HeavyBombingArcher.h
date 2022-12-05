@@ -26,7 +26,7 @@ public:
 
 	virtual void Init() override;
 	virtual void Release() override { Archer::Release(); };
-	virtual void Reset() override { Archer::Reset(); };
+	virtual void Reset() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 	virtual void UpdateAttack(float dt) override;

@@ -12,7 +12,7 @@ protected:
 	int startAlpha = 0;
 	int currentAlpha = 0;
 	int endAlpha = 255;
-	float targetTime = 15.f;
+	float targetTime = 7.f;
 	float currentTime = 0.f;
 
 	SpriteObj* thankYou;

@@ -97,6 +97,8 @@ protected:
 
 	Vector2f monsterLastPosition;
 
+	float hitTimer = 0.f;
+
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
 	virtual ~Enemy() { Release(); };
@@ -190,4 +192,7 @@ public:
 	void SetCardPos(Vector2f pos) { spawn->SetPos(pos); };
 
 	Vector2f GetLastPosition() const { return monsterLastPosition; };
+
+	void UpdateHit(float dt);
+	void OnHit(const Vector2f& atkDir, int dmg);
 };

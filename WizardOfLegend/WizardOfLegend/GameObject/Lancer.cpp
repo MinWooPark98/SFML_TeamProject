@@ -69,19 +69,27 @@ void Lancer::Update(float dt)
 		}
 		else if (isActionStart)
 		{
-			if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
+			if (curState != States::Hit)
 			{
-				NormalMonsterMove(dt);
-
-				moveSoundTimer -= dt;
-				if (moveSoundTimer <= 0.f)
+				if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
 				{
-					SOUND_MGR->Play("sounds/MetalFootstep.wav");
-					moveSoundTimer = 0.4f;
+					NormalMonsterMove(dt);
+
+					moveSoundTimer -= dt;
+					if (moveSoundTimer <= 0.f)
+					{
+						SOUND_MGR->Play("sounds/MetalFootstep.wav");
+						moveSoundTimer = 0.4f;
+					}
 				}
+
+				spearAnimation.Update(dt);
 			}
 			else
-				moveSoundTimer = 0.f;
+			{
+				attackDelay = 2.f;
+				spearWait = false;
+			}
 
 			if (curHp <= 0 && isAlive)
 			{
@@ -94,8 +102,6 @@ void Lancer::Update(float dt)
 			{
 				lastDir = direction;
 			}
-
-			spearAnimation.Update(dt);
 		}
 	}
 	animation.Update(dt);
@@ -266,4 +272,17 @@ void Lancer::UpdateAttack(float dt)
 			return;
 		}
 	}
+}
+
+void Lancer::Reset()
+{
+	Enemy::Reset();
+	spearWait = false;
+	spearPos = 0;
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("Lancer");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(GetMaxHp());
 }

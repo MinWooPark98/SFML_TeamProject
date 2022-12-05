@@ -156,11 +156,13 @@ void Archer::Draw(RenderWindow& window)
 
 		if (curState == States::Attack)
 		{
-			if (isDevMode)
-				window.draw(arrow->GetHitBox());
-
 			if (arrow->GetActive())
+			{
 				arrow->Draw(window);
+
+				if (isDevMode)
+					window.draw(arrow->GetHitBox());
+			}
 		}
 
 		window.draw(archerPullArm->GetSprite(), &shader);
@@ -324,4 +326,17 @@ void Archer::UpdateAttack(float dt)
 			}
 		}
 	}
+}
+
+void Archer::Reset()
+{
+	Enemy::Reset();
+	isAttack = true;
+	bowWait = false;
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("Archer");
+	SetDamage(stat.attackDmg);
+	SetMaxHp(stat.maxHp);
+	SetSpeed(stat.speed);
+	SetCurHp(maxHp);
 }
