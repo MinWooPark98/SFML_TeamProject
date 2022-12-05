@@ -9,6 +9,8 @@
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/FinalBossSkillTable.h"
 #include "../DataTable/StatTable.h"
+#include "../Scene/PlayScene.h"
+#include "../Ui/ShowDamage.h"
 
 FinalBoss::FinalBoss()
 	:currState(States::None), animator(nullptr), attackDmg(40), attackCnt(0), attackRange(0.f), speed(0.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.2f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
@@ -439,6 +441,9 @@ void FinalBoss::NextAction()
 
 void FinalBoss::OnHit(const Vector2f& atkDir, int dmg)
 {
+	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
+	auto showDamage = playScene->GetShowDamage()->Get();
+	showDamage->ShowDamageFire(position, dmg);
 	curHp -= dmg;
 	if (curHp <= 0)
 	{

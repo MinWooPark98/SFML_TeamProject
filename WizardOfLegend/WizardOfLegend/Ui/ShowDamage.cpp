@@ -6,7 +6,7 @@
 using namespace std;
 
 ShowDamage::ShowDamage()
-	:speed(100.f), direction(0,-1), duration(1.f)
+	:speed(80.f), duration(0.3f)
 {
 }
 
@@ -19,27 +19,27 @@ void ShowDamage::Init()
 	TextObj::Init();
 	SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	SetFillColor(Color::White);
-	SetSize(40);
+	SetOutlineColor(Color::Black);
+	SetOutlineThickness(0.75f);
+	SetSize(8);
 }
 
 void ShowDamage::Reset()
 {
 	TextObj::Reset();
 	timer = 0.f;
+	direction = { 0.f, -1.f };
 }
 
 void ShowDamage::Update(float dt)
 {	
 	TextObj::Update(dt);
-	if (InputMgr::GetKeyDown(Keyboard::Key::F2))
+	timer += dt;
+	Translate(direction * speed * dt);
+	if (timer >= duration)
 	{
-		timer += dt;
-		if (duration > timer)
-		{
-			Translate(direction * speed * dt);
-			timer = 0.f;
-			SetActive(false);
-		}
+		timer = 0.f;
+		SetActive(false);
 	}
 }
 
@@ -51,5 +51,5 @@ void ShowDamage::Draw(RenderWindow& window)
 void ShowDamage::ShowDamageFire(Vector2f objPos, int dmg)
 {	
 	SetString(to_string(dmg));
-	SetPos(objPos);
+	SetPos(objPos + Utils::RandAreaPoint() * 5.f);
 }

@@ -6,8 +6,7 @@ class ShowDamage : public TextObj
 protected:
 	float speed;
 	float duration;
-	float timer=0;
-	Vector2f direction;
+	float timer = 0.f;
 
 public:
 	ShowDamage();

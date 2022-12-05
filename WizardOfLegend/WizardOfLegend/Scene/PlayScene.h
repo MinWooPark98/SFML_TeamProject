@@ -7,6 +7,8 @@ class Player;
 class Sector;
 class FinalBoss;
 class HeavyBombingArcher;
+class ShowDamage;
+
 class PlayScene : public Scene
 {
 protected:
@@ -28,6 +30,8 @@ protected:
 
 	string mapName;
 
+	ObjectPool<ShowDamage>* showDamages;
+
 public:
 	PlayScene();
 	virtual ~PlayScene();
@@ -48,6 +52,7 @@ public:
 	void SpawnEnemy(int i, float dt);
 	void AllDieEnemy(int i);
 	void OnCollisionETC(int roomVec, Object* obj);
+	ObjectPool<ShowDamage>* GetShowDamage() { return showDamages; }
 
 	void SetMapName(const string& name) { mapName = name; }
 };

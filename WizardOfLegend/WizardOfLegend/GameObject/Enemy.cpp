@@ -1,4 +1,7 @@
 #include "Enemy.h"
+#include "../Scene/SceneMgr.h"
+#include "../Scene/PlayScene.h"
+#include "../Ui/ShowDamage.h"
 
 void Enemy::Init()
 {
@@ -308,6 +311,9 @@ void Enemy::UpdateHit(float dt)
 
 void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 {
+	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
+	auto showDamage = playScene->GetShowDamage()->Get();
+	showDamage->ShowDamageFire(position, dmg);
 	curHp -= dmg;
 	direction = -atkDir;
 	lastDir = direction;

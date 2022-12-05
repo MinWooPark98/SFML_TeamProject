@@ -9,6 +9,7 @@
 #include "../DataTable/StatTable.h"
 #include "../Ui/PlayUiMgr.h"
 #include "../Scene/PlayScene.h"
+#include "../Ui/ShowDamage.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
@@ -682,6 +683,9 @@ void Player::SetSkillSet(int idx, const string& skillSetName, bool isPlayScene)
 
 void Player::OnHit(const Vector2f& atkDir, int dmg)
 {
+	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
+	auto showDamage = playScene->GetShowDamage()->Get();
+	showDamage->ShowDamageFire(position, dmg);
 	curHp -= dmg;
 	if (curHp <= 0)
 	{
