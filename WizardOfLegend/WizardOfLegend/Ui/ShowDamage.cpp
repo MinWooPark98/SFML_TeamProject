@@ -1,11 +1,12 @@
 #include "ShowDamage.h"
 #include "../Framework/ResourceMgr.h"
 #include <sstream>
+#include "../Framework/InputMgr.h"
 
 using namespace std;
 
 ShowDamage::ShowDamage()
-	:speed(100.f), direction(0,-1)
+	:speed(100.f), direction(0,-1), duration(1.f)
 {
 }
 
@@ -16,17 +17,30 @@ ShowDamage::~ShowDamage()
 void ShowDamage::Init()
 {
 	TextObj::Init();
-	text.setFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-	text.setFillColor(Color::White);
+	SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	SetFillColor(Color::White);
+	SetSize(40);
+}
+
+void ShowDamage::Reset()
+{
+	TextObj::Reset();
+	timer = 0.f;
 }
 
 void ShowDamage::Update(float dt)
 {	
-	stringstream damagetext;
-	damagetext << damage;
-	text.setString(damagetext.str());
-	if(duration>dt)
-		Translate(direction * speed * dt);
+	TextObj::Update(dt);
+	if (InputMgr::GetKeyDown(Keyboard::Key::F2))
+	{
+		timer += dt;
+		if (duration > timer)
+		{
+			Translate(direction * speed * dt);
+			timer = 0.f;
+			SetActive(false);
+		}
+	}
 }
 
 void ShowDamage::Draw(RenderWindow& window)
@@ -34,16 +48,8 @@ void ShowDamage::Draw(RenderWindow& window)
 	TextObj::Draw(window);
 }
 
-void ShowDamage::SetPos(Vector2f pos)
-{
-	TextObj::SetPos(pos);
-}
-
-void ShowDamage::SetDamage(int dmg)
-{
-	damage = dmg;
-}
-
-void ShowDamage::ShowDamageFire()
-{
+void ShowDamage::ShowDamageFire(Vector2f objPos, int dmg)
+{	
+	SetString(to_string(dmg));
+	SetPos(objPos);
 }
