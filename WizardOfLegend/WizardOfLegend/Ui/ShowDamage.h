@@ -4,10 +4,9 @@
 class ShowDamage : public TextObj
 {
 protected:
-	int damage;
 	float speed;
-	Vector2f startPos;
 	float duration;
+	float timer=0;
 	Vector2f direction;
 
 public:
@@ -15,11 +14,11 @@ public:
 	virtual ~ShowDamage();
 
 	virtual void Init() override;
+
+	virtual void Reset() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
-	virtual void SetPos(Vector2f pos);
-	void SetDamage(int dmg);
-	void ShowDamageFire();
+	void ShowDamageFire(Vector2f objPos, int dmg);
 };
 
