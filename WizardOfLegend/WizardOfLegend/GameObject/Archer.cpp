@@ -36,7 +36,7 @@ void Archer::Init()
 	arrow->SetOrigin(Origins::MC);
 	SetArrowSpeed(400.f);
 	arrowDir.setFillColor(Color::Red);
-	arrowDir.setSize({1, 300});
+	arrowDir.setSize({ 1, 300 });
 
 
 	archerAttackArm = new SpriteObj();
@@ -116,7 +116,7 @@ void Archer::Update(float dt)
 		if (attackDelay <= attackStart + 0.2f && attackDelay >= attackStart + 0.05f)
 		{
 			if ((int)((attackDelay - attackStart) / 0.03f) % 2 == 0)
-				arrowDir.setFillColor({180, 180, 180});
+				arrowDir.setFillColor({ 180, 180, 180 });
 			else
 				arrowDir.setFillColor(Color::Red);
 		}
@@ -252,11 +252,14 @@ void Archer::UpdateAttack(float dt)
 
 		if (Utils::OBB(player->GetHitBox(), arrow->GetHitBox()))
 		{
-			if (isAttack)
+			if (arrow->GetActive())
 			{
-				player->OnHit(Utils::Normalize(playerLastPos - GetPos()), GetDamage());
-				arrow->SetActive(false);
-				isAttack = false;
+				if (isAttack)
+				{
+					player->OnHit(Utils::Normalize(playerLastPos - GetPos()), GetDamage());
+					arrow->SetActive(false);
+					isAttack = false;
+				}
 			}
 		}
 	}
@@ -313,7 +316,7 @@ void Archer::UpdateAttack(float dt)
 	}
 
 	auto& collisionList = ((PlayScene*)SCENE_MGR->GetCurrentScene())->GetCollisionList();
-	
+
 	for (int i = 0; i < collisionList.size(); i++)
 	{
 		if (collisionList[i][Object::ObjTypes::Player].empty())
@@ -321,9 +324,12 @@ void Archer::UpdateAttack(float dt)
 
 		for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
 		{
-			if (arrow->GetHitBounds().intersects(coll->GetHitBounds()))
+			if (arrow->GetActive())
 			{
-				arrow->SetActive(false);
+				if (arrow->GetHitBounds().intersects(coll->GetHitBounds()))
+				{
+					arrow->SetActive(false);
+				}
 			}
 		}
 	}

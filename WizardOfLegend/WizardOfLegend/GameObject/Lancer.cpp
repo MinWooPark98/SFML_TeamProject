@@ -1,6 +1,8 @@
 #include "Lancer.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/StatTable.h"
+#include "../Scene/PlayScene.h"
+#include "../Scene/SceneMgr.h"
 
 void Lancer::Init()
 {
@@ -28,7 +30,7 @@ void Lancer::Init()
 	lancerAttackEffect->SetOrigin(Origins::MC);
 	spearAnimation.SetTarget(&lancerAttackEffect->GetSprite());
 	spearAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("SpearMotion"));
-	
+
 
 	SetPaletteIndex(59);
 	SetpaletteSize(9);
@@ -38,7 +40,7 @@ void Lancer::Init()
 	SetAttackScale(100.f);
 	SetMonsterType(MonsterType::Normal);
 	weapon->SetOrigin(Origins::MC);
-	weapon->SetHitBox({20, 20, 5, 35}, Color::Red);
+	weapon->SetHitBox({ 20, 20, 5, 35 }, Color::Red);
 	weapon->GetHitBox().setOrigin(weapon->GetHitBox().getSize().x * 0.5f, weapon->GetHitBox().getSize().y * 0.5f);
 	spawn->SetPos(GetPos());
 	SetCardColor(2);
@@ -113,8 +115,11 @@ void Lancer::Draw(RenderWindow& window)
 	{
 		window.draw(weapon->GetSprite(), &shader);
 
-		if (attackDelay <= 1.f)
-			window.draw(lancerAttackEffect->GetSprite(), &shader);
+		if (lancerAttackEffect->GetActive())
+		{
+			if (attackDelay <= 1.f)
+				window.draw(lancerAttackEffect->GetSprite(), &shader);
+		}
 
 		if (isDevMode && lancerAttackEffect->GetActive())
 		{
@@ -210,7 +215,7 @@ void Lancer::UpdateAttack(float dt)
 		switch (spearPos)
 		{
 		case 1: case 2:
-			weapon->SetPos({ weapon->GetPos().x, weapon->GetPos().y - 5.f}); // �¿�
+			weapon->SetPos({ weapon->GetPos().x, weapon->GetPos().y - 5.f }); // �¿�
 			weapon->GetHitBox().setPosition(weapon->GetPos());
 			break;
 		case 3: case 4:
@@ -226,10 +231,28 @@ void Lancer::UpdateAttack(float dt)
 		spearAnimation.Play("SpearMotion");
 		SOUND_MGR->Play("sounds/KnightAttack.wav");
 
-		if (Utils::OBB(player->GetHitBox(), lancerAttackEffect->GetHitBox()) ||
-			Utils::OBB(player->GetHitBox(), weapon->GetHitBox()))
+		auto& collisionList = ((PlayScene*)SCENE_MGR->GetCurrentScene())->GetCollisionList();
+		for (int i = 0; i < collisionList.size(); i++)
 		{
-			player->OnHit(lanceDir, GetDamage());
+			if (collisionList[i][Object::ObjTypes::Player].empty())
+				continue;
+
+			for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
+			{
+				if (Utils::OBB(weapon->GetHitBox(), coll->GetHitBox()))
+				{
+					lancerAttackEffect->SetActive(false);
+				}
+			}
+		}
+
+		if (lancerAttackEffect->GetActive())
+		{
+			if (Utils::OBB(player->GetHitBox(), lancerAttackEffect->GetHitBox()) ||
+				Utils::OBB(player->GetHitBox(), weapon->GetHitBox()))
+			{
+				player->OnHit(lanceDir, GetDamage());
+			}
 		}
 
 		spearWait = false;

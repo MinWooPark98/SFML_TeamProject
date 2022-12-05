@@ -1,4 +1,4 @@
-#include "HeavyBombingArcher.h"
+ï»¿#include "HeavyBombingArcher.h"
 #include "../Scene/SceneMgr.h"
 #include "../Scene/PlayScene.h"
 #include "../DataTable/DataTableMGR.h"
@@ -7,10 +7,10 @@
 void HeavyBombingArcher::Init()
 {
 	Archer::Init();
-	arrow->SetScale({1, 1});
-	weapon->SetScale({1.5, 1.5});
+	arrow->SetScale({ 1, 1 });
+	weapon->SetScale({ 1.5, 1.5 });
 	archerAttackArm->SetScale({ 1.5, 1.5 });
-	archerPullArm->SetScale({1.5, 1.5});
+	archerPullArm->SetScale({ 1.5, 1.5 });
 	arrow->SetTexture(*RESOURCE_MGR->GetTexture("graphics/ArrowLarge.png"));
 	arrow->SetHitBox((FloatRect)arrow->GetSprite().getTextureRect());
 	arrow->SetOrigin(Origins::MC);
@@ -23,15 +23,15 @@ void HeavyBombingArcher::Init()
 	SetMoveAttackScale(100.f);
 	SetEscapeScale(50.f);
 	SetNormalAttackCount(2);
-	
+
 	for (int i = 0; i < smollArrowCount; i++)
 		smollArrow.push_back(new SpriteObj());
-	
+
 	for (auto it : smollArrow)
 	{
 		it->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Arrow.png"));
-		it->SetHitBox({20, 20, 10, 40}, Color::Red);
-		it->SetScale({1.5, 1.5});
+		it->SetHitBox({ 20, 20, 10, 40 }, Color::Red);
+		it->SetScale({ 1.5, 1.5 });
 		it->SetOrigin(Origins::MC);
 	}
 
@@ -150,7 +150,7 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 				}
 				else
 				{
-					// ÀÏÀÚ·Î ¾È°¨ ¤¾¤¾ ¹«Á¶°Ç ´ë°¢¼±
+					// ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½È°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ë°¢ï¿½ï¿½
 					if (playerLastPos.y > lastPos.y)
 						move = { move.x * 0.7f, 1 };
 					else
@@ -169,11 +169,14 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 
 				if (Utils::OBB(player->GetHitBox(), smollArrow[i]->GetHitBox()))
 				{
-					if (isAttack)
+					if (smollArrow[i]->GetActive())
 					{
-						player->OnHit(shot, GetDamage());
-						smollArrow[i]->SetActive(false);
-						isAttack = false;
+						if (isAttack)
+						{
+							player->OnHit(shot, GetDamage());
+							smollArrow[i]->SetActive(false);
+							isAttack = false;
+						}
 					}
 				}
 			}
