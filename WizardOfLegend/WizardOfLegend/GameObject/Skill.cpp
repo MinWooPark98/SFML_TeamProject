@@ -184,6 +184,8 @@ void Skill::Do()
 		break;
 	case Skill::SubjectType::Enemy:
 		{
+			if (setting->attackType == AttackType::SaveAttacks)
+				setting->attackType = AttackType::Multiple;
 			auto& playerPos = SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER")->GetPos();
 			obj->SetAtkDmg(setting->dmgRatio * ((Enemy*)subject)->GetDamage());
 			switch (setting->attackShape)

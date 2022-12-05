@@ -158,7 +158,6 @@ void FireBoss::Update(float dt)
 
 		if (curBossState != BossStates::Idle)
 			nextPatternDelay -= dt;
-
 		patternDelay -= dt;
 		animation.Update(dt);
 		fireWingAnimation.Update(dt);

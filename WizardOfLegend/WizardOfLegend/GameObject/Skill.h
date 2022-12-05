@@ -134,6 +134,9 @@ public:
 	bool GetDoing() { return isDoing; }
 	Set* GetSetting() { return setting; }
 
+	int GetAttackCnt() const { return attackCnt; }
+	float GetSkillTimer() const { return skillTimer; }
+
 	Vector2f GetSkillDir() const { return skillDir; };
 	void SetSkillDir(const Vector2f& dir) { skillDir = dir; };
 };

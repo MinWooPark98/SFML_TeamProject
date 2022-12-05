@@ -153,6 +153,7 @@
     <ClCompile Include="GameObject\FinalBoss.cpp" />
     <ClCompile Include="DataTable\StatTable.cpp" />
     <ClCompile Include="Ui\ShowDamage.cpp" />
+    <ClCompile Include="Ui\SkillCoolDownUi.cpp" />
     <ClCompile Include="Ui\PlaySceneSkillOptions.cpp" />
     <ClCompile Include="Ui\DataTableList.cpp" />
     <ClCompile Include="GameObject\CastingCircle.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="GameObject\FinalBoss.h" />
     <ClInclude Include="DataTable\StatTable.h" />
     <ClInclude Include="Ui\ShowDamage.h" />
+    <ClInclude Include="Ui\SkillCoolDownUi.h" />
     <ClInclude Include="Ui\PlaySceneSkillOptions.h" />
     <ClInclude Include="Ui\DataTableList.h" />
     <ClInclude Include="GameObject\CastingCircle.h" />

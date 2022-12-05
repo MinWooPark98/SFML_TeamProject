@@ -108,20 +108,19 @@ void PlayScene::Init()
 		else if (obj.type == "PLAYER")
 		{
 			player = new Player();
-			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 			player->Init();
-			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 			player->SetName(obj.type);
 			player->SetPos(obj.position);
 			player->SetObjType(Object::ObjTypes::Player);
 			player->SetLastPosition({ 0,0 });
 			objList[LayerType::Object][5].push_back(player);
 			auto& skillSet = player->GetSkillSets();
-			skillSet[0]->Set("FireBall");
-			skillSet[1]->Set("FireDash");
-			skillSet[2]->Set("JumpMeteor");
-			skillSet[4]->Set("DragonArc");
-			skillSet[5]->Set("FireFull");
+			player->SetSkillSet(0, "FireBall", true);
+			player->SetSkillSet(1, "FireDash", true);
+			player->SetSkillSet(2, "JumpMeteor", true);
+			player->SetSkillSet(4, "DragonArc", true);
+			player->SetSkillSet(5, "FireFull", true);
+			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 		}
 		else if (obj.type == "ENEMY")
 		{
@@ -311,7 +310,7 @@ void PlayScene::Update(float dt)
 	auto& usingProjectiles = projectiles->GetUseList();
 	for (auto& projectile : usingProjectiles)
 	{
-		if (((Projectile*)projectile)->GetAtkShape() != Skill::AttackShape::Wave)
+		if (((Projectile*)projectile)->GetAtkShape() != Skill::AttackShape::Wave || projectile->GetMovingTimer() <= 0.05f)
 			continue;
 		for (int i = 0; i < collisionList.size(); ++i)
 		{
@@ -322,7 +321,7 @@ void PlayScene::Update(float dt)
 				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
 					projectile->SetMoving(false);
-					continue;
+					break;
 				}
 			}
 		}
@@ -553,7 +552,7 @@ void PlayScene::OnCollisionETC(int roomVec, Object* obj)
 			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
 			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
 
-			if (obj->GetLowHitBounds().height <= collYPoint || objLowPoint >= collYPoint)
+			if (obj->GetLowHitBounds().top >= collYPoint || objLowPoint <= collYPoint)
 				topandLow = true;
 			if (obj->GetLowHitBounds().left >= collXPoint || objRightPoint <= collXPoint)
 				leftandRight = true;

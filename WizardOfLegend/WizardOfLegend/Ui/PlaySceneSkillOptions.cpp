@@ -169,6 +169,7 @@ void PlaySceneSkillOptions::SelectSkillSet(int idx)
 
 void PlaySceneSkillOptions::SetPlayerSkillSet(const string& skillSetName)
 {
-	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
-	player->GetSkillSets()[vecIdx]->Set(skillSetName);
+	auto currScene = SCENE_MGR->GetCurrentScene();
+	Player* player = (Player*)currScene->FindGameObj("PLAYER");
+	player->SetSkillSet(vecIdx, skillSetName, true);
 }

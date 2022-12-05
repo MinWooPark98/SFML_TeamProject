@@ -9,6 +9,7 @@ class FireBoss;
 class HeavyBombingArcher;
 class FinalBoss;
 class PlaySceneSkillOptions;
+class SkillCoolDownUi;
 
 class PlayUiMgr : public UiMgr
 {
@@ -81,6 +82,7 @@ protected:
 	vector<SpriteObj*> skillSelects;
 	vector<SpriteObj*> skillKeys;
 	vector<SpriteObj*> skills;
+	vector<SkillCoolDownUi*> coolDownUis;
 
 public:
 	PlayUiMgr();
@@ -102,7 +104,7 @@ public:
 	void SetBossCurHp(int hp) { bossCurHp = hp; };
 	void SetBossMaxHp(int hp) { bossMaxHp = hp; };
 
-	void SetPlayer(Player* player) { this->player = player; }
+	void SetPlayer(Player* player);
 	void SetFireBoss(FireBoss* boss) { this->fireBoss = boss; }
 	void SetHeavyBombingArcher(HeavyBombingArcher* boss) { this->heavyBombingArcher = boss; }
 	void SetFinalBoss(FinalBoss* boss) { this->finalBoss = boss; }

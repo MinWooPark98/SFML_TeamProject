@@ -60,6 +60,7 @@ public:
 	void SetMoving(bool moving) { isMoving = moving; }
 	bool GetMoving() const { return isMoving; }
 	void SetMovingDuration(float duration) { movingDuration = duration; }
+	float GetMovingTimer() { return movingTimer; }
 	void SetSpeed(float speed) { this->speed = speed; }
 	void SetWaveType(Skill::WaveType type) { waveType = type; }
 	void SetFallingHeight(float height) { fallingHeight = height; }

@@ -62,6 +62,7 @@
     <ClCompile Include="DataTable\StatTable.cpp" />
     <ClCompile Include="Scene\EndingScene.cpp" />
     <ClCompile Include="Ui\ShowDamage.cpp" />
+    <ClCompile Include="Ui\SkillCoolDownUi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -129,6 +130,7 @@
     <ClInclude Include="DataTable\StatTable.h" />
     <ClInclude Include="Scene\EndingScene.h" />
     <ClInclude Include="Ui\ShowDamage.h" />
+    <ClInclude Include="Ui\SkillCoolDownUi.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

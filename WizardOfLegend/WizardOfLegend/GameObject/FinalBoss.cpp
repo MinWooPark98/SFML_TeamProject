@@ -11,7 +11,7 @@
 #include "../DataTable/StatTable.h"
 
 FinalBoss::FinalBoss()
-	:currState(States::None), animator(nullptr), attackDmg(40), attackCnt(0), attackRange(0.f), speed(0.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.3f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
+	:currState(States::None), animator(nullptr), attackDmg(40), attackCnt(0), attackRange(0.f), speed(0.f), dashDuration(0.5f), dashTimer(0.f), evasionCntLim(3), evasionCnt(0), dashType(DashType::Evasion), lastDir(0.f, 1.f), dashDir(0.f, 1.f), isBackHand(false), vecIdx(0), currSkill(nullptr), maxHp(825), curHp(825), hitDuration(0.2f), hitTimer(0.f), player(nullptr), superArmor(true), superArmorDelay(6.f), superArmorTimer(0.f)
 {
 	direction = {0.f, 1.f};
 }
@@ -149,7 +149,7 @@ void FinalBoss::Init()
 		AnimationEvent ev;
 		ev.clipId = "FinalBossDie";
 		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
-		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
+		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Ending);
 		animator->AddEvent(ev);
 	}
 	animator->SetTarget(&sprite);
@@ -391,7 +391,7 @@ void FinalBoss::UpdateHit(float dt)
 {
 	hitTimer += dt;
 	superArmorTimer += dt;
-	Translate(-lastDir * speed * 0.5f * dt);
+	Translate(-lastDir * speed * 0.25f * dt);
 	if (hitTimer >= hitDuration)
 	{
 		hitTimer = 0.f;

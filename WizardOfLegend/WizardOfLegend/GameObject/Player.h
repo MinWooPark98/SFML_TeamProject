@@ -22,6 +22,7 @@ public:
 		GroundSlam,
 		GroundSlamEnd,
 		Hit,
+		Fall,
 		Die,
 	};
 	enum class SkillAction
@@ -53,10 +54,15 @@ protected:
 	float jumpTimer;
 	float jumpDistance;
 	float jumpOriginY;
+	float fallDuration;
+	float fallTimer;
 
 	Vector2f lastDir;
 	Vector2f dashDir;
 	bool isBackHand;	// true일 시 Backhand, false일 시 Forehand
+
+	Vector2f lastStandingPos;
+	Vector2f fallingScale;
 
 	vector<SkillSet*> skillSets;
 	SkillSet* currSkillSet;
@@ -86,6 +92,7 @@ public:
 	void UpdateJump(float dt);
 	void UpdateWait(float dt);
 	void UpdateHit(float dt);
+	void UpdateFall(float dt);
 
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
@@ -93,8 +100,12 @@ public:
 
 	bool GetBackHand() const { return isBackHand; }
 
+	void SetLastStandingPos(const Vector2f& pos) { lastStandingPos = pos; }
+	bool IsStanding();
+
 	void Action(Skill* skill);
 	void FinishAction();
+	void SetSkillSet(int idx, const string& skillSetName, bool isPlayScene = false);
 	void SetCurrSkillSet(SkillSet* skillSet) { currSkillSet = skillSet; }
 	SkillSet* GetCurrSkillSet() { return currSkillSet; }
 

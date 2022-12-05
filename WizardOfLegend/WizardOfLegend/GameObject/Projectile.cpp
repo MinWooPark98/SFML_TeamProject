@@ -39,6 +39,7 @@ void Projectile::Reset()
 	frequency = 0.f;
 	reverse = false;
 	subType = Skill::SubjectType::None;
+	damagedObjs.clear();
 	sprite.setRotation(0.f);
 }
 
