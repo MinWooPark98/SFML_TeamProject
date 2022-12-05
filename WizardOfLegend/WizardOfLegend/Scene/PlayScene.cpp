@@ -15,6 +15,7 @@
 #include "../GameObject/Cliff.h"
 #include "../GameObject/CastingCircle.h"
 #include "../GameObject/FinalBoss.h"
+#include "../Ui/ShowDamage.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -28,6 +29,8 @@ PlayScene::~PlayScene()
 void PlayScene::Init()
 {
 	Scene::Init();
+
+	showDamages = new ObjectPool<ShowDamage>;
 
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
@@ -257,6 +260,8 @@ void PlayScene::Update(float dt)
 			SetPause(true);
 	}
 
+	showDamages->Update(dt);
+
 	//�÷��̾� �� ��ġ 
 	for (int i = 0; i < room.size(); i++)
 	{
@@ -347,6 +352,11 @@ void PlayScene::Draw(RenderWindow& window)
 				}
 			}
 		}
+	}
+
+	for (auto showDamage : showDamages->GetUseList())
+	{
+		showDamage->Draw(window);
 	}
 
 	if (uiMgr != nullptr && uiMgr->GetActive())

@@ -78,14 +78,14 @@ void CastingCircle::Update(float dt)
 							continue;
 						for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 						{
-							if (!((Enemy*)enemy)->GetIsAlive())
+							if (!enemy->GetActive() || !((Enemy*)enemy)->GetIsAlive())
 								continue;
 							if (GetHitBounds().intersects(enemy->GetHitBounds()))
-								((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
+								((Enemy*)enemy)->OnHit(direction, attackDmg);
 						}
 						for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
 						{
-							if (((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
+							if (!boss->GetActive() || ((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
 								continue;
 							if (GetHitBounds().intersects(boss->GetHitBounds()))
 								((FinalBoss*)boss)->OnHit(direction, attackDmg);
@@ -100,7 +100,7 @@ void CastingCircle::Update(float dt)
 							continue;
 						for (auto& player : collisionList[i][Object::ObjTypes::Player])
 						{
-							if (((Player*)player)->GetState() == Player::States::Die)
+							if (!player->GetActive() || ((Player*)player)->GetState() == Player::States::Die)
 								continue;
 							if (GetHitBounds().intersects(player->GetHitBounds()))
 								((Player*)player)->OnHit(direction, attackDmg);
@@ -130,17 +130,17 @@ void CastingCircle::Update(float dt)
 					continue;
 				for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 				{
-					if (!((Enemy*)enemy)->GetIsAlive())
+					if (!enemy->GetActive() || !((Enemy*)enemy)->GetIsAlive())
 						continue;
 					if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
 					{
-						((Enemy*)enemy)->SetCurHp(((Enemy*)enemy)->GetCurHp() - attackDmg);
+						((Enemy*)enemy)->OnHit(direction, attackDmg);
 						damagedObjs.push_back(enemy);
 					}
 				}
 				for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
 				{
-					if (((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
+					if (!boss->GetActive() || ((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
 						continue;
 					if (GetHitBounds().intersects(boss->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), boss) == damagedObjs.end())
 					{
@@ -158,7 +158,7 @@ void CastingCircle::Update(float dt)
 					continue;
 				for (auto& player : collisionList[i][Object::ObjTypes::Player])
 				{
-					if (((Player*)player)->GetState() == Player::States::Die)
+					if (!player->GetActive() ||((Player*)player)->GetState() == Player::States::Die)
 						continue;
 					if (GetHitBounds().intersects(player->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), player) == damagedObjs.end())
 					{
