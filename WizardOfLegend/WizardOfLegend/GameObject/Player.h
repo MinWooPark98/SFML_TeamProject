@@ -83,6 +83,7 @@ public:
 	States GetState() const { return currState; }
 
 	virtual void Init() override;
+	virtual void Reset() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 

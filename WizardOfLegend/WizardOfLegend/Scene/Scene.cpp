@@ -153,6 +153,7 @@ Object* Scene::FindGameObj(string name)
 			}
 		}
 	}
+	return nullptr;
 }
 //bool sorting(Object* p1, Object* p2)
 //{

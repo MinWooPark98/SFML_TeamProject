@@ -12,7 +12,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
-	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.75f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale(1.f, 1.f)
+	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f })
 {
 }
 
@@ -156,6 +156,7 @@ void Player::Init()
 	SetPos(Vector2f(FRAMEWORK->GetWindowSize()) * 0.25f);
 
 	animator = new Animator();
+	animator->SetSpeed(1.5f);
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("IdleDown"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("IdleRight"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("IdleLeft"));
@@ -246,7 +247,7 @@ void Player::Init()
 
 	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
-	playerShader.setUniform("paletteIndex", (float)paletteIdx / paletteSize);	// index ¹Ù²ãÁÖ¾î »ö º¯°æ -> ¼Ó¼º º¯°æ ÃßÈÄ Ãß°¡
+	playerShader.setUniform("paletteIndex", (float)paletteIdx / paletteSize);	// index ï¿½Ù²ï¿½ï¿½Ö¾ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½Ó¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 
 	hitboxSize = FloatRect(0.f, 0.f, 10.f, 25.f);
 	SetHitBox(hitboxSize);
@@ -389,9 +390,7 @@ void Player::Update(float dt)
 			continue;
 		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
 		{
-			auto lowHitBound = GetLowHitBounds();
-			auto lowHitCenter = Vector2f(lowHitBound.left + lowHitBound.width * 0.5f, lowHitBound.top + lowHitBound.height * 0.5f);
-			if (cliff->GetHitBounds().contains(lowHitCenter))
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
 			{
 				if (currState != States::Hit && currState != States::Dash)
 					SetPos(lastPosition);
@@ -495,6 +494,30 @@ void Player::UpdateWait(float dt)
 	}
 }
 
+void Player::Reset()
+{
+	SpriteObj::Reset();
+	for (auto skillSet : skillSets)
+	{
+		skillSet->ResetSkills();
+	}
+	isBackHand = false;
+	accelTimer = 0.f;
+	dashTimer = 0.f;
+	jumpTimer = 0.f;
+	jumpDistance = 0.f;
+	jumpOriginY = 0.f;
+	direction = { 1.f, 0.f };
+	lastDir = { 1.f, 0.f };
+	dashDir = { 1.f, 0.f };
+	SetState(States::Idle);
+	currSkillSet = nullptr;
+	curHp = maxHp;
+	hitTimer = 0.f;
+	fallTimer = 0.f;
+	fallingScale = { 1.f, 1.f };
+}
+
 void Player::UpdateHit(float dt)
 {
 	hitTimer += dt;
@@ -512,8 +535,6 @@ void Player::UpdateFall(float dt)
 	fallingScale.x -= dt * 0.5f;
 	fallingScale.y -= dt * 0.5f;
 	sprite.setScale(fallingScale);
-	auto& origin = animator->GetFrame().origin;
-	sprite.setOrigin({ origin.x, origin.y - sprite.getGlobalBounds().height * (1 - fallingScale.y) * 0.5f });
 	fallTimer += dt;
 	if (fallTimer >= fallDuration)
 	{
@@ -541,6 +562,8 @@ void Player::SetSpeed(float speed)
 bool Player::IsStanding()
 {
 	auto currScene = SCENE_MGR->GetCurrentScene();
+	if (currScene->GetType() != Scenes::Play)
+		return true;
 	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
 	for (int i = 0; i < collisionList.size(); ++i)
 	{
@@ -548,9 +571,7 @@ bool Player::IsStanding()
 			continue;
 		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
 		{
-			auto lowHitBound = GetLowHitBounds();
-			auto lowHitCenter = Vector2f(lowHitBound.left + lowHitBound.width * 0.5f, lowHitBound.top + lowHitBound.height * 0.5f);
-			if (cliff->GetHitBounds().contains(lowHitCenter))
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
 			{
 				SetState(States::Fall);
 				return false;
