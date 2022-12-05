@@ -666,5 +666,6 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	direction = -atkDir;
 	lastDir = direction;
 	dashDir = direction;
+	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
 	SetState(States::Hit);
 }

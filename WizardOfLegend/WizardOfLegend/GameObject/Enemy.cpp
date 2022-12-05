@@ -311,7 +311,7 @@ void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 	curHp -= dmg;
 	direction = -atkDir;
 	lastDir = direction;
-
+	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
 	if (type == MonsterType::Normal)
 		SetState(States::Hit);
 	else if (type == MonsterType::StageBoss)
