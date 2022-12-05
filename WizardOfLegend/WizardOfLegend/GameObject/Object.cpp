@@ -65,10 +65,10 @@ void Object::Update(float dt)
         hitbox.setPosition(position);
         lowhitbox.setPosition({ position.x, position.y + (hitbox.getSize().y * 0.5f) + (lowhitbox.getSize().y * 0.5f) });
     }
-    if (InputMgr::GetKeyDown(Keyboard::F1))
+    /*if (InputMgr::GetKeyDown(Keyboard::F1))
     {
         isDevMode = !isDevMode;
-    }
+    }*/
 }
 
 

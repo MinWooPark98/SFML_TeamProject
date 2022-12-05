@@ -16,7 +16,8 @@ bool SceneMgr::Init()
 
     for (auto& pair : sceneMap)
     {
-        pair.second->Init();
+        if(pair.first != Scenes::Play)
+            pair.second->Init();
     }
 
     sceneMap[currScene]->Enter();

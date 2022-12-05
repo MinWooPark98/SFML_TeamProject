@@ -122,7 +122,7 @@ void PlayUiMgr::Init()
 		OverdriveActiveBar->SetTexture(*RESOURCE_MGR->GetTexture("graphics/OverdriveActiveBarFill.png"));
 		OverdriveActiveBar->SetPos({ windowSize.x * 0.074f, windowSize.y * 0.11f });
 		OverdriveActiveBar->SetScale({ 4, 4 });
-		OverdriveActiveBar->SetSize({ 0, OverdriveActiveBar->GetSize().y });
+		//OverdriveActiveBar->SetSize({ 0, OverdriveActiveBar->GetSize().y });
 		uiObjList[0].push_back(OverdriveActiveBar);
 
 		playerStatusBarPortrait = new SpriteObj();
@@ -381,7 +381,7 @@ void PlayUiMgr::Update(float dt)
 		for (auto& uiObjs : uiObjList[1])
 			uiObjs->SetActive(false);
 
-		OverdriveBarControl(dt);
+		//OverdriveBarControl(dt);
 		HpBarSizeControl(dt);
 		BossHpBraSizeControl(dt);
 

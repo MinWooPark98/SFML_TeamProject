@@ -359,6 +359,37 @@ void PlayScene::Draw(RenderWindow& window)
 void PlayScene::Release()
 {
 	Scene::Release();
+
+	for (auto& layer : objList)
+	{
+		for (auto& obj_pair : layer.second)
+		{
+			auto& objs = obj_pair.second;
+			for (auto& obj : objs)
+			{
+				obj->Release();
+				delete obj;
+			}
+		}
+	}
+	objList.clear();
+	room.clear();
+	playerRooms.clear();
+	collisionList.clear();
+	currSpownDelay = 5.f;
+	fireBoss = nullptr;
+	finalBoss = nullptr;
+	heavyBombingArcher = nullptr;
+	player = nullptr;
+	if(projectiles != nullptr)
+		projectiles->Release();
+	if(circles != nullptr)
+		circles->Release();
+	isPause = false;
+	hpBarSet = true;
+	if (uiMgr != nullptr)
+		delete uiMgr;
+	uiMgr = nullptr;
 }
 
 void PlayScene::Reset()
@@ -391,6 +422,9 @@ void PlayScene::Enter()
 
 	uiView.setSize(size);
 	uiView.setCenter(size * 0.5f);
+
+	Release();
+	Init();
 }
 
 void PlayScene::Exit()
