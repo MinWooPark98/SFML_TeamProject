@@ -758,3 +758,13 @@ graphics/Fireball_3.png,0
 graphics/Fireball_4.png,0
 animations/skill/FireBallRight.csv,3
 animations/skill/FireBallLeft.csv,3
+sounds/FireArcStart.wav,2
+sounds/FireArcEnd.wav,2
+sounds/ImpactAir.wav,2
+sounds/PlayerFootstep.wav,2
+sounds/PlayerFootstepAlt.wav,2
+sounds/FireballCast.wav,2
+sounds/Explosion2.wav,2
+sounds/MeteorLoop.wav,2
+sounds/MeteorExplosion.wav,2
+sounds/FireBlast.wav,2
