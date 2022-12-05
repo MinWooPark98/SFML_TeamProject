@@ -71,9 +71,11 @@ void SkillCoolDownUi::Update(float dt)
 			{
 				shape.setPoint(i, position);
 			}
+			text->SetActive(false);
 			return;
 		}
 	}
+	text->SetActive(true);
 	if (coolRatio < 0.125f)
 	{
 		shape.setPoint(0, position);
@@ -120,7 +122,7 @@ void SkillCoolDownUi::Draw(RenderWindow& window)
 {
 	Object::Draw(window);
 	window.draw(shape);
-	if(text != nullptr)
+	if(text != nullptr && text->GetActive())
 		text->Draw(window);
 }
 

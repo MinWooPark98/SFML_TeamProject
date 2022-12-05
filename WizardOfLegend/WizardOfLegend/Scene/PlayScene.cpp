@@ -310,7 +310,7 @@ void PlayScene::Update(float dt)
 	auto& usingProjectiles = projectiles->GetUseList();
 	for (auto& projectile : usingProjectiles)
 	{
-		if (((Projectile*)projectile)->GetAtkShape() != Skill::AttackShape::Wave)
+		if (((Projectile*)projectile)->GetAtkShape() != Skill::AttackShape::Wave || projectile->GetMovingTimer() <= 0.05f)
 			continue;
 		for (int i = 0; i < collisionList.size(); ++i)
 		{
@@ -321,7 +321,7 @@ void PlayScene::Update(float dt)
 				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
 					projectile->SetMoving(false);
-					continue;
+					break;
 				}
 			}
 		}
@@ -536,7 +536,7 @@ void PlayScene::OnCollisionETC(int roomVec, Object* obj)
 			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
 			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
 
-			if (obj->GetLowHitBounds().height <= collYPoint || objLowPoint >= collYPoint)
+			if (obj->GetLowHitBounds().top >= collYPoint || objLowPoint <= collYPoint)
 				topandLow = true;
 			if (obj->GetLowHitBounds().left >= collXPoint || objRightPoint <= collXPoint)
 				leftandRight = true;

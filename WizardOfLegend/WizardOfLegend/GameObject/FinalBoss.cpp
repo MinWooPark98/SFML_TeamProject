@@ -149,7 +149,7 @@ void FinalBoss::Init()
 		AnimationEvent ev;
 		ev.clipId = "FinalBossDie";
 		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
-		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
+		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Ending);
 		animator->AddEvent(ev);
 	}
 	animator->SetTarget(&sprite);
