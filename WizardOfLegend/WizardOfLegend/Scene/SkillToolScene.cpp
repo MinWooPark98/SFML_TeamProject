@@ -51,6 +51,9 @@ void SkillToolScene::Reset()
 			}
 		}
 	}
+	Player* player = (Player*)FindGameObj("PLAYER");
+	if (player != nullptr)
+		player->SetPos(Vector2f(FRAMEWORK->GetWindowSize()) * 0.25f);
 	if (uiMgr != nullptr && uiMgr->GetActive())
 		uiMgr->Reset();
 }

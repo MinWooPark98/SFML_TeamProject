@@ -494,6 +494,30 @@ void Player::UpdateWait(float dt)
 	}
 }
 
+void Player::Reset()
+{
+	SpriteObj::Reset();
+	for (auto skillSet : skillSets)
+	{
+		skillSet->ResetSkills();
+	}
+	isBackHand = false;
+	accelTimer = 0.f;
+	dashTimer = 0.f;
+	jumpTimer = 0.f;
+	jumpDistance = 0.f;
+	jumpOriginY = 0.f;
+	direction = { 1.f, 0.f };
+	lastDir = { 1.f, 0.f };
+	dashDir = { 1.f, 0.f };
+	SetState(States::Idle);
+	currSkillSet = nullptr;
+	curHp = maxHp;
+	hitTimer = 0.f;
+	fallTimer = 0.f;
+	fallingScale = { 1.f, 1.f };
+}
+
 void Player::UpdateHit(float dt)
 {
 	hitTimer += dt;
@@ -538,6 +562,8 @@ void Player::SetSpeed(float speed)
 bool Player::IsStanding()
 {
 	auto currScene = SCENE_MGR->GetCurrentScene();
+	if (currScene->GetType() != Scenes::Play)
+		return true;
 	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
 	for (int i = 0; i < collisionList.size(); ++i)
 	{
