@@ -107,6 +107,23 @@ void Lancer::Update(float dt)
 		}
 	}
 	animation.Update(dt);
+
+	Scene* currScene = SCENE_MGR->GetCurrentScene();
+	if (currScene->GetType() != Scenes::Play)
+		return;
+	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+	for (int i = 0; i < collisionList.size(); ++i)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
+		{
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			{
+				SetPos(lastPosition);
+			}
+		}
+	}
 }
 
 void Lancer::Draw(RenderWindow& window)
