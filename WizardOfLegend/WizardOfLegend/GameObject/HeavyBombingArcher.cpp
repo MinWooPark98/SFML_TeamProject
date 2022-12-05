@@ -60,6 +60,9 @@ void HeavyBombingArcher::Update(float dt)
 	if (attackDelay <= 0.f)
 		count = 0;
 
+	if (curState == States::Hit)
+		SetNormalAttackCount(2);
+
 	for (auto& arrows : smollArrow)
 	{
 		arrows->GetHitBox().setPosition(arrows->GetPos());
