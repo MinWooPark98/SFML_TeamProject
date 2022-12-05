@@ -192,6 +192,7 @@ void Lancer::SetState(States newState)
 		break;
 	case States::Die:
 		lastDir.x < 0.f ? animation.Play("LancerLeftDie") : animation.Play("LancerRightDie");
+		SOUND_MGR->Play("sounds/EnemyDead.wav");
 		break;
 	}
 }

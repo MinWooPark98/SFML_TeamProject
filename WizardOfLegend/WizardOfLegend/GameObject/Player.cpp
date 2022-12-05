@@ -59,12 +59,15 @@ void Player::SetState(States state)
 			else
 				animator->Play("DashLeft");
 		}
+		SOUND_MGR->Play("sounds/AirJet.wav");
 		break;
 	case States::Slide:
 		if (Utils::EqualFloat(dashDir.x, 0.f))
 			dashDir.y > 0.f ? animator->Play("SlideDown") : animator->Play("SlideUp");
 		else
 			dashDir.x > 0.f ? animator->Play("SlideRight") : animator->Play("SlideLeft");
+
+		isRunning = true;
 		break;
 	case States::NormalSpell:
 		{
@@ -140,6 +143,7 @@ void Player::SetState(States state)
 			else
 				animator->Play("HurtLeft");
 		}
+		SOUND_MGR->Play("sounds/Fall.wav");
 		break;
 	case States::Die:
 		animator->Play("Die");
@@ -274,7 +278,7 @@ void Player::Update(float dt)
 		return;
 
 	auto& windowSize = FRAMEWORK->GetWindowSize();
-	
+
 	if (currState == States::Idle || currState == States::Run)
 	{
 		direction.x = 0.f;
@@ -429,8 +433,23 @@ void Player::UpdateRun(float dt)
 		return;
 	}
 
+	moveSoundTimer -= dt;
+
+	if (moveSoundTimer <= 0.f)
+	{
+		SOUND_MGR->Play("sounds/PlayerFootstep.wav");
+		moveSoundTimer = 0.4f;
+	}
+
 	if (accelTimer >= accelTime)
+	{
+		if (isRunning)
+		{
+			SOUND_MGR->Play("sounds/RunSpeed.wav");
+			isRunning = false;
+		}
 		Translate(direction * runningSpeed * dt);
+	}
 	else
 		Translate(direction * walkingSpeed * dt);
 
@@ -526,6 +545,7 @@ void Player::UpdateFall(float dt)
 			return;
 		}
 		SetState(States::Idle);
+		SOUND_MGR->Play("sounds/FallRecover.wav");
 	}
 }
 
