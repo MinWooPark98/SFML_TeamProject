@@ -87,46 +87,65 @@ void Archer::Update(float dt)
 	}
 	else if (isActionStart)
 	{
-		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack && curState != States::MoveAttack)
+		if (curState != States::Hit)
 		{
-			NormalMonsterMove(dt);
-
-			moveSoundTimer -= dt;
-			if (moveSoundTimer <= 0.f)
+			if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack && curState != States::MoveAttack)
 			{
-				SOUND_MGR->Play("sounds/LightFootstep.wav");
-				moveSoundTimer = 0.4f;
+				NormalMonsterMove(dt);
+
+				moveSoundTimer -= dt;
+				if (moveSoundTimer <= 0.f)
+				{
+					SOUND_MGR->Play("sounds/LightFootstep.wav");
+					moveSoundTimer = 0.4f;
+				}
 			}
-		}
-		else
-			moveSoundTimer = 0.f;
+			else
+				moveSoundTimer = 0.f;
 
-		if (curHp <= 0 && isAlive)
-		{
-			dieTimer = 1.f;
-			SetState(States::Die);
-			isAlive = false;
-		}
+			if (curHp <= 0 && isAlive)
+			{
+				dieTimer = 1.f;
+				SetState(States::Die);
+				isAlive = false;
+			}
 
-		if (!Utils::EqualFloat(direction.x, 0.f))
-		{
-			lastDir = direction;
-		}
+			if (!Utils::EqualFloat(direction.x, 0.f))
+			{
+				lastDir = direction;
+			}
 
-		if (attackDelay <= attackStart + 0.2f && attackDelay >= attackStart + 0.05f)
-		{
-			if ((int)((attackDelay - attackStart) / 0.03f) % 2 == 0)
-				arrowDir.setFillColor({ 180, 180, 180 });
+			if (attackDelay <= attackStart + 0.2f && attackDelay >= attackStart + 0.05f)
+			{
+				if ((int)((attackDelay - attackStart) / 0.03f) % 2 == 0)
+					arrowDir.setFillColor({ 180, 180, 180 });
+				else
+					arrowDir.setFillColor(Color::Red);
+			}
 			else
 				arrowDir.setFillColor(Color::Red);
 		}
-		else
-			arrowDir.setFillColor(Color::Red);
-
 		arrow->GetHitBox().setPosition(arrow->GetPos());
 		animation.Update(dt);
 		archerPullArmAnimation.Update(dt);
 		bowAnimation.Update(dt);
+	}
+
+	Scene* currScene = SCENE_MGR->GetCurrentScene();
+	if (currScene->GetType() != Scenes::Play)
+		return;
+	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+	for (int i = 0; i < collisionList.size(); ++i)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
+		{
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			{
+				SetPos(lastPosition);
+			}
+		}
 	}
 }
 
