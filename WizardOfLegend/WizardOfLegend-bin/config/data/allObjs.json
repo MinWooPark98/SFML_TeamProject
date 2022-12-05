@@ -49,6 +49,10 @@
     {
       "texPath": "graphics/Map/Wall/AirWindow.png",
       "uiPath": "graphics/Map/Palette/AirWindow0.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/AirWallFoundation.png",
+      "uiPath": "graphics/Map/Palette/AirWallFoundation.png"
     }
   ],
   "OBJECT": [
