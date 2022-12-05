@@ -17,6 +17,7 @@ protected:
 	bool isOtherView;
 	Vector2f mousePos;
 	bool isMouseOn;
+	bool mouseOnSound;
 	bool isClicked;
 
 	Origins origin;
@@ -48,6 +49,7 @@ public:
 	virtual void SetOrigin(Origins origin) override;
 	void Reposition();
 
+	void SetMouseOnSound(bool soundOn) { mouseOnSound = soundOn; }
 	void DefaultMouseOn();
 	void DefaultMouseOff();
 	void FillBoxComplementaryColor();

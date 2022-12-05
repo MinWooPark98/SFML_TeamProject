@@ -35,6 +35,7 @@ void SelectOption::Init()
 	{
 		Button2* button1 = new Button2();
 		Button2* button2 = new Button2();
+		button2->SetMouseOnSound(false);
 		options.first->AddButton(button1, opts[i], { 0.f, 0.f, 200.f, buttonHeight });
 		options.second->AddButton(button2, "", { 0.f, 0.f, windowSize.x * 0.3f - 202.f, buttonHeight });
 		button2->MousePointerOn = bind(&Button2::FillBoxComplementaryColor, button2);
@@ -727,6 +728,15 @@ void SelectOption::SaveSetToCSV()
 
 void SelectOption::SetPlayer1stSkill()
 {
+	auto& buttons = options.second->GetButtons();
+	for (int i = 0; i < (int)Options::Count; ++i)
+	{
+		if ((Options)i == Options::SoundName1 || (Options)i == Options::SoundName2)
+			continue;
+
+		if (buttons[i]->GetText()->GetString().empty())
+			return;
+	}
 	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 	player->GetSkillSets()[0]->SetOnlyOneSkill(selectedSet);
 }

@@ -7,7 +7,7 @@
 #include "../Framework/SoundMgr.h"
 
 Button2::Button2()
-    :sprite(nullptr), text(nullptr), activated(true), isOtherView(false), isMouseOn(false), isClicked(false), origin(Origins::TL)
+    :sprite(nullptr), text(nullptr), activated(true), isOtherView(false), isMouseOn(false), mouseOnSound(true), isClicked(false), origin(Origins::TL)
 {
 }
 
@@ -199,7 +199,8 @@ void Button2::MouseOn()
     if (MousePointerOn != nullptr)
     {
         MousePointerOn();
-        SOUND_MGR->Play("sounds/Chime.wav");
+        if(mouseOnSound)
+            SOUND_MGR->Play("sounds/Chime.wav");
     }
 }
 
