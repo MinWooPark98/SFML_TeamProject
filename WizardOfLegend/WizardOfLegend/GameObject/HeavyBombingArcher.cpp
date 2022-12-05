@@ -61,7 +61,12 @@ void HeavyBombingArcher::Update(float dt)
 		count = 0;
 
 	if (curState == States::Hit)
+	{
+		count = 0;
+		smollArrowCount = 5;
+		pattern = Pattern::None;
 		SetNormalAttackCount(2);
+	}
 
 	for (auto& arrows : smollArrow)
 	{
