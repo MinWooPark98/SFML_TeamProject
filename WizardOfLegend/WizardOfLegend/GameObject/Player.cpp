@@ -389,7 +389,9 @@ void Player::Update(float dt)
 			continue;
 		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
 		{
-			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			auto lowHitBound = GetLowHitBounds();
+			auto lowHitCenter = Vector2f(lowHitBound.left + lowHitBound.width * 0.5f, lowHitBound.top + lowHitBound.height * 0.5f);
+			if (cliff->GetHitBounds().contains(lowHitCenter))
 			{
 				if (currState != States::Hit && currState != States::Dash)
 					SetPos(lastPosition);
@@ -510,6 +512,8 @@ void Player::UpdateFall(float dt)
 	fallingScale.x -= dt * 0.5f;
 	fallingScale.y -= dt * 0.5f;
 	sprite.setScale(fallingScale);
+	auto& origin = animator->GetFrame().origin;
+	sprite.setOrigin({ origin.x, origin.y - sprite.getGlobalBounds().height * (1 - fallingScale.y) * 0.5f });
 	fallTimer += dt;
 	if (fallTimer >= fallDuration)
 	{
@@ -544,7 +548,9 @@ bool Player::IsStanding()
 			continue;
 		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
 		{
-			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			auto lowHitBound = GetLowHitBounds();
+			auto lowHitCenter = Vector2f(lowHitBound.left + lowHitBound.width * 0.5f, lowHitBound.top + lowHitBound.height * 0.5f);
+			if (cliff->GetHitBounds().contains(lowHitCenter))
 			{
 				SetState(States::Fall);
 				return false;
