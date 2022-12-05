@@ -195,6 +195,20 @@ void FinalBoss::Release()
 void FinalBoss::Reset()
 {
 	SpriteObj::Reset();
+	attackCnt = 0;
+	dashTimer = 0.f;
+	evasionCnt = 0;
+	dashType = DashType::Evasion;
+	lastDir = { 0.f, 1.f };
+	dashDir = { 0.f, 1.f };
+	isBackHand = false;
+	vecIdx = 0;
+	if (!normalSkills.empty())
+		currSkill = normalSkills[0];
+	curHp = maxHp;
+	hitTimer = 0.f;
+	superArmor = true;
+	superArmorTimer = 0.f;
 }
 
 void FinalBoss::Update(float dt)
@@ -292,7 +306,7 @@ void FinalBoss::UpdateDash(float dt)
 			{
 				random_device rd;
 				mt19937 g(rd());
-				shuffle(normalSkills.begin(), normalSkills.end(), g);
+				std::shuffle(normalSkills.begin(), normalSkills.end(), g);
 
 				vecIdx = 0;
 				currSkill = normalSkills[vecIdx];
