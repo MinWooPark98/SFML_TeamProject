@@ -430,6 +430,16 @@ void PlayScene::AllDieEnemy(int i)
 			if (obj->GetObjType() == Object::ObjTypes::Enemy ||
 				obj->GetObjType() == Object::ObjTypes::FinalBoss)
 			{
+				if (obj->GetObjType() == Object::ObjTypes::FinalBoss)
+				{
+					if (finalBoss->GetActive())
+					{
+						((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
+						((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
+						((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
+					}
+				}
+
 				if (((Enemy*)obj)->GetIsAlive())
 				{
 					if (hpBarSet)
@@ -449,15 +459,7 @@ void PlayScene::AllDieEnemy(int i)
 							hpBarSet = false;
 						}
 					}
-				}
-				if (obj->GetObjType() == Object::ObjTypes::FinalBoss)
-				{
-					if (finalBoss->GetActive())
-					{
-						((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
-						((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
-						((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
-					}
+					return;
 				}
 			}
 			if (obj->GetObjType() == Object::ObjTypes::FinalBoss)

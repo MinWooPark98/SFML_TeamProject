@@ -180,11 +180,16 @@ void Enemy::UpdateIdle()
 {
 	if (!Utils::EqualFloat(direction.x, 0.f))
 	{
-		if (lastDir.x > 0.f)
-			SetState(States::LeftMove);
-		if (lastDir.x < 0.f)
-			SetState(States::RightMove);
-		return;
+		if (isActionStart)
+			return;
+		else
+		{
+			if (lastDir.x > 0.f)
+				SetState(States::LeftMove);
+			if (lastDir.x < 0.f)
+				SetState(States::RightMove);
+			return;
+		}
 	}
 }
 
