@@ -502,20 +502,28 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 		switch (bossType)
 		{
 		case PlayUiMgr::BossType::Archer:
-			set = heavyBombingArcher->GetIsAlive();
-			alive = heavyBombingArcher->GetActive();
+			if (heavyBombingArcher != nullptr)
+			{
+				set = heavyBombingArcher->GetIsAlive();
+				alive = heavyBombingArcher->GetActive();
+			}
 			break;
 		case PlayUiMgr::BossType::FireBoss:
-			set = fireBoss->GetIsAlive();
-			alive = fireBoss->GetActive();
+			if (fireBoss != nullptr)
+			{
+				set = fireBoss->GetIsAlive();
+				alive = fireBoss->GetActive();
+			}
 			break;
 		case PlayUiMgr::BossType::FinalBoss:
 			alive = true;
-
-			if (finalBoss->GetState() != FinalBoss::States::Die)
-				set = true;
-			else
-				set = false;
+			if (finalBoss != nullptr)
+			{
+				if (finalBoss->GetState() != FinalBoss::States::Die)
+					set = true;
+				else
+					set = false;
+			}
 			break;
 		}
 
