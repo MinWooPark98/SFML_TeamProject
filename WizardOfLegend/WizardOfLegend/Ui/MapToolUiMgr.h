@@ -39,6 +39,8 @@ private:
 	Vector2i windowSize;
 	TextObj* fps;
 
+	TextObj* currLayer;
+
 public:
 	MapToolUiMgr(Scene* scene);
 	virtual ~MapToolUiMgr();
