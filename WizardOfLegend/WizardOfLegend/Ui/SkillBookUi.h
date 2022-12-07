@@ -7,15 +7,23 @@ class TextObj;
 
 class SkillBookUi : public Object
 {
+public:
+	enum class States
+	{
+		SkillOption,
+		Collection,
+	};
 protected:
 	vector<SpriteObj*> panels;
-	vector<SkillBookButton*> options;
+	vector<pair<SkillBookButton*, SpriteObj*>> options;
 	SkillBookButton* collection;
 	vector<pair<SpriteObj*, TextObj*>> infos;
 	int skillVecIdx;
 
 	bool isMoving;
 	float moveSpeed;
+
+	States state;
 
 public:
 	SkillBookUi();
@@ -31,5 +39,6 @@ public:
 	virtual void SetPos(const Vector2f& pos) override;
 	virtual void Translate(const Vector2f& delta) override;
 	virtual void SetActive(bool active) override;
+	void Reappear();
 };
 

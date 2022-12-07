@@ -21,8 +21,12 @@ void DevScene::Init()
 
 	Player* player = new Player();
 	player->Init();
-	player->SetSkillToolMode();
+	player->Translate({ -240.f, 90.f });
 	player->SetName("PLAYER");
+	player->SetSkillSet(0, "FireBall");
+	player->SetSkillSet(1, "FireDash");
+	player->SetSkillSet(4, "DragonArc");
+	player->SetSkillSet(5, "JumpMeteor");
 	objList[LayerType::Object][0].push_back(player);
 
 	uiMgr = new DevUiMgr();
@@ -42,7 +46,6 @@ void DevScene::Reset()
 void DevScene::Update(float dt)
 {
 	Scene::Update(dt);
-	uiMgr->Update(dt);
 }
 
 void DevScene::Draw(RenderWindow& window)

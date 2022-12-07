@@ -214,6 +214,30 @@ float InputMgr::GetAxisRaw(Axis axis)
 
 }
 
+int InputMgr::GetAxisDown(Axis axis)
+{
+	const AxisInfo& info = axisInfoMap[axis];
+
+	auto it = downList.rbegin();
+	while (it != downList.rend())
+	{
+		Keyboard::Key key = *it;
+		if (find(info.negatives.begin(), info.negatives.end(), key) !=
+			info.negatives.end())
+		{
+			return -1;
+		}
+		if (find(info.positives.begin(), info.positives.end(), key) !=
+			info.positives.end())
+		{
+			return 1;
+		}
+		++it;
+	}
+	return 0;
+
+}
+
 const Vector2f& InputMgr::GetMousePosDisplacement()
 {
 	return mousePosDisplacement;

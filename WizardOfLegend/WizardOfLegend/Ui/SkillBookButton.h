@@ -6,12 +6,21 @@ class TextObj;
 
 class SkillBookButton : public Object
 {
+public:
+	enum class TextPlace
+	{
+		Aside,
+		Down,
+	};
+
 protected:
 	bool highLightOn;
 
 	SpriteObj* option;
 	SpriteObj* highLight;
-	TextObj* name;
+	TextObj* buttonName;
+
+	TextPlace textPlace;
 
 public:
 	SkillBookButton();
@@ -27,13 +36,14 @@ public:
 
 	void SetOption(const string& texDir);
 	void SetHighLight(const string& texDir);
-	void SetName(const string& name);
+	void SetButtonName(const string& name);
 
 	void HighLightOn();
 	void HighLightOff();
 	function<void()> HighLightOnFunc;
 	function<void()> HighLightOffFunc;
 
+	void SetTextPlace(TextPlace place) { textPlace = place; }
 	void Reposition();
 	virtual void SetPos(const Vector2f& pos);
 	virtual void Translate(const Vector2f& pos);

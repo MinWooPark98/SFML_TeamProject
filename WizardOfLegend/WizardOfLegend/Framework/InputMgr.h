@@ -71,6 +71,7 @@ public:
 
 	static float GetAxis(Axis axis);
 	static float GetAxisRaw(Axis axis);
+	static int GetAxisDown(Axis axis);
 
 	static char GetLastKey();
 	static bool GetKeyDown();

@@ -5,9 +5,12 @@
 #include "../Framework/FrameWork.h"
 #include "../GameObject/TextObj.h"
 #include "../Framework/InputMgr.h"
+#include "../GameObject/Player.h"
+#include "../Scene/SceneMgr.h"
+#include "../GameObject/SkillSet.h"
 
 SkillBookUi::SkillBookUi()
-	:collection(nullptr), skillVecIdx(0), isMoving(true), moveSpeed(400.f)
+	:collection(nullptr), skillVecIdx(0), isMoving(true), moveSpeed(3600.f), state(States::SkillOption)
 {
 }
 
@@ -33,29 +36,35 @@ void SkillBookUi::Init()
 		button->Init();
 		button->SetOption("graphics/ArcanaLargeFront.png");
 		button->SetHighLight("graphics/ArcanaLargeHighlight.png");
-		options.push_back(button);
 
+		SpriteObj* skill = new SpriteObj();
+		skill->Init();
+		skill->SetScale({ 3.75f, 4.f });
+
+		options.push_back({ button, skill });
 	}
-	options[0]->SetName("기초");
-	options[1]->SetName("돌진");
-	options[2]->SetName("표준");
-	options[3]->SetName("시그니처");
+	options[0].first->SetButtonName("기초");
+	options[1].first->SetButtonName("돌진");
+	options[2].first->SetButtonName("표준");
+	options[3].first->SetButtonName("시그니처");
 
 	collection = new SkillBookButton();
 	collection->Init();
-	collection->SetOption("graphics/ArcanaAllSkillsFocused.png");
-	collection->HighLightOnFunc = bind(&SkillBookButton::SetOption, collection, "graphics/SpellBookOpen7.png");
+	collection->SetOption("graphics/SpellBookOpen2_2.png");
+	collection->SetButtonName("모든 아르카나");
+	collection->SetTextPlace(SkillBookButton::TextPlace::Aside);
+	collection->HighLightOnFunc = bind(&SkillBookButton::SetOption, collection, "graphics/ArcanaAllSkillsFocused.png");
 	collection->HighLightOffFunc = bind(&SkillBookButton::SetOption, collection, "graphics/SpellBookOpen2_2.png");
 
 	for (int i = 0; i < 2; ++i)
 	{
 		SpriteObj* icon = new SpriteObj();
 		icon->Init();
-		icon->SetScale({ 4.f, 4.f });
+		icon->SetScale({ 3.75f, 3.75f });
 		TextObj* text = new TextObj();
 		text->Init();
 		text->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-		text->SetSize(25);
+		text->SetSize(22);
 		text->SetFillColor(Color::White);
 		infos.push_back({ icon, text });
 	}
@@ -69,20 +78,20 @@ void SkillBookUi::Init()
 	infos[1].second->SetString("나가기");
 	infos[1].second->AsciiToUnicode();
 	infos[1].second->SetOrigin(Origins::ML);
+
+	Object::Init();
+	SetActive(false);
 }
 	
 
 void SkillBookUi::Reset()
 {
 	Object::Reset();
-	isMoving = true;
-	auto& windowSize = FRAMEWORK->GetWindowSize();
-	if (!panels.empty())
-		SetPos(Vector2f(windowSize.x * 0.025f, windowSize.y));
 }
 
 void SkillBookUi::Release()
 {
+	Object::Release();
 }
 
 void SkillBookUi::Update(float dt)
@@ -96,16 +105,35 @@ void SkillBookUi::Update(float dt)
 			isMoving = false;
 		return;
 	}
-	auto inputVer = InputMgr::GetAxisRaw(Axis::Vertical);
-	if (inputVer > 0.f && !collection->GetHighLightOn())
+	auto inputV = InputMgr::GetAxisDown(Axis::Vertical);
+	if (inputV > 0 && state == States::SkillOption)
 	{
 		collection->HighLightOn();
-		options[skillVecIdx]->HighLightOff();
+		options[skillVecIdx].first->HighLightOff();
+		state = States::Collection;
 	}
-	else if (inputVer < 0.f && !options[skillVecIdx]->GetHighLightOn() )
+	else if (inputV < 0 && state == States::Collection)
 	{
 		collection->HighLightOff();
-		options[skillVecIdx]->HighLightOn();
+		options[skillVecIdx].first->HighLightOn();
+		state = States::SkillOption;
+	}
+
+	auto inputH = InputMgr::GetAxisDown(Axis::Horizontal);
+	if (state == States::SkillOption)
+	{
+		if (inputH > 0 && skillVecIdx < options.size() - 1)
+		{
+			options[skillVecIdx].first->HighLightOff();
+			++skillVecIdx;
+			options[skillVecIdx].first->HighLightOn();
+		}
+		else if (inputH < 0 && skillVecIdx > 0)
+		{
+			options[skillVecIdx].first->HighLightOff();
+			--skillVecIdx;
+			options[skillVecIdx].first->HighLightOn();
+		}
 	}
 }
 
@@ -116,9 +144,10 @@ void SkillBookUi::Draw(RenderWindow& window)
 	{
 		panel->Draw(window);
 	}
-	for (auto option : options)
+	for (auto& option : options)
 	{
-		option->Draw(window);
+		option.first->Draw(window);
+		option.second->Draw(window);
 	}
 	collection->Draw(window);
 	for (auto& pair : infos)
@@ -137,14 +166,15 @@ void SkillBookUi::Reposition()
 
 	for (int i = 0; i < options.size(); ++i)
 	{
-		options[i]->SetPos({ skillPanelBnd.left + skillPanelBnd.width * (0.125f + 0.25f * i), skillPanelBnd.top + skillPanelBnd.height * 0.45f });
+		options[i].first->SetPos({ skillPanelBnd.left + skillPanelBnd.width * (0.155f + 0.23f * i), skillPanelBnd.top + skillPanelBnd.height * 0.45f });
+		options[i].second->SetPos(options[i].first->GetPos());
 	}
-	collection->SetPos({ collectionPanelBnd.left + collectionPanelBnd.width * 0.2f, collectionPanelBnd.top + collectionPanelBnd.height * 0.5f });
+	collection->SetPos({ collectionPanelBnd.left + collectionPanelBnd.width * 0.15f, collectionPanelBnd.top + collectionPanelBnd.height * 0.5f });
 	for (int i = 0; i < infos.size(); ++i)
 	{
-		infos[i].first->SetPos({ collectionPanelBnd.left + collectionPanelBnd.width * 0.7f, collectionPanelBnd.top + collectionPanelBnd.height * (0.25f + 0.5f * i) });
+		infos[i].first->SetPos({ collectionPanelBnd.left + collectionPanelBnd.width * 0.7f, collectionPanelBnd.top + collectionPanelBnd.height * (0.3f + 0.4f * i) });
 		auto infoIconBnd = infos[i].first->GetGlobalBounds();
-		infos[i].second->SetPos({ infoIconBnd.left + infoIconBnd.width + 40.f, infos[i].first->GetPos().y });
+		infos[i].second->SetPos({ infoIconBnd.left + infoIconBnd.width + 20.f, infos[i].first->GetPos().y });
 	}
 }
 
@@ -164,5 +194,29 @@ void SkillBookUi::SetActive(bool active)
 {
 	Object::SetActive(active);
 	if (active)
-		Reset();
+	{
+		skillVecIdx = 0;
+		options[skillVecIdx].first->HighLightOn();
+		collection->HighLightOff();
+		state = States::SkillOption;
+		auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+		auto& skillSets = player->GetSkillSets();
+		options[0].second->SetTexture(*RESOURCE_MGR->GetTexture(skillSets[0]->GetIconDir()));
+		options[1].second->SetTexture(*RESOURCE_MGR->GetTexture(skillSets[1]->GetIconDir()));
+		options[2].second->SetTexture(*RESOURCE_MGR->GetTexture(skillSets[4]->GetIconDir()));
+		options[3].second->SetTexture(*RESOURCE_MGR->GetTexture(skillSets[5]->GetIconDir()));
+		for (auto& option : options)
+		{
+			option.second->SetOrigin(Origins::MC);
+		}
+		Reappear();
+	}
+}
+
+void SkillBookUi::Reappear()
+{
+	isMoving = true;
+	auto& windowSize = FRAMEWORK->GetWindowSize();
+	if (!panels.empty())
+		SetPos(Vector2f(windowSize.x * 0.025f, windowSize.y));
 }
