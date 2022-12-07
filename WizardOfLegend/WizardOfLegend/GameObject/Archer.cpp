@@ -3,6 +3,8 @@
 #include "../Scene/PlayScene.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/StatTable.h"
+#include "../Ui/Gold.h"
+#include "../Ui/ChaosFragments.h"
 
 Archer::Archer()
 	: bowDir(0, 0)
@@ -107,6 +109,11 @@ void Archer::Update(float dt)
 			{
 				dieTimer = 1.f;
 				SetState(States::Die);
+				PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
+				auto gold = playScene->GetGold()->Get();
+				gold->SetGoldPos(GetPos());
+				auto platinum = playScene->GetPlatinum()->Get();
+				platinum->SetPosition(GetPos());
 				isAlive = false;
 			}
 

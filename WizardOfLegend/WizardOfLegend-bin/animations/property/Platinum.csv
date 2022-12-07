@@ -1,0 +1,11 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+Platinum,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/PlatinumShine0.png,0,0,16,16,8,8,0,0
+graphics/PlatinumShine1.png,0,0,16,16,8,8,0,0
+graphics/PlatinumShine2.png,0,0,16,16,8,8,0,0
+graphics/PlatinumShine3.png,0,0,16,16,8,8,0,0
+graphics/PlatinumShine4.png,0,0,16,16,8,8,0,0
+graphics/PlatinumShine5.png,0,0,16,16,8,8,0,0
+graphics/PlatinumShine6.png,0,0,16,16,8,8,0,0

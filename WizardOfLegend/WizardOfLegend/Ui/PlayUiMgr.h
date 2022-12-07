@@ -84,6 +84,11 @@ protected:
 	vector<SpriteObj*> skills;
 	vector<SkillCoolDownUi*> coolDownUis;
 
+	SpriteObj* gold;
+	TextObj* goldText;
+	SpriteObj* platinum;
+	TextObj* platinumText;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();

@@ -146,9 +146,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ui\ChaosFragments.cpp" />
     <ClCompile Include="Framework\CameraMove.cpp" />
     <ClCompile Include="DataTable\FinalBossSkillTable.cpp" />
     <ClCompile Include="DataTable\MapNameTable.cpp" />
+    <ClCompile Include="Ui\Gold.cpp" />
     <ClCompile Include="Scene\EndingScene.cpp" />
     <ClCompile Include="GameObject\Cliff.cpp" />
     <ClCompile Include="GameObject\Door.cpp" />
@@ -221,9 +223,11 @@
     <ClInclude Include="3rd\OBB.h" />
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="Ui\ChaosFragments.h" />
     <ClInclude Include="Framework\CameraMove.h" />
     <ClInclude Include="DataTable\FinalBossSkillTable.h" />
     <ClInclude Include="DataTable\MapNameTable.h" />
+    <ClInclude Include="Ui\Gold.h" />
     <ClInclude Include="Scene\EndingScene.h" />
     <ClInclude Include="GameObject\Cliff.h" />
     <ClInclude Include="GameObject\Door.h" />

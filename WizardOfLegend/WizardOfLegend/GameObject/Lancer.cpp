@@ -3,6 +3,8 @@
 #include "../DataTable/StatTable.h"
 #include "../Scene/PlayScene.h"
 #include "../Scene/SceneMgr.h"
+#include "../Ui/Gold.h"
+#include "../Ui/ChaosFragments.h"
 
 void Lancer::Init()
 {
@@ -97,6 +99,11 @@ void Lancer::Update(float dt)
 			{
 				dieTimer = 1.f;
 				SetState(States::Die);
+				PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
+				auto gold = playScene->GetGold()->Get();
+				gold->SetGoldPos(GetPos());
+				auto platinum = playScene->GetPlatinum()->Get();
+				platinum->SetPosition(GetPos());
 				isAlive = false;
 			}
 

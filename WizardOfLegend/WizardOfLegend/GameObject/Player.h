@@ -78,6 +78,9 @@ protected:
 	float moveSoundTimer = 0.f;
 	bool isRunning = true;
 
+	int gold;
+	int platinum;
+
 public:
 	Player();
 	virtual ~Player();
@@ -123,5 +126,13 @@ public:
 	void SetCurHp(int hp) { curHp = hp; };
 
 	vector<SkillSet*>& GetSkillSets() { return skillSets; }
+
+	int GetCurGold() { return gold; };
+	void AddGold(int gold) { this->gold += gold; };
+	void GoldReset() { gold = 0; };
+
+	int GetCurPlatinum() { return platinum; };
+	void AddPlatinum(int platinum) { this->platinum += platinum; };
+	// platinum Save ÇØ¾ßÇÔ
 };
 

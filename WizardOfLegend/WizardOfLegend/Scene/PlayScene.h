@@ -8,6 +8,8 @@ class Sector;
 class FinalBoss;
 class HeavyBombingArcher;
 class ShowDamage;
+class Gold;
+class ChaosFragments;
 
 class PlayScene : public Scene
 {
@@ -31,6 +33,8 @@ protected:
 	string mapName;
 
 	ObjectPool<ShowDamage>* showDamages;
+	ObjectPool<Gold>* golds;
+	ObjectPool<ChaosFragments>* platinums;
 
 public:
 	PlayScene();
@@ -53,6 +57,8 @@ public:
 	void AllDieEnemy(int i);
 	void OnCollisionETC(int roomVec, Object* obj);
 	ObjectPool<ShowDamage>* GetShowDamage() { return showDamages; }
+	ObjectPool<Gold>* GetGold() { return golds; }
+	ObjectPool<ChaosFragments>* GetPlatinum() { return platinums; }
 
 	void SetMapName(const string& name) { mapName = name; }
 };
