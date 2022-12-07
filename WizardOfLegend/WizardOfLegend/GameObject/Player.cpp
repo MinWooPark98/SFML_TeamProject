@@ -10,6 +10,7 @@
 #include "../Ui/PlayUiMgr.h"
 #include "../Scene/PlayScene.h"
 #include "../Ui/ShowDamage.h"
+#include "../Framework/CameraMove.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
@@ -687,6 +688,9 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
 	curHp -= dmg;
+	CameraMove::SetShakeSpeed(1000.f);
+	CameraMove::SetShakeViewX(50.f);
+	CameraMove::SetViewShake(true);
 	if (curHp <= 0)
 	{
 		curHp = 0;

@@ -16,6 +16,7 @@
 #include "../GameObject/CastingCircle.h"
 #include "../GameObject/FinalBoss.h"
 #include "../Ui/ShowDamage.h"
+#include "../Framework/CameraMove.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -246,7 +247,7 @@ void PlayScene::Init()
 
 void PlayScene::Update(float dt)
 {
-	worldView.setCenter(player->GetPos());
+	CameraMove::CameraShake(dt);
 	Scene::Update(dt);
 	
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))

@@ -2,6 +2,7 @@
 #include "../Scene/SceneMgr.h"
 #include "../Scene/PlayScene.h"
 #include "../Ui/ShowDamage.h"
+#include "../Framework/CameraMove.h"
 
 void Enemy::Init()
 {
@@ -318,6 +319,9 @@ void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 	direction = -atkDir;
 	lastDir = direction;
 	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
+	CameraMove::SetShakeSpeed(200.f);
+	CameraMove::SetShakeViewX(10.f);
+	CameraMove::SetViewShake(true);
 	if (type == MonsterType::Normal)
 		SetState(States::Hit);
 	else if (type == MonsterType::StageBoss)

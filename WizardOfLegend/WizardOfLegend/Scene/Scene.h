@@ -92,6 +92,11 @@ public:
 	ObjectPool<CastingCircle>* GetCastingCircles() { return circles; }
 
 	Scenes GetType() { return type; }
+
+	Vector2f GetWorldViewCenter() const { return worldView.getCenter(); };
+	Vector2f GetUiViewCenter() const { return uiView.getCenter(); };
+	void SetWorldViewCenter(float x, float y) { worldView.setCenter({x, y}); };
+	void SetUiViewCenter(float x, float y) { uiView.setCenter({x, y}); };
 	//virtual void LayerSort();
 };
 //bool sorting(Object* p1, Object* p2);

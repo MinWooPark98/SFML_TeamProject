@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\CameraMove.cpp" />
     <ClCompile Include="DataTable\FinalBossSkillTable.cpp" />
     <ClCompile Include="DataTable\MapNameTable.cpp" />
     <ClCompile Include="Scene\EndingScene.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="3rd\OBB.h" />
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="Framework\CameraMove.h" />
     <ClInclude Include="DataTable\FinalBossSkillTable.h" />
     <ClInclude Include="DataTable\MapNameTable.h" />
     <ClInclude Include="Scene\EndingScene.h" />

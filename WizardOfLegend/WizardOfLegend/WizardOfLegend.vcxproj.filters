@@ -64,6 +64,7 @@
     <ClCompile Include="Ui\ShowDamage.cpp" />
     <ClCompile Include="Ui\SkillCoolDownUi.cpp" />
     <ClCompile Include="DataTable\MapNameTable.cpp" />
+    <ClCompile Include="Framework\CameraMove.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -133,6 +134,7 @@
     <ClInclude Include="Ui\ShowDamage.h" />
     <ClInclude Include="Ui\SkillCoolDownUi.h" />
     <ClInclude Include="DataTable\MapNameTable.h" />
+    <ClInclude Include="Framework\CameraMove.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
