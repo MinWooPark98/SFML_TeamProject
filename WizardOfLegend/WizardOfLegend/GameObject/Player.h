@@ -129,11 +129,13 @@ public:
 
 	int GetCurGold() { return gold; };
 	void AddGold(int gold) { this->gold += gold; };
+	void SubGold(int gold) { this->gold -= gold; };
 	void GoldReset() { gold = 0; };
 
 	int GetCurPlatinum() { return platinum; };
 	void SetPlatinum(int platinum) { this->platinum = platinum; };
 	void AddPlatinum(int platinum) { this->platinum += platinum; };
+	void SubPlatinum(int platinum) { this->platinum -= platinum; };
 	void SavePlatinum(int platinum);
 	void LoadPlatinum();
 };

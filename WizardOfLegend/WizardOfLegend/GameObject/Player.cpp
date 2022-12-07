@@ -268,8 +268,6 @@ void Player::Init()
 	SetMaxHp(stat.maxHp);
 	SetSpeed(stat.speed);
 	SetCurHp(maxHp);
-
-	LoadPlatinum();
 }
 
 void Player::Update(float dt)
