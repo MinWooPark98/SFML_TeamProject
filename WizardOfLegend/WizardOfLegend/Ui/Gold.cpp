@@ -66,5 +66,5 @@ void Gold::GetGold(Player* player)
 
 void Gold::SetGoldPos(Vector2f pos)
 {
-	SetPos(pos);
+	SetPos(pos + Utils::RandAreaPoint() * 25.f);
 }

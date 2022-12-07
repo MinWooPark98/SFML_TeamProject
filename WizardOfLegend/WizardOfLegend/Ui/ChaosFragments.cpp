@@ -66,5 +66,5 @@ void ChaosFragments::GetChaos(Player* player)
 
 void ChaosFragments::SetPosition(Vector2f pos)
 {
-	SetPos(pos);
+	SetPos(pos + Utils::RandAreaPoint() * 10.f);
 }
