@@ -1,4 +1,7 @@
 #include "Dummy.h"
+#include "../Scene/SceneMgr.h"
+#include "../Scene/PlayScene.h"
+#include "../Ui/ShowDamage.h"
 #include "../Framework/CameraMove.h"
 #include "../Framework/SoundMgr.h"
 #include "../Framework/ResourceMgr.h"
@@ -37,6 +40,9 @@ void Dummy::Draw(RenderWindow& window)
 
 void Dummy::OnHit(const Vector2f& atkDir, int dmg)
 {
+	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
+	auto showDamage = playScene->GetShowDamage()->Get();
+	showDamage->ShowDamageFire(position, dmg);
 	direction = -atkDir;
 	lastDir = direction;
 	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
