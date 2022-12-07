@@ -64,6 +64,10 @@
     <ClCompile Include="Ui\ShowDamage.cpp" />
     <ClCompile Include="Ui\SkillCoolDownUi.cpp" />
     <ClCompile Include="DataTable\MapNameTable.cpp" />
+    <ClCompile Include="Ui\SkillBookUi.cpp" />
+    <ClCompile Include="Ui\SkillBookButton.cpp" />
+    <ClCompile Include="Scene\DevScene.cpp" />
+    <ClCompile Include="Ui\DevUiMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -133,6 +137,10 @@
     <ClInclude Include="Ui\ShowDamage.h" />
     <ClInclude Include="Ui\SkillCoolDownUi.h" />
     <ClInclude Include="DataTable\MapNameTable.h" />
+    <ClInclude Include="Ui\SkillBookUi.h" />
+    <ClInclude Include="Ui\SkillBookButton.h" />
+    <ClInclude Include="Scene\DevScene.h" />
+    <ClInclude Include="Ui\DevUiMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

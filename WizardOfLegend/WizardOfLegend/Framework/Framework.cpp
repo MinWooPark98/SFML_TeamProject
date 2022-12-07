@@ -71,7 +71,7 @@ bool Framework::Do()
         SCENE_MGR->Update(dt);
         SOUND_MGR->Update();
 
-        window.clear();
+        window.clear(Color::White);
         SCENE_MGR->Draw(window);
         window.display();
     }

@@ -12,6 +12,7 @@ class CastingCircle;
 
 enum class Scenes
 {
+	Dev,
 	Title,
 	Play,
 	MapTool,

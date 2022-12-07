@@ -148,11 +148,15 @@
   <ItemGroup>
     <ClCompile Include="DataTable\FinalBossSkillTable.cpp" />
     <ClCompile Include="DataTable\MapNameTable.cpp" />
+    <ClCompile Include="Ui\DevUiMgr.cpp" />
+    <ClCompile Include="Scene\DevScene.cpp" />
     <ClCompile Include="Scene\EndingScene.cpp" />
     <ClCompile Include="GameObject\Cliff.cpp" />
     <ClCompile Include="GameObject\Door.cpp" />
     <ClCompile Include="GameObject\FinalBoss.cpp" />
     <ClCompile Include="DataTable\StatTable.cpp" />
+    <ClCompile Include="Ui\SkillBookButton.cpp" />
+    <ClCompile Include="Ui\SkillBookUi.cpp" />
     <ClCompile Include="Ui\ShowDamage.cpp" />
     <ClCompile Include="Ui\SkillCoolDownUi.cpp" />
     <ClCompile Include="Ui\PlaySceneSkillOptions.cpp" />
@@ -222,11 +226,15 @@
     <ClInclude Include="3rd\SingleTon.h" />
     <ClInclude Include="DataTable\FinalBossSkillTable.h" />
     <ClInclude Include="DataTable\MapNameTable.h" />
+    <ClInclude Include="Ui\DevUiMgr.h" />
+    <ClInclude Include="Scene\DevScene.h" />
     <ClInclude Include="Scene\EndingScene.h" />
     <ClInclude Include="GameObject\Cliff.h" />
     <ClInclude Include="GameObject\Door.h" />
     <ClInclude Include="GameObject\FinalBoss.h" />
     <ClInclude Include="DataTable\StatTable.h" />
+    <ClInclude Include="Ui\SkillBookButton.h" />
+    <ClInclude Include="Ui\SkillBookUi.h" />
     <ClInclude Include="Ui\ShowDamage.h" />
     <ClInclude Include="Ui\SkillCoolDownUi.h" />
     <ClInclude Include="Ui\PlaySceneSkillOptions.h" />

@@ -4,15 +4,17 @@
 #include "MapToolScene.h"
 #include "SkillToolScene.h"
 #include "EndingScene.h"
+#include "DevScene.h"
 
 bool SceneMgr::Init()
 {
+    sceneMap[Scenes::Dev] = new DevScene();
     sceneMap[Scenes::Title] = new TitleScene();
     sceneMap[Scenes::Play] = new PlayScene();
     sceneMap[Scenes::MapTool] = new MapToolScene();
     sceneMap[Scenes::SkillTool] = new SkillToolScene();
     sceneMap[Scenes::Ending] = new EndingScene();
-    currScene = Scenes::Title;
+    currScene = Scenes::Dev;
 
     for (auto& pair : sceneMap)
     {
