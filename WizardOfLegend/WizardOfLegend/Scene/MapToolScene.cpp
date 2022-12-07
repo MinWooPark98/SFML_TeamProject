@@ -99,6 +99,40 @@ void MapToolScene::Update(float dt)
 			worldView.setCenter(worldView.getCenter() + pos);
 		}
 	}
+	if (InputMgr::GetKeyDown(Keyboard::F5))
+	{
+		for (auto& layer : objList)
+		{
+			if (layer.first != LayerType::Back)
+			{
+				for (auto& obj_pair : layer.second)
+				{
+					auto& objs = obj_pair.second;
+
+					for (auto& obj : objs)
+					{
+						if (obj != nullptr)
+							delete obj;
+					}
+					objs.clear();
+				}
+				layer.second.clear();
+			}
+		}
+		for (auto& layer : gridObjs)
+		{
+			for (auto& obj_pair : layer.second)
+			{
+				obj_pair.second.clear();
+			}
+			layer.second.clear();
+		}
+		gridObjs.clear();
+		sectors.clear();
+		cliffs.clear();
+		sector = nullptr;
+		cliff = nullptr;
+	}
 	if (InputMgr::GetKeyDown(Keyboard::F6))
 	{
 		for (auto& objs : objList[LayerType::Sector])
