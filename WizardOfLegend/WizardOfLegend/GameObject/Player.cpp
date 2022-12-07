@@ -11,6 +11,7 @@
 #include "../Scene/PlayScene.h"
 #include "../Ui/ShowDamage.h"
 #include "../Framework/CameraMove.h"
+#include "../DataTable/PlatinumTable.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
@@ -267,6 +268,8 @@ void Player::Init()
 	SetMaxHp(stat.maxHp);
 	SetSpeed(stat.speed);
 	SetCurHp(maxHp);
+
+	LoadPlatinum();
 }
 
 void Player::Update(float dt)
@@ -702,4 +705,20 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	dashDir = direction;
 	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
 	SetState(States::Hit);
+}
+
+void Player::SavePlatinum(int platinum)
+{
+	rapidcsv::Document doc("tables/platinumTable.csv", rapidcsv::LabelParams(0, -1));
+
+	doc.SetCell(1, 0, platinum);
+	doc.Save("tables/platinumTable.csv");
+}
+
+void Player::LoadPlatinum()
+{
+	PlatinumTable* platinumTable = DATATABLE_MGR->Get<PlatinumTable>(DataTable::Types::Platinum);
+	platinumTable->Load();
+	auto& p = platinumTable->Get("Platinum");
+	SetPlatinum(p.platinum);
 }

@@ -132,7 +132,9 @@ public:
 	void GoldReset() { gold = 0; };
 
 	int GetCurPlatinum() { return platinum; };
+	void SetPlatinum(int platinum) { this->platinum = platinum; };
 	void AddPlatinum(int platinum) { this->platinum += platinum; };
-	// platinum Save ÇØ¾ßÇÔ
+	void SavePlatinum(int platinum);
+	void LoadPlatinum();
 };
 

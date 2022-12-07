@@ -1,30 +1,30 @@
-#include "StatTable.h"
+#include "PlatinumTable.h"
 #include "../3rd/rapidcsv.h"
 
-StatTable::StatTable()
-	:DataTable(DataTable::Types::Stat)
+PlatinumTable::PlatinumTable()
+	:DataTable(DataTable::Types::Platinum)
 {
-	fileName = "tables/statTable.csv";
+	fileName = "tables/platinumTable.csv";
 }
 
-StatTable::~StatTable()
+PlatinumTable::~PlatinumTable()
 {
 }
 
-const StatTable::Stat& StatTable::Get(const string& objType)
+const PlatinumTable::Platinum& PlatinumTable::Get(const string& objType)
 {
 	auto find = table.find(objType);
 	if (find == table.end())
-		throw "Wrong skillName";
+		throw "None";
 	return find->second;
 }
 
-void StatTable::Release()
+void PlatinumTable::Release()
 {
 	table.clear();
 }
 
-bool StatTable::Load()
+bool PlatinumTable::Load()
 {
 	Release();
 
@@ -33,9 +33,8 @@ bool StatTable::Load()
 	auto rowCount = doc.GetRowCount();
 	vector<string> objType = doc.GetColumn<string>(0);
 	keys = objType;
-	vector<int> attackDmg = doc.GetColumn<int>(1);
-	vector<int> maxHp = doc.GetColumn<int>(2);
-	vector<float> speed = doc.GetColumn<float>(3);
+	vector<int> platinum = doc.GetColumn<int>(1);
+
 	for (int j = 0; j < rowCount; ++j)
 	{
 		if (table.find(objType[j]) != table.end())
@@ -43,7 +42,7 @@ bool StatTable::Load()
 			cout << "duplicate values exist" << endl;
 			return false;
 		}
-		table.insert({ objType[j], {attackDmg[j], maxHp[j], speed[j]}});
+		table.insert({ objType[j], {platinum[j]}});
 	}
 	return true;
 }

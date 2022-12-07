@@ -10,6 +10,7 @@ public:
 	enum class Types
 	{
 		None = -1,
+		Platinum,
 		Stat,
 		Skill,
 		SkillSet,

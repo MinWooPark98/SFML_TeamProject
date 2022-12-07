@@ -67,6 +67,7 @@
     <ClCompile Include="Framework\CameraMove.cpp" />
     <ClCompile Include="Ui\Gold.cpp" />
     <ClCompile Include="Ui\ChaosFragments.cpp" />
+    <ClCompile Include="DataTable\PlatinumTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Framework\CameraMove.h" />
     <ClInclude Include="Ui\Gold.h" />
     <ClInclude Include="Ui\ChaosFragments.h" />
+    <ClInclude Include="DataTable\PlatinumTable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

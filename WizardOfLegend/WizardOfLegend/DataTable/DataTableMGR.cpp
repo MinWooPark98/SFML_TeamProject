@@ -4,6 +4,7 @@
 #include "SkillSetTable.h"
 #include "FinalBossSkillTable.h"
 #include "MapNameTable.h"
+#include "PlatinumTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -45,6 +46,10 @@ void DataTableMgr::Init()
     table = new MapNameTable();
     table->Load();
     tables.insert({ DataTable::Types::MapName, table });
+
+    table = new PlatinumTable();
+    table->Load();
+    tables.insert({DataTable::Types::Platinum, table});
 }
 
 void DataTableMgr::Release()

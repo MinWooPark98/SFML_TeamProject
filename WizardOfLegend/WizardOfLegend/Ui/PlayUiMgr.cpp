@@ -407,6 +407,8 @@ void PlayUiMgr::Update(float dt)
 			isOption = false;
 		else
 			isOption = true;
+
+		player->SavePlatinum(player->GetCurPlatinum());
 	}
 
 	if (isOption)

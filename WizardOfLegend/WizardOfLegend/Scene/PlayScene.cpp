@@ -450,6 +450,7 @@ void PlayScene::Enter()
 
 	Release();
 	Init();
+	player->LoadPlatinum();
 }
 
 void PlayScene::Exit()
