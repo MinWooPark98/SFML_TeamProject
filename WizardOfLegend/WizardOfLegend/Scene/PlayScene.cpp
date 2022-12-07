@@ -241,7 +241,8 @@ void PlayScene::Init()
 			((FinalBoss*)finalBoss)->SetPlayer(player);
 		}
 	}
-	fireBoss->SetPlayerLastPos(player->GetPos());
+	if(fireBoss !=nullptr)
+		fireBoss->SetPlayerLastPos(player->GetPos());
 }
 
 void PlayScene::Update(float dt)
@@ -479,8 +480,30 @@ void PlayScene::SpawnEnemy(int i, float dt)
 
 void PlayScene::AllDieEnemy(int i)
 {
+	if (collisionList[i][Object::ObjTypes::Enemy].empty() && collisionList[i][Object::ObjTypes::FinalBoss].empty())
+	{
+		if (room[i].GetAllEnemyDead())
+		{
+			for (auto& c_list : collisionList[i])
+			{
+				for (auto& obj : c_list.second)
+				{
+					if (obj->GetObjType() == Object::ObjTypes::ETC)
+					{
+						if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
+							obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
+							obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+						{
+							obj->SetActive(false);
+						}
+					}
+				}
+			}
+		}
+		return;
+	}
 	for (auto& c_list : collisionList[i])
-	{		
+	{
 		for (auto& obj : c_list.second)
 		{
 			if (obj->GetObjType() == Object::ObjTypes::Enemy ||
@@ -488,50 +511,64 @@ void PlayScene::AllDieEnemy(int i)
 			{
 				if (obj->GetObjType() == Object::ObjTypes::FinalBoss)
 				{
-					if (finalBoss->GetActive())
+					if (finalBoss != nullptr)
 					{
-						if (hpBarSet)
+						if (finalBoss->GetActive())
 						{
-							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
-							((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
-							((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
+							if (hpBarSet)
+							{
+								((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FinalBoss);
+								((PlayUiMgr*)uiMgr)->SetBossMaxHp(finalBoss->GetMaxHp());
+								((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
 
-							hpBarSet = false;
+								hpBarSet = false;
+							}
 						}
-					}
+					}					
 				}
 				else if (obj->GetObjType() == Object::ObjTypes::Enemy)
 				{
 					if (hpBarSet)
 					{
-						if (fireBoss->GetActive())
+						if (fireBoss != nullptr)
 						{
-							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FireBoss);
-							((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
-							((PlayUiMgr*)uiMgr)->SetBossName("Flame Queen");
-							hpBarSet = false;
+							if (fireBoss->GetActive())
+							{
+								((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::FireBoss);
+								((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
+								((PlayUiMgr*)uiMgr)->SetBossName("Flame Queen");
+								hpBarSet = false;
+							}
 						}
-						if (heavyBombingArcher->GetActive())
+						
+						if (heavyBombingArcher != nullptr)
 						{
-							((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::Archer);
-							((PlayUiMgr*)uiMgr)->SetBossMaxHp(heavyBombingArcher->GetMaxHp());
-							((PlayUiMgr*)uiMgr)->SetBossName("Heavy Bombing Archer");
-							hpBarSet = false;
+							if (heavyBombingArcher->GetActive())
+							{
+								((PlayUiMgr*)uiMgr)->SetBossType(PlayUiMgr::BossType::Archer);
+								((PlayUiMgr*)uiMgr)->SetBossMaxHp(heavyBombingArcher->GetMaxHp());
+								((PlayUiMgr*)uiMgr)->SetBossName("Heavy Bombing Archer");
+								hpBarSet = false;
+							}
 						}
+		
 					}
 				}
 			}
+			if (finalBoss != nullptr)
+			{
+				if (finalBoss->GetActive() && obj->GetObjType() == Object::ObjTypes::FinalBoss)
+				{
+					if (((FinalBoss*)obj)->GetState() != FinalBoss::States::Die)
+						return;
+				}
+				else if (obj->GetObjType() == Object::ObjTypes::Enemy)
+				{
+					if (((Enemy*)obj)->GetIsAlive())
+						return;
+				}
+			}
 
-			if (finalBoss->GetActive() && obj->GetObjType() == Object::ObjTypes::FinalBoss)
-			{
-				if (((FinalBoss*)obj)->GetState() != FinalBoss::States::Die)
-					return;
-			}
-			else if (obj->GetObjType() == Object::ObjTypes::Enemy)
-			{
-				if (((Enemy*)obj)->GetIsAlive())
-					return;
-			}
 		}
 		hpBarSet = true;
 		room[i].SetAllEnemyDead(true);
