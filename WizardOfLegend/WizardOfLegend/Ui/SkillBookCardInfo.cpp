@@ -8,6 +8,7 @@
 #include "../DataTable/SkillSetTable.h"
 #include "../Scene/SceneMgr.h"
 #include "../DataTable/SkillTable.h"
+#include "SkillBookButton.h"
 
 SkillBookCardInfo::SkillBookCardInfo()
 	:frame(nullptr), element(0), skillIdx(0), currPlayerSkillSetIdx(0), isMoving(true), moveSpeed(3600.f)
@@ -42,6 +43,19 @@ void SkillBookCardInfo::Init()
 		icon->SetScale({ 3.75f, 4.f });
 
 		cards.push_back({ card, icon });
+	}
+
+	vector<pair<string, string>> elements = { {"graphics/SpellBookTabFire.png", "graphics/SpellBookTabFireSelected.png"}, {"graphics/SpellBookTabAir.png", "graphics/SpellBookTabAirSelected.png"}, {"graphics/SpellBookTabEarth.png", "graphics/SpellBookTabEarthSelected.png"}, {"graphics/SpellBookTabLightning.png", "graphics/SpellBookTabLightningSelected.png"}, {"graphics/SpellBookTabWater.png", "graphics/SpellBookTabWaterSelected.png"}, {"graphics/SpellBookTabChaos.png", "graphics/SpellBookTabChaosSelected.png"} };
+	for (int i = 0; i < 6; ++i)
+	{
+		SkillBookButton* newButton = new SkillBookButton();
+		newButton->Init();
+		newButton->GetOption()->SetScale({ 4.f, 4.f });
+		newButton->GetHighLight()->SetScale({ 4.f, 4.f });
+		newButton->SetOption(elements[i].first);
+		newButton->HighLightOnFunc = bind(&SkillBookButton::SetOption, newButton, elements[i].second);
+		newButton->HighLightOffFunc = bind(&SkillBookButton::SetOption, newButton, elements[i].first);
+		showElements.push_back(newButton);
 	}
 
 	SetActive(false);
@@ -91,25 +105,17 @@ void SkillBookCardInfo::Update(float dt)
 			element = (int)skillInfos.size() - 1;
 		else if (element > (int)skillInfos.size() - 1)
 			element = 0;
-
-		if (skillInfos[element].empty())
-		{
-			element = lastElem;
-			return;
-		}
-		else
-			skillIdx = 0;
+		skillIdx = 0;
 	}
+	SetElementHighLight();
+
 	if (inputH != 0)
 	{
 		if (inputH < 0 && skillIdx > 0)
 			--skillIdx;
 		else if (inputH > 0 && skillIdx < (int)skillInfos[element].size() - 1)
 			++skillIdx;
-		else
-			return;
 	}
-
 	SetDrawinCards();
 }
 
@@ -121,6 +127,10 @@ void SkillBookCardInfo::Draw(RenderWindow& window)
 	{
 		card.first->Draw(window);
 		card.second->Draw(window);
+	}
+	for (auto& showElement : showElements)
+	{
+		showElement->Draw(window);
 	}
 }
 
@@ -136,6 +146,11 @@ void SkillBookCardInfo::Reposition()
 	for (auto& card : cards)
 	{
 		card.second->SetPos(card.first->GetPos());
+	}
+
+	for (int i = 0; i < showElements.size(); ++i)
+	{
+		showElements[i]->SetPos({ frameBnd.left + frameBnd.width * 0.98f, frameBnd.top + frameBnd.height * (0.15f + i * 0.125f) });
 	}
 }
 
@@ -164,6 +179,20 @@ void SkillBookCardInfo::Disappear()
 {
 	isMoving = true;
 	direction = { -1.f, 0.f };
+}
+
+void SkillBookCardInfo::SetElementHighLight()
+{
+	for (int i = 0; i < showElements.size(); ++i)
+	{
+		if (i != element)
+		{
+			if (showElements[i]->GetHighLightOn())
+				showElements[i]->HighLightOff();
+		}
+		else if (!showElements[i]->GetHighLightOn())
+			showElements[i]->HighLightOn();
+	}
 }
 
 void SkillBookCardInfo::SetDrawinCards()
@@ -202,6 +231,8 @@ void SkillBookCardInfo::SetDrawinCards()
 
 void SkillBookCardInfo::ChangeSkill()
 {
+	if (skillIdx > skillInfos[element].size() - 1)
+		return;
 	Disappear();
 	playerSkillSets[currPlayerSkillSetIdx]->Set(skillInfos[element][skillIdx].first);
 	if (ChangeSkillBookUi != nullptr)
@@ -259,6 +290,8 @@ void SkillBookCardInfo::SetActive(bool active)
 			skillInfos[i].push_back({ data.first, data.second.iconDir });
 		}
 	}
+	element = (int)playerSkillSets[currPlayerSkillSetIdx]->GetElement();
+	SetElementHighLight();
 	SetDrawinCards();
 	Reappear();
 }

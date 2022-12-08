@@ -14,6 +14,7 @@ protected:
 	vector<pair<SpriteObj*, SpriteObj*>> cards;
 	vector<pair<SpriteObj*, SpriteObj*>> drawingCards;
 	vector<vector<pair<string, string>>> skillInfos;
+	vector<SkillBookButton*> showElements;
 	int element;
 	int skillIdx;
 
@@ -41,6 +42,7 @@ public:
 	void Reappear();
 	void Disappear();
 
+	void SetElementHighLight();
 	void SetDrawinCards();
 	void ChangeSkill();
 	function<void()> ChangeSkillBookUi;

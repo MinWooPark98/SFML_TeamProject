@@ -52,6 +52,9 @@ void DevUiMgr::Draw(RenderWindow& window)
 	for (auto& uiObjs : uiObjList)
 	{
 		for (auto& obj : uiObjs.second)
-			obj->Draw(window);
+		{
+			if(obj->GetActive())
+				obj->Draw(window);
+		}
 	}
 }

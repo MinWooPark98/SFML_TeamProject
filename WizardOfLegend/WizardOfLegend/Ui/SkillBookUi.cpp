@@ -114,6 +114,12 @@ void SkillBookUi::Update(float dt)
 			return;
 	}
 
+	if (InputMgr::GetKeyDown(Keyboard::Escape))
+	{
+		SetActive(false);
+		return;
+	}
+
 	if (isMoving)
 	{
 		Translate(direction * moveSpeed * dt);
