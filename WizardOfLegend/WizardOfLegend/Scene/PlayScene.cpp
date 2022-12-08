@@ -77,7 +77,7 @@ void PlayScene::Init()
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::Wall);
 
-			objList[LayerType::Object][0].push_back(draw);
+			objList[LayerType::Wall][0].push_back(draw);
 		}
 		else if (obj.type == "TILE")
 		{
@@ -578,7 +578,11 @@ void PlayScene::AllDieEnemy(int i)
 					if (((FinalBoss*)obj)->GetState() != FinalBoss::States::Die)
 						return;
 				}
-				else if (obj->GetObjType() == Object::ObjTypes::Enemy)
+			}
+
+			if (obj != nullptr)
+			{
+				if (obj->GetObjType() == Object::ObjTypes::Enemy)
 				{
 					if (((Enemy*)obj)->GetIsAlive())
 						return;

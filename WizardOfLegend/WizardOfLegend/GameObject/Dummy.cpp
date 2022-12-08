@@ -21,6 +21,8 @@ void Dummy::Init()
 
 void Dummy::Update(float dt)
 {
+	SetLastPosition(GetPos());
+
 	SpriteObj::Update(dt);
 
 	switch (curState)
@@ -30,6 +32,23 @@ void Dummy::Update(float dt)
 	case Dummy::State::Hit:
 		UpdateHit(dt);
 		break;
+	}
+
+	Scene* currScene = SCENE_MGR->GetCurrentScene();
+	if (currScene->GetType() != Scenes::Play)
+		return;
+	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+	for (int i = 0; i < collisionList.size(); ++i)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
+		{
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			{
+				SetPos(lastPosition);
+			}
+		}
 	}
 }
 
