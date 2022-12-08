@@ -19,6 +19,7 @@
 #include "../Framework/CameraMove.h"
 #include "../Ui/Gold.h"
 #include "../Ui/ChaosFragments.h"
+#include "../GameObject/Dummy.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -77,7 +78,7 @@ void PlayScene::Init()
 			draw->SetHitBox(obj.path);
 			draw->SetObjType(Object::ObjTypes::Wall);
 
-			objList[LayerType::Object][0].push_back(draw);
+			objList[LayerType::Wall][0].push_back(draw);
 		}
 		else if (obj.type == "TILE")
 		{
@@ -193,6 +194,18 @@ void PlayScene::Init()
 				finalBoss->SetActive(false);
 				finalBoss->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][0].push_back(finalBoss);
+			}
+			else if (obj.path == "graphics/TrainingDummy.png")
+			{
+				Dummy* trainingDummy = new Dummy();
+				trainingDummy->Init();
+				trainingDummy->SetName(obj.type);
+				trainingDummy->SetPos(obj.position);
+				trainingDummy->SetInitPos(obj.position);
+				trainingDummy->SetObjType(Object::ObjTypes::Enemy);
+				trainingDummy->SetActive(false);
+				trainingDummy->SetLastPosition({ 0,0 });
+				objList[LayerType::Object][2].push_back(trainingDummy);
 			}
 		}
 		else if (obj.type == "CLIFF")

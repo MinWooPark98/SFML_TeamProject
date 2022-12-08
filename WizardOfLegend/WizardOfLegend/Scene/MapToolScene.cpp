@@ -453,13 +453,9 @@ void MapToolScene::Update(float dt)
 						delete findObj;
 					}
 				}
-
 			}
 		}
-
 	}
-	
-
 }
 
 

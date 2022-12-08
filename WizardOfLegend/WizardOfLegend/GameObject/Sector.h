@@ -28,6 +28,7 @@ public:
 
 	virtual void Update(float dt);
 	virtual void Draw(RenderWindow& window);
+	virtual void Release() override;
 	
 	void UpdateNowDraw(float dt, DrawObj* nowDraw);
 	void SetType(string type) { this->type = type; }

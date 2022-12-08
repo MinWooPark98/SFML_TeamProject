@@ -17,6 +17,11 @@ Sector::Sector()
 
 Sector::~Sector()
 {
+	if (sector != nullptr)
+	{
+		delete sector;
+		sector = nullptr;
+	}
 }
 
 void Sector::Update(float dt)
@@ -29,6 +34,16 @@ void Sector::Draw(RenderWindow& window)
 {
 	
 	window.draw(*sector);
+}
+
+void Sector::Release()
+{
+	Object::Release();
+	if (sector != nullptr)
+	{
+		delete sector;
+		sector = nullptr;
+	}
 }
 
 void Sector::UpdateNowDraw(float dt, DrawObj* nowDraw)
