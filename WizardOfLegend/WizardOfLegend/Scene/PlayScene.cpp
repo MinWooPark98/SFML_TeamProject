@@ -428,7 +428,7 @@ void PlayScene::Draw(RenderWindow& window)
 						{
 							drawSortObjs[0].push_back(obj);
 						}
-						else if (obj->GetObjType() == Object::ObjTypes::Wall || obj->GetObjType() == Object::ObjTypes::Player || obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss || obj->GetObjType() == Object::ObjTypes::ETC)
+						else if (obj->GetObjType() == Object::ObjTypes::Wall || obj->GetObjType() == Object::ObjTypes::Player || obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss || obj->GetObjType() == Object::ObjTypes::ETC || obj->GetObjType() == Object::ObjTypes::Dummy || obj->GetObjType() == Object::ObjTypes::BrokenObject)
 						{
 							drawSortObjs[1].push_back(obj);
 						}
