@@ -11,6 +11,7 @@ class ShowDamage;
 class Gold;
 class ChaosFragments;
 class Portal;
+class Heal;
 class PlayScene : public Scene
 {
 protected:

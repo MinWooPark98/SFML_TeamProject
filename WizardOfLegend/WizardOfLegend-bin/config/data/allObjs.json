@@ -95,6 +95,10 @@
     {
       "texPath": "graphics/Map/Object/Portal.png",
       "uiPath": "graphics/Map/Palette/Portal.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/HealthCrystal.png",
+      "uiPath": "graphics/Map/Palette/HealthCrystal.png"
     }
   ],
   "PLAYER": [

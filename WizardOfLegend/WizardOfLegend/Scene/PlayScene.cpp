@@ -21,6 +21,7 @@
 #include "../Ui/ChaosFragments.h"
 #include "../GameObject/Dummy.h"
 #include "../Ui/Portal.h"
+#include "../Ui/Heal.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -127,6 +128,18 @@ void PlayScene::Init()
 					portal->SetChanegeMap("TUTORIAL");
 
 				objList[LayerType::Object][0].push_back(portal);
+			}
+			else if (obj.path == "graphics/Map/Object/HealthCrystal.png")
+			{
+				Heal* heal = new Heal();
+				heal = new Heal();
+				heal->Init();
+				heal->SetName(obj.type);
+				heal->SetPos(obj.position);
+				heal->SetObjType(Object::ObjTypes::BrokenObject);
+				heal->SetPlayer(player);
+
+				objList[LayerType::Object][0].push_back(heal);
 			}
 			else
 			{
