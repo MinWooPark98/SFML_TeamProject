@@ -91,6 +91,10 @@
     {
       "texPath": "graphics/Map/Object/TreeTallPurple.png",
       "uiPath": "graphics/Map/Palette/TreeTallPurple.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/Portal.png",
+      "uiPath": "graphics/Map/Palette/Portal.png"
     }
   ],
   "PLAYER": [

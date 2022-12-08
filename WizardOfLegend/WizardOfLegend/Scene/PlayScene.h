@@ -10,7 +10,7 @@ class HeavyBombingArcher;
 class ShowDamage;
 class Gold;
 class ChaosFragments;
-
+class Portal;
 class PlayScene : public Scene
 {
 protected:
@@ -35,6 +35,8 @@ protected:
 	ObjectPool<ShowDamage>* showDamages;
 	ObjectPool<Gold>* golds;
 	ObjectPool<ChaosFragments>* platinums;
+
+	Portal* portal;
 
 public:
 	PlayScene();
