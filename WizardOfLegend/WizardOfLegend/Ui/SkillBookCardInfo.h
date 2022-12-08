@@ -5,33 +5,27 @@ class SkillBookButton;
 class SpriteObj;
 class TextObj;
 class SkillSet;
-class SkillBookCardInfo;
 
-class SkillBookUi : public Object
+class SkillBookCardInfo : public Object
 {
-public:
-	enum class States
-	{
-		SkillOption,
-		Collection,
-	};
 protected:
-	vector<SpriteObj*> panels;
-	vector<pair<SkillBookButton*, SpriteObj*>> options;
-	SkillBookCardInfo* skillInfo;
+	SpriteObj* frame;
+
+	vector<pair<SpriteObj*, SpriteObj*>> cards;
+	vector<pair<SpriteObj*, SpriteObj*>> drawingCards;
+	vector<vector<pair<string, string>>> skillInfos;
+	int element;
+	int skillIdx;
+
 	vector<SkillSet*> playerSkillSets;
-	SkillBookButton* collection;
-	vector<pair<SpriteObj*, TextObj*>> infos;
-	int skillVecIdx;
+	int currPlayerSkillSetIdx;
 
 	bool isMoving;
 	float moveSpeed;
 
-	States state;
-
 public:
-	SkillBookUi();
-	virtual ~SkillBookUi();
+	SkillBookCardInfo();
+	virtual ~SkillBookCardInfo();
 
 	virtual void Init() override;
 	virtual void Reset() override;
@@ -43,11 +37,14 @@ public:
 	virtual void SetPos(const Vector2f& pos) override;
 	virtual void Translate(const Vector2f& delta) override;
 	virtual void SetActive(bool active) override;
+	function<void()> Deactivate;
 	void Reappear();
 	void Disappear();
-	void OptionHighLightOn(int idx);
-	void OptionHighLightOff(int idx);
 
-	void ResetCurrOptionIcon();
+	void SetDrawinCards();
+	void ChangeSkill();
+	function<void()> ChangeSkillBookUi;
+
+	void SetCurrPlayerSkillSetIdx(int idx) { currPlayerSkillSetIdx = idx; }
 };
 

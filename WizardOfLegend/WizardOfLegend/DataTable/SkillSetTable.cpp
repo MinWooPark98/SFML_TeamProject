@@ -13,9 +13,20 @@ SkillSetTable::~SkillSetTable()
 
 const SkillSetTable::SetInfo& SkillSetTable::Get(const string& setName)
 {
-	auto find = table.find(setName);
+	for (auto& elemTable : table)
+	{
+		auto find = elemTable.second.find(setName);
+		if (find != elemTable.second.end())
+			return find->second;
+	}
+	throw "Wrong SkillSetName";
+}
+
+const map<string, SkillSetTable::SetInfo> SkillSetTable::Get(Skill::Element elem)
+{
+	auto find = table.find(elem);
 	if (find == table.end())
-		throw "Wrong SkillSetName";
+		throw "Wrong value";
 	return find->second;
 }
 
@@ -34,15 +45,19 @@ bool SkillSetTable::Load()
 	auto rowCount = doc.GetRowCount();
 	for (int j = 0; j < rowCount; ++j)
 	{
-		if (table.find(setName[j]) != table.end())
+		for (auto& elemTable : table)
 		{
-			cout << "duplicate values exist" << endl;
-			return false;
+			if (elemTable.second.find(setName[j]) != elemTable.second.end())
+			{
+				cout << "duplicate values exist" << endl;
+				return false;
+			}
 		}
+		int element = doc.GetCell<int>(1, j);
 		float coolDown = 0.f;
 		try
 		{
-			coolDown = doc.GetCell<float>(1, j);
+			coolDown = doc.GetCell<float>(2, j);
 			if (coolDown < 0.f)
 				coolDown = -1.f;
 		}
@@ -50,17 +65,18 @@ bool SkillSetTable::Load()
 		{
 			coolDown = -1.f;
 		}
-		string iconDir = doc.GetCell<string>(2, j);
+		string iconDir = doc.GetCell<string>(3, j);
 		list<string> skillNames;
 		string str;
-		for(int i = 3; i < columnCount;++i)
+		for(int i = 4; i < columnCount;++i)
 		{
 			str = doc.GetCell<string>(i, j);
 			if (str.empty())
 				break;
 			skillNames.push_back(str);
 		}
-		table[setName[j]] = { coolDown, iconDir, skillNames };
+		
+		table[(Skill::Element)element][setName[j]] = { coolDown, iconDir, skillNames };
 	}
 	return true;
 }

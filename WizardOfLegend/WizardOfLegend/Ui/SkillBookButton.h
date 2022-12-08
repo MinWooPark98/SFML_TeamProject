@@ -35,6 +35,7 @@ public:
 	bool GetHighLightOn() { return highLightOn; }
 
 	void SetOption(const string& texDir);
+	SpriteObj* GetOption() { return option; }
 	void SetHighLight(const string& texDir);
 	void SetButtonName(const string& name);
 

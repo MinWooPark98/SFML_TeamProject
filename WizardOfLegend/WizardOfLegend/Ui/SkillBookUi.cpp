@@ -8,9 +8,10 @@
 #include "../GameObject/Player.h"
 #include "../Scene/SceneMgr.h"
 #include "../GameObject/SkillSet.h"
+#include "SkillBookCardInfo.h"
 
 SkillBookUi::SkillBookUi()
-	:collection(nullptr), skillVecIdx(0), isMoving(true), moveSpeed(3600.f), state(States::SkillOption)
+	:collection(nullptr), skillVecIdx(0), skillInfo(nullptr), isMoving(true), moveSpeed(3600.f), state(States::SkillOption)
 {
 }
 
@@ -36,12 +37,15 @@ void SkillBookUi::Init()
 		button->Init();
 		button->SetOption("graphics/ArcanaLargeFront.png");
 		button->SetHighLight("graphics/ArcanaLargeHighlight.png");
+		button->HighLightOnFunc = bind(&SkillBookUi::OptionHighLightOn, this, i);
+		button->HighLightOffFunc = bind(&SkillBookUi::OptionHighLightOff, this, i);
 
 		SpriteObj* skill = new SpriteObj();
 		skill->Init();
 		skill->SetScale({ 3.75f, 4.f });
-
+		
 		options.push_back({ button, skill });
+		OptionHighLightOff(i);
 	}
 	options[0].first->SetButtonName("기초");
 	options[1].first->SetButtonName("돌진");
@@ -79,6 +83,11 @@ void SkillBookUi::Init()
 	infos[1].second->AsciiToUnicode();
 	infos[1].second->SetOrigin(Origins::ML);
 
+	skillInfo = new SkillBookCardInfo();
+	skillInfo->Init();
+	skillInfo->Deactivate = bind(&SkillBookUi::Reappear, this);
+	skillInfo->ChangeSkillBookUi = bind(&SkillBookUi::ResetCurrOptionIcon, this);
+
 	Object::Init();
 	SetActive(false);
 }
@@ -97,12 +106,26 @@ void SkillBookUi::Release()
 void SkillBookUi::Update(float dt)
 {
 	Object::Update(dt);
+
+	if (skillInfo != nullptr && skillInfo->GetActive())
+	{
+		skillInfo->Update(dt);
+		if (!isMoving)
+			return;
+	}
+
 	if (isMoving)
 	{
-		Translate(Vector2f(0.f, -1.f) * moveSpeed * dt);
+		Translate(direction * moveSpeed * dt);
 		auto& windowSize = FRAMEWORK->GetWindowSize();
-		if (position.y < windowSize.y * 0.3f)
+		if (direction.y < 0.f && position.y < windowSize.y * 0.3f)
+		{
 			isMoving = false;
+		}
+		else if (direction.y > 0.f && position.y > windowSize.y)
+		{
+			isMoving = false;
+		}
 		return;
 	}
 	auto inputV = InputMgr::GetAxisDown(Axis::Vertical);
@@ -135,6 +158,22 @@ void SkillBookUi::Update(float dt)
 			options[skillVecIdx].first->HighLightOn();
 		}
 	}
+
+	if (InputMgr::GetKeyDown(Keyboard::Space))
+	{
+		switch (state)
+		{
+		case SkillBookUi::States::SkillOption:
+			skillInfo->SetCurrPlayerSkillSetIdx(skillVecIdx);
+			skillInfo->SetActive(true);
+			Disappear();
+			break;
+		case SkillBookUi::States::Collection:
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void SkillBookUi::Draw(RenderWindow& window)
@@ -155,6 +194,8 @@ void SkillBookUi::Draw(RenderWindow& window)
 		pair.first->Draw(window);
 		pair.second->Draw(window);
 	}
+	if (skillInfo != nullptr && skillInfo->GetActive())
+		skillInfo->Draw(window);
 }
 
 void SkillBookUi::Reposition()
@@ -201,10 +242,14 @@ void SkillBookUi::SetActive(bool active)
 		state = States::SkillOption;
 		auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 		auto& skillSets = player->GetSkillSets();
-		options[0].second->SetTexture(*RESOURCE_MGR->GetTexture(skillSets[0]->GetIconDir()));
-		options[1].second->SetTexture(*RESOURCE_MGR->GetTexture(skillSets[1]->GetIconDir()));
-		options[2].second->SetTexture(*RESOURCE_MGR->GetTexture(skillSets[4]->GetIconDir()));
-		options[3].second->SetTexture(*RESOURCE_MGR->GetTexture(skillSets[5]->GetIconDir()));
+		playerSkillSets.push_back(skillSets[0]);
+		playerSkillSets.push_back(skillSets[1]);
+		playerSkillSets.push_back(skillSets[4]);
+		playerSkillSets.push_back(skillSets[5]);
+		for (int i = 0; i < options.size(); ++i)
+		{
+			options[i].second->SetTexture(*RESOURCE_MGR->GetTexture(playerSkillSets[i]->GetIconDir()));
+		}
 		for (auto& option : options)
 		{
 			option.second->SetOrigin(Origins::MC);
@@ -219,4 +264,28 @@ void SkillBookUi::Reappear()
 	auto& windowSize = FRAMEWORK->GetWindowSize();
 	if (!panels.empty())
 		SetPos(Vector2f(windowSize.x * 0.025f, windowSize.y));
+	direction = { 0.f, -1.f };
+}
+
+void SkillBookUi::Disappear()
+{
+	isMoving = true;
+	direction = { 0.f, 1.f };
+}
+
+void SkillBookUi::OptionHighLightOn(int idx)
+{
+	options[idx].first->GetOption()->SetColor(Color(255, 255, 255, 255));
+	options[idx].second->SetColor(Color(255, 255, 255, 255));
+}
+
+void SkillBookUi::OptionHighLightOff(int idx)
+{
+	options[idx].first->GetOption()->SetColor(Color(100, 100, 100, 255));
+	options[idx].second->SetColor(Color(100, 100, 100, 255));
+}
+
+void SkillBookUi::ResetCurrOptionIcon()
+{
+	options[skillVecIdx].second->SetTexture(*RESOURCE_MGR->GetTexture(playerSkillSets[skillVecIdx]->GetIconDir()));
 }

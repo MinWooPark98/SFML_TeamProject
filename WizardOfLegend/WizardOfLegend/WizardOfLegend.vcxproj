@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="DataTable\FinalBossSkillTable.cpp" />
     <ClCompile Include="DataTable\MapNameTable.cpp" />
+    <ClCompile Include="Ui\SkillBookCardInfo.cpp" />
     <ClCompile Include="Ui\DevUiMgr.cpp" />
     <ClCompile Include="Scene\DevScene.cpp" />
     <ClCompile Include="Scene\EndingScene.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="3rd\SingleTon.h" />
     <ClInclude Include="DataTable\FinalBossSkillTable.h" />
     <ClInclude Include="DataTable\MapNameTable.h" />
+    <ClInclude Include="Ui\SkillBookCardInfo.h" />
     <ClInclude Include="Ui\DevUiMgr.h" />
     <ClInclude Include="Scene\DevScene.h" />
     <ClInclude Include="Scene\EndingScene.h" />
