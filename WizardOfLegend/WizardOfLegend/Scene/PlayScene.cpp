@@ -368,7 +368,7 @@ void PlayScene::Draw(RenderWindow& window)
 				{
 					if (obj->GetActive())
 					{
-						obj->Draw(window);
+						drawSortObjs[0].push_back(obj);
 					}
 				}
 			}

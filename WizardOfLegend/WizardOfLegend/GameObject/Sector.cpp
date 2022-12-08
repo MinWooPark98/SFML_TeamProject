@@ -17,11 +17,11 @@ Sector::Sector()
 
 Sector::~Sector()
 {
-	if (sector != nullptr)
-	{
-		delete sector;
-		sector = nullptr;
-	}
+//	if (sector != nullptr)
+//	{
+//		delete sector;
+//		sector = nullptr;
+//	}
 }
 
 void Sector::Update(float dt)

@@ -52,6 +52,9 @@ protected:
 
 	UiMgr* uiMgr;
 
+	map<int,vector<Object*>> drawSortObjs;
+
+
 	vector<Object*> moves;
 	vector<Object*> drawObjs;
 	vector<Object*> alphaObj;
