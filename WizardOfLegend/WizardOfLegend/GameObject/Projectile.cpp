@@ -4,6 +4,8 @@
 #include "../Scene/PlayScene.h"
 #include "../Scene/SceneMgr.h"
 #include "FinalBoss.h"
+#include "../Ui/Heal.h"
+#include "Dummy.h"
 
 Projectile::Projectile()
 	:atkShape(Skill::AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(Skill::WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(Skill::RangeType::None), isComingBack(false),  attackDmg(0), dmgType(Skill::DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0), subType(Skill::SubjectType::None)
@@ -154,6 +156,22 @@ void Projectile::Update(float dt)
 					{
 						((FinalBoss*)boss)->OnHit(direction, attackDmg);
 						damagedObjs.push_back(boss);
+					}
+				}
+				for (auto& etc : collisionList[i][Object::ObjTypes::ETC])
+				{
+					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
+					{
+						if ((Dummy*)etc->GetActive())
+						{
+							((Dummy*)etc)->OnHit(direction, attackDmg);
+							damagedObjs.push_back(etc);
+						}
+						if ((Heal*)etc->GetActive())
+						{
+							((Heal*)etc)->OnHit(attackDmg, 60);
+							damagedObjs.push_back(etc);
+						}
 					}
 				}
 			}

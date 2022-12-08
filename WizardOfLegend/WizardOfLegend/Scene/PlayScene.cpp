@@ -591,13 +591,16 @@ void PlayScene::AllDieEnemy(int i)
 					if (((FinalBoss*)obj)->GetState() != FinalBoss::States::Die)
 						return;
 				}
-				else if (obj->GetObjType() == Object::ObjTypes::Enemy)
+			}
+
+			if (obj != nullptr)
+			{
+				if (obj->GetObjType() == Object::ObjTypes::Enemy)
 				{
 					if (((Enemy*)obj)->GetIsAlive())
 						return;
 				}
 			}
-
 		}
 		hpBarSet = true;
 		room[i].SetAllEnemyDead(true);
