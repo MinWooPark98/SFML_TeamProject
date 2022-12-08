@@ -158,6 +158,7 @@
     <ClCompile Include="GameObject\Door.cpp" />
     <ClCompile Include="GameObject\FinalBoss.cpp" />
     <ClCompile Include="DataTable\StatTable.cpp" />
+    <ClCompile Include="Ui\Heal.cpp" />
     <ClCompile Include="Ui\ShowDamage.cpp" />
     <ClCompile Include="Ui\SkillCoolDownUi.cpp" />
     <ClCompile Include="Ui\PlaySceneSkillOptions.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="GameObject\Door.h" />
     <ClInclude Include="GameObject\FinalBoss.h" />
     <ClInclude Include="DataTable\StatTable.h" />
+    <ClInclude Include="Ui\Heal.h" />
     <ClInclude Include="Ui\ShowDamage.h" />
     <ClInclude Include="Ui\SkillCoolDownUi.h" />
     <ClInclude Include="Ui\PlaySceneSkillOptions.h" />

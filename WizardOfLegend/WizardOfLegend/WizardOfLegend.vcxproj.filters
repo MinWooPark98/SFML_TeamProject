@@ -69,6 +69,7 @@
     <ClCompile Include="Ui\ChaosFragments.cpp" />
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
     <ClCompile Include="GameObject\Dummy.cpp" />
+    <ClCompile Include="Ui\Heal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Ui\ChaosFragments.h" />
     <ClInclude Include="DataTable\PlatinumTable.h" />
     <ClInclude Include="GameObject\Dummy.h" />
+    <ClInclude Include="Ui\Heal.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

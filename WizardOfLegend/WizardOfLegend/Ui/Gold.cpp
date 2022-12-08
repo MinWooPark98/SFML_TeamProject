@@ -39,23 +39,25 @@ void Gold::Drop(float dt)
 {
 	Scene* currScene = SCENE_MGR->GetCurrentScene();
 	player = (Player*)currScene->FindGameObj("PLAYER");
-
-	if (player->GetHitBounds().intersects(GetHitBounds()) && GetActive())
+	if (player != nullptr)
 	{
-		SOUND_MGR->Play("sounds/DropItem.wav");
-		GetGold(player);
-		animationPlay = true;
-		SetActive(false);
-	}
-	else
-	{
-		auto move = Utils::Normalize(player->GetPos() - GetPos());
-		Translate(dt * moveSpeed * move);
-
-		if (animationPlay)
+		if (player->GetHitBounds().intersects(GetHitBounds()) && GetActive())
 		{
-			goldAnimation.Play("Gold");
-			animationPlay = false;
+			SOUND_MGR->Play("sounds/DropItem.wav");
+			GetGold(player);
+			animationPlay = true;
+			SetActive(false);
+		}
+		else
+		{
+			auto move = Utils::Normalize(player->GetPos() - GetPos());
+			Translate(dt * moveSpeed * move);
+
+			if (animationPlay)
+			{
+				goldAnimation.Play("Gold");
+				animationPlay = false;
+			}
 		}
 	}
 }

@@ -357,6 +357,12 @@ void PlayScene::Draw(RenderWindow& window)
 	Vector2i max = { (int)(worldView.getCenter().x + (int)worldView.getSize().x * 0.5f), (int)(worldView.getCenter().y + (int)worldView.getSize().y * 0.5f) };
 
 	window.setView(worldView);
+	drawSortObjs.clear();
+	for (int i = 0; i < 2; i++)
+	{
+		drawSortObjs.push_back(vector<Object*>());
+
+	}
 	for (auto& layer : objList)
 	{
 		for (auto& obj_pair : layer.second)
@@ -368,13 +374,28 @@ void PlayScene::Draw(RenderWindow& window)
 				{
 					if (obj->GetActive())
 					{
-						drawSortObjs[0].push_back(obj);
+						if (obj->GetObjType() == Object::ObjTypes::Tile)
+						{
+							drawSortObjs[0].push_back(obj);
+						}
+						else if (obj->GetObjType() == Object::ObjTypes::Wall || obj->GetObjType() == Object::ObjTypes::Player || obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss || obj->GetObjType() == Object::ObjTypes::ETC)
+						{
+							drawSortObjs[1].push_back(obj);
+						}
 					}
 				}
 			}
 		}
 	}
+	DrawSort(drawSortObjs[1]);
 
+	for (auto& layer : drawSortObjs)
+	{
+		for (auto& obj : layer)
+		{
+			obj->Draw(window);
+		}
+	}
 	for (auto showDamage : showDamages->GetUseList())
 	{
 		showDamage->Draw(window);
@@ -591,16 +612,13 @@ void PlayScene::AllDieEnemy(int i)
 					if (((FinalBoss*)obj)->GetState() != FinalBoss::States::Die)
 						return;
 				}
-			}
-
-			if (obj != nullptr)
-			{
-				if (obj->GetObjType() == Object::ObjTypes::Enemy)
+				else if (obj->GetObjType() == Object::ObjTypes::Enemy)
 				{
 					if (((Enemy*)obj)->GetIsAlive())
 						return;
 				}
 			}
+
 		}
 		hpBarSet = true;
 		room[i].SetAllEnemyDead(true);

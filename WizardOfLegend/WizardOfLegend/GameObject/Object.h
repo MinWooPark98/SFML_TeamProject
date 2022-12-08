@@ -100,7 +100,7 @@ public:
     virtual void SetHitBox(string path);
     void SetHitBoxOrigin(Origins origin) { Utils::SetOrigin(hitbox, origin); }
     void SetHitBoxOrigin(const Vector2f& origin) { hitbox.setOrigin(origin); }
-    RectangleShape& GetHitBox() { return hitbox; } 
+    RectangleShape& GetHitBox() { return hitbox; }
     FloatRect GetHitBounds() const { return hitbox.getGlobalBounds(); }
     FloatRect GetLowHitBounds() const { return lowhitbox.getGlobalBounds(); }
 
@@ -115,5 +115,7 @@ public:
     RectangleShape& GetLowHitBox() { return lowhitbox; }
 
     Vector2f GetLastPosition() const { return lastPosition; }
-    void SetLastPosition(Vector2f pos) { lastPosition = pos; };
+    void SetLastPosition(Vector2f pos) { lastPosition = pos; }
+
+    float GetSortHitBoxPostion();
 };

@@ -56,6 +56,12 @@ void Object::SetOrigin(Origins origin)
     Utils::SetOrigin(hitbox, origin);
 }
 
+
+void Object::Translate(const Vector2f& delta)
+{
+    SetPos({ position.x + delta.x, position.y + delta.y });
+}
+
 void Object::Update(float dt)
 {
     if (gravityApply)
@@ -65,10 +71,6 @@ void Object::Update(float dt)
         hitbox.setPosition(position);
         lowhitbox.setPosition({ position.x, position.y + (hitbox.getSize().y * 0.5f) + (lowhitbox.getSize().y * 0.5f) });
     }
-    /*if (InputMgr::GetKeyDown(Keyboard::F1))
-    {
-        isDevMode = !isDevMode;
-    }*/
 }
 
 
@@ -99,7 +101,29 @@ void Object::SetHitBox(string path)
     }
 }
 
-void Object::Translate(const Vector2f& delta)
+float Object::GetSortHitBoxPostion()
 {
-    SetPos({ position.x + delta.x, position.y + delta.y });
+    switch (GetObjType())
+    {
+        case ObjTypes::Player:
+        {
+            return GetLowHitBox().getPosition().y;
+        }
+        case ObjTypes::Enemy:
+        {
+            return GetLowHitBox().getPosition().y;
+        }
+        case ObjTypes::FinalBoss:
+        {
+            return GetLowHitBox().getPosition().y;
+        }
+        case ObjTypes::Wall:
+        {
+            return GetHitBox().getPosition().y;
+        }
+        case ObjTypes::ETC:
+        {
+            return GetHitBox().getPosition().y;
+        }
+    }
 }

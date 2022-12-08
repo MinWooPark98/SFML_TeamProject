@@ -7,6 +7,11 @@
 #include "../Framework/SoundMgr.h"
 #include "../GameObject/Projectile.h"
 #include "../GameObject/CastingCircle.h"
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
 
 Scene::Scene(Scenes type)
 	: type(type), uiMgr(nullptr), isPause(false), projectiles(nullptr)
@@ -23,6 +28,7 @@ void Scene::Init()
 	projectiles = new ObjectPool<Projectile>();
 	circles = new ObjectPool<CastingCircle>();
 }
+
 void Scene::Release()
 {
 	if (uiMgr != nullptr)
@@ -137,6 +143,7 @@ void Scene::AddGameObject(Object* obj, LayerType type, int num)
 {
 	objList[type][num].push_back(obj);
 }
+
 Object* Scene::FindGameObj(string name)
 {
 	for (auto& layer : objList)
@@ -155,82 +162,11 @@ Object* Scene::FindGameObj(string name)
 	}
 	return nullptr;
 }
-//bool sorting(Object* p1, Object* p2)
-//{
-//	return ((HitBoxObject*)p1)->GetBottomPos() < ((HitBoxObject*)p2)->GetBottomPos();
-//}
-//
-//void Scene::LayerSort()
-//{
-//	moves.clear();
-//	drawObjs.clear();
-//	HitBoxObject* player = nullptr;
-//
-//	for (auto& obj : alphaObj)
-//	{
-//		((HitBoxObject*)(obj))->SetHitPlayer(false);
-//	}
-//
-//	alphaObj.clear();
-//
-//	for (auto& objss : objList[LayerType::Object])
-//	{
-//		for (auto& obj : objss.second)
-//		{
-//			if (!(((SpriteObj*)obj)->IsInView()))
-//			{
-//				continue;
-//			}
-//			if (obj->GetName() == "TREE" || obj->GetName() == "STONE" || obj->GetName() == "BLOCK")
-//			{
-//				if (obj->GetName() == "TREE")
-//					alphaObj.push_back((HitBoxObject*)obj);
-//				drawObjs.push_back(obj);
-//			}
-//			else if (obj->GetName() == "ENEMY" || obj->GetName() == "PLAYER")
-//			{
-//				if (obj->GetName() == "PLAYER")
-//					player = ((HitBoxObject*)obj);
-//				moves.push_back(obj);
-//			}
-//		}
-//	}
-//
-//	if (player != nullptr)
-//	{
-//		for (auto& obj : alphaObj)
-//		{
-//			if (Utils::OBB(obj->GetHitBoxs(), player->GetBottom()))
-//			{
-//				obj->SetHitPlayer(true);
-//			}
-//		}
-//	}
-//	sort(moves.begin(), moves.end(), sorting);
-//	auto dit = drawObjs.begin();
-//
-//	for (auto mit = moves.begin(); mit != moves.end();)
-//	{
-//		if (dit == drawObjs.end())
-//		{
-//			while (mit != moves.end())
-//			{
-//				drawObjs.push_back(*mit);
-//				mit++;
-//			}
-//			break;
-//		}
-//		if (((HitBoxObject*)(*mit))->GetBottomPos() < ((HitBoxObject*)(*dit))->GetBottomPos())
-//		{
-//			dit = drawObjs.insert(dit, *mit);
-//			mit++;
-//		}
-//		else
-//		{
-//			dit++;
-//		}
-//	}
-//
-//}
 
+void Scene::DrawSort(vector<Object*>& drawSortObjs)
+{
+	sort(drawSortObjs.begin(), drawSortObjs.end(), [](Object* a, Object* b) {
+		return a->GetSortHitBoxPostion() < b->GetSortHitBoxPostion(); });
+
+}
 
