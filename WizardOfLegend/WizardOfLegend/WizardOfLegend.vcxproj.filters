@@ -70,6 +70,8 @@
     <ClCompile Include="Ui\DevUiMgr.cpp" />
     <ClCompile Include="Ui\SkillBookCardInfo.cpp" />
     <ClCompile Include="DataTable\SkillSetIntroTable.cpp" />
+    <ClCompile Include="GameObject\NPC\NPC.cpp" />
+    <ClCompile Include="GameObject\NPC\SkillBook.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -145,6 +147,8 @@
     <ClInclude Include="Ui\DevUiMgr.h" />
     <ClInclude Include="Ui\SkillBookCardInfo.h" />
     <ClInclude Include="DataTable\SkillSetIntroTable.h" />
+    <ClInclude Include="GameObject\NPC\NPC.h" />
+    <ClInclude Include="GameObject\NPC\SkillBook.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

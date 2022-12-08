@@ -18,6 +18,8 @@ public:
 protected:
 	States currState;
 
+
+
 public:
 	SkillBook();
 	virtual ~SkillBook();
