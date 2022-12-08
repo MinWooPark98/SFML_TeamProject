@@ -70,8 +70,14 @@ bool Framework::Do()
 
         SCENE_MGR->Update(dt);
         SOUND_MGR->Update();
-
-        window.clear();
+        if (SCENE_MGR->GetCurrentScene()->GetType() == Scenes::MapTool)
+        {
+            window.clear({100,100,100});
+        }
+        else
+        {
+            window.clear();
+        }
         SCENE_MGR->Draw(window);
         window.display();
     }

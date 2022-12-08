@@ -119,6 +119,10 @@
     {
       "texPath": "graphics/Map/FinalBoss.png",
       "uiPath": "graphics/Map/Palette/FinalBoss.png"
+    },
+    {
+      "texPath": "graphics/TrainingDummy.png",
+      "uiPath": "graphics/Map/Palette/TrainingDummy.png"
     }
   ],
   "SECTOR": [

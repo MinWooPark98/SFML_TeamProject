@@ -501,9 +501,9 @@ void PlayUiMgr::BossHpBraSizeControl(float dt)
 	{
 		bool set = false;
 		bool alive = false;
-		switch (bossType)
+		switch(bossType)
 		{
-		case PlayUiMgr::BossType::Archer:
+        case PlayUiMgr::BossType::Archer:
 			if (heavyBombingArcher != nullptr)
 			{
 				set = heavyBombingArcher->GetIsAlive();

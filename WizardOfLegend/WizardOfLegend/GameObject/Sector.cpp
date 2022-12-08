@@ -33,7 +33,8 @@ void Sector::Draw(RenderWindow& window)
 
 void Sector::UpdateNowDraw(float dt, DrawObj* nowDraw)
 {
-
+	if (nowDraw == nullptr)
+		return;
 	if (InputMgr::GetMouseButtonDown(Mouse::Left))
 	{
 		SetType(nowDraw->GetType());

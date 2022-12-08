@@ -24,6 +24,7 @@ private:
 	bool isNowSectorDraw = false;
 	bool isNowCliffDraw = false;
 	bool isNowObjDraw = false;
+	bool isNowEraseDraw = false;
 
 	DrawObj* player;
 	Vector2i playerPos;
@@ -36,6 +37,7 @@ private:
 	map<LayerType, map<int, map<int, Cliff*>>> cliffs;
 	int sectorI;
 	int sectorJ;
+
 
 public:
 	MapToolScene();

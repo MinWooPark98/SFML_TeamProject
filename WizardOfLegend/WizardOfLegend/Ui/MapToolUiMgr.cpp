@@ -114,6 +114,15 @@ void MapToolUiMgr::Init()
 	fps->SetOutlineThickness(2.f);
 	fps->SetText("");
 	fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
+
+	//currLayer = new TextObj();
+	//currLayer->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	//currLayer->SetSize(35);
+	//currLayer->SetFillColor(Color::White);
+	//currLayer->SetOutlineColor(Color::Black);
+	//currLayer->SetOutlineThickness(2.f);
+	//currLayer->SetText("");
+	//currLayer->SetPos({ paletteBook->GetPos().x, paletteBook->GetPos().y });
 	
 }
 

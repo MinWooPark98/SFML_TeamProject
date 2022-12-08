@@ -9,6 +9,7 @@
 #include "../Framework/Framework.h"
 #include "../GameObject/Sector.h"
 #include "../GameObject/Cliff.h"
+#include "../GameObject/TextBox.h"
 
 MapToolScene::MapToolScene()
 	: Scene(Scenes::MapTool)
@@ -40,7 +41,10 @@ void MapToolScene::Init()
 	uiMgr->Init();
 	nowType = LayerType::Object;
 
-
+	//currLayer = new TextObj();
+	//currLayer->Init();
+	//currLayer->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	//
 }
 
 void MapToolScene::Reset()
@@ -94,6 +98,40 @@ void MapToolScene::Update(float dt)
 			Vector2f pos = InputMgr::GetMousePosDisplacement();
 			worldView.setCenter(worldView.getCenter() + pos);
 		}
+	}
+	if (InputMgr::GetKeyDown(Keyboard::F5))
+	{
+		for (auto& layer : objList)
+		{
+			if (layer.first != LayerType::Back)
+			{
+				for (auto& obj_pair : layer.second)
+				{
+					auto& objs = obj_pair.second;
+
+					for (auto& obj : objs)
+					{
+						if (obj != nullptr)
+							delete obj;
+					}
+					objs.clear();
+				}
+				layer.second.clear();
+			}
+		}
+		for (auto& layer : gridObjs)
+		{
+			for (auto& obj_pair : layer.second)
+			{
+				obj_pair.second.clear();
+			}
+			layer.second.clear();
+		}
+		gridObjs.clear();
+		sectors.clear();
+		cliffs.clear();
+		sector = nullptr;
+		cliff = nullptr;
 	}
 	if (InputMgr::GetKeyDown(Keyboard::F6))
 	{
@@ -156,114 +194,96 @@ void MapToolScene::Update(float dt)
 			//cout << i << "," << j << endl;
 			if (nowType == LayerType::Object && playerPos == Vector2i{ j,i })
 				return;
-
-			//삭제코드
-			if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
-			{
-				Button* findObj = nullptr;
-				if (nowgridObjs.find(j) != nowgridObjs.end())
+			/*	if (((MapToolUiMgr*)uiMgr)->IsPaletteBook())
 				{
-					if (nowgridObjs[j].find(i) != nowgridObjs[j].end())
+					Button* findObj = nullptr;
+					if (nowgridObjs.find(j) != nowgridObjs.end())
 					{
-						findObj = nowgridObjs[j][i];
-						auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findObj);
+						if (nowgridObjs[j].find(i) != nowgridObjs[j].end())
+						{
+							findObj = nowgridObjs[j][i];
+							auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findObj);
 
-						objList[nowType][j].erase(deleteObj);
-						gridObjs[nowType][j].erase(nowgridObjs[j].find(i));
+							objList[nowType][j].erase(deleteObj);
+							gridObjs[nowType][j].erase(nowgridObjs[j].find(i));
 
-						delete findObj;
+							delete findObj;
+						}
 					}
-				}
-				return;
-			}
-			if (nowDraw == nullptr || ((MapToolUiMgr*)uiMgr)->IsPaletteBook())
-			{
-				Sector* findObj = nullptr;
-				if (nowsectorObjs.find(j) != nowsectorObjs.end())
-				{
-					if (nowsectorObjs[j].find(i) != nowsectorObjs[j].end())
-					{
-						findObj = nowsectorObjs[j][i];
-						auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findObj);
-						objList[nowType][j].erase(deleteObj);
-						sectors[nowType][j].erase(nowsectorObjs[j].find(i));
-
-						delete findObj;
-					}
-				}
-				return;
-			}
-
-			Button* findObj = nullptr;
-			if (nowgridObjs.find(j) != nowgridObjs.end())
-			{
-				if (nowgridObjs[j].find(i) != nowgridObjs[j].end())
-				{
-					findObj = nowgridObjs[j][i];
-
-					if (nowDraw->GetType() == "PLAYER")
-						return;
-
-					auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findObj);
-					objList[nowType][j].erase(deleteObj);
-					gridObjs[nowType][j].erase(nowgridObjs[j].find(i));
-
-					delete findObj;
-				}
-			}
-
-			if (nowDraw->GetType() == "SECTOR" && nowDraw != nullptr)
-			{
-				if (InputMgr::GetMouseButtonDown(Mouse::Left))
-				{
-					sector = new Sector();
-					sector->SetPos(grids[j][i]->GetPos());
-					cout << "sector1 " << endl;
-					isNowSectorDraw = true;
-					sectorJ = j;
-					sectorI = i;
-				}
-				if (sector == nullptr)
 					return;
-				sector->UpdateNowDraw(dt, nowDraw);
-				sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
-				//cout << "grids " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
-				//cout << "sector2 " << sector->GetPos().x << "," << sector->GetPos().y << endl;
-
-			}
-			if (nowDraw->GetType() == "CLIFF" && nowDraw != nullptr)
+				}*/
+				//삭제코드
+			if (!((MapToolUiMgr*)uiMgr)->IsPaletteBook() && !((MapToolUiMgr*)uiMgr)->IsLoad() && !((MapToolUiMgr*)uiMgr)->IsSave())
 			{
-				if (InputMgr::GetMouseButtonDown(Mouse::Left))
+				if (nowDraw == nullptr)
 				{
-					cliff = new Cliff();
-					cliff->SetPos(grids[j][i]->GetPos());
-					isNowCliffDraw = true;
-					sectorJ = j;
-					sectorI = i;
-				}
-				if (cliff != nullptr)
-				{
-					cliff->UpdateNowDraw(dt, nowDraw);
-					cliff->SetSize({ grids[j][i]->GetPos().x - cliff->GetPos().x + 16,grids[j][i]->GetPos().y - cliff->GetPos().y + 16 });
-				}
-			}
-			if (nowDraw->GetType() != "SECTOR" && nowDraw->GetType() != "CLIFF" && nowDraw != nullptr)
-			{
-				if (InputMgr::GetMouseButtonDown(Mouse::Left))
-				{
-					sector = new Sector();
-					sector->SetPos(grids[j][i]->GetPos());
-					isNowObjDraw = true;
-					sectorJ = j;
-					sectorI = i;
-				}
-				if (sector != nullptr)
-				{
+					if (InputMgr::GetMouseButtonDown(Mouse::Left))
+					{
+						sector = new Sector();
+						sector->SetPos(grids[j][i]->GetPos());
+						sector->SetOutlineColor(Color::Blue);
+						isNowEraseDraw = true;
+						sectorJ = j;
+						sectorI = i;
+					}
+					if (sector == nullptr)
+						return;
 					sector->UpdateNowDraw(dt, nowDraw);
 					sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
 				}
+				else if (nowDraw->GetType() == "SECTOR" && nowDraw != nullptr)
+				{
+					if (InputMgr::GetMouseButtonDown(Mouse::Left))
+					{
+						sector = new Sector();
+						sector->SetPos(grids[j][i]->GetPos());
+						isNowSectorDraw = true;
+						sectorJ = j;
+						sectorI = i;
+					}
+					if (sector == nullptr)
+						return;
+					sector->UpdateNowDraw(dt, nowDraw);
+					sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
+					//cout << "grids " << grids[j][i]->GetPos().x << "," << grids[j][i]->GetPos().y << endl;
+					//cout << "sector2 " << sector->GetPos().x << "," << sector->GetPos().y << endl;
 
+				}
+				else if (nowDraw->GetType() == "CLIFF" && nowDraw != nullptr)
+				{
+					if (InputMgr::GetMouseButtonDown(Mouse::Left))
+					{
+						cliff = new Cliff();
+						cliff->SetPos(grids[j][i]->GetPos());
+						isNowCliffDraw = true;
+						sectorJ = j;
+						sectorI = i;
+					}
+					if (cliff != nullptr)
+					{
+						cliff->UpdateNowDraw(dt, nowDraw);
+						cliff->SetSize({ grids[j][i]->GetPos().x - cliff->GetPos().x + 16,grids[j][i]->GetPos().y - cliff->GetPos().y + 16 });
+					}
+				}
+				else if (nowDraw->GetType() != "SECTOR" && nowDraw->GetType() != "CLIFF" && nowDraw != nullptr)
+				{
+					if (InputMgr::GetMouseButtonDown(Mouse::Left))
+					{
+						sector = new Sector();
+						sector->SetPos(grids[j][i]->GetPos());
+						isNowObjDraw = true;
+						sectorJ = j;
+						sectorI = i;
+					}
+					if (sector != nullptr)
+					{
+						sector->UpdateNowDraw(dt, nowDraw);
+						sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
+					}
+
+				}
 			}
+
 		}
 		if (nowDraw != nullptr && isNowSectorDraw)
 		{
@@ -310,21 +330,21 @@ void MapToolScene::Update(float dt)
 				{
 					for (int y = sectorI; y < i + 1; y++)
 					{
-						
-							Button* findObj = nullptr;
-							if (nowgridObjs.find(x) != nowgridObjs.end())
+
+						Button* findObj = nullptr;
+						if (nowgridObjs.find(x) != nowgridObjs.end())
+						{
+							if (nowgridObjs[x].find(y) != nowgridObjs[x].end())
 							{
-								if (nowgridObjs[x].find(y) != nowgridObjs[x].end())
-								{
-									findObj = nowgridObjs[x][y];
-									auto deleteObj = find(objList[nowType][x].begin(), objList[nowType][x].end(), findObj);
+								findObj = nowgridObjs[x][y];
+								auto deleteObj = find(objList[nowType][x].begin(), objList[nowType][x].end(), findObj);
 
-									objList[nowType][x].erase(deleteObj);
-									gridObjs[nowType][x].erase(nowgridObjs[x].find(y));
+								objList[nowType][x].erase(deleteObj);
+								gridObjs[nowType][x].erase(nowgridObjs[x].find(y));
 
-									delete findObj;
-								}
+								delete findObj;
 							}
+						}
 
 						DrawObj* draw = new DrawObj(uiMgr);
 						draw->SetType(nowDraw->GetType());
@@ -370,9 +390,78 @@ void MapToolScene::Update(float dt)
 				}
 			}
 		}
+		if (nowDraw == nullptr && isNowEraseDraw)
+		{
+			if (InputMgr::GetMouseButtonUp(Mouse::Left))
+			{
+				isNowEraseDraw = false;
+
+				if (sector != nullptr)
+				{
+					sector = nullptr;
+				}
+				for (int x = sectorJ; x < j + 1; x++)
+				{
+					for (int y = sectorI; y < i + 1; y++)
+					{
+						Button* findObj = nullptr;
+						if (nowgridObjs.find(x) != nowgridObjs.end())
+						{
+							if (nowgridObjs[x].find(y) != nowgridObjs[x].end())
+							{
+								findObj = nowgridObjs[x][y];
+								auto deleteObj = find(objList[nowType][x].begin(), objList[nowType][x].end(), findObj);
+
+								objList[nowType][x].erase(deleteObj);
+								gridObjs[nowType][x].erase(nowgridObjs[x].find(y));
+
+								delete findObj;
+							}
+						}
+
+						////섹터 지우는 기능 추가 필요 밑에 코드로는 삭제가 안됨
+						//Sector* findSectorObj = nullptr;
+						//if (nowsectorObjs.find(j) != nowsectorObjs.end())
+						//{
+						//	if (nowsectorObjs[j].find(i) != nowsectorObjs[j].end())
+						//	{
+						//		findSectorObj = nowsectorObjs[j][i];
+						//		auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findSectorObj);
+						//		objList[nowType][j].erase(deleteObj);
+						//		sectors[nowType][j].erase(nowsectorObjs[j].find(i));
+						//		delete findSectorObj;
+						//	}
+						//}
+					}
+				}
+
+
+				Button* findObj = nullptr;
+				if (nowgridObjs.find(j) != nowgridObjs.end())
+				{
+					if (nowgridObjs[j].find(i) != nowgridObjs[j].end())
+					{
+						findObj = nowgridObjs[j][i];
+
+						/*if (nowDraw->GetType() == "PLAYER")
+							return;*/
+
+						auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findObj);
+						objList[nowType][j].erase(deleteObj);
+						gridObjs[nowType][j].erase(nowgridObjs[j].find(i));
+
+						delete findObj;
+					}
+				}
+
+			}
+		}
+
 	}
+	
 
 }
+
 
 void MapToolScene::Draw(RenderWindow& window)
 {
