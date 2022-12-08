@@ -30,6 +30,17 @@ const map<string, SkillSetTable::SetInfo> SkillSetTable::Get(Skill::Element elem
 	return find->second;
 }
 
+const Skill::Element SkillSetTable::GetElement(const string& name)
+{
+	for (int i = 0; i < (int)Skill::Element::Count; ++i)
+	{
+		auto find = table[(Skill::Element)i].find(name);
+		if (find != table[(Skill::Element)i].end())
+			return (Skill::Element)i;
+	}
+	throw "Wrong value";
+}
+
 void SkillSetTable::Release()
 {
 	table.clear();

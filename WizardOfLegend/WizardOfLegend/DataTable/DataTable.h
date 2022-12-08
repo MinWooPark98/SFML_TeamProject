@@ -13,6 +13,7 @@ public:
 		Stat,
 		Skill,
 		SkillSet,
+		SkillSetIntro,
 		FinalBossSkill,
 		MapName,
 	};

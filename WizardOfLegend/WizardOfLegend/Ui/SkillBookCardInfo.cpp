@@ -9,9 +9,10 @@
 #include "../Scene/SceneMgr.h"
 #include "../DataTable/SkillTable.h"
 #include "SkillBookButton.h"
+#include "../DataTable/SkillSetIntroTable.h"
 
 SkillBookCardInfo::SkillBookCardInfo()
-	:frame(nullptr), element(0), skillIdx(0), currPlayerSkillSetIdx(0), isMoving(true), moveSpeed(3600.f)
+	:frame(nullptr), element(0), skillIdx(0), currPlayerSkillSetIdx(0), isMoving(true), moveSpeed(7200.f), skillName(nullptr), skillIntro(nullptr)
 {
 }
 
@@ -45,18 +46,49 @@ void SkillBookCardInfo::Init()
 		cards.push_back({ card, icon });
 	}
 
-	vector<pair<string, string>> elements = { {"graphics/SpellBookTabFire.png", "graphics/SpellBookTabFireSelected.png"}, {"graphics/SpellBookTabAir.png", "graphics/SpellBookTabAirSelected.png"}, {"graphics/SpellBookTabEarth.png", "graphics/SpellBookTabEarthSelected.png"}, {"graphics/SpellBookTabLightning.png", "graphics/SpellBookTabLightningSelected.png"}, {"graphics/SpellBookTabWater.png", "graphics/SpellBookTabWaterSelected.png"}, {"graphics/SpellBookTabChaos.png", "graphics/SpellBookTabChaosSelected.png"} };
+	vector<pair<string, string>> elementBtns = { {"graphics/SpellBookTabFire.png", "graphics/SpellBookTabFireSelected.png"}, {"graphics/SpellBookTabAir.png", "graphics/SpellBookTabAirSelected.png"}, {"graphics/SpellBookTabEarth.png", "graphics/SpellBookTabEarthSelected.png"}, {"graphics/SpellBookTabLightning.png", "graphics/SpellBookTabLightningSelected.png"}, {"graphics/SpellBookTabWater.png", "graphics/SpellBookTabWaterSelected.png"}, {"graphics/SpellBookTabChaos.png", "graphics/SpellBookTabChaosSelected.png"} };
+	vector<string> elemIconDirs = { "graphics/SpellbookUIEleIconFireSel.png", "graphics/SpellbookUIEleIconAirSel.png", "graphics/SpellbookUIEleIconEarthSel.png", "graphics/SpellbookUIEleIconLightningSel.png", "graphics/SpellbookUIEleIconWaterSel.png", "graphics/SpellbookUIEleIconChaosSel.png" };
+	vector<string> elemPageDirs = { "graphics/SpellbookUIFirePage.png", "graphics/SpellbookUIAirPage.png", "graphics/SpellbookUIEarthPage.png", "graphics/SpellbookUILightningPage.png", "graphics/SpellbookUIWaterPage.png" };
 	for (int i = 0; i < 6; ++i)
 	{
 		SkillBookButton* newButton = new SkillBookButton();
 		newButton->Init();
 		newButton->GetOption()->SetScale({ 4.f, 4.f });
 		newButton->GetHighLight()->SetScale({ 4.f, 4.f });
-		newButton->SetOption(elements[i].first);
-		newButton->HighLightOnFunc = bind(&SkillBookButton::SetOption, newButton, elements[i].second);
-		newButton->HighLightOffFunc = bind(&SkillBookButton::SetOption, newButton, elements[i].first);
+		newButton->SetOption(elementBtns[i].first);
+		newButton->HighLightOnFunc = bind(&SkillBookButton::SetOption, newButton, elementBtns[i].second);
+		newButton->HighLightOffFunc = bind(&SkillBookButton::SetOption, newButton, elementBtns[i].first);
 		showElements.push_back(newButton);
+
+		SpriteObj* elemIcon = new SpriteObj();
+		elemIcon->Init();
+		elemIcon->SetTexture(*RESOURCE_MGR->GetTexture(elemIconDirs[i]));
+		elemIcon->SetOrigin(Origins::MC);
+		elemIcon->SetScale({ 3.75f, 3.75f });
+		elemIcons.push_back(elemIcon);
+
+		if (i < 5)
+		{
+			SpriteObj* elemPage = new SpriteObj();
+			elemPage->Init();
+			elemPage->SetTexture(*RESOURCE_MGR->GetTexture(elemPageDirs[i]));
+			elemPage->SetOrigin(Origins::TC);
+			elemPage->SetScale({ 3.75f, 4.f });
+			elemPages.push_back(elemPage);
+		}
 	}
+
+	skillName = new TextObj();
+	skillName->Init();
+	skillName->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	skillName->SetSize(35);
+	skillName->SetFillColor(Color(57, 40, 21, 255));
+
+	skillIntro = new TextObj();
+	skillIntro->Init();
+	skillIntro->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	skillIntro->SetSize(25);
+	skillIntro->SetFillColor(Color(57, 40, 21, 255));
 
 	SetActive(false);
 }
@@ -117,12 +149,16 @@ void SkillBookCardInfo::Update(float dt)
 			++skillIdx;
 	}
 	SetDrawinCards();
+	SetSkillIntro();
 }
 
 void SkillBookCardInfo::Draw(RenderWindow& window)
 {
 	Object::Draw(window);
 	frame->Draw(window);
+	if (element < 5)
+		elemPages[element]->Draw(window);
+	elemIcons[element]->Draw(window);
 	for (auto& card : drawingCards)
 	{
 		card.first->Draw(window);
@@ -132,12 +168,22 @@ void SkillBookCardInfo::Draw(RenderWindow& window)
 	{
 		showElement->Draw(window);
 	}
+	skillName->Draw(window);
+	skillIntro->Draw(window);
 }
 
 void SkillBookCardInfo::Reposition()
 {
 	frame->SetPos(position);
 	auto frameBnd = frame->GetGlobalBounds();
+	for (int i = 0; i < elemPages.size(); ++i)
+	{
+		Vector2f pos = { frameBnd.left + frameBnd.width * 0.5f, frameBnd.top };
+		if (i == 3)
+			elemPages[i]->SetPos({ pos.x, pos.y + 30.f });
+		else
+			elemPages[i]->SetPos(pos);
+	}
 	cards[0].first->SetPos({ frameBnd.left + frameBnd.width * 0.245f, frameBnd.top + frameBnd.height * 0.4f });
 	cards[1].first->SetPos({ frameBnd.left + frameBnd.width * 0.33f, frameBnd.top + frameBnd.height * 0.385f });
 	cards[2].first->SetPos({ frameBnd.left + frameBnd.width * 0.495f, frameBnd.top + frameBnd.height * 0.37f });
@@ -152,7 +198,14 @@ void SkillBookCardInfo::Reposition()
 	{
 		showElements[i]->SetPos({ frameBnd.left + frameBnd.width * 0.98f, frameBnd.top + frameBnd.height * (0.15f + i * 0.125f) });
 	}
-}
+	for (auto elemIcon : elemIcons)
+	{
+		elemIcon->SetPos({ frameBnd.left + frameBnd.width * 0.49f, frameBnd.top + frameBnd.height * 0.185f });
+	}
+
+	skillName->SetPos({ frameBnd.left + frameBnd.width * 0.5f, frameBnd.top + frameBnd.height * 0.535f });
+	skillIntro->SetPos({ frameBnd.left + frameBnd.width * 0.125f, frameBnd.top + frameBnd.height * 0.595f });
+} 
 
 void SkillBookCardInfo::SetPos(const Vector2f& pos)
 {
@@ -195,6 +248,26 @@ void SkillBookCardInfo::SetElementHighLight()
 	}
 }
 
+void SkillBookCardInfo::SetSkillIntro()
+{
+	if (skillInfos[element].empty())
+	{
+		skillName->SetString("");
+		skillIntro->SetString("");
+	}
+	else
+	{
+		auto table = DATATABLE_MGR->Get<SkillSetIntroTable>(DataTable::Types::SkillSetIntro);
+		auto& intro = table->Get(skillInfos[element][skillIdx].first);
+		skillName->SetString(intro.skillName_Kor);
+		skillName->AsciiToUnicode();
+		skillName->SetOrigin(Origins::TC);
+		skillIntro->SetString(intro.skillIntro_Kor);
+		skillIntro->AsciiToUnicode();
+		skillIntro->SetOrigin(Origins::TL);
+	}
+}
+
 void SkillBookCardInfo::SetDrawinCards()
 {
 	drawingCards.clear();
@@ -231,7 +304,7 @@ void SkillBookCardInfo::SetDrawinCards()
 
 void SkillBookCardInfo::ChangeSkill()
 {
-	if (skillIdx > skillInfos[element].size() - 1)
+	if (skillIdx > (int)skillInfos[element].size() - 1)
 		return;
 	Disappear();
 	playerSkillSets[currPlayerSkillSetIdx]->Set(skillInfos[element][skillIdx].first);
@@ -293,5 +366,6 @@ void SkillBookCardInfo::SetActive(bool active)
 	element = (int)playerSkillSets[currPlayerSkillSetIdx]->GetElement();
 	SetElementHighLight();
 	SetDrawinCards();
+	SetSkillIntro();
 	Reappear();
 }

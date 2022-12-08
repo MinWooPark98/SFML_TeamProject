@@ -5,7 +5,7 @@
 #include "../Ui/PlayUiMgr.h"
 
 SkillSet::SkillSet()
-	:subject(nullptr), subType(Skill::SubjectType::None), isSingleSkill(false), isOnCoolDown(false), newCoolDownEntered(false), newCoolDownApplied(false), newCoolDown(0.f), timer(0.f)
+	:subject(nullptr), subType(Skill::SubjectType::None), element(Skill::Element::Fire), isSingleSkill(false), isOnCoolDown(false), newCoolDownEntered(false), newCoolDownApplied(false), newCoolDown(0.f), timer(0.f)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -55,6 +55,7 @@ void SkillSet::Set(const string& setName)
 	skillSetName = setName;
 	SkillSetTable* table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	auto& skillSetInfo = table->Get(setName);
+	element = table->GetElement(setName);
 	newCoolDown = skillSetInfo.newCoolDown;
 	if (!Utils::EqualFloat(newCoolDown, -1.f))
 	{
@@ -107,6 +108,7 @@ void SkillSet::SetOnlyOneSkill(const Skill::Set& set)
 	ResetSkills();
 	skillSetName = set.skillName;
 	isSingleSkill = true;
+	element = set.element;
 	if (set.attackType == Skill::AttackType::SaveAttacks)
 	{
 		newCoolDown = 0.f;

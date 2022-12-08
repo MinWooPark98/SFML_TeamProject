@@ -22,6 +22,7 @@ public:
 
 	const SetInfo& Get(const string& setName);
 	const map<string, SetInfo> Get(Skill::Element elem);
+	const Skill::Element GetElement(const string& name);
 	const map<Skill::Element, map<string, SetInfo>>& GetTable() { return table; }
 
 	virtual void Release() override;

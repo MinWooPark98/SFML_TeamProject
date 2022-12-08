@@ -11,7 +11,7 @@
 #include "SkillBookCardInfo.h"
 
 SkillBookUi::SkillBookUi()
-	:collection(nullptr), skillVecIdx(0), skillInfo(nullptr), isMoving(true), moveSpeed(3600.f), state(States::SkillOption)
+	:collection(nullptr), skillVecIdx(0), skillInfo(nullptr), isMoving(true), moveSpeed(5400.f), state(States::SkillOption)
 {
 }
 
@@ -261,6 +261,14 @@ void SkillBookUi::SetActive(bool active)
 			option.second->SetOrigin(Origins::MC);
 		}
 		Reappear();
+	}
+	else
+	{
+		for (auto& option : options)
+		{
+			if(option.first->GetHighLightOn())
+				option.first->HighLightOff();
+		}
 	}
 }
 
