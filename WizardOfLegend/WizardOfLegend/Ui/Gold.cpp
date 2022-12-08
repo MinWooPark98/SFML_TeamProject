@@ -5,6 +5,7 @@
 #include "../Scene/PlayScene.h"
 #include "../GameObject/Player.h"
 #include "../Framework/ResourceMgr.h"
+#include "../Framework/SoundMgr.h"
 
 void Gold::Init()
 {
@@ -41,6 +42,7 @@ void Gold::Drop(float dt)
 
 	if (player->GetHitBounds().intersects(GetHitBounds()) && GetActive())
 	{
+		SOUND_MGR->Play("sounds/DropItem.wav");
 		GetGold(player);
 		animationPlay = true;
 		SetActive(false);

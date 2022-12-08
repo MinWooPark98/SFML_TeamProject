@@ -4,7 +4,7 @@
 #include "../Scene/PlayScene.h"
 #include "../GameObject/Player.h"
 
-int CameraMove::shakeCount = 3;
+int CameraMove::shakeCount = 2;
 bool CameraMove::viewShakeLeft = true;
 bool CameraMove::viewShakeRight;
 
@@ -57,7 +57,7 @@ void CameraMove::CameraShake(float dt)
 
 		if (shakeCount == 0)
 		{
-			shakeCount = 3;
+			shakeCount = 2;
 			viewShake = false;
 			viewSet = true;
 		}

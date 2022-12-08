@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
+    <ClCompile Include="GameObject\Dummy.cpp" />
     <ClCompile Include="Ui\ChaosFragments.cpp" />
     <ClCompile Include="Framework\CameraMove.cpp" />
     <ClCompile Include="DataTable\FinalBossSkillTable.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
     <ClInclude Include="DataTable\PlatinumTable.h" />
+    <ClInclude Include="GameObject\Dummy.h" />
     <ClInclude Include="Ui\ChaosFragments.h" />
     <ClInclude Include="Framework\CameraMove.h" />
     <ClInclude Include="DataTable\FinalBossSkillTable.h" />

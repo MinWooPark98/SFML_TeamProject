@@ -99,11 +99,20 @@ void Lancer::Update(float dt)
 			{
 				dieTimer = 1.f;
 				SetState(States::Die);
+
 				PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 				auto gold = playScene->GetGold()->Get();
 				gold->SetGoldPos(GetPos());
-				auto platinum = playScene->GetPlatinum()->Get();
-				platinum->SetPosition(GetPos());
+
+				int platinumDrop = Utils::RandomRange(0, 100);
+				if (platinumDrop >= 70)
+				{
+					auto platinum = playScene->GetPlatinum()->Get();
+					platinum->SetPosition(GetPos());
+				}
+
+				SOUND_MGR->Play("sounds/GoldSpawn.wav");
+
 				isAlive = false;
 			}
 
