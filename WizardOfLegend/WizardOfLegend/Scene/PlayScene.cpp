@@ -588,7 +588,6 @@ void PlayScene::AllDieEnemy(int i)
 						return;
 				}
 			}
-
 		}
 		hpBarSet = true;
 		room[i].SetAllEnemyDead(true);

@@ -4,6 +4,8 @@
 #include "../Scene/SceneMgr.h"
 #include "../Scene/PlayScene.h"
 #include "FinalBoss.h"
+#include "../Ui/Heal.h"
+#include "Dummy.h"
 
 CastingCircle::CastingCircle()
 	:animator(nullptr), duration(0.f), timer(0.f), dmgType(Skill::DamageType::Once), attackDmg(0), atkDelay(0.f), atkTimer(0.f), subType(Skill::SubjectType::None)
@@ -90,6 +92,22 @@ void CastingCircle::Update(float dt)
 							if (GetHitBounds().intersects(boss->GetHitBounds()))
 								((FinalBoss*)boss)->OnHit(direction, attackDmg);
 						}
+						for (auto& etc : collisionList[i][Object::ObjTypes::ETC])
+						{
+							if (GetHitBounds().intersects(etc->GetHitBounds()))
+							{
+								if ((Dummy*)etc->GetActive())
+								{
+									((Dummy*)etc)->OnHit(direction, attackDmg);
+									damagedObjs.push_back(etc);
+								}
+								if ((Heal*)etc->GetActive())
+								{
+									((Heal*)etc)->OnHit(attackDmg, 60);
+									damagedObjs.push_back(etc);
+								}
+							}
+						}
 					}
 					break;
 				case Skill::SubjectType::Enemy:
@@ -146,6 +164,22 @@ void CastingCircle::Update(float dt)
 					{
 						((FinalBoss*)boss)->OnHit(direction, attackDmg);
 						damagedObjs.push_back(boss);
+					}
+				}
+				for (auto& etc : collisionList[i][Object::ObjTypes::ETC])
+				{
+					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
+					{
+						if ((Dummy*)etc->GetActive())
+						{
+							((Dummy*)etc)->OnHit(direction, attackDmg);
+							damagedObjs.push_back(etc);
+						}
+						if ((Heal*)etc->GetActive())
+						{
+							((Heal*)etc)->OnHit(attackDmg, 60);
+							damagedObjs.push_back(etc);
+						}
 					}
 				}
 			}
