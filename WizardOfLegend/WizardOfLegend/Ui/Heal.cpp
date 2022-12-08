@@ -48,7 +48,11 @@ void Heal::OnHit(int dmg, int heal)
 	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
 
 	player = (Player*)playScene->FindGameObj("PLAYER");
-	player->SetCurHp(player->GetCurHp() + heal);
+
+	if (player->GetCurHp() + heal >= player->GetMaxHp())
+		player->SetCurHp(player->GetMaxHp());
+	else
+		player->SetCurHp(player->GetCurHp() + heal);
 	SOUND_MGR->Play("sounds/HealRegen.wav");
 
 	SetActive(false);

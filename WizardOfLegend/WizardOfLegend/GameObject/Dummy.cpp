@@ -15,8 +15,11 @@ void Dummy::Init()
 {
 	SpriteObj::Init();
 	SetTexture(*RESOURCE_MGR->GetTexture("graphics/TrainingDummy.png"));
-	SetHitBox({20, 20, 15, 30}, Color::Red);
-	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
+	SetOrigin(Origins::MC);
+	SetHitBox({ 20, 20, 15, 30 }, Color::Red);
+	hitbox.setOrigin(hitbox.getSize().x * 0.5f, hitbox.getSize().y * 0.5f);
+	SetLowHitBox({20, 20, 15, 5}, Color::White);
+	SetLowHitBoxOrigin(Origins::MC);
 }
 
 void Dummy::Update(float dt)

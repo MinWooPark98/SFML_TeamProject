@@ -158,20 +158,20 @@ void Projectile::Update(float dt)
 						damagedObjs.push_back(boss);
 					}
 				}
-				for (auto& etc : collisionList[i][Object::ObjTypes::ETC])
+				for (auto& etc : collisionList[i][Object::ObjTypes::Dummy])
 				{
 					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
 					{
-						if ((Dummy*)etc->GetActive())
-						{
-							((Dummy*)etc)->OnHit(direction, attackDmg);
-							damagedObjs.push_back(etc);
-						}
-						if ((Heal*)etc->GetActive())
-						{
-							((Heal*)etc)->OnHit(attackDmg, 60);
-							damagedObjs.push_back(etc);
-						}
+						((Dummy*)etc)->OnHit(direction, attackDmg);
+						damagedObjs.push_back(etc);
+					}
+				}
+				for (auto& etc : collisionList[i][Object::ObjTypes::BrokenObject])
+				{
+					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
+					{
+						((Heal*)etc)->OnHit(attackDmg, 60);
+						damagedObjs.push_back(etc);
 					}
 				}
 			}

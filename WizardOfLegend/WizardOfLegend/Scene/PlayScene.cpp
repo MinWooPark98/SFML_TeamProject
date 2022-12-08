@@ -20,6 +20,7 @@
 #include "../Ui/Gold.h"
 #include "../Ui/ChaosFragments.h"
 #include "../GameObject/Dummy.h"
+#include "../Ui/Portal.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -59,7 +60,7 @@ void PlayScene::Init()
 			objList[LayerType::Sector][0].push_back(sector);
 		}
 	}
-	
+
 	for (int i = 0; i < room.size(); i++)
 	{
 		collisionList.push_back(map<Object::ObjTypes, list<Object*>>());
@@ -92,25 +93,6 @@ void PlayScene::Init()
 
 			objList[LayerType::Tile][0].push_back(draw);
 		}
-		else if (obj.type == "OBJECT")
-		{
-			SpriteObj* draw = new SpriteObj();
-			draw->Init();
-			draw->SetName(obj.type);
-			draw->SetFileName(obj.path);
-			draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
-			draw->SetOrigin(Origins::BC);
-			draw->SetPos(obj.position);
-			draw->SetHitBox(obj.path);
-			draw->SetObjType(Object::ObjTypes::ETC);
-			if (obj.path == "graphics/Map/Object/GateFull.png" ||
-				obj.path == "graphics/Map/Palette/LeftGate.png" ||
-				obj.path == "graphics/Map/Palette/RightGate.png")
-			{
-				draw->SetActive(false);
-			}
-			objList[LayerType::Object][0].push_back(draw);
-		}
 		else if (obj.type == "PLAYER")
 		{
 			player = new Player();
@@ -127,6 +109,44 @@ void PlayScene::Init()
 			player->SetSkillSet(4, "DragonArc", true);
 			player->SetSkillSet(5, "FireFull", true);
 			((PlayUiMgr*)uiMgr)->SetPlayer(player);
+		}
+		else if (obj.type == "OBJECT")
+		{
+			if (obj.path == "graphics/Map/Object/Portal.png")
+			{
+				portal = new Portal();
+				portal->Init();
+				portal->SetName(obj.type);
+				portal->SetPos(obj.position);
+				portal->SetObjType(Object::ObjTypes::ETC);
+				portal->SetPlayer(player);
+
+				if (mapName == "TUTORIALMAP")
+					portal->SetChanegeMap("TUTORIALFIGHT");
+				else if (mapName == "TUTORIALFIGHT")
+					portal->SetChanegeMap("TUTORIAL");
+
+				objList[LayerType::Object][0].push_back(portal);
+			}
+			else
+			{
+				SpriteObj* draw = new SpriteObj();
+				draw->Init();
+				draw->SetName(obj.type);
+				draw->SetFileName(obj.path);
+				draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
+				draw->SetOrigin(Origins::BC);
+				draw->SetPos(obj.position);
+				draw->SetHitBox(obj.path);
+				draw->SetObjType(Object::ObjTypes::ETC);
+				if (obj.path == "graphics/Map/Object/GateFull.png" ||
+					obj.path == "graphics/Map/Palette/LeftGate.png" ||
+					obj.path == "graphics/Map/Palette/RightGate.png")
+				{
+					draw->SetActive(false);
+				}
+				objList[LayerType::Object][0].push_back(draw);
+			}
 		}
 		else if (obj.type == "ENEMY")
 		{
@@ -202,8 +222,8 @@ void PlayScene::Init()
 				trainingDummy->SetName(obj.type);
 				trainingDummy->SetPos(obj.position);
 				trainingDummy->SetInitPos(obj.position);
-				trainingDummy->SetObjType(Object::ObjTypes::Enemy);
-				trainingDummy->SetActive(false);
+				trainingDummy->SetObjType(Object::ObjTypes::Dummy);
+				trainingDummy->SetActive(true);
 				trainingDummy->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][2].push_back(trainingDummy);
 			}
@@ -259,7 +279,7 @@ void PlayScene::Init()
 			((FinalBoss*)finalBoss)->SetPlayer(player);
 		}
 	}
-	if(fireBoss !=nullptr)
+	if (fireBoss != nullptr)
 		fireBoss->SetPlayerLastPos(player->GetPos());
 }
 
@@ -267,7 +287,14 @@ void PlayScene::Update(float dt)
 {
 	CameraMove::CameraShake(dt);
 	Scene::Update(dt);
-	
+
+	if (portal != nullptr)
+	{
+		portal->Update(dt);
+		if (player->GetHitBounds().intersects(portal->GetHitBounds()))
+			portal->ChangeMap();
+	}
+
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
 		if (GetPause())
@@ -294,7 +321,7 @@ void PlayScene::Update(float dt)
 				collisionList[i][Object::ObjTypes::Player].push_back(player);
 				playerRooms.push_back(i);
 			}
-			SpawnEnemy(i,dt);
+			SpawnEnemy(i, dt);
 			AllDieEnemy(i);
 		}
 		else
@@ -325,11 +352,26 @@ void PlayScene::Update(float dt)
 				}
 			}
 			break;
+		case Object::ObjTypes::BrokenObject:
+			for (int j = 0; j < collisionList.size(); ++j)
+			{
+				if (collisionList[j][Object::ObjTypes::Player].empty())
+					continue;
+				for (auto& obj : collisionList[j][Object::ObjTypes::Dummy])
+				{
+					if ((Dummy*)obj->GetActive())
+					{
+						OnCollisionWall(j, (Dummy*)obj);
+						OnCollisionETC(j, (Dummy*)obj);
+					}
+				}
+			}
+			break;
 		default:
 			break;
 		}
 	}
-	
+
 	auto& usingProjectiles = projectiles->GetUseList();
 	for (auto& projectile : usingProjectiles)
 	{
@@ -340,6 +382,14 @@ void PlayScene::Update(float dt)
 			if (collisionList[i][Object::ObjTypes::Player].empty())
 				continue;
 			for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
+			{
+				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
+				{
+					projectile->SetMoving(false);
+					break;
+				}
+			}
+			for (auto& coll : collisionList[i][Object::ObjTypes::ETC])
 			{
 				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
@@ -432,6 +482,7 @@ void PlayScene::Release()
 			}
 		}
 	}
+	portal = nullptr;
 	objList.clear();
 	room.clear();
 	playerRooms.clear();
@@ -441,9 +492,9 @@ void PlayScene::Release()
 	finalBoss = nullptr;
 	heavyBombingArcher = nullptr;
 	player = nullptr;
-	if(projectiles != nullptr)
+	if (projectiles != nullptr)
 		projectiles->Release();
-	if(circles != nullptr)
+	if (circles != nullptr)
 		circles->Release();
 	isPause = false;
 	hpBarSet = true;
@@ -464,7 +515,7 @@ void PlayScene::Reset()
 			auto& objs = obj_pair.second;
 			for (auto& obj : objs)
 			{
-				if (obj->GetObjType()== Object::ObjTypes::Enemy)
+				if (obj->GetObjType() == Object::ObjTypes::Enemy)
 				{
 					((Enemy*)obj)->Reset();
 				}
@@ -502,7 +553,7 @@ void PlayScene::SpawnEnemy(int i, float dt)
 		{
 			for (auto& obj : c_list.second)
 			{
-				if ((obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive()) || 
+				if ((obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive()) ||
 					((obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((FinalBoss*)obj)->GetState() != FinalBoss::States::Die))
 				{
 					obj->SetActive(true);
@@ -574,7 +625,7 @@ void PlayScene::AllDieEnemy(int i)
 								hpBarSet = false;
 							}
 						}
-					}					
+					}
 				}
 				else if (obj->GetObjType() == Object::ObjTypes::Enemy)
 				{
@@ -590,7 +641,7 @@ void PlayScene::AllDieEnemy(int i)
 								hpBarSet = false;
 							}
 						}
-						
+
 						if (heavyBombingArcher != nullptr)
 						{
 							if (heavyBombingArcher->GetActive())
@@ -601,7 +652,7 @@ void PlayScene::AllDieEnemy(int i)
 								hpBarSet = false;
 							}
 						}
-		
+
 					}
 				}
 			}
@@ -679,7 +730,7 @@ void PlayScene::OnCollisionETC(int roomVec, Object* obj)
 {
 	for (auto& coll : collisionList[roomVec][Object::ObjTypes::ETC])
 	{
-		if(!coll->GetActive())
+		if (!coll->GetActive())
 			continue;
 		if (obj->GetLowHitBounds().intersects(coll->GetHitBounds()))
 		{
@@ -691,6 +742,37 @@ void PlayScene::OnCollisionETC(int roomVec, Object* obj)
 
 			float collXPoint = (coll->GetHitBounds().width * 0.5f) + coll->GetHitBounds().left;
 			float collYPoint = (coll->GetHitBounds().height * 0.5f) + coll->GetHitBounds().top;
+
+			if (obj->GetLowHitBounds().top >= collYPoint || objLowPoint <= collYPoint)
+				topandLow = true;
+			if (obj->GetLowHitBounds().left >= collXPoint || objRightPoint <= collXPoint)
+				leftandRight = true;
+
+			if (topandLow)
+			{
+				obj->SetPos({ obj->GetPos().x, obj->GetLastPosition().y });
+			}
+			if (leftandRight)
+			{
+				obj->SetPos({ obj->GetLastPosition().x, obj->GetPos().y });
+			}
+		}
+	}
+
+	for (auto& dummy : collisionList[roomVec][Object::ObjTypes::Dummy])
+	{
+		if (!dummy->GetActive())
+			continue;
+		if (obj->GetLowHitBounds().intersects(dummy->GetHitBounds()))
+		{
+			bool leftandRight = false;
+			bool topandLow = false;
+
+			float objRightPoint = obj->GetLowHitBounds().width + obj->GetLowHitBounds().left;
+			float objLowPoint = obj->GetLowHitBounds().height + obj->GetLowHitBounds().top;
+
+			float collXPoint = (dummy->GetHitBounds().width * 0.5f) + dummy->GetHitBounds().left;
+			float collYPoint = (dummy->GetHitBounds().height * 0.5f) + dummy->GetHitBounds().top;
 
 			if (obj->GetLowHitBounds().top >= collYPoint || objLowPoint <= collYPoint)
 				topandLow = true;

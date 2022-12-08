@@ -22,6 +22,8 @@ public:
         FinalBoss,
         Cliff,
         Sector,
+        Dummy,
+        BrokenObject,
         ETC,
         Count,
     };

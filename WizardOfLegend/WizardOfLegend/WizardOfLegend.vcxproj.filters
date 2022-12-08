@@ -70,6 +70,7 @@
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
     <ClCompile Include="GameObject\Dummy.cpp" />
     <ClCompile Include="Ui\Heal.cpp" />
+    <ClCompile Include="Ui\Portal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="DataTable\PlatinumTable.h" />
     <ClInclude Include="GameObject\Dummy.h" />
     <ClInclude Include="Ui\Heal.h" />
+    <ClInclude Include="Ui\Portal.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
