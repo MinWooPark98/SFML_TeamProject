@@ -80,6 +80,7 @@
     <ClCompile Include="DataTable\SkillSetIntroTable.cpp" />
     <ClCompile Include="GameObject\Interactive\Interactive.cpp" />
     <ClCompile Include="GameObject\Interactive\SkillBook.cpp" />
+    <ClCompile Include="GameObject\HitSpark.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="DataTable\SkillSetIntroTable.h" />
     <ClInclude Include="GameObject\Interactive\Interactive.h" />
     <ClInclude Include="GameObject\Interactive\SkillBook.h" />
+    <ClInclude Include="GameObject\HitSpark.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

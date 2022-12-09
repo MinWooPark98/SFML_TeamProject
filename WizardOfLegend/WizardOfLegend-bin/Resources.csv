@@ -900,3 +900,12 @@ animations/npc/SkillBook/SkillBookOpenReady.csv,3
 animations/npc/SkillBook/SkillBookOpen.csv,3
 animations/npc/SkillBook/SkillBookBigChomp.csv,3
 graphics/F.png,0
+graphics/Map/effect/SlashHitSpark_0.png,0
+graphics/Map/effect/SlashHitSpark_1.png,0
+graphics/Map/effect/SlashHitSpark_2.png,0
+graphics/Map/effect/SlashHitSpark_3.png,0
+graphics/Map/effect/SlashHitSpark_4.png,0
+graphics/Map/effect/SlashHitSpark_5.png,0
+graphics/Map/effect/SlashHitSpark_6.png,0
+graphics/Map/effect/CameraHurtEffect.png,0
+animations/effect/HitEffect.csv,3
