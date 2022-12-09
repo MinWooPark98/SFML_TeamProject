@@ -3,7 +3,7 @@
 #include "../../Framework/ResourceMgr.h"
 
 SkillBook::SkillBook()
-	:currState(States::None)
+	:currState(States::None), idleActionDelay(3.f), idleActionTimer(0.f)
 {
 }
 
@@ -13,7 +13,7 @@ SkillBook::~SkillBook()
 
 void SkillBook::Init()
 {
-	NPC::Init();
+	Interactive::Init();
 	animator = new Animator();
 	animator->SetTarget(&sprite);
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SkillBookIdle"));
@@ -32,21 +32,35 @@ void SkillBook::Init()
 			animator->AddEvent(ev);
 		}
 	}
+	SetHitBox(FloatRect(0.f, 0.f, 36.f, 24.f));
+	SetHitBoxOrigin(Origins::TC);
+	SetInteractKeyPos({ 0.f, -30.f });
+
+	SetState(States::Idle);
 }
 
 void SkillBook::Release()
 {
-	NPC::Release();
+	Interactive::Release();
 }
 
 void SkillBook::Reset()
 {
-	NPC::Reset();
+	Interactive::Reset();
 }
 
 void SkillBook::Update(float dt)
 {
-	NPC::Update(dt);
+	Interactive::Update(dt);
+	if (currState == States::Idle)
+	{
+		idleActionTimer += dt;
+		if (idleActionTimer > idleActionDelay)
+		{
+			idleActionTimer = 0.f;
+			Utils::RandomRange(0, 2) == 0 ? SetState(States::Turn) : SetState(States::BigChomp);
+		}
+	}
 }
 
 void SkillBook::SetState(States state)
@@ -69,7 +83,7 @@ void SkillBook::SetState(States state)
 		animator->Play("SkillBookTurn");
 		break;
 	case SkillBook::States::BigChomp:
-		animator->Play("SkillBookOpenBigChomp");
+		animator->Play("SkillBookBigChomp");
 		break;
 	default:
 		break;

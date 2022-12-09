@@ -1,7 +1,7 @@
 #pragma once
-#include "NPC.h"
+#include "Interactive.h"
 
-class SkillBook : public NPC
+class SkillBook : public Interactive
 {
 public:
 	enum class States
@@ -18,7 +18,8 @@ public:
 protected:
 	States currState;
 
-
+	float idleActionDelay;
+	float idleActionTimer;
 
 public:
 	SkillBook();

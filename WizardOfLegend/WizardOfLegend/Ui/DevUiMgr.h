@@ -18,5 +18,7 @@ public:
 	virtual void Release() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
+
+	virtual Object* FindUiObj(const string& name) override;
 };
 

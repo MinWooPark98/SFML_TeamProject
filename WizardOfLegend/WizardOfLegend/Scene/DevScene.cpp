@@ -5,6 +5,8 @@
 #include "../Framework/InputMgr.h"
 #include "SceneMgr.h"
 #include "../GameObject/Skill.h"
+#include "../GameObject/Interactive/SkillBook.h"
+#include "../Ui/SkillBookUi.h"
 
 DevScene::DevScene()
 	:Scene(Scenes::Dev)
@@ -18,6 +20,7 @@ DevScene::~DevScene()
 void DevScene::Init()
 {
 	Scene::Init();
+	auto& windowSize = FRAMEWORK->GetWindowSize();
 
 	Player* player = new Player();
 	player->Init();
@@ -29,8 +32,16 @@ void DevScene::Init()
 	player->SetSkillSet(5, "JumpMeteor");
 	objList[LayerType::Object][0].push_back(player);
 
+	SkillBook* book = new SkillBook();
+	book->Init();
+	book->SetPos((Vector2f)windowSize * 0.125f);
+	book->SetPlayer(player);
+	objList[LayerType::Object][0].push_back(book);
+
 	uiMgr = new DevUiMgr();
 	uiMgr->Init();
+
+	book->Interact = bind(&SkillBookUi::SetActive, (SkillBookUi*)uiMgr->FindUiObj("SKILLBOOKUI"), true);
 }
 
 void DevScene::Release()

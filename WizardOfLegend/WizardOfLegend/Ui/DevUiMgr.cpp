@@ -17,6 +17,7 @@ void DevUiMgr::Init()
 {
 	UiMgr::Init();
 	skillBook = new SkillBookUi();
+	skillBook->SetName("SKILLBOOKUI");
 	skillBook->Init();
 	skillBook->SetActive(false);
 	uiObjList[0].push_back(skillBook);
@@ -42,8 +43,6 @@ void DevUiMgr::Update(float dt)
 		for (auto& obj : uiObjs.second)
 			obj->Update(dt);
 	}
-	if (InputMgr::GetKeyDown(Keyboard::F1))
-		skillBook->SetActive(true);
 }
 
 void DevUiMgr::Draw(RenderWindow& window)
@@ -57,4 +56,17 @@ void DevUiMgr::Draw(RenderWindow& window)
 				obj->Draw(window);
 		}
 	}
+}
+
+Object* DevUiMgr::FindUiObj(const string& name)
+{
+	for (auto& uiObjs : uiObjList)
+	{
+		for (auto& obj : uiObjs.second)
+		{
+			if (obj->GetName() == name)
+				return obj;
+		}
+	}
+	return nullptr;
 }

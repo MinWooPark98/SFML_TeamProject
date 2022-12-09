@@ -13,5 +13,6 @@ public:
 	virtual ~UiMgr();
 
 	void SetPos(const Vector2f& pos) {};
+	virtual Object* FindUiObj(const string& name) { return nullptr; }
 };
 
