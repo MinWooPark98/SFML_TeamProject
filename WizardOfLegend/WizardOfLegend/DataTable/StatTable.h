@@ -7,9 +7,13 @@ class StatTable : public DataTable
 protected:
 	struct Stat
 	{
-		int attackDmg;
-		int maxHp;
 		float speed;
+		int attackDmg;
+		float damageTake;
+		int maxHp;
+		float evasionRate;
+		float criticalRate;
+		float criticalRatio;
 	};
 	map<string, Stat> table;
 

@@ -74,6 +74,10 @@ protected:
 	float hitDuration;
 	float hitTimer;
 	FloatRect hitboxSize;
+	float damageTake;
+	float evasionRate;
+	float criticalRate;
+	float criticalRatio;
 
 	float moveSoundTimer = 0.f;
 	bool isRunning = true;
@@ -101,9 +105,17 @@ public:
 	void UpdateHit(float dt);
 	void UpdateFall(float dt);
 
+	void SetSpeed(float speed);
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
-	void SetSpeed(float speed);
+	void SetDamageTake(float take) { damageTake = take; }
+	float GetDamageTake() { return damageTake; }
+	void SetEvasionRate(float ratio) { evasionRate = ratio; }
+	float GetEvasionRate() { return evasionRate; }
+	void SetCriticalRate(float ratio) { criticalRate = ratio; }
+	float GetCriticalRate() { return criticalRate; }
+	void SetCriticalRatio(float dmg) { criticalRatio = dmg; }
+	float GetCriticalRatio() { return criticalRatio; }
 
 	bool GetBackHand() const { return isBackHand; }
 

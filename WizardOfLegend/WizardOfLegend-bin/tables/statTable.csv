@@ -1,7 +1,7 @@
-ObjType,AttackDmg,MaxHp,Speed,EvasionRate(0~100%),CriticalRate,CriticalDmgRatio
-Player,20,525,200,0,0,0
-Archer,15,150,100,0,0,0
-Lancer,20,200,200,0,0,0
-HeavyBombingArcher,25,500,200,0,0,0
-FireBoss,30,700,700,0,0,0
-FinalBoss,40,825,400,0,0,0
+ObjType,Speed,AttackDmg,DamageTake,MaxHp,EvasionRate,CriticalRatio,CriticalDmg
+Player,200,20,1,525,0,0,2
+Archer,100,15,1,150,0,0,2
+Lancer,200,20,1,200,0,0,2
+HeavyBombingArcher,200,25,1,500,0,0,2
+FireBoss,700,30,1,700,0,0,2
+FinalBoss,400,40,1,825,0,0,2
