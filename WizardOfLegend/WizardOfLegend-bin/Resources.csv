@@ -902,3 +902,14 @@ animations/npc/SkillBook/SkillBookBigChomp.csv,3
 graphics/F.png,0
 graphics/Portrait.png,0
 graphics/HumanKnightPortrait.png,0
+graphics/TurretEyeHalfClosedInner.png,0
+graphics/TurretEyeOpenInner.png,0
+graphics/TurretEyeWaryInner.png,0
+graphics/TurretEyeClosed.png,0
+graphics/TurretEyeHalfClosed.png,0
+graphics/TurretEyeOpen.png,0
+graphics/TurretEyeWary.png,0
+graphics/TurretIris.png,0
+graphics/Map/Palette/TurretMerged.png,0
+graphics/TurretMerged.png,0
+graphics/TurretBase.png,0

@@ -22,6 +22,7 @@
 #include "../GameObject/Dummy.h"
 #include "../Ui/Portal.h"
 #include "../Ui/Heal.h"
+#include "../GameObject/Turret.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -227,6 +228,18 @@ void PlayScene::Init()
 				finalBoss->SetActive(false);
 				finalBoss->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][0].push_back(finalBoss);
+			}
+			else if (obj.path == "graphics/TurretMerged.png")
+			{
+				Turret* turret = new Turret();
+				turret->Init();
+				turret->SetName(obj.type);
+				turret->SetPos(obj.position);
+				turret->EyePos(obj.position);
+				turret->SetObjType(Object::ObjTypes::Enemy);
+				turret->SetLastPosition({ 0,0 });
+				turret->SetActive(true);
+				objList[LayerType::Object][1].push_back(turret);
 			}
 			else if (obj.path == "graphics/TrainingDummy.png")
 			{

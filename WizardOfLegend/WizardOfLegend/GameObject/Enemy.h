@@ -16,6 +16,7 @@ public:
 		StageBoss,
 		MiddleBoss,
 		LastBoss,
+		ETC,
 	};
 
 	enum class States

@@ -127,6 +127,7 @@ void MessageUi::Update(float dt)
 
 		UiEnabled(true);
 		isTalk = true;
+		//SetIsTalk(true);
 	}
 
 	if (isTalk)
