@@ -247,8 +247,8 @@ void PlayScene::Init()
 			cliff->Init();
 			cliff->SetName(obj.type);
 			cliff->SetPos(obj.position);
-			cliff->SetSize(obj.size);
-			cliff->SetHitBox((FloatRect)cliff->GetCliffShape()->getGlobalBounds());
+			cliff->SetSize({obj.size.x-8, obj.size.y-8});
+			cliff->SetHitBox({ (FloatRect)cliff->GetCliffShape()->getGlobalBounds() }, Color::Red);
 			cliff->SetOutlineColor({ 0, 0, 0, 0 });
 			cliff->SetObjType(Object::ObjTypes::Cliff);
 			objList[LayerType::Object][3].push_back(cliff);
