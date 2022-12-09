@@ -5,7 +5,7 @@
 #include "../Ui/PlayUiMgr.h"
 
 SkillSet::SkillSet()
-	:subject(nullptr), subType(Skill::SubjectType::None), element(Skill::Element::Fire), isSingleSkill(false), isOnCoolDown(false), newCoolDownEntered(false), newCoolDownApplied(false), newCoolDown(0.f), timer(0.f)
+	:currSkillIt(usingSkills.rend()), subject(nullptr), subType(Skill::SubjectType::None), element(Skill::Element::Fire), isSingleSkill(false), isOnCoolDown(false), newCoolDownEntered(false), newCoolDownApplied(false), newCoolDown(0.f), timer(0.f)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -30,6 +30,7 @@ void SkillSet::ResetSkills()
 		unusingSkills.push_back(skill);
 	}
 	usingSkills.clear();
+	usingSkills.rend();
 	skillSetName.clear();
 }
 
