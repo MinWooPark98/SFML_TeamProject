@@ -38,6 +38,7 @@ private:
 	int sectorI;
 	int sectorJ;
 
+	vector<Object*> undoObjs;
 
 public:
 	MapToolScene();

@@ -280,21 +280,17 @@ void MapToolScene::Update(float dt)
 						sector->UpdateNowDraw(dt, nowDraw);
 						sector->SetSize({ grids[j][i]->GetPos().x - sector->GetPos().x + 16,grids[j][i]->GetPos().y - sector->GetPos().y + 16 });
 					}
-
 				}
 			}
-
 		}
 		if (nowDraw != nullptr && isNowSectorDraw)
 		{
-			//cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
 			if (nowDraw->GetType() == "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
 			{
 				isNowSectorDraw = false;
 
 				objList[nowType][sectorJ].push_back(sector);
 				sectors[nowType][sectorJ][sectorI] = sector;
-				//cout << "up" << endl;
 
 				if (sector != nullptr)
 				{
@@ -304,14 +300,12 @@ void MapToolScene::Update(float dt)
 		}
 		if (nowDraw != nullptr && isNowCliffDraw)
 		{
-			//cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
 			if (nowDraw->GetType() == "CLIFF" && InputMgr::GetMouseButtonUp(Mouse::Left))
 			{
 				isNowCliffDraw = false;
 
 				objList[nowType][sectorJ].push_back(cliff);
 				cliffs[nowType][sectorJ][sectorI] = cliff;
-				//cout << "up" << endl;
 
 				if (cliff != nullptr)
 				{
@@ -321,8 +315,6 @@ void MapToolScene::Update(float dt)
 		}
 		if (nowDraw != nullptr && isNowObjDraw)
 		{
-			//cout << nowDraw->GetType() << endl;
-			//cout << InputMgr::GetMouseButtonUp(Mouse::Left) << endl;
 			if (nowDraw->GetType() != "SECTOR" && InputMgr::GetMouseButtonUp(Mouse::Left))
 			{
 				isNowObjDraw = false;
@@ -418,23 +410,8 @@ void MapToolScene::Update(float dt)
 								delete findObj;
 							}
 						}
-
-						////섹터 지우는 기능 추가 필요 밑에 코드로는 삭제가 안됨
-						//Sector* findSectorObj = nullptr;
-						//if (nowsectorObjs.find(j) != nowsectorObjs.end())
-						//{
-						//	if (nowsectorObjs[j].find(i) != nowsectorObjs[j].end())
-						//	{
-						//		findSectorObj = nowsectorObjs[j][i];
-						//		auto deleteObj = find(objList[nowType][j].begin(), objList[nowType][j].end(), findSectorObj);
-						//		objList[nowType][j].erase(deleteObj);
-						//		sectors[nowType][j].erase(nowsectorObjs[j].find(i));
-						//		delete findSectorObj;
-						//	}
-						//}
 					}
 				}
-
 
 				Button* findObj = nullptr;
 				if (nowgridObjs.find(j) != nowgridObjs.end())
@@ -493,10 +470,6 @@ void MapToolScene::Draw(RenderWindow& window)
 		window.setView(worldView);
 		cliff->Draw(window);
 	}
-	//for (auto sectorlist : sectors)
-	//{
-	//	window.draw(*sectorlist);
-	//}
 }
 
 

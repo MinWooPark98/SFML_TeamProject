@@ -13,9 +13,21 @@
       "uiPath": "graphics/Map/Palette/AirPlatformTopRight.png"
     },
     {
+      "texPath": "graphics/Map/Palette/FirePlatformTopLeft.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformTopLeft.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/FirePlatformTop.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformTop.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/FirePlatformTopRight.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformTopRight.png"
+    },
+    {
       "texPath": "graphics/Map/Palette/AirPlatformLeft.png",
       "uiPath": "graphics/Map/Palette/AirPlatformLeft.png"
-    },
+    },    
     {
       "texPath": "graphics/Map/Palette/AirPlatformCenter.png",
       "uiPath": "graphics/Map/Palette/AirPlatformCenter.png"
@@ -23,6 +35,18 @@
     {
       "texPath": "graphics/Map/Palette/AirPlatformRight.png",
       "uiPath": "graphics/Map/Palette/AirPlatformRight.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/FirePlatformLeft.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformLeft.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/FirePlatformCenter.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformCenter.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/FirePlatformRight.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformRight.png"
     },
     {
       "texPath": "graphics/Map/Palette/AirPlatformBotLeft.png",
@@ -35,6 +59,78 @@
     {
       "texPath": "graphics/Map/Palette/AirPlatformBotRight.png",
       "uiPath": "graphics/Map/Palette/AirPlatformBotRight.png"
+    },     
+    {
+      "texPath": "graphics/Map/Palette/FirePlatformBotLeft.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformBotLeft.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/FirePlatformBot.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformBot.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/FirePlatformBotRight.png",
+      "uiPath": "graphics/Map/Palette/FirePlatformBotRight.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformTopLeft.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformTopLeft.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformTop.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformTop.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformTopRight.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformTopRight.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformLeft.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformLeft.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformCenter.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformCenter.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformRight.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformRight.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },    
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformBotLeft.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformBotLeft.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformBot.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformBot.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IcePlatformBotRight.png",
+      "uiPath": "graphics/Map/Palette/IcePlatformBotRight.png"
     }
   ],
   "WALL": [
@@ -53,7 +149,58 @@
     {
       "texPath": "graphics/Map/Palette/AirWallFoundation.png",
       "uiPath": "graphics/Map/Palette/AirWallFoundation.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+
+    {
+      "texPath": "graphics/Map/Wall/FireWallTop.png",
+      "uiPath": "graphics/Map/Palette/FireWallTop.png"
+    },
+    {
+      "texPath": "graphics/Map/Wall/FireWallBatton.png",
+      "uiPath": "graphics/Map/Palette/FireWallBatton.png"
+    },
+    {
+      "texPath": "graphics/Map/Wall/FireWindow.png",
+      "uiPath": "graphics/Map/Palette/FireWindow.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/FireWallFoundation.png",
+      "uiPath": "graphics/Map/Palette/FireWallFoundation.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+    {
+      "texPath": "graphics/Map/Empty.png",
+      "uiPath": "graphics/Map/Empty.png"
+    },
+
+    {
+      "texPath": "graphics/Map/Wall/IceWallTop.png",
+      "uiPath": "graphics/Map/Palette/IceWallTop.png"
+    },
+    {
+      "texPath": "graphics/Map/Wall/IceWallBatton.png",
+      "uiPath": "graphics/Map/Palette/IceWallBatton.png"
+    },
+    {
+      "texPath": "graphics/Map/Wall/IceWindow.png",
+      "uiPath": "graphics/Map/Palette/IceWindow.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/IceWallFoundation.png",
+      "uiPath": "graphics/Map/Palette/IceWallFoundation.png"
     }
+
   ],
   "OBJECT": [
     {
@@ -93,8 +240,24 @@
       "uiPath": "graphics/Map/Palette/TreeTallPurple.png"
     },
     {
-      "texPath": "graphics/Map/Object/Portal.png",
-      "uiPath": "graphics/Map/Palette/Portal.png"
+      "texPath": "graphics/Map/Object/HealthCrystal.png",
+      "uiPath": "graphics/Map/Palette/HealthCrystal.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/tutorial_skill_1.png",
+      "uiPath": "graphics/Map/Palette/FireSwirl000.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/tutorial_skill_2.png",
+      "uiPath": "graphics/Map/Palette/MeteorStrike0.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/tutorial_skill_3.png",
+      "uiPath": "graphics/Map/Palette/AirSpinnerBurst_0.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/tutorial_skill_4.png",
+      "uiPath": "graphics/Map/Palette/WindSlashSmall1.png"
     }
   ],
   "PLAYER": [

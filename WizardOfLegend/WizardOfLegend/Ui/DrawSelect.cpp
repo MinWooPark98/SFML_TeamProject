@@ -26,4 +26,3 @@ void DrawSelect::Update(float dt)
 		((MapToolUiMgr*)uimgr)->Select(this);
 	}
 }
-

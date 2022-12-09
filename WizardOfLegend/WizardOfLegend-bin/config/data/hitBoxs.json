@@ -35,14 +35,75 @@
       }
     }
   ],
-  "graphics/Map/Palette/Empty.png": [
+  "graphics/Map/Wall/FireWallBatton.png": [
     {
       "pos": {
-        "x": 0,
-        "y": 0
+        "x": 0.0,
+        "y": -16.0
       },
       "size": {
         "x": 16.0,
+        "y": 48.0
+      }
+    }
+  ],
+  "graphics/Map/Wall/FireWallTop.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 16.0,
+        "y": 32.0
+      }
+    }
+  ],
+  "graphics/Map/Wall/FireWindow.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 32.0,
+        "y": 16.0
+      }
+    }
+  ],
+  
+  "graphics/Map/Wall/IceWallBatton.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": -16.0
+      },
+      "size": {
+        "x": 16.0,
+        "y": 48.0
+      }
+    }
+  ],
+  "graphics/Map/Wall/IceWallTop.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 16.0,
+        "y": 32.0
+      }
+    }
+  ],
+  "graphics/Map/Wall/IceWindow.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 32.0,
         "y": 16.0
       }
     }
@@ -80,6 +141,54 @@
       "size": {
         "x": 8.0,
         "y": 16.0
+      }
+    }
+  ],
+  "graphics/Map/Object/tutorial_skill_1.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 25.0,
+        "y": 12.0
+      }
+    }
+  ],
+  "graphics/Map/Object/tutorial_skill_2.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 25.0,
+        "y": 12.0
+      }
+    }
+  ],
+  "graphics/Map/Object/tutorial_skill_3.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 25.0,
+        "y": 12.0
+      }
+    }
+  ],
+  "graphics/Map/Object/tutorial_skill_4.png": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0
+      },
+      "size": {
+        "x": 25.0,
+        "y": 12.0
       }
     }
   ]
