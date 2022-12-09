@@ -20,11 +20,10 @@ void MessageUi::Init()
 
 	// 3까지 메세지 틀
 	// 4 = npc 이미지, 5 = 플레이어 이미지
-	//for (int i = 0; i < 6; i++)
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 		massageImages.push_back(new SpriteObj());
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < massageImages.size(); i++)
 	{
 		switch (i)
 		{
@@ -57,6 +56,11 @@ void MessageUi::Init()
 			break;
 		case 5:
 			massageImages[i]->SetPos({ windowSize.x * 0.85f, windowSize.y * 0.8f }); // 플레이어 이미지
+			massageImages[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Portrait.png"));
+			massageImages[i]->SetScale({ 4.3, 4.3 });
+			massageImages[i]->SetSpriteShader();
+			massageImages[i]->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
+			massageImages[i]->SetFlipX(1);
 			break;
 		}
 
@@ -92,24 +96,34 @@ void MessageUi::Init()
 	spaceBarImage->SetScale({ 3, 3 });
 	spaceBarImage->SetPos({ windowSize.x * 0.725f, windowSize.y * 0.87f });
 	spaceBarImage->SetOrigin(Origins::MC);
+
+	playerShader.setFillColor({0, 0, 0, 180});
+	playerShader.setSize(massageImages[5]->GetSize() * 4.3f);
+	playerShader.setPosition(massageImages[5]->GetPos());
+	playerShader.setOrigin(playerShader.getSize() * 0.5f);
 }
 
 void MessageUi::Update(float dt)
 {
 	SpriteObj::Update(dt);
 
-	// 상호작용이랑 연결 / 함수 만들어놨음
+	// 상호작용이랑 연결
 	if (InputMgr::GetKeyDown(Keyboard::F))
 	{
-		// 임시 테스트용 string
-		vector<string> str;
-		for (int i = 0; i < 20; i++)
-			str.push_back("");
+		// 설정할 곳에서 사용할 코드
+		{
+			// 임시 테스트용 string
+			vector<string> str;
+			for (int i = 0; i < 20; i++)
+				str.push_back("");
 
-		SetTexts(str);
+			SetTexts(str);
 
-		string devName = "박민우의  볼케이노  순삭  쇼";
-		SetNpcName(devName);
+			string devName = "박민우의  볼케이노  순삭  쇼";
+			SetNpcName(devName);
+			SetPlayerImage(1);
+			SetNpcImage("graphics/HumanKnightPortrait.png");
+		}
 
 		UiEnabled(true);
 		isTalk = true;
@@ -117,27 +131,35 @@ void MessageUi::Update(float dt)
 
 	if (isTalk)
 	{
+		InputMgr::StackedOrderAdd(this);
+
 		enabledTime -= dt;
 
 		if (InputMgr::GetKeyDown(Keyboard::Space))
 		{
 			UiEnabled(false);
-			// 임시 테스트용 string
-			vector<string> string;
-			for (int i = 0; i < 100; i++)
-				string.push_back("냠");
 
-			SetTexts(string);
+			// 설정할 곳에서 사용할 코드
+			{
+				// 임시 테스트용 string
+				vector<string> string;
+				for (int i = 0; i < 100; i++)
+					string.push_back("냠");
+
+				SetTexts(string);
+			}
+
 			enabledTime = 0.1f;
 			spaceBright = 0;
 		}
 
-		//if (texts.size() > 0 && enabledTime <= 0.f)
 		if (enabledTime <= 0.f)
 		{
 			UiEnabled(true);
 		}
 	}
+	else
+		InputMgr::StackedOrderRemove(this);
 }
 
 void MessageUi::Draw(RenderWindow& window)
@@ -156,6 +178,7 @@ void MessageUi::Draw(RenderWindow& window)
 			texts[i]->Draw(window);
 
 		npcName->Draw(window);
+		window.draw(playerShader);
 	}
 }
 
@@ -221,10 +244,11 @@ void MessageUi::SetNpcImage(string imageName)
 {
 	if (massageImages[4] != nullptr)
 		massageImages[4]->SetTexture(*RESOURCE_MGR->GetTexture(imageName));
+	massageImages[4]->SetScale({6.3, 6.3});
+	massageImages[4]->SetOrigin(Origins::MC);
 }
 
-void MessageUi::SetPlayerImage(string imageName)
+void MessageUi::SetPlayerImage(int playerPaletteColor)
 {
-	if (massageImages[5] != nullptr)
-		massageImages[5]->SetTexture(*RESOURCE_MGR->GetTexture(imageName));
+	massageImages[5]->SetPaletteColor(playerPaletteColor);
 }

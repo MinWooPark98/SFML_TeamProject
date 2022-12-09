@@ -48,11 +48,15 @@ public:
     void SetSpritePaletteIndex(int index) { spritePaletteIndex = index; };
     void SetSpritePaletteSize(int size) { spritePaletteSize = size; };
     void SetSpriteColorTable(string table) { spriteColorTable.loadFromFile(table); };
-    void SetSpriteColor(int index)
+    void SetPaletteColor(int index)
     {
+        int saveIndex = spritePaletteIndex;
+
         spritePaletteIndex = (spritePaletteIndex - index) % spritePaletteSize;
         spriteShader.setUniform("colorTable", spriteColorTable);
         spriteShader.setUniform("paletteIndex", (float)spritePaletteIndex / spritePaletteSize);
+
+        spritePaletteIndex = saveIndex;
     }
     void SetSpritePalette(int index, int size, string table)
     {
