@@ -51,6 +51,7 @@ public:
 	static bool IsRange(const FloatRect rect, const Vector2f value);
 
 	static bool EqualFloat(float a, float b) { return fabs(a - b) < numeric_limits<float>::epsilon(); }
+	static wstring StrToWstr(const string& var);
 
 	static bool OBB(const RectangleShape& obb1, const RectangleShape& obb2);
 };

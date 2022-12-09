@@ -45,6 +45,7 @@ void TextObj::SetText(string str)
 {
 	text.setString(str);
 }
+
 void TextObj::SetText(Font& font, int size, Color color, string str)
 {
 	text.setFont(font);
@@ -52,15 +53,31 @@ void TextObj::SetText(Font& font, int size, Color color, string str)
 	text.setString(str);
 	text.setFillColor(color);
 }
+
 void TextObj::SetString(string str)
 {
 	text.setString(str);
 }
+
+void TextObj::WrapString(int wordLim)
+{
+	auto str = GetString();
+	int i = 0;
+	for (string::iterator it = str.begin(); it != str.end(); ++it)
+	{
+		if ((i % wordLim) == 0)
+			it = str.insert(it, '\n');
+		++i;
+	}
+	SetString(str);
+}
+
 void TextObj::SetOrigin(Origins origin)
 {
 	Object::SetOrigin(origin);
 	Utils::SetOrigin(text, origin);
 }
+
 string TextObj::GetString()
 {
 	return text.getString();

@@ -16,6 +16,8 @@ private:
 	Object* subject;
 	Skill::SubjectType subType;
 
+	Skill::Element element;
+
 	bool isSingleSkill;
 	bool isOnCoolDown;
 	bool newCoolDownEntered;
@@ -45,6 +47,7 @@ public:
 	float GetCoolDown() const { return newCoolDown; }
 	float GetTimer() const { return timer; }
 	list<Skill*> GetUsingSkills() const { return usingSkills; }
+	Skill::Element GetElement() { return element; }
 
 	Skill* GetCurrSkill();
 	string GetIconDir() { return iconDir; }

@@ -2,6 +2,7 @@
 #include "StatTable.h"
 #include "SkillTable.h"
 #include "SkillSetTable.h"
+#include "SkillSetIntroTable.h"
 #include "FinalBossSkillTable.h"
 #include "MapNameTable.h"
 #include "PlatinumTable.h"
@@ -38,6 +39,10 @@ void DataTableMgr::Init()
     table = new SkillSetTable();
     table->Load();
     tables.insert({ DataTable::Types::SkillSet, table });
+
+    table = new SkillSetIntroTable();
+    table->Load();
+    tables.insert({ DataTable::Types::SkillSetIntro, table });
 
     table = new FinalBossSkillTable();
     table->Load();

@@ -98,6 +98,15 @@ void TextBox::Update(float dt)
 		FinishWrite();
 }
 
+void TextBox::SetActive(bool active)
+{
+	TextObj::SetActive(active);
+	if (active)
+		InputMgr::StackedOrderAdd(this);
+	else
+		InputMgr::StackedOrderRemove(this);
+}
+
 void TextBox::SetString(string str)
 {
 	this->str = str;

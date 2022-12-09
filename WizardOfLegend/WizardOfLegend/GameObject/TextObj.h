@@ -26,6 +26,7 @@ public:
 	Text& GetText() { return text; }
 	void SetText(Font& font, int size, Color color, string str);
 	virtual void SetString(string str);
+	virtual void WrapString(int wordLim);
 	virtual string GetString();
 	virtual void SetOrigin(Origins origin);
 	virtual void Translate(const Vector2f& pos) override;

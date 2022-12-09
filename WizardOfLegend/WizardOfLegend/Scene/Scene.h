@@ -17,6 +17,7 @@ enum class Scenes
 	MapTool,
 	SkillTool,
 	Ending,
+	Dev,
 };
 
 class UiMgr;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Framework.h"
+#include "../GameObject/Object.h"
 
 map<Axis, AxisInfo> InputMgr::axisInfoMap;
 
@@ -20,6 +21,8 @@ bool InputMgr::wheelDown;
 Vector2f InputMgr::mousePos;
 Vector2f InputMgr::mousePosDisplacement;
 Vector2f InputMgr::prevMousePos;
+
+list<Object*> InputMgr::objStackedOrder;
 
 void InputMgr::Init()
 {
@@ -214,6 +217,30 @@ float InputMgr::GetAxisRaw(Axis axis)
 
 }
 
+int InputMgr::GetAxisDown(Axis axis)
+{
+	const AxisInfo& info = axisInfoMap[axis];
+
+	auto it = downList.rbegin();
+	while (it != downList.rend())
+	{
+		Keyboard::Key key = *it;
+		if (find(info.negatives.begin(), info.negatives.end(), key) !=
+			info.negatives.end())
+		{
+			return -1;
+		}
+		if (find(info.positives.begin(), info.positives.end(), key) !=
+			info.positives.end())
+		{
+			return 1;
+		}
+		++it;
+	}
+	return 0;
+
+}
+
 const Vector2f& InputMgr::GetMousePosDisplacement()
 {
 	return mousePosDisplacement;
@@ -230,4 +257,14 @@ char InputMgr::GetLastKey()
 bool InputMgr::GetKeyDown()
 {
 	return !downList.empty();
+}
+
+void InputMgr::StackedOrderAdd(Object* obj)
+{
+	objStackedOrder.push_back(obj);
+}
+
+void InputMgr::StackedOrderRemove(Object* obj)
+{
+	objStackedOrder.remove(obj);
 }

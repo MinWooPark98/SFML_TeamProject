@@ -118,6 +118,13 @@ bool Utils::IsRange(const FloatRect rect, const Vector2f value)
 		&& IsRange(rect.top, rect.top + rect.height, value.y);
 }
 
+wstring Utils::StrToWstr(const string& var)
+{
+	static std::locale loc("");
+	auto& facet = std::use_facet<std::codecvt<wchar_t, char, std::mbstate_t>>(loc);
+	return std::wstring_convert<std::remove_reference<decltype(facet)>::type, wchar_t>(&facet).from_bytes(var);
+}
+
 bool Utils::OBB(const RectangleShape& obb1, const RectangleShape& obb2)
 {
 	Vector2f MTV;

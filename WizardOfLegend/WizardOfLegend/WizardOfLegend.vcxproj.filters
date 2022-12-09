@@ -72,6 +72,14 @@
     <ClCompile Include="Ui\Heal.cpp" />
     <ClCompile Include="Ui\Portal.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
+    <ClCompile Include="Ui\SkillBookUi.cpp" />
+    <ClCompile Include="Ui\SkillBookButton.cpp" />
+    <ClCompile Include="Scene\DevScene.cpp" />
+    <ClCompile Include="Ui\DevUiMgr.cpp" />
+    <ClCompile Include="Ui\SkillBookCardInfo.cpp" />
+    <ClCompile Include="DataTable\SkillSetIntroTable.cpp" />
+    <ClCompile Include="GameObject\Interactive\Interactive.cpp" />
+    <ClCompile Include="GameObject\Interactive\SkillBook.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -149,6 +157,14 @@
     <ClInclude Include="Ui\Heal.h" />
     <ClInclude Include="Ui\Portal.h" />
     <ClInclude Include="Ui\MessageUi.h" />
+    <ClInclude Include="Ui\SkillBookUi.h" />
+    <ClInclude Include="Ui\SkillBookButton.h" />
+    <ClInclude Include="Scene\DevScene.h" />
+    <ClInclude Include="Ui\DevUiMgr.h" />
+    <ClInclude Include="Ui\SkillBookCardInfo.h" />
+    <ClInclude Include="DataTable\SkillSetIntroTable.h" />
+    <ClInclude Include="GameObject\Interactive\Interactive.h" />
+    <ClInclude Include="GameObject\Interactive\SkillBook.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
