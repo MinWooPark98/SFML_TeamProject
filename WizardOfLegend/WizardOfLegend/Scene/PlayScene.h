@@ -64,5 +64,6 @@ public:
 	ObjectPool<ChaosFragments>* GetPlatinum() { return platinums; }
 
 	void SetMapName(const string& name) { mapName = name; }
+	string GetMapName() { return mapName; };
 };
 

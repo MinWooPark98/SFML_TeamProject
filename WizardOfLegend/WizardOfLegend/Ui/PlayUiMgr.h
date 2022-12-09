@@ -89,6 +89,11 @@ protected:
 	SpriteObj* platinum;
 	TextObj* platinumText;
 
+	bool isTutorial;
+	vector<SpriteObj*> moveKeyboard;
+	float keyboardEnabledTimer = 5.f;
+	int keyboardBright = 255;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();
@@ -122,4 +127,6 @@ public:
 	void SetSkillIcon(int idx, const string& texture);
 
 	bool GetIsStart() { return isStart; };
+
+	void TuturialMoveKeyboardUiControl(float dt);
 };

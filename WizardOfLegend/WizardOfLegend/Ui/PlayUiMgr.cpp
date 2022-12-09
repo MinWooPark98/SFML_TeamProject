@@ -13,6 +13,7 @@
 #include "../GameObject/FinalBoss.h"
 #include "PlaySceneSkillOptions.h"
 #include "SkillCoolDownUi.h"
+#include "../Scene/PlayScene.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -236,15 +237,6 @@ void PlayUiMgr::Init()
 		bossName->SetOutlineThickness(2.f);
 		bossName->SetText("BOSS NAME");
 		bossName->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.07f });
-
-		fps = new TextObj();
-		fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-		fps->SetSize(35);
-		fps->SetFillColor(Color::White);
-		fps->SetOutlineColor(Color::Black);
-		fps->SetOutlineThickness(2.f);
-		fps->SetText("");
-		fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
 	}
 
 	for (int i = 0; i < 6; i++)
@@ -340,6 +332,45 @@ void PlayUiMgr::Init()
 	platinumText->SetPos({ platinum->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.8f - (platinum->GetSize().y * 2) + 7 });
 	uiObjList[0].push_back(platinumText);
 
+
+	for (int i = 0; i < 4; i++)
+		moveKeyboard.push_back(new SpriteObj());
+
+	Scene* currScene = SCENE_MGR->GetCurrentScene();
+	if (((PlayScene*)currScene)->GetMapName() == "TUTORIALMAP")
+	{
+		for (int i = 0; i < moveKeyboard.size(); i++)
+		{
+			switch (i)
+			{
+			case 0:
+				moveKeyboard[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/W.png"));
+				moveKeyboard[i]->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.35f });
+				break;
+			case 1:
+				moveKeyboard[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/A.png"));
+				moveKeyboard[i]->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.35f + moveKeyboard[i]->GetSize().y * 3 });
+				break;
+			case 2:
+				moveKeyboard[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/S.png"));
+				moveKeyboard[i]->SetPos({ windowSize.x * 0.5f - (moveKeyboard[i]->GetSize().x * 3), windowSize.y * 0.35f + (moveKeyboard[i]->GetSize().y * 3) });
+				break;
+			case 3:
+				moveKeyboard[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/D.png"));
+				moveKeyboard[i]->SetPos({ windowSize.x * 0.5f + (moveKeyboard[i]->GetSize().x * 3), windowSize.y * 0.35f + (moveKeyboard[i]->GetSize().y * 3) });
+				break;
+			}
+			moveKeyboard[i]->SetScale({ 4, 4 });
+			moveKeyboard[i]->SetOrigin(Origins::MC);
+
+			uiObjList[0].push_back(moveKeyboard[i]);
+		}
+
+		keyboardBright = 255.f;
+		isTutorial = true;
+	}
+
+
 	fps = new TextObj();
 	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	fps->SetSize(35);
@@ -386,6 +417,9 @@ void PlayUiMgr::Update(float dt)
 		options->Update(dt);
 		return;
 	}
+
+	if (isTutorial && !moveKeyboard.empty())
+		TuturialMoveKeyboardUiControl(dt);
 
 	goldText->SetOrigin(Origins::ML);
 	goldText->SetText(to_string(player->GetCurGold()));
@@ -642,4 +676,23 @@ void PlayUiMgr::SetSkillIcon(int idx, const string& texture)
 {
 	skills[idx]->SetTexture(*RESOURCE_MGR->GetTexture(texture));
 	skills[idx]->SetOrigin(Origins::MC);
+}
+
+void PlayUiMgr::TuturialMoveKeyboardUiControl(float dt)
+{
+	keyboardEnabledTimer -= dt;
+
+	if (keyboardEnabledTimer <= 1.f)
+	{
+		keyboardBright -= dt;
+		for (int i = 0; i < moveKeyboard.size(); i++)
+		{
+			Color fadeColor = moveKeyboard[i]->GetSprite().getColor();
+			fadeColor.a = keyboardBright;
+			moveKeyboard[i]->SetColor(fadeColor);
+		}
+	}
+
+	if (keyboardBright <= 0)
+		isTutorial = false;
 }
