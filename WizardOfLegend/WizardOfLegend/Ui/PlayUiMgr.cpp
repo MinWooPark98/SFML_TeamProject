@@ -302,7 +302,7 @@ void PlayUiMgr::Init()
 	// property
 	gold = new SpriteObj();
 	gold->SetTexture(*RESOURCE_MGR->GetTexture("graphics/GoldHD.png"));
-	gold->SetPos({windowSize.x * 0.48f, windowSize.y * 0.85f});
+	gold->SetPos({windowSize.x * 0.48f, windowSize.y * 0.95f});
 	gold->SetOrigin(Origins::MC);
 	gold->SetScale({3, 3});
 	uiObjList[0].push_back(gold);
@@ -313,12 +313,12 @@ void PlayUiMgr::Init()
 	goldText->SetOutlineColor(Color::Black);
 	goldText->SetOutlineThickness(2.f);
 	goldText->SetText("");
-	goldText->SetPos({ gold->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.85f - (gold->GetSize().y * 2) + 3});
+	goldText->SetPos({ gold->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.95f - (gold->GetSize().y * 2) + 3});
 	uiObjList[0].push_back(goldText);
 
 	platinum = new SpriteObj();
 	platinum->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Platinum.png"));
-	platinum->SetPos({ windowSize.x * 0.48f, windowSize.y * 0.8f });
+	platinum->SetPos({ windowSize.x * 0.48f, windowSize.y * 0.9f });
 	platinum->SetOrigin(Origins::MC);
 	platinum->SetScale({ 3, 3 });
 	uiObjList[0].push_back(platinum);
@@ -329,7 +329,7 @@ void PlayUiMgr::Init()
 	platinumText->SetOutlineColor(Color::Black);
 	platinumText->SetOutlineThickness(2.f);
 	platinumText->SetText("");
-	platinumText->SetPos({ platinum->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.8f - (platinum->GetSize().y * 2) + 7 });
+	platinumText->SetPos({ platinum->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.9f - (platinum->GetSize().y * 2) + 7 });
 	uiObjList[0].push_back(platinumText);
 
 
