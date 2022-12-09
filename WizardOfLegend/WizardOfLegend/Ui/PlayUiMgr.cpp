@@ -14,6 +14,7 @@
 #include "PlaySceneSkillOptions.h"
 #include "SkillCoolDownUi.h"
 #include "../Scene/PlayScene.h"
+#include "MessageUi.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -380,6 +381,9 @@ void PlayUiMgr::Init()
 	fps->SetText("");
 	fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
 	uiObjList[0].push_back(fps);
+
+	messageUi = new MessageUi();
+	messageUi->Init();
 }
 
 void PlayUiMgr::Release()
@@ -417,6 +421,8 @@ void PlayUiMgr::Update(float dt)
 		options->Update(dt);
 		return;
 	}
+
+	messageUi->Update(dt);
 
 	if (isTutorial && !moveKeyboard.empty())
 		TuturialMoveKeyboardUiControl(dt);
@@ -503,6 +509,8 @@ void PlayUiMgr::Draw(RenderWindow& window)
 
 	if (isDevMode)
 		fps->Draw(window);
+
+	messageUi->Draw(window);
 }
 
 void PlayUiMgr::HpBarSizeControl(float dt)

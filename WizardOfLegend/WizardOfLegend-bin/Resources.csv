@@ -721,7 +721,6 @@ graphics/Map/FinalBoss.png,0
 graphics/Map/Palette/FinalBoss.png,0
 graphics/InactiveCooldownPanel.png,0
 graphics/Q.png,0
-graphics/Space.png,0
 graphics/E.png,0
 graphics/R.png,0
 graphics/M0.png,0
@@ -804,3 +803,5 @@ graphics/W.png,0
 graphics/A.png,0
 graphics/S.png,0
 graphics/D.png,0
+graphics/Space.png,0
+graphics/Panel.png,0

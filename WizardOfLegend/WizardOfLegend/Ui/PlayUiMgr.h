@@ -10,7 +10,7 @@ class HeavyBombingArcher;
 class FinalBoss;
 class PlaySceneSkillOptions;
 class SkillCoolDownUi;
-
+class MessageUi;
 class PlayUiMgr : public UiMgr
 {
 public:
@@ -93,6 +93,8 @@ protected:
 	vector<SpriteObj*> moveKeyboard;
 	float keyboardEnabledTimer = 5.f;
 	int keyboardBright = 255;
+
+	MessageUi* messageUi;
 
 public:
 	PlayUiMgr();
