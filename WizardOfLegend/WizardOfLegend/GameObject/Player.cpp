@@ -284,39 +284,34 @@ void Player::Update(float dt)
 	{
 		direction.x = 0.f;
 		direction.y = 0.f;
-		if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
+		auto stackedOrder = InputMgr::GetStackedOrder();
+		if (stackedOrder.empty())
 		{
 			direction.x += Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D) ? 1 : 0;
 			direction.x += Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A) ? -1 : 0;
 			direction.y += Keyboard::isKeyPressed(Keyboard::Down) || Keyboard::isKeyPressed(Keyboard::S) ? 1 : 0;
 			direction.y += Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W) ? -1 : 0;
-		}
-		direction = Utils::Normalize(direction);
 
-		if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
-		{
-			for (auto mouseDown : InputMgr::GetMouseDownList())
+			if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
 			{
-				switch (mouseDown)
+				for (auto mouseDown : InputMgr::GetMouseDownList())
 				{
-				case Mouse::Left:
-					SetCurrSkillSet(skillSets[0]);
-					skillSets[0]->Restart();
-					break;
-				case Mouse::Right:
-					SetCurrSkillSet(skillSets[2]);
-					skillSets[2]->Restart();
-					break;
-				default:
-					break;
+					switch (mouseDown)
+					{
+					case Mouse::Left:
+						SetCurrSkillSet(skillSets[0]);
+						skillSets[0]->Restart();
+						break;
+					case Mouse::Right:
+						SetCurrSkillSet(skillSets[2]);
+						skillSets[2]->Restart();
+						break;
+					default:
+						break;
+					}
 				}
 			}
-		}
-	}
-	if (currState == States::Idle || currState == States::Run)
-	{
-		if (!skillToolMode || InputMgr::GetMousePos().x < windowSize.x * 0.7f)
-		{
+
 			for (auto keyDown : InputMgr::GetKeyDownList())
 			{
 				switch (keyDown)
@@ -343,6 +338,7 @@ void Player::Update(float dt)
 				}
 			}
 		}
+		direction = Utils::Normalize(direction);
 	}
 
 	switch (currState)

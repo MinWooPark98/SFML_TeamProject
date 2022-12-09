@@ -47,7 +47,8 @@ void Interactive::Update(float dt)
 				return;
 			}
 
-			if (InputMgr::GetKeyDown(Keyboard::F) && Interact != nullptr)
+			auto stackedOrder = InputMgr::GetStackedOrder();
+			if (stackedOrder.empty() && InputMgr::GetKeyDown(Keyboard::F) && Interact != nullptr)
 				Interact();
 		}
 	}

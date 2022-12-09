@@ -1,6 +1,7 @@
 #include "OptionButtons.h"
 #include "../GameObject/Button2.h"
 #include "../GameObject/TextObj.h"
+#include "../Framework/InputMgr.h"
 
 OptionButtons::OptionButtons()
 	:axis(Axis::Vertical)
@@ -65,6 +66,15 @@ void OptionButtons::SetPos(const Vector2f& pos)
 			break;
 		}
 	}
+}
+
+void OptionButtons::SetActive(bool active)
+{
+	Object::SetActive(active);
+	if (active)
+		InputMgr::StackedOrderAdd(this);
+	else
+		InputMgr::StackedOrderRemove(this);
 }
 
 void OptionButtons::Clear()

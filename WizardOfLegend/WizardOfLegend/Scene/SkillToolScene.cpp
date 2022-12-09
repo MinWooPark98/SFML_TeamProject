@@ -1,7 +1,7 @@
 #include "SkillToolScene.h"
 #include "../Framework/Framework.h"
 #include "../GameObject/Player.h"
-#include "../Ui/DevUiMgr.h"
+#include "../Ui/SkillToolUiMgr.h"
 #include "../Framework/InputMgr.h"
 #include "SceneMgr.h"
 #include "../GameObject/Skill.h"
@@ -25,7 +25,7 @@ void SkillToolScene::Init()
 	player->SetName("PLAYER");
 	objList[LayerType::Object][0].push_back(player);
 
-	uiMgr = new DevUiMgr();
+	uiMgr = new SkillToolUiMgr();
 	uiMgr->Init();
 }
 

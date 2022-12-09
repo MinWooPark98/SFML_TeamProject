@@ -242,6 +242,7 @@ void SkillBookUi::SetActive(bool active)
 	Object::SetActive(active);
 	if (active)
 	{
+		InputMgr::StackedOrderAdd(this);
 		skillVecIdx = 0;
 		options[skillVecIdx].first->HighLightOn();
 		collection->HighLightOff();
@@ -264,11 +265,14 @@ void SkillBookUi::SetActive(bool active)
 	}
 	else
 	{
+		InputMgr::StackedOrderRemove(this);
 		for (auto& option : options)
 		{
 			if(option.first->GetHighLightOn())
 				option.first->HighLightOff();
 		}
+		if(collection->GetHighLightOn())
+			collection->HighLightOff();
 	}
 }
 

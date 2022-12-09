@@ -22,6 +22,8 @@ struct AxisInfo
 	float value;
 };
 
+class Object;
+
 class InputMgr
 {
 private:
@@ -42,6 +44,8 @@ private:
 	static Vector2f mousePosDisplacement;
 	static bool wheelUp;
 	static bool wheelDown;
+
+	static list<Object*> objStackedOrder;
 
 public:
 	static void Init();
@@ -75,4 +79,8 @@ public:
 
 	static char GetLastKey();
 	static bool GetKeyDown();
+	
+	static list<Object*> GetStackedOrder() { return objStackedOrder; }
+	static void StackedOrderAdd(Object* obj);
+	static void StackedOrderRemove(Object* obj);
 };

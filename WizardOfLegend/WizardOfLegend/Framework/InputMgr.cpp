@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Framework.h"
+#include "../GameObject/Object.h"
 
 map<Axis, AxisInfo> InputMgr::axisInfoMap;
 
@@ -20,6 +21,8 @@ bool InputMgr::wheelDown;
 Vector2f InputMgr::mousePos;
 Vector2f InputMgr::mousePosDisplacement;
 Vector2f InputMgr::prevMousePos;
+
+list<Object*> InputMgr::objStackedOrder;
 
 void InputMgr::Init()
 {
@@ -254,4 +257,14 @@ char InputMgr::GetLastKey()
 bool InputMgr::GetKeyDown()
 {
 	return !downList.empty();
+}
+
+void InputMgr::StackedOrderAdd(Object* obj)
+{
+	objStackedOrder.push_back(obj);
+}
+
+void InputMgr::StackedOrderRemove(Object* obj)
+{
+	objStackedOrder.remove(obj);
 }

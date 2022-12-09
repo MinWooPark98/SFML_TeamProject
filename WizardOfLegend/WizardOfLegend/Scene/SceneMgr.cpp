@@ -8,13 +8,13 @@
 
 bool SceneMgr::Init()
 {
-    sceneMap[Scenes::Dev] = new DevScene();
     sceneMap[Scenes::Title] = new TitleScene();
     sceneMap[Scenes::Play] = new PlayScene();
     sceneMap[Scenes::MapTool] = new MapToolScene();
     sceneMap[Scenes::SkillTool] = new SkillToolScene();
     sceneMap[Scenes::Ending] = new EndingScene();
-    currScene = Scenes::Dev;
+    sceneMap[Scenes::Dev] = new DevScene();
+    currScene = Scenes::Title;
 
     for (auto& pair : sceneMap)
     {
