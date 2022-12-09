@@ -1,11 +1,8 @@
 #include "Portal.h"
-#include "../3rd/rapidcsv.h"
 #include "../Scene/PlayScene.h"
 #include "../Scene/SceneMgr.h"
-#include "../Framework/FileMgr.h"
 #include "../GameObject/Player.h"
 #include "../Framework/ResourceMgr.h"
-#include "../GameObject/Player.h"
 
 Portal::Portal()
 {

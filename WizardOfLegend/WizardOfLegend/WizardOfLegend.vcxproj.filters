@@ -71,6 +71,7 @@
     <ClCompile Include="GameObject\Dummy.cpp" />
     <ClCompile Include="Ui\Heal.cpp" />
     <ClCompile Include="Ui\Portal.cpp" />
+    <ClCompile Include="Ui\MessageUi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="GameObject\Dummy.h" />
     <ClInclude Include="Ui\Heal.h" />
     <ClInclude Include="Ui\Portal.h" />
+    <ClInclude Include="Ui\MessageUi.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

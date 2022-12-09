@@ -6,7 +6,6 @@ class Player;
 class Heal : public SpriteObj
 {
 protected:
-	Animator animation;
 	Player* player;
 
 public:
@@ -18,7 +17,8 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 	virtual void Reset() override;
 
-	void SetHealObject(string texture, string animationClipName, Vector2f hitBoxXY);
 	void OnHit(int dmg, int heal);
+
+	void SetPlayer(Player* p) { player = p; };
 };
 

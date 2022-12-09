@@ -11,6 +11,7 @@ class ShowDamage;
 class Gold;
 class ChaosFragments;
 class Portal;
+class Heal;
 class PlayScene : public Scene
 {
 protected:
@@ -63,5 +64,6 @@ public:
 	ObjectPool<ChaosFragments>* GetPlatinum() { return platinums; }
 
 	void SetMapName(const string& name) { mapName = name; }
+	string GetMapName() { return mapName; };
 };
 

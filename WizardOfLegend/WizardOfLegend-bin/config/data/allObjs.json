@@ -258,6 +258,10 @@
     {
       "texPath": "graphics/Map/Object/tutorial_skill_4.png",
       "uiPath": "graphics/Map/Palette/WindSlashSmall1.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/Portal.png",
+      "uiPath": "graphics/Map/Palette/Portal.png"
     }
   ],
   "PLAYER": [

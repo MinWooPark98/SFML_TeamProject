@@ -13,6 +13,8 @@
 #include "../GameObject/FinalBoss.h"
 #include "PlaySceneSkillOptions.h"
 #include "SkillCoolDownUi.h"
+#include "../Scene/PlayScene.h"
+#include "MessageUi.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -236,15 +238,6 @@ void PlayUiMgr::Init()
 		bossName->SetOutlineThickness(2.f);
 		bossName->SetText("BOSS NAME");
 		bossName->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.07f });
-
-		fps = new TextObj();
-		fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-		fps->SetSize(35);
-		fps->SetFillColor(Color::White);
-		fps->SetOutlineColor(Color::Black);
-		fps->SetOutlineThickness(2.f);
-		fps->SetText("");
-		fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
 	}
 
 	for (int i = 0; i < 6; i++)
@@ -310,7 +303,7 @@ void PlayUiMgr::Init()
 	// property
 	gold = new SpriteObj();
 	gold->SetTexture(*RESOURCE_MGR->GetTexture("graphics/GoldHD.png"));
-	gold->SetPos({windowSize.x * 0.48f, windowSize.y * 0.85f});
+	gold->SetPos({windowSize.x * 0.48f, windowSize.y * 0.95f});
 	gold->SetOrigin(Origins::MC);
 	gold->SetScale({3, 3});
 	uiObjList[0].push_back(gold);
@@ -321,12 +314,12 @@ void PlayUiMgr::Init()
 	goldText->SetOutlineColor(Color::Black);
 	goldText->SetOutlineThickness(2.f);
 	goldText->SetText("");
-	goldText->SetPos({ gold->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.85f - (gold->GetSize().y * 2) + 3});
+	goldText->SetPos({ gold->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.95f - (gold->GetSize().y * 2) + 3});
 	uiObjList[0].push_back(goldText);
 
 	platinum = new SpriteObj();
 	platinum->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Platinum.png"));
-	platinum->SetPos({ windowSize.x * 0.48f, windowSize.y * 0.8f });
+	platinum->SetPos({ windowSize.x * 0.48f, windowSize.y * 0.9f });
 	platinum->SetOrigin(Origins::MC);
 	platinum->SetScale({ 3, 3 });
 	uiObjList[0].push_back(platinum);
@@ -337,8 +330,47 @@ void PlayUiMgr::Init()
 	platinumText->SetOutlineColor(Color::Black);
 	platinumText->SetOutlineThickness(2.f);
 	platinumText->SetText("");
-	platinumText->SetPos({ platinum->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.8f - (platinum->GetSize().y * 2) + 7 });
+	platinumText->SetPos({ platinum->GetPos().x + (gold->GetSize().x * 4), windowSize.y * 0.9f - (platinum->GetSize().y * 2) + 7 });
 	uiObjList[0].push_back(platinumText);
+
+
+	for (int i = 0; i < 4; i++)
+		moveKeyboard.push_back(new SpriteObj());
+
+	Scene* currScene = SCENE_MGR->GetCurrentScene();
+	if (((PlayScene*)currScene)->GetMapName() == "TUTORIALMAP")
+	{
+		for (int i = 0; i < moveKeyboard.size(); i++)
+		{
+			switch (i)
+			{
+			case 0:
+				moveKeyboard[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/W.png"));
+				moveKeyboard[i]->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.35f });
+				break;
+			case 1:
+				moveKeyboard[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/A.png"));
+				moveKeyboard[i]->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.35f + moveKeyboard[i]->GetSize().y * 3 });
+				break;
+			case 2:
+				moveKeyboard[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/S.png"));
+				moveKeyboard[i]->SetPos({ windowSize.x * 0.5f - (moveKeyboard[i]->GetSize().x * 3), windowSize.y * 0.35f + (moveKeyboard[i]->GetSize().y * 3) });
+				break;
+			case 3:
+				moveKeyboard[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/D.png"));
+				moveKeyboard[i]->SetPos({ windowSize.x * 0.5f + (moveKeyboard[i]->GetSize().x * 3), windowSize.y * 0.35f + (moveKeyboard[i]->GetSize().y * 3) });
+				break;
+			}
+			moveKeyboard[i]->SetScale({ 4, 4 });
+			moveKeyboard[i]->SetOrigin(Origins::MC);
+
+			uiObjList[0].push_back(moveKeyboard[i]);
+		}
+
+		keyboardBright = 255.f;
+		isTutorial = true;
+	}
+
 
 	fps = new TextObj();
 	fps->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
@@ -349,6 +381,9 @@ void PlayUiMgr::Init()
 	fps->SetText("");
 	fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
 	uiObjList[0].push_back(fps);
+
+	messageUi = new MessageUi();
+	messageUi->Init();
 }
 
 void PlayUiMgr::Release()
@@ -386,6 +421,11 @@ void PlayUiMgr::Update(float dt)
 		options->Update(dt);
 		return;
 	}
+
+	messageUi->Update(dt);
+
+	if (isTutorial && !moveKeyboard.empty())
+		TuturialMoveKeyboardUiControl(dt);
 
 	goldText->SetOrigin(Origins::ML);
 	goldText->SetText(to_string(player->GetCurGold()));
@@ -469,6 +509,8 @@ void PlayUiMgr::Draw(RenderWindow& window)
 
 	if (isDevMode)
 		fps->Draw(window);
+
+	messageUi->Draw(window);
 }
 
 void PlayUiMgr::HpBarSizeControl(float dt)
@@ -642,4 +684,23 @@ void PlayUiMgr::SetSkillIcon(int idx, const string& texture)
 {
 	skills[idx]->SetTexture(*RESOURCE_MGR->GetTexture(texture));
 	skills[idx]->SetOrigin(Origins::MC);
+}
+
+void PlayUiMgr::TuturialMoveKeyboardUiControl(float dt)
+{
+	keyboardEnabledTimer -= dt;
+
+	if (keyboardEnabledTimer <= 1.f)
+	{
+		keyboardBright -= dt;
+		for (int i = 0; i < moveKeyboard.size(); i++)
+		{
+			Color fadeColor = moveKeyboard[i]->GetSprite().getColor();
+			fadeColor.a = keyboardBright;
+			moveKeyboard[i]->SetColor(fadeColor);
+		}
+	}
+
+	if (keyboardBright <= 0)
+		isTutorial = false;
 }
