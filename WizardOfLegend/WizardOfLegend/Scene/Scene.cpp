@@ -81,6 +81,11 @@ void Scene::Update(float dt)
 					{
 						obj->Update(dt);
 					}
+
+					if (InputMgr::GetKeyDown(Keyboard::F1))
+					{
+						obj->SwitchDevMode();
+					}
 				}
 			}
 		}

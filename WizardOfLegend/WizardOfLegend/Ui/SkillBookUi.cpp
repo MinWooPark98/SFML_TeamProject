@@ -107,6 +107,12 @@ void SkillBookUi::Update(float dt)
 {
 	Object::Update(dt);
 
+	for (int i = 0; i < options.size(); ++i)
+	{
+		if (options[i].first->GetHighLightOn())
+			cout << i << endl;
+	}
+
 	if (skillInfo != nullptr && skillInfo->GetActive())
 	{
 		skillInfo->Update(dt);

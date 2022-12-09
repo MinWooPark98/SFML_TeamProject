@@ -41,7 +41,10 @@ void DevUiMgr::Update(float dt)
 	for (auto& uiObjs : uiObjList)
 	{
 		for (auto& obj : uiObjs.second)
-			obj->Update(dt);
+		{
+			if(obj->GetActive())
+				obj->Update(dt);
+		}
 	}
 }
 
