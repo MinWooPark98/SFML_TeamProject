@@ -150,7 +150,7 @@ void Turret::EyePos(const Vector2f& pos)
 
 void Turret::EyeMove(float dt)
 {
-	if (Utils::Distance(turretIris->GetPos(), turretEye->GetPos()) < 2.f)
+	if (Utils::Distance(turretIris->GetPos(), turretEye->GetPos()) < 1.5f)
 	{
 		auto move = Utils::Normalize(player->GetPos() - turretIris->GetPos());
 		turretIris->Translate(dt * move * eyeMoveSpeed);

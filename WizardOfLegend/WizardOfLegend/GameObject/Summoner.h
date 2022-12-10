@@ -13,6 +13,7 @@ protected:
 	bool isAttack = false;
 
 	bool fireSet = true;
+	bool isShot = false;
 
 public:
 	Summoner();

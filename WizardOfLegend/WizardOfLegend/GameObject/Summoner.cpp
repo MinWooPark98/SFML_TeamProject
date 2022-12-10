@@ -199,6 +199,17 @@ void Summoner::SetState(States newState)
 		lastDir.x < 0.f ? animation.Play("SummonerLeftCast") : animation.Play("SummonerRightCast");
 		break;
 	case States::Hit:
+		if (!isAttack)
+		{
+			for (int i = 0; i < fires.size(); i++)
+			{
+				if (fires[i]->GetActive())
+					fires[i]->SetActive(false);
+			}
+		}
+
+		attackTimer = 0.f;
+		fireSet = true;
 		lastDir.x < 0.f ? animation.Play("SummonerLeftHurt") : animation.Play("SummonerRightHurt");
 		break;
 	case States::Die:
@@ -231,6 +242,7 @@ void Summoner::UpdateAttack(float dt)
 				fireAnimations[i]->Play("FireAnimation");
 			}
 			fireSet = false;
+			isShot = false;
 		}
 	}
 	else
@@ -244,6 +256,7 @@ void Summoner::UpdateAttack(float dt)
 		}
 
 		isAttack = true;
+		isShot = true;
 	}
 
 	if (attackTimer >= attackStartTimer + 1.f)
@@ -325,7 +338,7 @@ void Summoner::UpdateCollision(float dt)
 		}
 	}
 
-	if (isAttack)
+	if (isShot)
 	{
 		for (int i = 0; i < fires.size(); i++)
 		{
