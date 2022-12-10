@@ -298,6 +298,10 @@
     {
       "texPath": "graphics/TurretMerged.png",
       "uiPath": "graphics/Map/Palette/TurretMerged.png"
+    },
+    {
+      "texPath": "graphics/SummonerIdleDown.png",
+      "uiPath": "graphics/Map/Palette/SummonerPainting.png"
     }
   ],
   "SECTOR": [

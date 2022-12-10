@@ -23,6 +23,7 @@
 #include "../Ui/Portal.h"
 #include "../Ui/Heal.h"
 #include "../GameObject/Turret.h"
+#include "../GameObject/Summoner.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -240,6 +241,19 @@ void PlayScene::Init()
 				turret->SetLastPosition({ 0,0 });
 				turret->SetActive(true);
 				objList[LayerType::Object][1].push_back(turret);
+			}
+			else if (obj.path == "graphics/SummonerIdleDown.png")
+			{
+				Summoner* summoner = new Summoner();
+				summoner->Init();
+				summoner->SetName(obj.type);
+				summoner->SetPos(obj.position);
+				summoner->SetCardPos(summoner->GetPos());
+				summoner->SetObjType(Object::ObjTypes::Enemy);
+				summoner->SetColor(2);
+				summoner->SetActive(false);
+				summoner->SetLastPosition({ 0,0 });
+				objList[LayerType::Object][1].push_back(summoner);
 			}
 			else if (obj.path == "graphics/TrainingDummy.png")
 			{

@@ -1,0 +1,7 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+SummonerLeftMove,1,6,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/SummonerRunRight0.png,0,0,48,48,24,24,1,0
+graphics/SummonerRunRight1.png,0,0,48,48,24,24,1,0
+graphics/SummonerRunRight2.png,0,0,48,48,24,24,1,0

@@ -81,6 +81,7 @@
     <ClCompile Include="GameObject\Interactive\Interactive.cpp" />
     <ClCompile Include="GameObject\Interactive\SkillBook.cpp" />
     <ClCompile Include="GameObject\Turret.cpp" />
+    <ClCompile Include="GameObject\Summoner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="GameObject\Interactive\Interactive.h" />
     <ClInclude Include="GameObject\Interactive\SkillBook.h" />
     <ClInclude Include="GameObject\Turret.h" />
+    <ClInclude Include="GameObject\Summoner.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

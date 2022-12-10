@@ -913,3 +913,45 @@ graphics/TurretIris.png,0
 graphics/Map/Palette/TurretMerged.png,0
 graphics/TurretMerged.png,0
 graphics/TurretBase.png,0
+graphics/SummonerRunRight2.png,0
+graphics/SummonerCast3.png,0
+graphics/SummonerDead4.png,0
+graphics/SummonerCast0.png,0
+graphics/SummonerRunRight1.png,0
+graphics/SummonerDead1.png,0
+graphics/SummonerDead2.png,0
+graphics/SummonerCast5.png,0
+graphics/SummonerHurt.png,0
+graphics/SummonerCast4.png,0
+graphics/SummonerIdleDown.png,0
+graphics/SummonerCast1.png,0
+graphics/SummonerCast2.png,0
+graphics/SummonerDead0.png,0
+graphics/SummonerRunRight0.png,0
+graphics/SummonerDead5.png,0
+graphics/SummonerDead3.png,0
+graphics/SummonerColorIndex.png,0
+animations/summonerAnimation/SummonerLeftAttack.csv,3
+animations/summonerAnimation/SummonerLeftCast.csv,3
+animations/summonerAnimation/SummonerLeftDead.csv,3
+animations/summonerAnimation/SummonerLeftHurt.csv,3
+animations/summonerAnimation/SummonerLeftIdle.csv,3
+animations/summonerAnimation/SummonerLeftMove.csv,3
+animations/summonerAnimation/SummonerRightAttack.csv,3
+animations/summonerAnimation/SummonerRightCast.csv,3
+animations/summonerAnimation/SummonerRightDead.csv,3
+animations/summonerAnimation/SummonerRightHurt.csv,3
+animations/summonerAnimation/SummonerRightIdle.csv,3
+animations/summonerAnimation/SummonerRightMove.csv,3
+graphics/SummonerPainting.png,0
+graphics/Map/Palette/SummonerPainting.png,0
+graphics/FireColorIndex.png,0
+graphics/NewFire_0.png,0
+graphics/NewFire_1 #182741.png,0
+graphics/NewFire_2 #178018.png,0
+graphics/NewFire_3 #166468.png,0
+graphics/NewFire_4.png,0
+graphics/NewFire_5 #138725.png,0
+graphics/NewFire_6 #117900.png,0
+graphics/NewFire_7 #156544.png,0
+animations/summonerAnimation/FireAnimation.csv,3

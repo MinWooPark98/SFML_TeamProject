@@ -114,9 +114,14 @@ void Enemy::Update(float dt)
 
 void Enemy::SetColor(int index)
 {
+	int saveIndex = paletteIndex;
+
 	paletteIndex = (paletteIndex - index) % paletteSize;
 	shader.setUniform("colorTable", texColorTable);
 	shader.setUniform("paletteIndex", (float)paletteIndex / paletteSize);
+
+	paletteIndex = saveIndex;
+
 }
 
 void Enemy::NormalMonsterMove(float dt)

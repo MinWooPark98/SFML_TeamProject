@@ -1,0 +1,10 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+FireAnimation,1,7,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/NewFire_0.png,0,0,20,20,10,10,0,0
+graphics/NewFire_1 #182741.png,0,0,20,20,10,10,0,0
+graphics/NewFire_2 #178018.png,0,0,20,20,10,10,0,0
+graphics/NewFire_3 #166468.png,0,0,20,20,10,10,0,0
+graphics/NewFire_4.png,0,0,20,20,10,10,0,0
+graphics/NewFire_5 #138725.png,0,0,20,20,10,10,0,0

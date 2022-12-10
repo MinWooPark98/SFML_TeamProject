@@ -149,6 +149,7 @@
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
     <ClCompile Include="GameObject\Dummy.cpp" />
     <ClCompile Include="GameObject\Turret.cpp" />
+    <ClCompile Include="GameObject\Summoner.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="Ui\Portal.cpp" />
     <ClCompile Include="Ui\ChaosFragments.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="DataTable\PlatinumTable.h" />
     <ClInclude Include="GameObject\Dummy.h" />
     <ClInclude Include="GameObject\Turret.h" />
+    <ClInclude Include="GameObject\Summoner.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="Ui\Portal.h" />
     <ClInclude Include="Ui\ChaosFragments.h" />
