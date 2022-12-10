@@ -388,6 +388,8 @@ void PlayUiMgr::Init()
 
 void PlayUiMgr::Release()
 {
+	InputMgr::StackedOrderRemove(messageUi);
+
 	UiMgr::Release();
 	for (auto& uiObjs : uiObjList)
 	{

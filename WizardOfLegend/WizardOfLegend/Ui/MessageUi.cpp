@@ -17,7 +17,7 @@ MessageUi::~MessageUi()
 void MessageUi::Init()
 {
 	SpriteObj::Init();
-
+	isTalk = false;
 	// 3까지 메세지 틀
 	// 4 = npc 이미지, 5 = 플레이어 이미지
 	for (int i = 0; i < 6; i++)
