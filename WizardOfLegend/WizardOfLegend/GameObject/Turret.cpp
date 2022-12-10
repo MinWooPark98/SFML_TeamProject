@@ -80,7 +80,7 @@ void Turret::Update(float dt)
 		PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 		auto gold = playScene->GetGold()->Get();
 		gold->SetGoldPos(GetPos());
-
+		SOUND_MGR->Play("sounds/EnemyDead.wav");
 		SOUND_MGR->Play("sounds/GoldSpawn.wav");
 
 		isAlive = false;
@@ -128,6 +128,7 @@ void Turret::UpdateAttack(float dt)
 			newSkill->Reprepare();
 			newSkill->Do();
 			attackTimer = 0.f;
+			SOUND_MGR->Play("sounds/FireballCast.wav");
 		}
 		else
 		{

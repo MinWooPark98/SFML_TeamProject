@@ -14,6 +14,7 @@ protected:
 
 	bool fireSet = true;
 	bool isShot = false;
+	bool setShotDir;
 
 public:
 	Summoner();

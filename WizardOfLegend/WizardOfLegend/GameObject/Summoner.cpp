@@ -99,18 +99,14 @@ void Summoner::Update(float dt)
 				if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
 				{
 					NormalMonsterMove(dt);
-					playerLastPos = player->GetPos();
+					
 					moveSoundTimer -= dt;
 					if (moveSoundTimer <= 0.f)
 					{
-						SOUND_MGR->Play("sounds/MetalFootstep.wav"); // 발소리 변경
+						SOUND_MGR->Play("sounds/LightFootstep.wav");
 						moveSoundTimer = 0.4f;
 					}
 				}
-			}
-			else
-			{
-				attackDelay = 2.f;
 			}
 
 			if (curHp <= 0 && isAlive)
@@ -149,16 +145,6 @@ void Summoner::Update(float dt)
 
 void Summoner::Draw(RenderWindow& window)
 {
-	Enemy::Draw(window);
-
-	if (isAlive)
-		window.draw(sprite, &shader);
-	else
-	{
-		if (dieTimer >= 0.f)
-			window.draw(sprite, &shader);
-	}
-
 	for (int i = 0; i < fires.size(); i++)
 	{
 		if (fires[i]->GetActive())
@@ -169,6 +155,16 @@ void Summoner::Draw(RenderWindow& window)
 				window.draw(fires[i]->GetHitBox());
 			}
 		}
+	}
+
+	Enemy::Draw(window);
+
+	if (isAlive)
+		window.draw(sprite, &shader);
+	else
+	{
+		if (dieTimer >= 0.f)
+			window.draw(sprite, &shader);
 	}
 }
 
@@ -207,8 +203,8 @@ void Summoner::SetState(States newState)
 					fires[i]->SetActive(false);
 			}
 		}
-
-		attackTimer = 0.f;
+		isAttack = false;
+		attackTimer = -0.3f;
 		fireSet = true;
 		lastDir.x < 0.f ? animation.Play("SummonerLeftHurt") : animation.Play("SummonerRightHurt");
 		break;
@@ -226,10 +222,12 @@ void Summoner::UpdateAttack(float dt)
 
 	attackTimer += dt;
 
-	if (attackTimer <= attackStartTimer)
+	if (attackTimer <= attackStartTimer && attackTimer >= 0.f)
 	{
 		if (fireSet)
 		{
+			playerLastPos = player->GetPos();
+
 			for (int i = 0; i < fires.size(); i++)
 			{
 				float angle = atan2(-(playerLastPos.y - GetPos().y), playerLastPos.x - GetPos().x) * 180.f / M_PI;
@@ -241,11 +239,12 @@ void Summoner::UpdateAttack(float dt)
 				fires[i]->SetActive(true);
 				fireAnimations[i]->Play("FireAnimation");
 			}
+			SOUND_MGR->Play("sounds/FireballCast.wav");
 			fireSet = false;
 			isShot = false;
 		}
 	}
-	else
+	else if (attackTimer >= attackStartTimer)
 	{
 		if (!isAttack)
 		{
@@ -253,6 +252,8 @@ void Summoner::UpdateAttack(float dt)
 				animation.Play("SummonerRightAttack");
 			if (playerLastPos.x < GetPos().x)
 				animation.Play("SummonerLeftAttack");
+
+			SOUND_MGR->Play("sounds/FireBlast.wav");
 		}
 
 		isAttack = true;
