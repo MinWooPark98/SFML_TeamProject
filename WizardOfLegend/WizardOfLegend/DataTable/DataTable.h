@@ -17,6 +17,7 @@ public:
 		SkillSetIntro,
 		FinalBossSkill,
 		MapName,
+		Item,
 	};
 protected:
 	Types type;

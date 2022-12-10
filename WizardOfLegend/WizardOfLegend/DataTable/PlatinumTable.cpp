@@ -15,7 +15,7 @@ const PlatinumTable::Platinum& PlatinumTable::Get(const string& objType)
 {
 	auto find = table.find(objType);
 	if (find == table.end())
-		throw "None";
+		throw invalid_argument("wrong value");
 	return find->second;
 }
 

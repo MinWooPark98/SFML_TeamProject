@@ -6,6 +6,7 @@
 #include "FinalBossSkillTable.h"
 #include "MapNameTable.h"
 #include "PlatinumTable.h"
+#include "ItemTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -55,6 +56,10 @@ void DataTableMgr::Init()
     table = new PlatinumTable();
     table->Load();
     tables.insert({DataTable::Types::Platinum, table});
+
+    table = new ItemTable();
+    table->Load();
+    tables.insert({ DataTable::Types::Item, table });
 }
 
 void DataTableMgr::Release()

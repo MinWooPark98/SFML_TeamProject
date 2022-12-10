@@ -338,7 +338,15 @@ void SkillBookCardInfo::SetActive(bool active)
 	for (int i = 0; i < (int)Skill::Element::Count; ++i)
 	{
 		skillInfos.push_back(vector<pair<string, string>>());
-		auto data_elem = skillSetData->Get((Skill::Element)i);
+		map<string, SkillSetTable::SetInfo> data_elem;
+		try
+		{
+			data_elem = skillSetData->Get(SkillSetTable::Locked::Unlocked, (Skill::Element)i);
+		}
+		catch (exception& expn)
+		{
+			continue;
+		}
 		for (auto& data : data_elem)
 		{
 			bool isExist = false;

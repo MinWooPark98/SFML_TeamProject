@@ -14,7 +14,7 @@ bool SceneMgr::Init()
     sceneMap[Scenes::SkillTool] = new SkillToolScene();
     sceneMap[Scenes::Ending] = new EndingScene();
     sceneMap[Scenes::Dev] = new DevScene();
-    currScene = Scenes::Title;
+    currScene = Scenes::Dev;
 
     for (auto& pair : sceneMap)
     {

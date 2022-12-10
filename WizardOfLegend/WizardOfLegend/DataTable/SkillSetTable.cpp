@@ -4,7 +4,7 @@
 SkillSetTable::SkillSetTable()
 	:DataTable(Types::SkillSet)
 {
-	fileName = "tables/skillSet.csv";
+	fileName = "tables/SkillSet.csv";
 }
 
 SkillSetTable::~SkillSetTable()
@@ -13,20 +13,33 @@ SkillSetTable::~SkillSetTable()
 
 const SkillSetTable::SetInfo& SkillSetTable::Get(const string& setName)
 {
-	for (auto& elemTable : table)
+	for (auto& outermost : table)
 	{
-		auto find = elemTable.second.find(setName);
-		if (find != elemTable.second.end())
-			return find->second;
+		for (auto& elemTable : outermost.second)
+		{
+			auto find = elemTable.second.find(setName);
+			if (find != elemTable.second.end())
+				return find->second;
+		}
 	}
-	throw "Wrong SkillSetName";
+	throw invalid_argument("wrong value");
 }
 
-const map<string, SkillSetTable::SetInfo> SkillSetTable::Get(Skill::Element elem)
+const map<Skill::Element, map<string, SkillSetTable::SetInfo>> SkillSetTable::GetElementLists(Locked locked)
 {
-	auto find = table.find(elem);
+	auto find = table.find(locked);
 	if (find == table.end())
-		throw "Wrong value";
+		throw invalid_argument("wrong value");
+	return find->second;
+}
+
+const map<string, SkillSetTable::SetInfo> SkillSetTable::Get(Locked locked, Skill::Element elem)
+{
+	if (table.find(locked) == table.end())
+		throw invalid_argument("wrong value");
+	auto find = table[locked].find(elem);
+	if (find == table[locked].end())
+		throw invalid_argument("wrong value");
 	return find->second;
 }
 
@@ -34,11 +47,14 @@ const Skill::Element SkillSetTable::GetElement(const string& name)
 {
 	for (int i = 0; i < (int)Skill::Element::Count; ++i)
 	{
-		auto find = table[(Skill::Element)i].find(name);
-		if (find != table[(Skill::Element)i].end())
+		auto find_locked = table[Locked::Locked][(Skill::Element)i].find(name);
+		if (find_locked != table[Locked::Locked][(Skill::Element)i].end())
+			return (Skill::Element)i;
+		auto find_unlocked = table[Locked::Unlocked][(Skill::Element)i].find(name);
+		if (find_unlocked != table[Locked::Unlocked][(Skill::Element)i].end())
 			return (Skill::Element)i;
 	}
-	throw "Wrong value";
+	throw invalid_argument("wrong value");
 }
 
 void SkillSetTable::Release()
@@ -50,25 +66,29 @@ bool SkillSetTable::Load()
 {
 	Release();
 	rapidcsv::Document doc(fileName, rapidcsv::LabelParams(0, -1));
-	vector<string> setName = doc.GetColumn<string>(0);
+	vector<string> setName = doc.GetColumn<string>(1);
 	keys = setName;
 	auto columnCount = doc.GetColumnCount();
 	auto rowCount = doc.GetRowCount();
 	for (int j = 0; j < rowCount; ++j)
 	{
-		for (auto& elemTable : table)
+		for (auto& outermost : table)
 		{
-			if (elemTable.second.find(setName[j]) != elemTable.second.end())
+			for (auto& elemTable : outermost.second)
 			{
-				cout << "duplicate values exist" << endl;
-				return false;
+				if (elemTable.second.find(setName[j]) != elemTable.second.end())
+				{
+					cout << "duplicate values exist" << endl;
+					return false;
+				}
 			}
 		}
-		int element = doc.GetCell<int>(1, j);
+		int locked = doc.GetCell<int>(0, j);
+		int element = doc.GetCell<int>(2, j);
 		float coolDown = 0.f;
 		try
 		{
-			coolDown = doc.GetCell<float>(2, j);
+			coolDown = doc.GetCell<float>(3, j);
 			if (coolDown < 0.f)
 				coolDown = -1.f;
 		}
@@ -76,10 +96,10 @@ bool SkillSetTable::Load()
 		{
 			coolDown = -1.f;
 		}
-		string iconDir = doc.GetCell<string>(3, j);
+		string iconDir = doc.GetCell<string>(4, j);
 		list<string> skillNames;
 		string str;
-		for(int i = 4; i < columnCount;++i)
+		for(int i = 5; i < columnCount;++i)
 		{
 			str = doc.GetCell<string>(i, j);
 			if (str.empty())
@@ -87,7 +107,7 @@ bool SkillSetTable::Load()
 			skillNames.push_back(str);
 		}
 		
-		table[(Skill::Element)element][setName[j]] = { coolDown, iconDir, skillNames };
+		table[(Locked)locked][(Skill::Element)element][setName[j]] = {coolDown, iconDir, skillNames};
 	}
 	return true;
 }

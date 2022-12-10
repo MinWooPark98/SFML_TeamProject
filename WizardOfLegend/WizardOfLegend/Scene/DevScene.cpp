@@ -7,9 +7,12 @@
 #include "../GameObject/Skill.h"
 #include "../GameObject/Interactive/SkillBook.h"
 #include "../Ui/SkillBookUi.h"
+#include "../GameObject/Item/ItemMgr.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/ItemTable.h"
 
 DevScene::DevScene()
-	:Scene(Scenes::Dev)
+	:Scene(Scenes::Dev), itemMgr(nullptr)
 {
 }
 
@@ -21,6 +24,8 @@ void DevScene::Init()
 {
 	Scene::Init();
 	auto& windowSize = FRAMEWORK->GetWindowSize();
+
+	itemMgr = new ItemMgr();
 
 	Player* player = new Player();
 	player->Init();

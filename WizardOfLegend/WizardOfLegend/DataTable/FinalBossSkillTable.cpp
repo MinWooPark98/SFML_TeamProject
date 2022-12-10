@@ -4,7 +4,7 @@
 FinalBossSkillTable::FinalBossSkillTable()
 	:DataTable(Types::FinalBossSkill)
 {
-	fileName = "tables/finalbossSkillTable.csv";
+	fileName = "tables/FinalBossSkillTable.csv";
 }
 
 FinalBossSkillTable::~FinalBossSkillTable()
@@ -15,7 +15,7 @@ const list<string>& FinalBossSkillTable::Get(const string& setName)
 {
 	auto find = table.find(setName);
 	if (find == table.end())
-		throw "Wrong SkillSetName";
+		throw invalid_argument("wrong value");
 	return find->second;
 }
 
