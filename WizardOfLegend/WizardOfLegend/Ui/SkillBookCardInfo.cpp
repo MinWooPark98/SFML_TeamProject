@@ -10,6 +10,7 @@
 #include "../DataTable/SkillTable.h"
 #include "SkillBookButton.h"
 #include "../DataTable/SkillSetIntroTable.h"
+#include "../GameObject/Interactive/SkillBook.h"
 
 SkillBookCardInfo::SkillBookCardInfo()
 	:frame(nullptr), element(0), skillIdx(0), currPlayerSkillSetIdx(0), isMoving(true), moveSpeed(7200.f), skillName(nullptr), skillIntro(nullptr)
@@ -315,10 +316,12 @@ void SkillBookCardInfo::ChangeSkill()
 void SkillBookCardInfo::SetActive(bool active)
 {
 	Object::SetActive(active);
+	auto currScene = SCENE_MGR->GetCurrentScene();
 	if (!active)
 	{
 		if (Deactivate != nullptr)
 			Deactivate();
+		((SkillBook*)currScene->FindGameObj("SKILLBOOK"))->SetState(SkillBook::States::CloseReady);
 		return;
 	}
 	element = 0;
@@ -329,7 +332,7 @@ void SkillBookCardInfo::SetActive(bool active)
 
 	auto skillSetData = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	auto skillData = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
-	auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+	auto player = (Player*)currScene->FindGameObj("PLAYER");
 	auto& skillSets = player->GetSkillSets();
 	playerSkillSets.push_back(skillSets[0]);
 	playerSkillSets.push_back(skillSets[1]);
@@ -376,4 +379,5 @@ void SkillBookCardInfo::SetActive(bool active)
 	SetDrawinCards();
 	SetSkillIntro();
 	Reappear();
+	((SkillBook*)currScene->FindGameObj("SKILLBOOK"))->SetState(SkillBook::States::Open);
 }

@@ -10,6 +10,7 @@
 #include "../GameObject/Item/ItemMgr.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/ItemTable.h"
+#include "../GameObject/Interactive/Wardrobe.h"
 
 DevScene::DevScene()
 	:Scene(Scenes::Dev), itemMgr(nullptr)
@@ -39,9 +40,17 @@ void DevScene::Init()
 
 	SkillBook* book = new SkillBook();
 	book->Init();
+	book->SetName("SKILLBOOK");
 	book->SetPos((Vector2f)windowSize * 0.125f);
 	book->SetPlayer(player);
 	objList[LayerType::Object][0].push_back(book);
+
+	Wardrobe* wardrobe = new Wardrobe();
+	wardrobe->Init();
+	wardrobe->SetName("WARDROBE");
+	wardrobe->SetPos((Vector2f)windowSize * 0.125f + Vector2f(50.f, 50.f));
+	wardrobe->SetPlayer(player);
+	objList[LayerType::Object][0].push_back(wardrobe);
 
 	uiMgr = new DevUiMgr();
 	uiMgr->Init();

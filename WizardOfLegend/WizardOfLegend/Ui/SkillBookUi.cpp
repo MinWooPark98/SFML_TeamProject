@@ -9,6 +9,7 @@
 #include "../Scene/SceneMgr.h"
 #include "../GameObject/SkillSet.h"
 #include "SkillBookCardInfo.h"
+#include "../GameObject/Interactive/SkillBook.h"
 
 SkillBookUi::SkillBookUi()
 	:collection(nullptr), skillVecIdx(0), skillInfo(nullptr), isMoving(true), moveSpeed(5400.f), state(States::SkillOption)
@@ -246,6 +247,7 @@ void SkillBookUi::Translate(const Vector2f& delta)
 void SkillBookUi::SetActive(bool active)
 {
 	Object::SetActive(active);
+	auto currScene = SCENE_MGR->GetCurrentScene();
 	if (active)
 	{
 		InputMgr::StackedOrderAdd(this);
@@ -253,7 +255,7 @@ void SkillBookUi::SetActive(bool active)
 		options[skillVecIdx].first->HighLightOn();
 		collection->HighLightOff();
 		state = States::SkillOption;
-		auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+		auto player = (Player*)currScene->FindGameObj("PLAYER");
 		auto& skillSets = player->GetSkillSets();
 		playerSkillSets.push_back(skillSets[0]);
 		playerSkillSets.push_back(skillSets[1]);
@@ -268,6 +270,7 @@ void SkillBookUi::SetActive(bool active)
 			option.second->SetOrigin(Origins::MC);
 		}
 		Reappear();
+		((SkillBook*)currScene->FindGameObj("SKILLBOOK"))->SetState(SkillBook::States::OpenReady);
 	}
 	else
 	{
@@ -279,6 +282,7 @@ void SkillBookUi::SetActive(bool active)
 		}
 		if(collection->GetHighLightOn())
 			collection->HighLightOff();
+		((SkillBook*)currScene->FindGameObj("SKILLBOOK"))->SetState(SkillBook::States::Close);
 	}
 }
 

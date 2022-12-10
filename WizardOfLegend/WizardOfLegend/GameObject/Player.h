@@ -4,6 +4,7 @@
 class Animator;
 class SkillSet;
 class Skill;
+class ItemMgr;
 
 class Player : public SpriteObj
 {
@@ -67,6 +68,8 @@ protected:
 	vector<SkillSet*> skillSets;
 	SkillSet* currSkillSet;
 
+	CircleShape shadow;
+
 	bool skillToolMode;
 
 	int maxHp;
@@ -81,6 +84,8 @@ protected:
 
 	float moveSoundTimer = 0.f;
 	bool isRunning = true;
+
+	ItemMgr* itemMgr;
 
 	int gold;
 	int platinum;

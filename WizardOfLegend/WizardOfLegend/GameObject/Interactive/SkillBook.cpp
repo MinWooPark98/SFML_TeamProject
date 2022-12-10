@@ -20,9 +20,11 @@ void SkillBook::Init()
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SkillBookTurn"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SkillBookOpenReady"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SkillBookOpen"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SkillBookCloseReady"));
+	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SkillBookClose"));
 	animator->AddClip(*RESOURCE_MGR->GetAnimationClip("SkillBookBigChomp"));
 	{
-		vector<string> clipIds = { "SkillBookTurn", "SkillBookBigChomp" };
+		vector<string> clipIds = { "SkillBookClose", "SkillBookTurn", "SkillBookBigChomp" };
 		for (int i = 0; i < clipIds.size(); ++i)
 		{
 			AnimationEvent ev;
@@ -39,14 +41,11 @@ void SkillBook::Init()
 	SetState(States::Idle);
 }
 
-void SkillBook::Release()
-{
-	Interactive::Release();
-}
-
 void SkillBook::Reset()
 {
 	Interactive::Reset();
+	SetState(States::Idle);
+	idleActionTimer = 0.f;
 }
 
 void SkillBook::Update(float dt)
@@ -71,6 +70,7 @@ void SkillBook::SetState(States state)
 	switch (state)
 	{
 	case SkillBook::States::Idle:
+		idleActionTimer = 0.f;
 		animator->Play("SkillBookIdle");
 		break;
 	case SkillBook::States::OpenReady:
@@ -78,6 +78,12 @@ void SkillBook::SetState(States state)
 		break;
 	case SkillBook::States::Open:
 		animator->Play("SkillBookOpen");
+		break;
+	case SkillBook::States::CloseReady:
+		animator->Play("SkillBookCloseReady");
+		break;
+	case SkillBook::States::Close:
+		animator->Play("SkillBookClose");
 		break;
 	case SkillBook::States::Turn:
 		animator->Play("SkillBookTurn");

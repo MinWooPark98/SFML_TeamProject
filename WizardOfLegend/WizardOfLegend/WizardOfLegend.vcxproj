@@ -146,11 +146,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject\Interactive\Wardrobe.cpp" />
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
     <ClCompile Include="GameObject\Dummy.cpp" />
     <ClCompile Include="GameObject\Item\ItemMgr.cpp" />
     <ClCompile Include="GameObject\Item\Item.cpp" />
     <ClCompile Include="DataTable\ItemTable.cpp" />
+    <ClCompile Include="GameObject\Interactive\ItemBox.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="Ui\Portal.cpp" />
     <ClCompile Include="Ui\ChaosFragments.cpp" />
@@ -239,11 +241,13 @@
     <ClInclude Include="3rd\OBB.h" />
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="GameObject\Interactive\Wardrobe.h" />
     <ClInclude Include="DataTable\PlatinumTable.h" />
     <ClInclude Include="GameObject\Dummy.h" />
     <ClInclude Include="GameObject\Item\ItemMgr.h" />
     <ClInclude Include="GameObject\Item\Item.h" />
     <ClInclude Include="DataTable\ItemTable.h" />
+    <ClInclude Include="GameObject\Interactive\ItemBox.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="Ui\Portal.h" />
     <ClInclude Include="Ui\ChaosFragments.h" />

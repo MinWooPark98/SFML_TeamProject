@@ -1,19 +1,17 @@
 #pragma once
 #include "Interactive.h"
 
-class SkillBook : public Interactive
+class Wardrobe : public Interactive
 {
 public:
 	enum class States
 	{
 		None = -1,
 		Idle,
-		OpenReady,
 		Open,
-		CloseReady,
 		Close,
-		Turn,
-		BigChomp,
+		Blink,
+		Mustache,
 		Count,
 	};
 
@@ -24,12 +22,13 @@ protected:
 	float idleActionTimer;
 
 public:
-	SkillBook();
-	virtual ~SkillBook();
+	Wardrobe();
+	virtual ~Wardrobe();
 
 	virtual void Init() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
-	
+
 	void SetState(States state);
 };
+

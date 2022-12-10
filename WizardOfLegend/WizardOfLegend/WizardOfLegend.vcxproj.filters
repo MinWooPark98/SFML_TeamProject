@@ -83,6 +83,8 @@
     <ClCompile Include="GameObject\Item\ItemMgr.cpp" />
     <ClCompile Include="GameObject\Item\Item.cpp" />
     <ClCompile Include="DataTable\ItemTable.cpp" />
+    <ClCompile Include="GameObject\Interactive\Wardrobe.cpp" />
+    <ClCompile Include="GameObject\Interactive\ItemBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -171,6 +173,8 @@
     <ClInclude Include="GameObject\Item\ItemMgr.h" />
     <ClInclude Include="GameObject\Item\Item.h" />
     <ClInclude Include="DataTable\ItemTable.h" />
+    <ClInclude Include="GameObject\Interactive\Wardrobe.h" />
+    <ClInclude Include="GameObject\Interactive\ItemBox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -3,8 +3,10 @@
 #include "../../DataTable/ItemTable.h"
 #include "../../Scene/SceneMgr.h"
 #include "../Player.h"
+#include "../../DataTable/StatTable.h"
 
 ItemMgr::ItemMgr()
+	:player(nullptr)
 {
 }
 
@@ -31,6 +33,20 @@ void ItemMgr::Update(float dt)
 		if (item->GetApplyValues())
 			totalValues += item->GetValues();
 	}
+	Apply();
+}
+
+void ItemMgr::Apply()
+{
+	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
+	auto& stat = statTable->Get("Player");
+	player->SetSpeed(stat.speed * (1 + totalValues.speed));
+	player->SetAtkDmg(stat.attackDmg * (1 + totalValues.atkDmg));
+	player->SetDamageTake(stat.damageTake * (1 - totalValues.dmg));
+	player->SetMaxHp(stat.maxHp * (1 + totalValues.maxHp));
+	player->SetEvasionRate(stat.evasionRate * (1 + totalValues.evasionRate));
+	player->SetCriticalRate(stat.criticalRate * (1 + totalValues.criticalRate));
+	player->SetCriticalRatio(stat.criticalRatio * (1 + totalValues.criticalRatio));
 }
 
 void ItemMgr::Clear()

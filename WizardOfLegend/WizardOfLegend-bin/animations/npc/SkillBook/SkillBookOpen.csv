@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-SkillBookOpen,0,7,,,,,,
+SkillBookOpen,0,14,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/SpellBookOpen3.png,0,0,27,30,13.5,15,0,0
