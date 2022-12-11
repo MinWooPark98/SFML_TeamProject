@@ -4,7 +4,7 @@
 #include "../Scene/SceneMgr.h"
 #include "../Scene/PlayScene.h"
 #include "FinalBoss.h"
-#include "../Ui/Heal.h"
+#include "../GameObject/Heal.h"
 #include "Dummy.h"
 
 CastingCircle::CastingCircle()

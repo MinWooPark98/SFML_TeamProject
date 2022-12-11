@@ -9,7 +9,6 @@ protected:
 
     Shader* spriteShader;
     Texture texColorTable;
-    int spritePaletteIndex;
     int spritePaletteSize;
     Texture spriteColorTable;
 
@@ -45,22 +44,16 @@ public:
     FloatRect GetGlobalBounds() const;
     FloatRect GetLocalBounds() const;
 
-    void SetSpritePaletteIndex(int index) { spritePaletteIndex = index; };
     void SetSpritePaletteSize(int size) { spritePaletteSize = size; };
     void SetSpriteColorTable(string table) { spriteColorTable.loadFromFile(table); };
     void SetPaletteColor(int index)
     {
-        int saveIndex = spritePaletteIndex;
-
-        spritePaletteIndex = (spritePaletteIndex - index) % spritePaletteSize;
+        float spritePaletteIndex = index % spritePaletteSize;
         spriteShader->setUniform("colorTable", spriteColorTable);
-        spriteShader->setUniform("paletteIndex", (float)spritePaletteIndex / spritePaletteSize);
-
-        spritePaletteIndex = saveIndex;
+        spriteShader->setUniform("paletteIndex", spritePaletteIndex / spritePaletteSize);
     }
-    void SetSpritePalette(int index, int size, string table)
+    void SetSpritePalette(int size, string table)
     {
-        SetSpritePaletteIndex(index);
         SetSpritePaletteSize(size);
         SetSpriteColorTable(table);
     };

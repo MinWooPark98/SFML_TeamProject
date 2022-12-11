@@ -60,7 +60,7 @@ void MessageUi::Init()
 			massageImages[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Portrait.png"));
 			massageImages[i]->SetScale({ 4.3, 4.3 });
 			massageImages[i]->SetSpriteShader();
-			massageImages[i]->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
+			massageImages[i]->SetSpritePalette(32, "graphics/WizardPalette.png");
 			massageImages[i]->SetFlipX(1);
 			break;
 		}
@@ -122,7 +122,7 @@ void MessageUi::Update(float dt)
 
 			string devName = "박민우의  볼케이노  순삭  쇼";
 			SetNpcName(devName);
-			SetPlayerImage(1);
+			SetPlayerImage(63);
 			SetNpcImage("graphics/HumanKnightPortrait.png");
 		}
 

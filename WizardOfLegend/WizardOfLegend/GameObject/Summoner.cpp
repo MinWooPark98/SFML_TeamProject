@@ -65,8 +65,8 @@ void Summoner::Init()
 		fires[i]->SetHitBoxOrigin(Origins::MC);
 
 		fires[i]->SetSpriteShader();
-		fires[i]->SetSpritePalette(5, 5, "graphics/FireColorIndex.png");
-		fires[i]->SetPaletteColor(3);
+		fires[i]->SetSpritePalette(5, "graphics/FireColorIndex.png");
+		fires[i]->SetPaletteColor(2);
 		
 		fires[i]->SetActive(false);
 	}
