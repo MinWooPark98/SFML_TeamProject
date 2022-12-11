@@ -183,6 +183,34 @@ void MessageUi::Draw(RenderWindow& window)
 	}
 }
 
+void MessageUi::Release()
+{
+	InputMgr::StackedOrderRemove(this);
+	for (auto& messages : massageImages)
+	{
+		if (messages != nullptr)
+			delete messages;
+		messages = nullptr;
+	}
+	massageImages.clear();
+
+	for (auto& text : texts)
+	{
+		if (text != nullptr)
+			delete text;
+		text = nullptr;
+	}
+	texts.clear();
+
+	if (npcName != nullptr)
+		delete npcName;
+	npcName = nullptr;
+
+	if (spaceBarImage != nullptr)
+		delete spaceBarImage;
+	spaceBarImage = nullptr;
+}
+
 void MessageUi::UiEnabled(bool set)
 {
 	if (massageImages.size() != 0)
