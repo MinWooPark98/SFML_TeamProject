@@ -66,11 +66,10 @@
     <ClCompile Include="DataTable\MapNameTable.cpp" />
     <ClCompile Include="Framework\CameraMove.cpp" />
     <ClCompile Include="Ui\Gold.cpp" />
-    <ClCompile Include="Ui\ChaosFragments.cpp" />
+    <ClCompile Include="GameObject\ChaosFragments.cpp" />
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
     <ClCompile Include="GameObject\Dummy.cpp" />
     <ClCompile Include="Ui\Heal.cpp" />
-    <ClCompile Include="Ui\Portal.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="Ui\SkillBookUi.cpp" />
     <ClCompile Include="Ui\SkillBookButton.cpp" />
@@ -82,6 +81,9 @@
     <ClCompile Include="GameObject\Interactive\SkillBook.cpp" />
     <ClCompile Include="GameObject\Turret.cpp" />
     <ClCompile Include="GameObject\Summoner.cpp" />
+    <ClCompile Include="GameObject\Gold.cpp" />
+    <ClCompile Include="GameObject\Heal.cpp" />
+    <ClCompile Include="GameObject\Portal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -153,11 +155,10 @@
     <ClInclude Include="DataTable\MapNameTable.h" />
     <ClInclude Include="Framework\CameraMove.h" />
     <ClInclude Include="Ui\Gold.h" />
-    <ClInclude Include="Ui\ChaosFragments.h" />
+    <ClInclude Include="GameObject\ChaosFragments.h" />
     <ClInclude Include="DataTable\PlatinumTable.h" />
     <ClInclude Include="GameObject\Dummy.h" />
     <ClInclude Include="Ui\Heal.h" />
-    <ClInclude Include="Ui\Portal.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="Ui\SkillBookUi.h" />
     <ClInclude Include="Ui\SkillBookButton.h" />
@@ -169,6 +170,9 @@
     <ClInclude Include="GameObject\Interactive\SkillBook.h" />
     <ClInclude Include="GameObject\Turret.h" />
     <ClInclude Include="GameObject\Summoner.h" />
+    <ClInclude Include="GameObject\Gold.h" />
+    <ClInclude Include="GameObject\Heal.h" />
+    <ClInclude Include="GameObject\Portal.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

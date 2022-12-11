@@ -148,11 +148,13 @@
   <ItemGroup>
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
     <ClCompile Include="GameObject\Dummy.cpp" />
+    <ClCompile Include="GameObject\Gold.cpp" />
+    <ClCompile Include="GameObject\Heal.cpp" />
+    <ClCompile Include="GameObject\Portal.cpp" />
     <ClCompile Include="GameObject\Turret.cpp" />
     <ClCompile Include="GameObject\Summoner.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
-    <ClCompile Include="Ui\Portal.cpp" />
-    <ClCompile Include="Ui\ChaosFragments.cpp" />
+    <ClCompile Include="GameObject\ChaosFragments.cpp" />
     <ClCompile Include="Framework\CameraMove.cpp" />
     <ClCompile Include="DataTable\FinalBossSkillTable.cpp" />
     <ClCompile Include="DataTable\MapNameTable.cpp" />
@@ -240,11 +242,13 @@
     <ClInclude Include="3rd\SingleTon.h" />
     <ClInclude Include="DataTable\PlatinumTable.h" />
     <ClInclude Include="GameObject\Dummy.h" />
+    <ClInclude Include="GameObject\Gold.h" />
+    <ClInclude Include="GameObject\Heal.h" />
+    <ClInclude Include="GameObject\Portal.h" />
     <ClInclude Include="GameObject\Turret.h" />
     <ClInclude Include="GameObject\Summoner.h" />
     <ClInclude Include="Ui\MessageUi.h" />
-    <ClInclude Include="Ui\Portal.h" />
-    <ClInclude Include="Ui\ChaosFragments.h" />
+    <ClInclude Include="GameObject\ChaosFragments.h" />
     <ClInclude Include="Framework\CameraMove.h" />
     <ClInclude Include="DataTable\FinalBossSkillTable.h" />
     <ClInclude Include="DataTable\MapNameTable.h" />

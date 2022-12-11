@@ -5,7 +5,7 @@
 #include "../DataTable/StatTable.h"
 #include "../Scene/PlayScene.h"
 #include "../Scene/SceneMgr.h"
-#include "../Ui/Gold.h"
+#include "../GameObject/Gold.h"
 
 Turret::Turret()
 {

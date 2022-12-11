@@ -3,8 +3,8 @@
 #include "../Scene/PlayScene.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/StatTable.h"
-#include "../Ui/Gold.h"
-#include "../Ui/ChaosFragments.h"
+#include "../GameObject/Gold.h"
+#include "../GameObject/ChaosFragments.h"
 
 Archer::Archer()
 	: bowDir(0, 0)

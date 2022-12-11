@@ -3,8 +3,8 @@
 #include "../DataTable/StatTable.h"
 #include "../Scene/PlayScene.h"
 #include "../Scene/SceneMgr.h"
-#include "../Ui/Gold.h"
-#include "../Ui/ChaosFragments.h"
+#include "../GameObject/Gold.h"
+#include "../GameObject/ChaosFragments.h"
 
 Summoner::Summoner()
 {
