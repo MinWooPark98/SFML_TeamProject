@@ -122,8 +122,7 @@ void PlayScene::Init()
 				portal->SetName(obj.type);
 				portal->SetPos(obj.position);
 				portal->SetObjType(Object::ObjTypes::ETC);
-				portal->SetPlayer(player);
-
+				
 				if (mapName == "TUTORIALMAP")
 					portal->SetChanegeMap("TUTORIALFIGHT");
 				else if (mapName == "TUTORIALFIGHT")

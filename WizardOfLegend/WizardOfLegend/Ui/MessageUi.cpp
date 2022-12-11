@@ -56,6 +56,7 @@ void MessageUi::Init()
 			break;
 		case 5:
 			massageImages[i]->SetPos({ windowSize.x * 0.85f, windowSize.y * 0.8f }); // 플레이어 이미지
+			massageImages[i]->UseShader();
 			massageImages[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Portrait.png"));
 			massageImages[i]->SetScale({ 4.3, 4.3 });
 			massageImages[i]->SetSpriteShader();

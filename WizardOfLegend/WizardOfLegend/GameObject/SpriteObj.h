@@ -7,7 +7,7 @@ class SpriteObj : public Object
 protected:
     Sprite sprite;
 
-    Shader spriteShader;
+    Shader* spriteShader;
     Texture texColorTable;
     int spritePaletteIndex;
     int spritePaletteSize;
@@ -53,8 +53,8 @@ public:
         int saveIndex = spritePaletteIndex;
 
         spritePaletteIndex = (spritePaletteIndex - index) % spritePaletteSize;
-        spriteShader.setUniform("colorTable", spriteColorTable);
-        spriteShader.setUniform("paletteIndex", (float)spritePaletteIndex / spritePaletteSize);
+        spriteShader->setUniform("colorTable", spriteColorTable);
+        spriteShader->setUniform("paletteIndex", (float)spritePaletteIndex / spritePaletteSize);
 
         spritePaletteIndex = saveIndex;
     }
@@ -65,6 +65,11 @@ public:
         SetSpriteColorTable(table);
     };
 
-    void SetSpriteShader() { spriteShader.loadFromFile("shaders/palette.frag", Shader::Fragment); };
+    void SetSpriteShader() 
+    { 
+        if (spriteShader != nullptr)
+            spriteShader->loadFromFile("shaders/palette.frag", Shader::Fragment); 
+    };
+    void UseShader();
 };
 

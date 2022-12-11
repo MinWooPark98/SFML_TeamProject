@@ -57,6 +57,7 @@ void Summoner::Init()
 	for (int i = 0; i < 5; i++)
 	{
 		fires.push_back(new SpriteObj());
+		fires[i]->UseShader();
 		fires[i]->SetTexture(*RESOURCE_MGR->GetTexture("graphics/NewFire_0.png"));
 		fires[i]->SetOrigin(Origins::MC);
 		fires[i]->SetHitBox((FloatRect)fires[i]->GetTextureRect());

@@ -128,6 +128,7 @@ void PlayUiMgr::Init()
 		uiObjList[0].push_back(OverdriveActiveBar);
 
 		playerStatusBarPortrait = new SpriteObj();
+		playerStatusBarPortrait->UseShader();
 		playerStatusBarPortrait->SetTexture(*RESOURCE_MGR->GetTexture("graphics/PlayerStatusBarPortrait.png"));
 		playerStatusBarPortrait->SetPos({ windowSize.x * 0.038f, windowSize.y * 0.07f });
 		playerStatusBarPortrait->SetScale({ 4, 4 });

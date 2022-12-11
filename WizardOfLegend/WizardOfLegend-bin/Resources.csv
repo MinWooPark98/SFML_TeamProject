@@ -955,3 +955,13 @@ graphics/NewFire_5 #138725.png,0
 graphics/NewFire_6 #117900.png,0
 graphics/NewFire_7 #156544.png,0
 animations/summonerAnimation/FireAnimation.csv,3
+graphics/Map/Object/TeleportEffect0.png,0
+graphics/Map/Object/TeleportEffect1.png,0
+graphics/Map/Object/TeleportEffect2.png,0
+graphics/Map/Object/TeleportEffect3.png,0
+graphics/Map/Object/TeleportEffect4.png,0
+graphics/Map/Object/TeleportEffect5.png,0
+graphics/Map/Object/TeleportEffect6.png,0
+graphics/Map/Object/TeleportEffect7.png,0
+graphics/Map/Object/TeleportEffect8.png,0
+animations/teleportAnimation/Teleport.csv,3
