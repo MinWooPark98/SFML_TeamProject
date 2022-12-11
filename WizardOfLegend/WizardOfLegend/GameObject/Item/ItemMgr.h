@@ -3,11 +3,14 @@
 #include <vector>
 
 class Player;
+class Relic;
+class Hood;
 
 class ItemMgr
 {
 private:
-	vector<Item*> itemList;
+	Hood* hood;
+	vector<Relic*> relicList;
 
 	Item::Values totalValues;
 	Player* player;
@@ -16,11 +19,12 @@ public:
 	ItemMgr();
 	~ItemMgr();
 
-	void AddItem(int id);
-	void AddItem(const Item::Info& info);
-	void ChangeItem(int id, int idx);
-	void ChangeItem(const Item::Info& info, int idx);
-	vector<Item*> GetList() { return itemList; }
+	void SetHood(int id);
+	Hood* GetHood() { return hood; }
+
+	void AddRelic(int id);
+	void ChangeRelic(int id, int idx);
+	vector<Relic*> GetRelicList() { return relicList; }
 
 	void Update(float dt);
 

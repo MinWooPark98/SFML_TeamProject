@@ -9,10 +9,11 @@
 #include "../Ui/SkillBookUi.h"
 #include "../GameObject/Item/ItemMgr.h"
 #include "../DataTable/DataTableMGR.h"
-#include "../DataTable/ItemTable.h"
+#include "../DataTable/RelicTable.h"
 #include "../GameObject/Interactive/Wardrobe.h"
 #include "../GameObject/Interactive/ItemBox.h"
 #include "../Ui/ItemBoxUi.h"
+#include "../Ui/WardrobeUi.h"
 
 DevScene::DevScene()
 	:Scene(Scenes::Dev), itemMgr(nullptr)
@@ -65,6 +66,7 @@ void DevScene::Init()
 	uiMgr->Init();
 
 	book->Interact = bind(&SkillBookUi::SetActive, (SkillBookUi*)uiMgr->FindUiObj("SKILLBOOKUI"), true);
+	wardrobe->Interact = bind(&WardrobeUi::SetActive, (WardrobeUi*)uiMgr->FindUiObj("WARDROBEUI"), true);
 	itemBox->Interact = bind(&ItemBox::SetActive, (ItemBoxUi*)uiMgr->FindUiObj("ITEMBOXUI"), true);
 }
 

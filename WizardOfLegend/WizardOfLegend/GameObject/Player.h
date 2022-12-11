@@ -39,9 +39,6 @@ protected:
 	States currState;
 
 	Animator* animator;
-	Shader playerShader;
-	int paletteIdx;
-	int paletteSize;
 	
 	int attackDmg;
 

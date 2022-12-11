@@ -1,6 +1,5 @@
 #include "ItemBoxUi.h"
 #include "../GameObject/SpriteObj.h"
-#include "KeyButton.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/FrameWork.h"
 #include "../GameObject/TextObj.h"
@@ -10,7 +9,7 @@
 #include "../GameObject/Item/ItemMgr.h"
 #include "../GameObject/Interactive/ItemBox.h"
 #include "../DataTable/DataTableMGR.h"
-#include "../DataTable/ItemTable.h"
+#include "../DataTable/RelicTable.h"
 
 ItemBoxUi::ItemBoxUi()
 	:frame(nullptr), panel(nullptr), currPage(0), currRow(0), currColumn(0), indexChanged(false), currPlayerItem(nullptr), itemName(nullptr), itemIntro(nullptr), isMoving(true), moveSpeed(7200.f)
@@ -77,10 +76,12 @@ void ItemBoxUi::Init()
 
 void ItemBoxUi::Reset()
 {
+	Object::Reset();
 }
 
 void ItemBoxUi::Release()
 {
+	Object::Release();
 }
 
 void ItemBoxUi::Update(float dt)
@@ -107,20 +108,16 @@ void ItemBoxUi::Update(float dt)
 		if (inputV > 0 && currRow < collections[currPage].size() - 1)
 		{
 			CollectionHighLightOff();
-			//collections[currPage][currRow][currColumn].first->HighLightOff();
 			++currRow;
 			if (collections[currPage][currRow].size() <= currColumn)
 				currColumn = collections[currPage][currRow].size() - 1;
 			CollectionHighLightOn();
-			//collections[currPage][currRow][currColumn].first->HighLightOn();
 		}
 		else if (inputV < 0 && currRow > 0)
 		{
 			CollectionHighLightOff();
-			//collections[currPage][currRow][currColumn].first->HighLightOff();
 			--currRow;
 			CollectionHighLightOn();
-			//collections[currPage][currRow][currColumn].first->HighLightOn();
 		}
 
 		if (inputH > 0)
@@ -128,21 +125,17 @@ void ItemBoxUi::Update(float dt)
 			if (currColumn < collections[currPage][currRow].size() - 1)
 			{
 				CollectionHighLightOff();
-				//collections[currPage][currRow][currColumn].first->HighLightOff();
 				++currColumn;
 				CollectionHighLightOn();
-				//collections[currPage][currRow][currColumn].first->HighLightOn();
 			}
 			else if (currPage < collections.size() - 1)
 			{
 				CollectionHighLightOff();
-				//collections[currPage][currRow][currColumn].first->HighLightOff();
 				++currPage;
 				currColumn = 0;
 				if (currRow >= collections[currPage].size())
 					currRow = 0;
 				CollectionHighLightOn();
-				//collections[currPage][currRow][currColumn].first->HighLightOn();
 			}
 		}
 		else if (inputH < 0)
@@ -150,19 +143,15 @@ void ItemBoxUi::Update(float dt)
 			if (currColumn > 0)
 			{
 				CollectionHighLightOff();
-				//collections[currPage][currRow][currColumn].first->HighLightOff();
 				--currColumn;
 				CollectionHighLightOn();
-				//collections[currPage][currRow][currColumn].first->HighLightOn();
 			}
 			else if (currPage > 0)
 			{
 				CollectionHighLightOff();
-				//collections[currPage][currRow][currColumn].first->HighLightOff();
 				--currPage;
 				currColumn = collections[currPage][currRow].size() - 1;
 				CollectionHighLightOn();
-				//collections[currPage][currRow][currColumn].first->HighLightOn();
 			}
 		}
 		SetItemInfo();
@@ -183,7 +172,7 @@ void ItemBoxUi::Draw(RenderWindow& window)
 	{
 		for (auto& column : row)
 		{
-			column.first->Draw(window);
+			column.image->Draw(window);
 		}
 	}
 	itemName->Draw(window);
@@ -208,7 +197,7 @@ void ItemBoxUi::Reposition()
 		{
 			for (int j = 0; j < page[i].size(); ++j)
 			{
-				page[i][j].first->SetPos({ frameBnd.left + frameBnd.width * (0.191f + 0.125f * j) , frameBnd.top + frameBnd.height * (0.2625f + 0.11f * i) });
+				page[i][j].image->SetPos({ frameBnd.left + frameBnd.width * (0.191f + 0.125f * j) , frameBnd.top + frameBnd.height * (0.2625f + 0.11f * i) });
 			}
 		}
 	}
@@ -242,13 +231,13 @@ void ItemBoxUi::SetActive(bool active)
 	{
 		InputMgr::StackedOrderAdd(this);
 		collections.clear();
-		auto table = DATATABLE_MGR->Get<ItemTable>(DataTable::Types::Item)->GetTable();
-		map<int, pair<ItemTable::Locked, Item::Info>> wholeTable;
+		auto table = DATATABLE_MGR->Get<RelicTable>(DataTable::Types::Relic)->GetTable();
+		map<int, pair<RelicTable::Locked, Relic::RelicInfo>> wholeTable;
 		for (int i = 0; i < table.size(); ++i)
 		{
-			for (auto& info : table[(ItemTable::Locked)i])
+			for (auto& info : table[(RelicTable::Locked)i])
 			{
-				wholeTable[info.first] = { (ItemTable::Locked)i, info.second };
+				wholeTable[info.first] = { (RelicTable::Locked)i, info.second };
 			}
 		}
 
@@ -258,29 +247,32 @@ void ItemBoxUi::SetActive(bool active)
 		for (auto& info : wholeTable)
 		{
 			if (collections.size() <= wholeTablei)
-				collections.push_back(vector<vector<pair<KeyButton*, pair<bool, Item::Info>>>>());
+				collections.push_back(vector<vector<Collection>>());
 			if (collections[wholeTablei].size() <= wholeTablej)
-				collections[wholeTablei].push_back(vector<pair<KeyButton*, pair<bool, Item::Info>>>());
-			auto newItem = new KeyButton();
+				collections[wholeTablei].push_back(vector<Collection>());
+			auto newItem = new SpriteObj();
 			newItem->Init();
+			newItem->SetScale({ 3.75f, 4.f });
+			newItem->SetUI(true);
 			bool unlocked = false;
-			if (info.second.first == ItemTable::Locked::Locked)
-				newItem->SetOption("graphics/EmoteQuestion.png");
+			if (info.second.first == RelicTable::Locked::Locked)
+			{
+				newItem->SetTexture(*RESOURCE_MGR->GetTexture("graphics/EmoteQuestion.png"));
+				newItem->SetOrigin(Origins::MC);
+			}
 			else
 			{
-				newItem->SetOption(info.second.second.iconDir);
+				newItem->SetTexture(*RESOURCE_MGR->GetTexture(info.second.second.iconDir));
+				newItem->SetOrigin(Origins::MC);
 				unlocked = true;
 			}
-			auto newItemOpt = newItem->GetOption();
-			newItemOpt->SetScale({ 4.f, 4.f });
-			newItemOpt->SetHitBox({ 0.f, 0.f, 80.f, 80.f }, Color::Transparent);
-			newItemOpt->GetHitBox().setOutlineThickness(5.f);
-			newItemOpt->GetHitBox().setOutlineColor(Color::Transparent);
-			newItemOpt->SetHitBoxOrigin(Origins::MC);
+			newItem->SetScale({ 4.f, 4.f });
+			newItem->SetHitBox({ 0.f, 0.f, 80.f, 80.f }, Color::Transparent);
+			newItem->GetHitBox().setOutlineThickness(5.f);
+			newItem->GetHitBox().setOutlineColor(Color::Transparent);
+			newItem->SetHitBoxOrigin(Origins::MC);
 			newItem->SetDevMode(true);
-			//newItem->HighLightOnFunc = bind(&ItemBoxUi::CollectionHighLightOn, this);
-			//newItem->HighLightOffFunc = bind(&ItemBoxUi::CollectionHighLightOff, this);
-			collections[wholeTablei][wholeTablej].push_back({ newItem, { unlocked, info.second.second } });
+			collections[wholeTablei][wholeTablej].push_back({ newItem, unlocked, info.second.second });
 			++wholeTablek;
 			if (wholeTablek > 5)
 			{
@@ -296,7 +288,6 @@ void ItemBoxUi::SetActive(bool active)
 		currPage = 0;
 		currRow = 0;
 		currColumn = 0;
-		//collections[currPage][currRow][currColumn].first->HighLightOn();
 		CollectionHighLightOn();
 		SetItemInfo();
 		((ItemBox*)currScene->FindGameObj("ITEMBOX"))->SetState(ItemBox::States::Open);
@@ -326,10 +317,10 @@ void ItemBoxUi::Disappear()
 
 void ItemBoxUi::SetItemInfo()
 {
-	if (collections[currPage][currRow][currColumn].second.first)
+	if (collections[currPage][currRow][currColumn].unlocked)
 	{
-		itemName->SetString(collections[currPage][currRow][currColumn].second.second.name);
-		itemIntro->SetString(collections[currPage][currRow][currColumn].second.second.intro);
+		itemName->SetString(collections[currPage][currRow][currColumn].info.name);
+		itemIntro->SetString(collections[currPage][currRow][currColumn].info.intro);
 	}
 	else
 	{
@@ -345,35 +336,35 @@ void ItemBoxUi::SetItemInfo()
 void ItemBoxUi::SelectItem()
 {
 	auto& currItem = collections[currPage][currRow][currColumn];
-	if (currItem.second.first)
+	if (currItem.unlocked)
 	{
 		if(currPlayerItem != nullptr)
-			currPlayerItem->GetOption()->GetHitBox().setOutlineColor(Color::Transparent);
+			currPlayerItem->GetHitBox().setOutlineColor(Color::Transparent);
 		auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 		auto itemMgr = player->GetItemMgr();
-		if (itemMgr->GetList().empty())
-			itemMgr->AddItem(currItem.second.second.id);
+		if (itemMgr->GetRelicList().empty())
+			itemMgr->AddRelic(currItem.info.id);
 		else
-			itemMgr->ChangeItem(currItem.second.second.id, 0);
-		currPlayerItem = currItem.first;
-		currPlayerItem->GetOption()->GetHitBox().setOutlineColor(Color::Red);
+			itemMgr->ChangeRelic(currItem.info.id, 0);
+		currPlayerItem = currItem.image;
+		currPlayerItem->GetHitBox().setOutlineColor(Color::Red);
 	}
 }
 
 void ItemBoxUi::CollectionHighLightOn()
 {
 	const auto& currItem = collections[currPage][currRow][currColumn];
-	if (currItem.first == currPlayerItem)
-		currItem.first->GetOption()->GetHitBox().setOutlineColor(Color::Green);
+	if (currItem.image == currPlayerItem)
+		currItem.image->GetHitBox().setOutlineColor(Color::Green);
 	else
-		currItem.first->GetOption()->GetHitBox().setOutlineColor(Color::Yellow);
+		currItem.image->GetHitBox().setOutlineColor(Color::Yellow);
 }
 
 void ItemBoxUi::CollectionHighLightOff()
 {
 	const auto& currItem = collections[currPage][currRow][currColumn];
-	if (currItem.first == currPlayerItem)
-		currItem.first->GetOption()->GetHitBox().setOutlineColor(Color::Red);
+	if (currItem.image == currPlayerItem)
+		currItem.image->GetHitBox().setOutlineColor(Color::Red);
 	else
-		currItem.first->GetOption()->GetHitBox().setOutlineColor(Color::Transparent);
+		currItem.image->GetHitBox().setOutlineColor(Color::Transparent);
 }

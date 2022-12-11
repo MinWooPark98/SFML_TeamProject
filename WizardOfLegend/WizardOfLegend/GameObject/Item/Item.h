@@ -10,17 +10,8 @@ class Item
 public:
 	enum class Types
 	{
-		Item,
+		Relic,
 		Hood,
-	};
-	enum class Condition
-	{
-		None,
-		HpLower,
-		HpUpper,
-		NumOfItems,
-		OnHit,
-		WhileDashing,
 	};
 	struct Values
 	{
@@ -63,44 +54,18 @@ public:
 			return *this;
 		}
 	};
-	struct Info
-	{
-		int id;
-		Types type;
-		string name;
-		Values values;
-		Condition condition;
-		float conditionValue;
-		float duration;
-		int price;
-		string iconDir;
-		string intro;
-	};
 
 protected:
-	Info info;
-	bool applyValues;
+	Types type;
 
 	Player* player;
 
 public:
-	Item();
+	Item(Types type);
 	virtual ~Item();
 
-	void Reset();
-
-	void SetInfo(const Info& info);
-	const Info& GetInfo() { return info; }
-	const Values& GetValues() { return info.values; }
-	bool GetApplyValues() { return applyValues; }
 	void SetPlayer(Player* player) { this->player = player; }
 
-	void Update(float dt);
-
-	void CheckHpLower();
-	void CheckHpUpper();
-	void CheckNumOfItems();
-	void CheckOnHit();
-	void CheckWhileDashing();
+	virtual void Update(float dt) {}
 };
 

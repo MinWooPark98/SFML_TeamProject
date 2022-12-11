@@ -1,12 +1,15 @@
 #include "ItemMgr.h"
 #include "../../DataTable/DataTableMGR.h"
-#include "../../DataTable/ItemTable.h"
+#include "../../DataTable/RelicTable.h"
+#include "../../DataTable/HoodTable.h"
 #include "../../Scene/SceneMgr.h"
 #include "../Player.h"
 #include "../../DataTable/StatTable.h"
+#include "Relic.h"
+#include "Hood.h"
 
 ItemMgr::ItemMgr()
-	:player(nullptr)
+	:hood(nullptr), player(nullptr)
 {
 }
 
@@ -14,41 +17,43 @@ ItemMgr::~ItemMgr()
 {
 }
 
-void ItemMgr::AddItem(int id)
+void ItemMgr::SetHood(int id)
 {
-	auto table = DATATABLE_MGR->Get<ItemTable>(DataTable::Types::Item);
-	const auto& itemInfo = table->Get(id);
-	AddItem(itemInfo);
+	if (hood == nullptr)
+		hood = new Hood();
+	auto table = DATATABLE_MGR->Get<HoodTable>(DataTable::Types::Hood);
+	const auto& hoodInfo = table->Get(id);
+	hood->SetHoodInfo(hoodInfo);
+	player->SetSpriteColor(hoodInfo.paletteIdx);
 }
 
-void ItemMgr::AddItem(const Item::Info& info)
+void ItemMgr::AddRelic(int id)
 {
-	Item* newItem = new Item();
-	newItem->SetInfo(info);
-	newItem->SetPlayer((Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER"));
-	itemList.push_back(newItem);
+	auto table = DATATABLE_MGR->Get<RelicTable>(DataTable::Types::Relic);
+	const auto& relicInfo = table->Get(id);
+	Relic* newItem = new Relic();
+	newItem->SetRelicInfo(relicInfo);
+	newItem->SetPlayer(player);
+	relicList.push_back(newItem);
 }
 
-void ItemMgr::ChangeItem(int id, int idx)
+void ItemMgr::ChangeRelic(int id, int idx)
 {
-	auto table = DATATABLE_MGR->Get<ItemTable>(DataTable::Types::Item);
-	const auto& itemInfo = table->Get(id);
-	ChangeItem(itemInfo, idx);
-}
-
-void ItemMgr::ChangeItem(const Item::Info& info, int idx)
-{
-	itemList[idx]->SetInfo(info);
+	auto table = DATATABLE_MGR->Get<RelicTable>(DataTable::Types::Relic);
+	const auto& relicInfo = table->Get(id);
+	relicList[idx]->SetRelicInfo(relicInfo);
 }
 
 void ItemMgr::Update(float dt)
 {
 	totalValues.Reset();
-	for (auto item : itemList)
+	if(hood != nullptr)
+		totalValues += hood->GetValues();
+	for (auto relic : relicList)
 	{
-		item->Update(dt);
-		if (item->GetApplyValues())
-			totalValues += item->GetValues();
+		relic->Update(dt);
+		if (relic->GetApplyValues())
+			totalValues += relic->GetValues();
 	}
 	Apply();
 }
@@ -68,11 +73,16 @@ void ItemMgr::Apply()
 
 void ItemMgr::Clear()
 {
-	for (auto item : itemList)
+	if (hood != nullptr)
+	{
+		delete hood;
+		hood = nullptr;
+	}
+	for (auto item : relicList)
 	{
 		delete item;
 	}
-	itemList.clear();
+	relicList.clear();
 	totalValues.Reset();
 }
 

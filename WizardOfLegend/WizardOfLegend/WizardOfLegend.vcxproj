@@ -151,8 +151,11 @@
     <ClCompile Include="GameObject\Dummy.cpp" />
     <ClCompile Include="GameObject\Item\ItemMgr.cpp" />
     <ClCompile Include="GameObject\Item\Item.cpp" />
-    <ClCompile Include="DataTable\ItemTable.cpp" />
+    <ClCompile Include="DataTable\RelicTable.cpp" />
     <ClCompile Include="GameObject\Interactive\ItemBox.cpp" />
+    <ClCompile Include="GameObject\Item\Hood.cpp" />
+    <ClCompile Include="GameObject\Item\Relic.cpp" />
+    <ClCompile Include="DataTable\HoodTable.cpp" />
     <ClCompile Include="Ui\ItemBoxUi.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="Ui\Portal.cpp" />
@@ -237,6 +240,7 @@
     <ClCompile Include="Ui\SaveWindowBox.cpp" />
     <ClCompile Include="Ui\SkillToolUiMgr.cpp" />
     <ClCompile Include="Ui\UiMgr.cpp" />
+    <ClCompile Include="Ui\WardrobeUi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\OBB.h" />
@@ -247,8 +251,11 @@
     <ClInclude Include="GameObject\Dummy.h" />
     <ClInclude Include="GameObject\Item\ItemMgr.h" />
     <ClInclude Include="GameObject\Item\Item.h" />
-    <ClInclude Include="DataTable\ItemTable.h" />
+    <ClInclude Include="DataTable\RelicTable.h" />
     <ClInclude Include="GameObject\Interactive\ItemBox.h" />
+    <ClInclude Include="GameObject\Item\Hood.h" />
+    <ClInclude Include="GameObject\Item\Relic.h" />
+    <ClInclude Include="DataTable\HoodTable.h" />
     <ClInclude Include="Ui\ItemBoxUi.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="Ui\Portal.h" />
@@ -334,6 +341,7 @@
     <ClInclude Include="Ui\SaveWindowBox.h" />
     <ClInclude Include="Ui\SkillToolUiMgr.h" />
     <ClInclude Include="Ui\UiMgr.h" />
+    <ClInclude Include="Ui\WardrobeUi.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

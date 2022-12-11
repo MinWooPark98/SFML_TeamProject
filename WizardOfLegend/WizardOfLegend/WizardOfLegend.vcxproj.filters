@@ -82,10 +82,14 @@
     <ClCompile Include="GameObject\Interactive\SkillBook.cpp" />
     <ClCompile Include="GameObject\Item\ItemMgr.cpp" />
     <ClCompile Include="GameObject\Item\Item.cpp" />
-    <ClCompile Include="DataTable\ItemTable.cpp" />
+    <ClCompile Include="DataTable\RelicTable.cpp" />
     <ClCompile Include="GameObject\Interactive\Wardrobe.cpp" />
     <ClCompile Include="GameObject\Interactive\ItemBox.cpp" />
     <ClCompile Include="Ui\ItemBoxUi.cpp" />
+    <ClCompile Include="Ui\WardrobeUi.cpp" />
+    <ClCompile Include="GameObject\Item\Relic.cpp" />
+    <ClCompile Include="GameObject\Item\Hood.cpp" />
+    <ClCompile Include="DataTable\HoodTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -173,10 +177,14 @@
     <ClInclude Include="GameObject\Interactive\SkillBook.h" />
     <ClInclude Include="GameObject\Item\ItemMgr.h" />
     <ClInclude Include="GameObject\Item\Item.h" />
-    <ClInclude Include="DataTable\ItemTable.h" />
+    <ClInclude Include="DataTable\RelicTable.h" />
     <ClInclude Include="GameObject\Interactive\Wardrobe.h" />
     <ClInclude Include="GameObject\Interactive\ItemBox.h" />
     <ClInclude Include="Ui\ItemBoxUi.h" />
+    <ClInclude Include="Ui\WardrobeUi.h" />
+    <ClInclude Include="GameObject\Item\Relic.h" />
+    <ClInclude Include="GameObject\Item\Hood.h" />
+    <ClInclude Include="DataTable\HoodTable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

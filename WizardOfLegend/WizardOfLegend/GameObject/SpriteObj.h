@@ -45,18 +45,16 @@ public:
     FloatRect GetGlobalBounds() const;
     FloatRect GetLocalBounds() const;
 
-    void SetSpritePaletteIndex(int index) { spritePaletteIndex = index; };
     void SetSpritePaletteSize(int size) { spritePaletteSize = size; };
     void SetSpriteColorTable(string table) { spriteColorTable.loadFromFile(table); };
     void SetSpriteColor(int index)
     {
-        spritePaletteIndex = (spritePaletteIndex - index) % spritePaletteSize;
+        spritePaletteIndex = index;
         spriteShader.setUniform("colorTable", spriteColorTable);
         spriteShader.setUniform("paletteIndex", (float)spritePaletteIndex / spritePaletteSize);
     }
-    void SetSpritePalette(int index, int size, string table)
+    void SetSpritePalette(int size, string table)
     {
-        SetSpritePaletteIndex(index);
         SetSpritePaletteSize(size);
         SetSpriteColorTable(table);
     };

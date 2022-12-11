@@ -132,7 +132,7 @@ void PlayUiMgr::Init()
 		playerStatusBarPortrait->SetPos({ windowSize.x * 0.038f, windowSize.y * 0.07f });
 		playerStatusBarPortrait->SetScale({ 4, 4 });
 		playerStatusBarPortrait->SetSpriteShader();
-		playerStatusBarPortrait->SetSpritePalette(64, 64, "graphics/WizardPalette.png");
+		playerStatusBarPortrait->SetSpritePalette(64, "graphics/WizardPalette.png");
 		playerStatusBarPortrait->SetSpriteColor(1); // �÷��̾�� ���� �����ؾ���
 		uiObjList[0].push_back(playerStatusBarPortrait);
 	}

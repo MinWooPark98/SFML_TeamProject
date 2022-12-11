@@ -68,6 +68,7 @@ void Wardrobe::SetState(States state)
 	switch (state)
 	{
 	case Wardrobe::States::Idle:
+		idleActionTimer = 0.f;
 		animator->Play("WardrobeIdle");
 		break;
 	case Wardrobe::States::Open:

@@ -1,42 +1,45 @@
 #pragma once
 #include "../GameObject/Object.h"
-#include "../GameObject/Item/Relic.h"
+#include "../GameObject/Item/Hood.h"
+#include "../Framework/ObjectPool.h"
 
 class SpriteObj;
 class TextObj;
 
-class ItemBoxUi : public Object
+class WardrobeUi : public Object
 {
 public:
 	struct Collection
 	{
+		SpriteObj* backImg;
 		SpriteObj* image;
 		bool unlocked;
-		Relic::RelicInfo info;
+		Hood::HoodInfo info;
 	};
 protected:
 	SpriteObj* frame;
+	SpriteObj* display;
+	vector<string> actions;
+	int actionIdx;
+	float angle;
+	float currAngle;
+
 	SpriteObj* panel;
-
-	vector<vector<vector<Collection>>> collections;
-	int currPage;
-	int currRow;
-	int currColumn;
-	bool indexChanged;
-
-	SpriteObj* currPlayerItem;
+	vector<Collection> collections;
+	int vecIdx;
+	int lastIdx;
 
 	TextObj* itemName;
 	TextObj* itemIntro;
 
-	vector<pair<SpriteObj*, TextObj*>> keyInfos;
+	//vector<pair<SpriteObj*, TextObj*>> keyInfos;
 
 	bool isMoving;
 	float moveSpeed;
 
 public:
-	ItemBoxUi();
-	virtual ~ItemBoxUi();
+	WardrobeUi();
+	virtual ~WardrobeUi();
 
 	virtual void Init() override;
 	virtual void Reset() override;
@@ -53,6 +56,8 @@ public:
 
 	void SetItemInfo();
 	void SelectItem();
+	void FinishRoate();
+	void ChangeHood();
 
 	void CollectionHighLightOn();
 	void CollectionHighLightOff();

@@ -17,7 +17,8 @@ public:
 		SkillSetIntro,
 		FinalBossSkill,
 		MapName,
-		Item,
+		Relic,
+		Hood,
 	};
 protected:
 	Types type;

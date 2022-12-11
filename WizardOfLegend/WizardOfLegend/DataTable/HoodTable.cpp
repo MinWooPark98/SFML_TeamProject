@@ -1,17 +1,17 @@
-#include "ItemTable.h"
+#include "HoodTable.h"
 #include "../3rd/rapidcsv.h"
 
-ItemTable::ItemTable()
-	:DataTable(DataTable::Types::Item)
+HoodTable::HoodTable()
+	:DataTable(DataTable::Types::Hood)
 {
-	fileName = "tables/ItemTable.csv";
+	fileName = "tables/HoodTable.csv";
 }
 
-ItemTable::~ItemTable()
+HoodTable::~HoodTable()
 {
 }
 
-const Item::Info& ItemTable::Get(int id)
+const Hood::HoodInfo& HoodTable::Get(int id)
 {
 	for (auto& outermost : table)
 	{
@@ -22,7 +22,7 @@ const Item::Info& ItemTable::Get(int id)
 	throw invalid_argument("wrong value");
 }
 
-const map<int, Item::Info> ItemTable::GetInfoList(Locked locked)
+const map<int, Hood::HoodInfo>& HoodTable::GetInfoList(Locked locked)
 {
 	auto find = table.find(locked);
 	if (find == table.end())
@@ -30,15 +30,13 @@ const map<int, Item::Info> ItemTable::GetInfoList(Locked locked)
 	return find->second;
 }
 
-void ItemTable::Release()
+void HoodTable::Release()
 {
 	table.clear();
 }
 
-bool ItemTable::Load()
+bool HoodTable::Load()
 {
-	Release();
-
 	map<int, Locked> lockedTable;
 	string lockedFileName = "tables/ItemLocked.csv";
 	rapidcsv::Document docLocked(lockedFileName, rapidcsv::LabelParams(0, -1));
@@ -62,8 +60,8 @@ bool ItemTable::Load()
 	auto columnCount = doc.GetColumnCount();
 	auto rowCount = doc.GetRowCount();
 	vector<int> id = doc.GetColumn<int>(0);
-	vector<int> type = doc.GetColumn<int>(1);
-	vector<string> name = doc.GetColumn<string>(2);
+	vector<string> name = doc.GetColumn<string>(1);
+	vector<int> paletteIdx = doc.GetColumn<int>(2);
 	vector<float> speed = doc.GetColumn<float>(3);
 	vector<float> atkDmg = doc.GetColumn<float>(4);
 	vector<float> dmg = doc.GetColumn<float>(5);
@@ -71,12 +69,8 @@ bool ItemTable::Load()
 	vector<float> evasionRate = doc.GetColumn<float>(7);
 	vector<float> criticalRate = doc.GetColumn<float>(8);
 	vector<float> criticalRatio = doc.GetColumn<float>(9);
-	vector<int> condition = doc.GetColumn<int>(10);
-	vector<float> conditionValue = doc.GetColumn<float>(11);
-	vector<float> duration= doc.GetColumn<float>(12);
-	vector<int> price = doc.GetColumn<int>(13);
-	vector<string> iconDir = doc.GetColumn<string>(14);
-	vector<string> intro = doc.GetColumn<string>(15);
+	vector<int> price = doc.GetColumn<int>(10);
+	vector<string> intro = doc.GetColumn<string>(11);
 	for (int j = 0; j < rowCount; ++j)
 	{
 		for (auto& outermost : table)
@@ -97,7 +91,7 @@ bool ItemTable::Load()
 		}
 		else
 			locked = lockedTable[id[j]];
-		table[locked].insert({id[j], {id[j], (Item::Types)type[j], name[j], {speed[j], atkDmg[j], dmg[j], maxHp[j], evasionRate[j], criticalRate[j], criticalRatio[j]}, (Item::Condition)condition[j], conditionValue[j], duration[j], price[j], iconDir[j], intro[j]}});
+		table[locked].insert({ id[j], {id[j], name[j], paletteIdx[j], {speed[j], atkDmg[j], dmg[j], maxHp[j], evasionRate[j], criticalRate[j], criticalRatio[j]}, price[j], intro[j]}});
 	}
 	return true;
 }
