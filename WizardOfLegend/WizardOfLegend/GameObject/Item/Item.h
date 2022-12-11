@@ -87,7 +87,9 @@ public:
 	Item();
 	virtual ~Item();
 
-	void SetInfo(const Info& info) { this->info = info; }
+	void Reset();
+
+	void SetInfo(const Info& info);
 	const Info& GetInfo() { return info; }
 	const Values& GetValues() { return info.values; }
 	bool GetApplyValues() { return applyValues; }

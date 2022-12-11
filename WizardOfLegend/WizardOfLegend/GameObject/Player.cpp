@@ -284,6 +284,16 @@ void Player::Update(float dt)
 	animator->Update(dt);
 	itemMgr->Update(dt);
 
+	if (InputMgr::GetKeyDown(Keyboard::F2))
+	{
+		paletteIdx = paletteIdx - 1;
+		if (paletteIdx < 0)
+			paletteIdx = paletteSize;
+		cout << paletteIdx << endl;
+		playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
+		playerShader.setUniform("paletteIndex", (float)paletteIdx / paletteSize);
+	}
+
 	if (currState == States::Die)
 		return;
 

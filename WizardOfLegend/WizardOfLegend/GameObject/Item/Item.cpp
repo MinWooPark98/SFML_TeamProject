@@ -14,6 +14,17 @@ Item::~Item()
 {
 }
 
+void Item::Reset()
+{
+	applyValues = true;
+}
+
+void Item::SetInfo(const Info& info)
+{
+	Reset();
+	this->info = info;
+}
+
 void Item::Update(float dt)
 {
 	if (player == nullptr)

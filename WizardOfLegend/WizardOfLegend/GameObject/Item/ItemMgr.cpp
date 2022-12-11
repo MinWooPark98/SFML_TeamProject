@@ -17,11 +17,28 @@ ItemMgr::~ItemMgr()
 void ItemMgr::AddItem(int id)
 {
 	auto table = DATATABLE_MGR->Get<ItemTable>(DataTable::Types::Item);
-	auto& itemInfo = table->Get(id);
+	const auto& itemInfo = table->Get(id);
+	AddItem(itemInfo);
+}
+
+void ItemMgr::AddItem(const Item::Info& info)
+{
 	Item* newItem = new Item();
-	newItem->SetInfo(itemInfo);
+	newItem->SetInfo(info);
 	newItem->SetPlayer((Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER"));
 	itemList.push_back(newItem);
+}
+
+void ItemMgr::ChangeItem(int id, int idx)
+{
+	auto table = DATATABLE_MGR->Get<ItemTable>(DataTable::Types::Item);
+	const auto& itemInfo = table->Get(id);
+	ChangeItem(itemInfo, idx);
+}
+
+void ItemMgr::ChangeItem(const Item::Info& info, int idx)
+{
+	itemList[idx]->SetInfo(info);
 }
 
 void ItemMgr::Update(float dt)

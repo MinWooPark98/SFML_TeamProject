@@ -144,6 +144,8 @@ public:
 
 	vector<SkillSet*>& GetSkillSets() { return skillSets; }
 
+	ItemMgr* GetItemMgr() { return itemMgr; }
+
 	int GetCurGold() { return gold; };
 	void AddGold(int gold) { this->gold += gold; };
 	void SubGold(int gold) { this->gold -= gold; };

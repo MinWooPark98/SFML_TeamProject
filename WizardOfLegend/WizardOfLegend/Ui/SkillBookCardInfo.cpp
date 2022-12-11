@@ -8,7 +8,7 @@
 #include "../DataTable/SkillSetTable.h"
 #include "../Scene/SceneMgr.h"
 #include "../DataTable/SkillTable.h"
-#include "SkillBookButton.h"
+#include "KeyButton.h"
 #include "../DataTable/SkillSetIntroTable.h"
 #include "../GameObject/Interactive/SkillBook.h"
 
@@ -52,13 +52,13 @@ void SkillBookCardInfo::Init()
 	vector<string> elemPageDirs = { "graphics/SpellbookUIFirePage.png", "graphics/SpellbookUIAirPage.png", "graphics/SpellbookUIEarthPage.png", "graphics/SpellbookUILightningPage.png", "graphics/SpellbookUIWaterPage.png" };
 	for (int i = 0; i < 6; ++i)
 	{
-		SkillBookButton* newButton = new SkillBookButton();
+		KeyButton* newButton = new KeyButton();
 		newButton->Init();
 		newButton->GetOption()->SetScale({ 4.f, 4.f });
 		newButton->GetHighLight()->SetScale({ 4.f, 4.f });
 		newButton->SetOption(elementBtns[i].first);
-		newButton->HighLightOnFunc = bind(&SkillBookButton::SetOption, newButton, elementBtns[i].second);
-		newButton->HighLightOffFunc = bind(&SkillBookButton::SetOption, newButton, elementBtns[i].first);
+		newButton->HighLightOnFunc = bind(&KeyButton::SetOption, newButton, elementBtns[i].second);
+		newButton->HighLightOffFunc = bind(&KeyButton::SetOption, newButton, elementBtns[i].first);
 		showElements.push_back(newButton);
 
 		SpriteObj* elemIcon = new SpriteObj();

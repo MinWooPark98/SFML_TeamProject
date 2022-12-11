@@ -1,5 +1,6 @@
 #include "SkillSetTable.h"
 #include "../3rd/rapidcsv.h"
+#include <fstream>
 
 SkillSetTable::SkillSetTable()
 	:DataTable(Types::SkillSet)
@@ -65,8 +66,28 @@ void SkillSetTable::Release()
 bool SkillSetTable::Load()
 {
 	Release();
+
+	map<string, Locked> lockedTable;
+	string lockedFileName = "tables/SkillSetLocked.csv";
+	rapidcsv::Document docLocked(lockedFileName, rapidcsv::LabelParams(0, -1));
+	{
+		auto columnCount = docLocked.GetColumnCount();
+		auto rowCount = docLocked.GetRowCount();
+		vector<string> key = docLocked.GetColumn<string>(0);
+		vector<int> locked = docLocked.GetColumn<int>(1);
+		for (int j = 0; j < rowCount; ++j)
+		{
+			if (lockedTable.find(key[j]) != lockedTable.end())
+			{
+				cout << "duplicate values exist" << endl;
+				return false;
+			}
+			lockedTable[key[j]] = (Locked)locked[j];
+		}
+	}
+
 	rapidcsv::Document doc(fileName, rapidcsv::LabelParams(0, -1));
-	vector<string> setName = doc.GetColumn<string>(1);
+	vector<string> setName = doc.GetColumn<string>(0);
 	keys = setName;
 	auto columnCount = doc.GetColumnCount();
 	auto rowCount = doc.GetRowCount();
@@ -83,12 +104,11 @@ bool SkillSetTable::Load()
 				}
 			}
 		}
-		int locked = doc.GetCell<int>(0, j);
-		int element = doc.GetCell<int>(2, j);
+		int element = doc.GetCell<int>(1, j);
 		float coolDown = 0.f;
 		try
 		{
-			coolDown = doc.GetCell<float>(3, j);
+			coolDown = doc.GetCell<float>(2, j);
 			if (coolDown < 0.f)
 				coolDown = -1.f;
 		}
@@ -96,18 +116,27 @@ bool SkillSetTable::Load()
 		{
 			coolDown = -1.f;
 		}
-		string iconDir = doc.GetCell<string>(4, j);
+		string iconDir = doc.GetCell<string>(3, j);
 		list<string> skillNames;
 		string str;
-		for(int i = 5; i < columnCount;++i)
+		for(int i = 4; i < columnCount;++i)
 		{
 			str = doc.GetCell<string>(i, j);
 			if (str.empty())
 				break;
 			skillNames.push_back(str);
 		}
-		
-		table[(Locked)locked][(Skill::Element)element][setName[j]] = {coolDown, iconDir, skillNames};
+		Locked locked = Locked::Locked;
+		if (lockedTable.find(setName[j]) == lockedTable.end())
+		{
+			auto row = docLocked.GetRowCount();
+			docLocked.SetCell(0, row, setName[j]);
+			docLocked.SetCell(1, row, (int)Locked::Locked);
+			docLocked.Save(lockedFileName);
+		}
+		else
+			locked = lockedTable[setName[j]];
+		table[locked][(Skill::Element)element][setName[j]] = {coolDown, iconDir, skillNames};
 	}
 	return true;
 }

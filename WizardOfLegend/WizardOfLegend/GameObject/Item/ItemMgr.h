@@ -17,6 +17,9 @@ public:
 	~ItemMgr();
 
 	void AddItem(int id);
+	void AddItem(const Item::Info& info);
+	void ChangeItem(int id, int idx);
+	void ChangeItem(const Item::Info& info, int idx);
 	vector<Item*> GetList() { return itemList; }
 
 	void Update(float dt);

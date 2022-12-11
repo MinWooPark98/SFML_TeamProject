@@ -11,6 +11,8 @@
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/ItemTable.h"
 #include "../GameObject/Interactive/Wardrobe.h"
+#include "../GameObject/Interactive/ItemBox.h"
+#include "../Ui/ItemBoxUi.h"
 
 DevScene::DevScene()
 	:Scene(Scenes::Dev), itemMgr(nullptr)
@@ -48,14 +50,22 @@ void DevScene::Init()
 	Wardrobe* wardrobe = new Wardrobe();
 	wardrobe->Init();
 	wardrobe->SetName("WARDROBE");
-	wardrobe->SetPos((Vector2f)windowSize * 0.125f + Vector2f(50.f, 50.f));
+	wardrobe->SetPos((Vector2f)windowSize * 0.125f + Vector2f(50.f, 0.f));
 	wardrobe->SetPlayer(player);
 	objList[LayerType::Object][0].push_back(wardrobe);
+
+	ItemBox* itemBox = new ItemBox();
+	itemBox->Init();
+	itemBox->SetName("ITEMBOX");
+	itemBox->SetPos((Vector2f)windowSize * 0.125f + Vector2f(-50.f, 0.f));
+	itemBox->SetPlayer(player);
+	objList[LayerType::Object][0].push_back(itemBox);
 
 	uiMgr = new DevUiMgr();
 	uiMgr->Init();
 
 	book->Interact = bind(&SkillBookUi::SetActive, (SkillBookUi*)uiMgr->FindUiObj("SKILLBOOKUI"), true);
+	itemBox->Interact = bind(&ItemBox::SetActive, (ItemBoxUi*)uiMgr->FindUiObj("ITEMBOXUI"), true);
 }
 
 void DevScene::Release()

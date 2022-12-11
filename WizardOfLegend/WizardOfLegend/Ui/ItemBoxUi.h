@@ -1,37 +1,36 @@
 #pragma once
 #include "../GameObject/Object.h"
+#include "../GameObject/Item/Item.h"
 
 class KeyButton;
 class SpriteObj;
 class TextObj;
-class SkillSet;
-class SkillBookCardInfo;
 
-class SkillBookUi : public Object
+class ItemBoxUi : public Object
 {
-public:
-	enum class States
-	{
-		SkillOption,
-		Collection,
-	};
 protected:
-	vector<SpriteObj*> panels;
-	vector<pair<KeyButton*, SpriteObj*>> options;
-	SkillBookCardInfo* skillInfo;
-	vector<SkillSet*> playerSkillSets;
-	KeyButton* collection;
+	SpriteObj* frame;
+	SpriteObj* panel;
+
+	vector<vector<vector<pair<KeyButton*, pair<bool, Item::Info>>>>> collections;
+	int currPage;
+	int currRow;
+	int currColumn;
+	bool indexChanged;
+
+	KeyButton* currPlayerItem;
+
+	TextObj* itemName;
+	TextObj* itemIntro;
+
 	vector<pair<SpriteObj*, TextObj*>> keyInfos;
-	int skillVecIdx;
 
 	bool isMoving;
 	float moveSpeed;
 
-	States state;
-
 public:
-	SkillBookUi();
-	virtual ~SkillBookUi();
+	ItemBoxUi();
+	virtual ~ItemBoxUi();
 
 	virtual void Init() override;
 	virtual void Reset() override;
@@ -45,9 +44,11 @@ public:
 	virtual void SetActive(bool active) override;
 	void Reappear();
 	void Disappear();
-	void OptionHighLightOn(int idx);
-	void OptionHighLightOff(int idx);
 
-	void ResetCurrOptionIcon();
+	void SetItemInfo();
+	void SelectItem();
+
+	void CollectionHighLightOn();
+	void CollectionHighLightOff();
 };
 

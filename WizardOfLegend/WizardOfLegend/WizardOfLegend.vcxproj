@@ -153,6 +153,7 @@
     <ClCompile Include="GameObject\Item\Item.cpp" />
     <ClCompile Include="DataTable\ItemTable.cpp" />
     <ClCompile Include="GameObject\Interactive\ItemBox.cpp" />
+    <ClCompile Include="Ui\ItemBoxUi.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="Ui\Portal.cpp" />
     <ClCompile Include="Ui\ChaosFragments.cpp" />
@@ -172,7 +173,7 @@
     <ClCompile Include="GameObject\FinalBoss.cpp" />
     <ClCompile Include="DataTable\StatTable.cpp" />
     <ClCompile Include="Ui\Heal.cpp" />
-    <ClCompile Include="Ui\SkillBookButton.cpp" />
+    <ClCompile Include="Ui\KeyButton.cpp" />
     <ClCompile Include="Ui\SkillBookUi.cpp" />
     <ClCompile Include="Ui\ShowDamage.cpp" />
     <ClCompile Include="Ui\SkillCoolDownUi.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="GameObject\Item\Item.h" />
     <ClInclude Include="DataTable\ItemTable.h" />
     <ClInclude Include="GameObject\Interactive\ItemBox.h" />
+    <ClInclude Include="Ui\ItemBoxUi.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="Ui\Portal.h" />
     <ClInclude Include="Ui\ChaosFragments.h" />
@@ -267,7 +269,7 @@
     <ClInclude Include="GameObject\FinalBoss.h" />
     <ClInclude Include="DataTable\StatTable.h" />
     <ClInclude Include="Ui\Heal.h" />
-    <ClInclude Include="Ui\SkillBookButton.h" />
+    <ClInclude Include="Ui\KeyButton.h" />
     <ClInclude Include="Ui\SkillBookUi.h" />
     <ClInclude Include="Ui\ShowDamage.h" />
     <ClInclude Include="Ui\SkillCoolDownUi.h" />
