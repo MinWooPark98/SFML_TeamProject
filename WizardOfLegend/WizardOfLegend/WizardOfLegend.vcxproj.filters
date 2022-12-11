@@ -84,6 +84,7 @@
     <ClCompile Include="GameObject\Gold.cpp" />
     <ClCompile Include="GameObject\Heal.cpp" />
     <ClCompile Include="GameObject\Portal.cpp" />
+    <ClCompile Include="DataTable\PropertyTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="GameObject\Gold.h" />
     <ClInclude Include="GameObject\Heal.h" />
     <ClInclude Include="GameObject\Portal.h" />
+    <ClInclude Include="DataTable\PropertyTable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

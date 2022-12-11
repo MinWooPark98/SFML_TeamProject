@@ -3,6 +3,7 @@
 #include "../Framework/Framework.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/StatTable.h"
+#include "../DataTable/PropertyTable.h"
 
 void FireBoss::Init()
 {

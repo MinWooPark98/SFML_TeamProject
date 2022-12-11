@@ -3,8 +3,9 @@
 #include "../DataTable/StatTable.h"
 #include "../Scene/PlayScene.h"
 #include "../Scene/SceneMgr.h"
-#include "../Ui/Gold.h"
-#include "../Ui/ChaosFragments.h"
+#include "Gold.h"
+#include "ChaosFragments.h"
+#include "../DataTable/PropertyTable.h"
 
 void Lancer::Init()
 {
@@ -58,6 +59,10 @@ void Lancer::Init()
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
 	SetLowHitBox({ 20.f, 20.f, 20.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
+
+	auto propertyTable = DATATABLE_MGR->Get<PropertyTable>(DataTable::Types::MonsterProperty);
+	auto& p = propertyTable->Get("Lancer");
+	SetProperty(p.goldProbability, p.goldDropNumber, p.minGold, p.maxGold, p.platinumProbability, p.platinumDropNumber);
 }
 
 void Lancer::Update(float dt)
@@ -101,17 +106,7 @@ void Lancer::Update(float dt)
 				SetState(States::Die);
 
 				PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
-				auto gold = playScene->GetGold()->Get();
-				gold->SetGoldPos(GetPos());
-
-				int platinumDrop = Utils::RandomRange(0, 100);
-				if (platinumDrop >= 70)
-				{
-					auto platinum = playScene->GetPlatinum()->Get();
-					platinum->SetPosition(GetPos());
-				}
-
-				SOUND_MGR->Play("sounds/GoldSpawn.wav");
+				Drop(playScene);
 
 				isAlive = false;
 			}

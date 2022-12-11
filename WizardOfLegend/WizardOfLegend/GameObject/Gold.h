@@ -9,7 +9,7 @@ protected:
 	float moveSpeed = 200.f;
 	Player* player;
 	Animator goldAnimation;
-
+	int gold;
 	bool animationPlay = true;
 
 public:
@@ -24,5 +24,6 @@ public:
 	void Drop(float dt);
 	void GetGold(Player* player);
 	void SetGoldPos(Vector2f pos);
+	void SetGold(int gold) { this->gold = gold; };
 };
 

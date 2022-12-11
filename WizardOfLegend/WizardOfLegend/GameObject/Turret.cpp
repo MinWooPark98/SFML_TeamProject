@@ -6,6 +6,8 @@
 #include "../Scene/PlayScene.h"
 #include "../Scene/SceneMgr.h"
 #include "../GameObject/Gold.h"
+#include "../GameObject/ChaosFragments.h"
+#include "../DataTable/PropertyTable.h"
 
 Turret::Turret()
 {
@@ -56,6 +58,10 @@ void Turret::Init()
 	SetMonsterType(MonsterType::Normal);
 	isActionStart = true;
 	sprite.setScale({1, 1});
+
+	auto propertyTable = DATATABLE_MGR->Get<PropertyTable>(DataTable::Types::MonsterProperty);
+	auto& p = propertyTable->Get("Turret");
+	SetProperty(p.goldProbability, p.goldDropNumber, p.minGold, p.maxGold, p.platinumProbability, p.platinumDropNumber);
 }
 
 void Turret::Reset()
@@ -78,10 +84,9 @@ void Turret::Update(float dt)
 		SetState(States::Die);
 
 		PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
-		auto gold = playScene->GetGold()->Get();
-		gold->SetGoldPos(GetPos());
+		Drop(playScene);
+
 		SOUND_MGR->Play("sounds/EnemyDead.wav");
-		SOUND_MGR->Play("sounds/GoldSpawn.wav");
 
 		isAlive = false;
 	}

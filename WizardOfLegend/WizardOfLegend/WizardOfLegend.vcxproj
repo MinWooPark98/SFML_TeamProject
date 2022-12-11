@@ -153,6 +153,7 @@
     <ClCompile Include="GameObject\Portal.cpp" />
     <ClCompile Include="GameObject\Turret.cpp" />
     <ClCompile Include="GameObject\Summoner.cpp" />
+    <ClCompile Include="DataTable\PropertyTable.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="GameObject\ChaosFragments.cpp" />
     <ClCompile Include="Framework\CameraMove.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="GameObject\Portal.h" />
     <ClInclude Include="GameObject\Turret.h" />
     <ClInclude Include="GameObject\Summoner.h" />
+    <ClInclude Include="DataTable\PropertyTable.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="GameObject\ChaosFragments.h" />
     <ClInclude Include="Framework\CameraMove.h" />

@@ -5,6 +5,7 @@
 #include "../Scene/SceneMgr.h"
 #include "../GameObject/Gold.h"
 #include "../GameObject/ChaosFragments.h"
+#include "../DataTable/PropertyTable.h"
 
 Summoner::Summoner()
 {
@@ -76,6 +77,10 @@ void Summoner::Init()
 		fireAnimations[i]->SetTarget(&fires[i]->GetSprite());
 		fireAnimations[i]->AddClip(*RESOURCE_MGR->GetAnimationClip("FireAnimation"));
 	}
+
+	auto propertyTable = DATATABLE_MGR->Get<PropertyTable>(DataTable::Types::MonsterProperty);
+	auto& p = propertyTable->Get("Summoner");
+	SetProperty(p.goldProbability, p.goldDropNumber, p.minGold, p.maxGold, p.platinumProbability, p.platinumDropNumber);
 }
 
 void Summoner::Reset()
@@ -114,19 +119,9 @@ void Summoner::Update(float dt)
 			{
 				dieTimer = 1.f;
 				SetState(States::Die);
-
+				
 				PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
-				auto gold = playScene->GetGold()->Get();
-				gold->SetGoldPos(GetPos());
-
-				int platinumDrop = Utils::RandomRange(0, 100);
-				if (platinumDrop >= 70)
-				{
-					auto platinum = playScene->GetPlatinum()->Get();
-					platinum->SetPosition(GetPos());
-				}
-
-				SOUND_MGR->Play("sounds/GoldSpawn.wav");
+				Drop(playScene);
 
 				isAlive = false;
 			}

@@ -3,6 +3,8 @@
 #include "../Scene/PlayScene.h"
 #include "../Ui/ShowDamage.h"
 #include "../Framework/CameraMove.h"
+#include "Gold.h"
+#include "ChaosFragments.h"
 
 void Enemy::Init()
 {
@@ -359,4 +361,40 @@ void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 			}
 		}
 	}
+}
+
+void Enemy::SetProperty(float goldPer, int goldDropNum, int minG, int maxG, float platinumPer, int platinumDropNum)
+{
+	goldProbability = goldPer;
+	goldDropNumber = goldDropNum;
+	minGold = minG;
+	maxGold = maxG;
+	platinumProbability = platinumPer;
+	platinumDropNumber = platinumDropNum;
+}
+
+void Enemy::Drop(PlayScene* scene)
+{
+	float goldDrop = Utils::RandomRange(0.f, 100.f);
+	if (goldDrop <= GetGoldPer())
+	{
+		for (int i = 0; i < GetGoldDropNum(); i++)
+		{
+			auto gold = scene->GetGold()->Get();
+			gold->SetGold(Utils::RandomRange(GetMinGold(), GetMaxGold()));
+			gold->SetGoldPos(GetPos());
+		}
+	}
+
+	float platinumDrop = Utils::RandomRange(0.f, 100.f);
+	if (platinumDrop <= GetPlatinumPer())
+	{
+		for (int i = 0; i < GetPlatinumDropNum(); i++)
+		{
+			auto platinum = scene->GetPlatinum()->Get();
+			platinum->SetPosition(GetPos());
+		}
+	}
+
+	SOUND_MGR->Play("sounds/GoldSpawn.wav");
 }
