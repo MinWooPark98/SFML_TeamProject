@@ -3,6 +3,7 @@
 #include <map>
 #include <list>
 #include "../GameObject/SkillSet.h"
+#include "../3rd/rapidcsv.h"
 
 class SkillSetTable : public DataTable
 {
@@ -20,6 +21,7 @@ public:
 	};
 protected:
 	map<Locked, map<Skill::Element, map<string, SetInfo>>> table;
+	rapidcsv::Document skillSetLocked;
 
 public:
 	SkillSetTable();
@@ -30,6 +32,7 @@ public:
 	const map<string, SetInfo> Get(Locked locked, Skill::Element elem);
 	const Skill::Element GetElement(const string& name);
 	const map<Locked, map<Skill::Element, map<string, SetInfo>>>& GetTable() { return table; }
+	void Unlock(const string& name);
 
 	virtual void Release() override;
 	virtual bool Load() override;

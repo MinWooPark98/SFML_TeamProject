@@ -16,7 +16,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), attackDmg(20),
-	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), damageTake(0.f), evasionRate(0.f), criticalRate(0.f), criticalRatio(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f }), itemMgr(nullptr)
+	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), extraSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), damageTake(0.f), evasionRate(0.f), criticalRate(0.f), criticalRatio(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f }), itemMgr(nullptr)
 {
 }
 
@@ -252,6 +252,9 @@ void Player::Init()
 		newSkillSet->SetSubject(this, Skill::SubjectType::Player);
 		skillSets.push_back(newSkillSet);
 	}
+
+	extraSkillSet = new SkillSet();
+	extraSkillSet->SetSubject(this, Skill::SubjectType::Player);
 
 	SetSpriteShader();
 	SetSpritePalette(64, "graphics/WizardPalette.png");
@@ -706,6 +709,15 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	dashDir = direction;
 	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
 	SetState(States::Hit);
+}
+
+void Player::SetExtraSkillSet(const string& skillSetName)
+{
+	if (!extraSkillSet->GetSkillSetName().empty())
+	{
+		// 밖으로 카드 소환되도록
+	}
+	extraSkillSet->Set(skillSetName);
 }
 
 void Player::SavePlatinum(int platinum)

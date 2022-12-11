@@ -64,6 +64,7 @@ protected:
 
 	vector<SkillSet*> skillSets;
 	SkillSet* currSkillSet;
+	SkillSet* extraSkillSet;
 
 	CircleShape shadow;
 
@@ -140,6 +141,8 @@ public:
 	void SetCurHp(int hp) { curHp = hp; };
 
 	vector<SkillSet*>& GetSkillSets() { return skillSets; }
+	void SetExtraSkillSet(const string& skillSetName);
+	SkillSet* GetExtraSkillSet() { return extraSkillSet; }
 
 	ItemMgr* GetItemMgr() { return itemMgr; }
 

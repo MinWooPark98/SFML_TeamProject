@@ -90,6 +90,10 @@
     <ClCompile Include="GameObject\Item\Relic.cpp" />
     <ClCompile Include="GameObject\Item\Hood.cpp" />
     <ClCompile Include="DataTable\HoodTable.cpp" />
+    <ClCompile Include="GameObject\Interactive\Goods.cpp" />
+    <ClCompile Include="GameObject\Interactive\GoodsHood.cpp" />
+    <ClCompile Include="GameObject\Interactive\GoodsRelic.cpp" />
+    <ClCompile Include="GameObject\Interactive\GoodsSkill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -185,6 +189,10 @@
     <ClInclude Include="GameObject\Item\Relic.h" />
     <ClInclude Include="GameObject\Item\Hood.h" />
     <ClInclude Include="DataTable\HoodTable.h" />
+    <ClInclude Include="GameObject\Interactive\Goods.h" />
+    <ClInclude Include="GameObject\Interactive\GoodsHood.h" />
+    <ClInclude Include="GameObject\Interactive\GoodsRelic.h" />
+    <ClInclude Include="GameObject\Interactive\GoodsSkill.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

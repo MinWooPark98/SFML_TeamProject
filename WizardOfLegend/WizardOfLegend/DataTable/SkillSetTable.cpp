@@ -1,5 +1,4 @@
 #include "SkillSetTable.h"
-#include "../3rd/rapidcsv.h"
 #include <fstream>
 
 SkillSetTable::SkillSetTable()
@@ -58,6 +57,20 @@ const Skill::Element SkillSetTable::GetElement(const string& name)
 	throw invalid_argument("wrong value");
 }
 
+void SkillSetTable::Unlock(const string& name)
+{
+	vector<string> key = skillSetLocked.GetColumn<string>(0);
+	for (int j = 0; j < key.size(); ++j)
+	{
+		if (key[j] == name)
+		{
+			skillSetLocked.SetCell(1, j, (int)Locked::Unlocked);
+			skillSetLocked.Save("tables/SkillSetLocked.csv");
+			return;
+		}
+	}
+}
+
 void SkillSetTable::Release()
 {
 	table.clear();
@@ -69,12 +82,12 @@ bool SkillSetTable::Load()
 
 	map<string, Locked> lockedTable;
 	string lockedFileName = "tables/SkillSetLocked.csv";
-	rapidcsv::Document docLocked(lockedFileName, rapidcsv::LabelParams(0, -1));
+	skillSetLocked.Load(lockedFileName, rapidcsv::LabelParams(0, -1));
 	{
-		auto columnCount = docLocked.GetColumnCount();
-		auto rowCount = docLocked.GetRowCount();
-		vector<string> key = docLocked.GetColumn<string>(0);
-		vector<int> locked = docLocked.GetColumn<int>(1);
+		auto columnCount = skillSetLocked.GetColumnCount();
+		auto rowCount = skillSetLocked.GetRowCount();
+		vector<string> key = skillSetLocked.GetColumn<string>(0);
+		vector<int> locked = skillSetLocked.GetColumn<int>(1);
 		for (int j = 0; j < rowCount; ++j)
 		{
 			if (lockedTable.find(key[j]) != lockedTable.end())
@@ -129,10 +142,10 @@ bool SkillSetTable::Load()
 		Locked locked = Locked::Locked;
 		if (lockedTable.find(setName[j]) == lockedTable.end())
 		{
-			auto row = docLocked.GetRowCount();
-			docLocked.SetCell(0, row, setName[j]);
-			docLocked.SetCell(1, row, (int)Locked::Locked);
-			docLocked.Save(lockedFileName);
+			auto row = skillSetLocked.GetRowCount();
+			skillSetLocked.SetCell(0, row, setName[j]);
+			skillSetLocked.SetCell(1, row, (int)Locked::Locked);
+			skillSetLocked.Save(lockedFileName);
 		}
 		else
 			locked = lockedTable[setName[j]];

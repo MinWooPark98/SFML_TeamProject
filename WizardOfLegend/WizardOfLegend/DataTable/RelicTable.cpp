@@ -1,5 +1,4 @@
 #include "RelicTable.h"
-#include "../3rd/rapidcsv.h"
 
 RelicTable::RelicTable()
 	:DataTable(DataTable::Types::Relic)
@@ -30,6 +29,20 @@ const map<int, Relic::RelicInfo>& RelicTable::GetInfoList(Locked locked)
 	return find->second;
 }
 
+void RelicTable::Unlock(int id)
+{
+	vector<int> key = relicLocked.GetColumn<int>(0);
+	for (int j = 0; j < key.size(); ++j)
+	{
+		if (key[j] == id)
+		{
+			relicLocked.SetCell(1, j, (int)Locked::Unlocked);
+			relicLocked.Save("tables/ItemLocked.csv");
+			return;
+		}
+	}
+}
+
 void RelicTable::Release()
 {
 	table.clear();
@@ -41,12 +54,12 @@ bool RelicTable::Load()
 
 	map<int, Locked> lockedTable;
 	string lockedFileName = "tables/ItemLocked.csv";
-	rapidcsv::Document docLocked(lockedFileName, rapidcsv::LabelParams(0, -1));
+	relicLocked.Load(lockedFileName, rapidcsv::LabelParams(0, -1));
 	{
-		auto columnCount = docLocked.GetColumnCount();
-		auto rowCount = docLocked.GetRowCount();
-		vector<int> key = docLocked.GetColumn<int>(0);
-		vector<int> locked = docLocked.GetColumn<int>(1);
+		auto columnCount = relicLocked.GetColumnCount();
+		auto rowCount = relicLocked.GetRowCount();
+		vector<int> key = relicLocked.GetColumn<int>(0);
+		vector<int> locked = relicLocked.GetColumn<int>(1);
 		for (int j = 0; j < rowCount; ++j)
 		{
 			if (lockedTable.find(key[j]) != lockedTable.end())
@@ -89,10 +102,10 @@ bool RelicTable::Load()
 		Locked locked = Locked::Locked;
 		if (lockedTable.find(id[j]) == lockedTable.end())
 		{
-			auto row = docLocked.GetRowCount();
-			docLocked.SetCell(0, row, id[j]);
-			docLocked.SetCell(1, row, (int)Locked::Locked);
-			docLocked.Save(lockedFileName);
+			auto row = relicLocked.GetRowCount();
+			relicLocked.SetCell(0, row, id[j]);
+			relicLocked.SetCell(1, row, (int)Locked::Locked);
+			relicLocked.Save(lockedFileName);
 		}
 		else
 			locked = lockedTable[id[j]];

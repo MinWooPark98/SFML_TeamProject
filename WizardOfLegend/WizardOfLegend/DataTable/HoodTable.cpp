@@ -1,5 +1,4 @@
 #include "HoodTable.h"
-#include "../3rd/rapidcsv.h"
 
 HoodTable::HoodTable()
 	:DataTable(DataTable::Types::Hood)
@@ -30,6 +29,20 @@ const map<int, Hood::HoodInfo>& HoodTable::GetInfoList(Locked locked)
 	return find->second;
 }
 
+void HoodTable::Unlock(int id)
+{
+	vector<int> key = hoodLocked.GetColumn<int>(0);
+	for (int j = 0; j < key.size(); ++j)
+	{
+		if (key[j] == id)
+		{
+			hoodLocked.SetCell(1, j, (int)Locked::Unlocked);
+			hoodLocked.Save("tables/ItemLocked.csv");
+			return;
+		}
+	}
+}
+
 void HoodTable::Release()
 {
 	table.clear();
@@ -39,12 +52,12 @@ bool HoodTable::Load()
 {
 	map<int, Locked> lockedTable;
 	string lockedFileName = "tables/ItemLocked.csv";
-	rapidcsv::Document docLocked(lockedFileName, rapidcsv::LabelParams(0, -1));
+	hoodLocked.Load(lockedFileName, rapidcsv::LabelParams(0, -1));
 	{
-		auto columnCount = docLocked.GetColumnCount();
-		auto rowCount = docLocked.GetRowCount();
-		vector<int> key = docLocked.GetColumn<int>(0);
-		vector<int> locked = docLocked.GetColumn<int>(1);
+		auto columnCount = hoodLocked.GetColumnCount();
+		auto rowCount = hoodLocked.GetRowCount();
+		vector<int> key = hoodLocked.GetColumn<int>(0);
+		vector<int> locked = hoodLocked.GetColumn<int>(1);
 		for (int j = 0; j < rowCount; ++j)
 		{
 			if (lockedTable.find(key[j]) != lockedTable.end())
@@ -84,10 +97,10 @@ bool HoodTable::Load()
 		Locked locked = Locked::Locked;
 		if (lockedTable.find(id[j]) == lockedTable.end())
 		{
-			auto row = docLocked.GetRowCount();
-			docLocked.SetCell(0, row, id[j]);
-			docLocked.SetCell(1, row, (int)Locked::Locked);
-			docLocked.Save(lockedFileName);
+			auto row = hoodLocked.GetRowCount();
+			hoodLocked.SetCell(0, row, id[j]);
+			hoodLocked.SetCell(1, row, (int)Locked::Locked);
+			hoodLocked.Save(lockedFileName);
 		}
 		else
 			locked = lockedTable[id[j]];
