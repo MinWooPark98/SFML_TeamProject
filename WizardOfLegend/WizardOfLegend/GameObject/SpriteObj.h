@@ -37,7 +37,7 @@ public:
     void SetTextureRect(const IntRect& rect);
     const IntRect& GetTextureRect()const;
     void SetLowHitBoxOrigin(Origins origin) { Utils::SetOrigin(lowhitbox, origin); }
-    void Rotate() { sprite.rotate(rotation); }
+    void Rotate(float rotation) { sprite.rotate(rotation); }
 
     void SetFlipX(bool flip);
     void SetFlipY(bool flip);

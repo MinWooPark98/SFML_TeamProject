@@ -22,6 +22,8 @@
 #include "../GameObject/Dummy.h"
 #include "../Ui/Portal.h"
 #include "../Ui/Heal.h"
+#include "../GameObject/HitSpark.h"
+#include "../GameObject/GlassTube.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -39,6 +41,7 @@ void PlayScene::Init()
 	showDamages = new ObjectPool<ShowDamage>;
 	golds = new ObjectPool<Gold>;
 	platinums = new ObjectPool<ChaosFragments>;
+	hitSparks = new ObjectPool<HitSpark>;
 
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
@@ -140,6 +143,22 @@ void PlayScene::Init()
 				heal->SetPlayer(player);
 
 				objList[LayerType::Object][0].push_back(heal);
+			}
+			else if (obj.path == "graphics/Map/Object/tutorial_skill_1.png" ||
+					obj.path == "graphics/Map/Object/tutorial_skill_2.png" ||
+					obj.path == "graphics/Map/Object/tutorial_skill_3.png" ||
+					obj.path == "graphics/Map/Object/tutorial_skill_4.png")
+			{
+				glassTube= new GlassTube();
+				glassTube->SetFileName(obj.path);
+				glassTube->Init();
+				glassTube->SetName(obj.type);
+				glassTube->SetPos(obj.position);
+				glassTube->SetHitBox(obj.path);
+				glassTube->SetObjType(Object::ObjTypes::ETC);
+				glassTube->SetPlayer(player);
+
+				objList[LayerType::Object][0].push_back(glassTube);
 			}
 			else
 			{
@@ -307,6 +326,19 @@ void PlayScene::Update(float dt)
 		if (player->GetHitBounds().intersects(portal->GetHitBounds()))
 			portal->ChangeMap();
 	}
+	if (glassTube != nullptr)
+	{
+		glassTube->Update(dt);
+		if (player->GetHitBounds().intersects(glassTube->GetHitBounds()))
+		{
+			glassTube->SetIsPlayerAdjacent(true);
+		}
+		else
+		{
+			glassTube->SetIsPlayerAdjacent(true);
+		}
+	}
+
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
@@ -322,6 +354,7 @@ void PlayScene::Update(float dt)
 	showDamages->Update(dt);
 	golds->Update(dt);
 	platinums->Update(dt);
+	hitSparks->Update(dt);
 
 	//�÷��̾� �� ��ġ 
 	for (int i = 0; i < room.size(); i++)
@@ -471,12 +504,18 @@ void PlayScene::Draw(RenderWindow& window)
 	{
 		platinum->Draw(window);
 	}
+	for (auto hitSpark : hitSparks->GetUseList())
+	{
+		hitSpark->Draw(window);
+	}
+	glassTube->Draw(window);
 
 	if (uiMgr != nullptr && uiMgr->GetActive())
 	{
 		window.setView(uiView);
 		uiMgr->Draw(window);
 	}
+
 }
 
 void PlayScene::Release()

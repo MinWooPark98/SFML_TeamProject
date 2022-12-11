@@ -5,7 +5,8 @@
 class HitSpark : public SpriteObj
 {
 protected:
-	Animator animation;
+	Animator* animation;
+	bool showing=false;
 
 public:
 	HitSpark();
@@ -17,6 +18,7 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
-	void HitSparkFire(Vector2f hitpoint);
+	void EnemyHitSparkFire(Vector2f hitpoint);
+	void PlayerHitSparkFire(Vector2f hitpoint);
 };
 

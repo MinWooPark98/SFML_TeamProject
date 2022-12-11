@@ -12,6 +12,7 @@
 #include "../Ui/ShowDamage.h"
 #include "../Framework/CameraMove.h"
 #include "../DataTable/PlatinumTable.h"
+#include "../GameObject/HitSpark.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
@@ -684,6 +685,8 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
+	auto hitSpark = playScene->GetHitSpark()->Get();
+	hitSpark->PlayerHitSparkFire(position);
 	curHp -= dmg;
 	CameraMove::SetShakeSpeed(1000.f);
 	CameraMove::SetShakeViewX(50.f);

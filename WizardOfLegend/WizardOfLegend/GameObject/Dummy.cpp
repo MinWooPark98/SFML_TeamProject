@@ -5,6 +5,7 @@
 #include "../Framework/CameraMove.h"
 #include "../Framework/SoundMgr.h"
 #include "../Framework/ResourceMgr.h"
+#include "../GameObject/HitSpark.h"
 
 Dummy::Dummy()
 	: speed(50.f), resetTimer(0.f), curState(State::Normal)
@@ -65,6 +66,8 @@ void Dummy::OnHit(const Vector2f& atkDir, int dmg)
 	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
+	auto hitSpark = playScene->GetHitSpark()->Get();
+	hitSpark->EnemyHitSparkFire(position);
 	direction = -atkDir;
 	lastDir = direction;
 	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");

@@ -3,6 +3,7 @@
 #include "../Scene/PlayScene.h"
 #include "../Ui/ShowDamage.h"
 #include "../Framework/CameraMove.h"
+#include "../GameObject/HitSpark.h"
 
 void Enemy::Init()
 {
@@ -315,6 +316,8 @@ void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
+	auto hitSpark = playScene->GetHitSpark()->Get();
+	hitSpark->EnemyHitSparkFire(position);
 	curHp -= dmg;
 	direction = -atkDir;
 	lastDir = direction;

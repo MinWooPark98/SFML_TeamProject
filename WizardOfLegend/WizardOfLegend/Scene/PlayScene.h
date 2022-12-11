@@ -12,6 +12,9 @@ class Gold;
 class ChaosFragments;
 class Portal;
 class Heal;
+class HitSpark;
+class GlassTube;
+
 class PlayScene : public Scene
 {
 protected:
@@ -36,8 +39,10 @@ protected:
 	ObjectPool<ShowDamage>* showDamages;
 	ObjectPool<Gold>* golds;
 	ObjectPool<ChaosFragments>* platinums;
+	ObjectPool<HitSpark>* hitSparks;
 
 	Portal* portal;
+	GlassTube* glassTube;
 
 public:
 	PlayScene();
@@ -62,6 +67,7 @@ public:
 	ObjectPool<ShowDamage>* GetShowDamage() { return showDamages; }
 	ObjectPool<Gold>* GetGold() { return golds; }
 	ObjectPool<ChaosFragments>* GetPlatinum() { return platinums; }
+	ObjectPool<HitSpark>* GetHitSpark() { return hitSparks; }
 
 	void SetMapName(const string& name) { mapName = name; }
 	string GetMapName() { return mapName; };

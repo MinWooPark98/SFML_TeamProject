@@ -55,10 +55,6 @@ protected:
 
 	vector<vector<Object*>> drawSortObjs;
 
-
-	vector<Object*> moves;
-	vector<Object*> drawObjs;
-	vector<Object*> alphaObj;
 	bool isMap;
 
 public:
