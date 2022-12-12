@@ -129,10 +129,12 @@ bool SkillSetTable::Load()
 		{
 			coolDown = -1.f;
 		}
-		string iconDir = doc.GetCell<string>(3, j);
+		int goldPrice = doc.GetCell<int>(3, j);
+		int platinumPrice = doc.GetCell<int>(4, j);
+		string iconDir = doc.GetCell<string>(5, j);
 		list<string> skillNames;
 		string str;
-		for(int i = 4; i < columnCount;++i)
+		for(int i = 6; i < columnCount;++i)
 		{
 			str = doc.GetCell<string>(i, j);
 			if (str.empty())
@@ -149,7 +151,7 @@ bool SkillSetTable::Load()
 		}
 		else
 			locked = lockedTable[setName[j]];
-		table[locked][(Skill::Element)element][setName[j]] = {coolDown, iconDir, skillNames};
+		table[locked][(Skill::Element)element][setName[j]] = {coolDown, goldPrice, platinumPrice, iconDir, skillNames};
 	}
 	return true;
 }

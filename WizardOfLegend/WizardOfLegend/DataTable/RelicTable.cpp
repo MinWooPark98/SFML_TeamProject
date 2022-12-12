@@ -86,9 +86,10 @@ bool RelicTable::Load()
 	vector<int> condition = doc.GetColumn<int>(9);
 	vector<float> conditionValue = doc.GetColumn<float>(10);
 	vector<float> duration= doc.GetColumn<float>(11);
-	vector<int> price = doc.GetColumn<int>(12);
-	vector<string> iconDir = doc.GetColumn<string>(13);
-	vector<string> intro = doc.GetColumn<string>(14);
+	vector<int> goldPrice = doc.GetColumn<int>(12);
+	vector<int> platinumPrice = doc.GetColumn<int>(13);
+	vector<string> iconDir = doc.GetColumn<string>(14);
+	vector<string> intro = doc.GetColumn<string>(15);
 	for (int j = 0; j < rowCount; ++j)
 	{
 		for (auto& outermost : table)
@@ -109,7 +110,7 @@ bool RelicTable::Load()
 		}
 		else
 			locked = lockedTable[id[j]];
-		table[locked].insert({id[j], {id[j], name[j], {speed[j], atkDmg[j], dmg[j], maxHp[j], evasionRate[j], criticalRate[j], criticalRatio[j]}, (Relic::Condition)condition[j], conditionValue[j], duration[j], price[j], iconDir[j], intro[j]}});
+		table[locked].insert({id[j], {id[j], name[j], {speed[j], atkDmg[j], dmg[j], maxHp[j], evasionRate[j], criticalRate[j], criticalRatio[j]}, (Relic::Condition)condition[j], conditionValue[j], duration[j], goldPrice[j], platinumPrice[j], iconDir[j], intro[j]}});
 	}
 	return true;
 }

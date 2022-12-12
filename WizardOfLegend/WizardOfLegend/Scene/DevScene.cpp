@@ -14,6 +14,7 @@
 #include "../GameObject/Interactive/ItemBox.h"
 #include "../Ui/ItemBoxUi.h"
 #include "../Ui/WardrobeUi.h"
+#include "../GameObject/Store.h"
 
 DevScene::DevScene()
 	:Scene(Scenes::Dev), itemMgr(nullptr)
@@ -44,23 +45,25 @@ void DevScene::Init()
 	SkillBook* book = new SkillBook();
 	book->Init();
 	book->SetName("SKILLBOOK");
-	book->SetPos((Vector2f)windowSize * 0.125f);
-	book->SetPlayer(player);
+	book->SetPos((Vector2f)windowSize * 0.05f);
 	objList[LayerType::Object][0].push_back(book);
 
 	Wardrobe* wardrobe = new Wardrobe();
 	wardrobe->Init();
 	wardrobe->SetName("WARDROBE");
-	wardrobe->SetPos((Vector2f)windowSize * 0.125f + Vector2f(50.f, 0.f));
-	wardrobe->SetPlayer(player);
+	wardrobe->SetPos((Vector2f)windowSize * 0.05f + Vector2f(250.f, 0.f));
 	objList[LayerType::Object][0].push_back(wardrobe);
 
 	ItemBox* itemBox = new ItemBox();
 	itemBox->Init();
 	itemBox->SetName("ITEMBOX");
-	itemBox->SetPos((Vector2f)windowSize * 0.125f + Vector2f(-50.f, 0.f));
-	itemBox->SetPlayer(player);
+	itemBox->SetPos(Vector2f(windowSize.x * 0.05f, windowSize.y * 0.2f));
 	objList[LayerType::Object][0].push_back(itemBox);
+
+	Store* store = new Store(Goods::Payment::Gold, Goods::Types::Relic);
+	store->Init();
+	store->SetPos(Vector2f(windowSize.x * 0.05f + 150.f, windowSize.y * 0.2f));
+	objList[LayerType::Object][0].push_back(store);
 
 	uiMgr = new DevUiMgr();
 	uiMgr->Init();

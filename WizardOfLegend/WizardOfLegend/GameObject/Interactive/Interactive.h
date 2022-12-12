@@ -2,7 +2,6 @@
 #include "../SpriteObj.h"
 
 class Animator;
-class Player;
 
 class Interactive : public SpriteObj
 {
@@ -12,8 +11,6 @@ protected:
 	SpriteObj* interactKey;
 	Vector2f interactKeyScale;
 	Vector2f interactKeyPos;
-
-	Player* player;
 
 public:
 	Interactive();
@@ -31,7 +28,6 @@ public:
 	void DefaultApproach();
 	void DefaultApproachEnd();
 
-	void SetPlayer(Player* player) { this->player = player; }
 	function<void()> ApproachFunc;
 	function<void()> ApproachEndFunc;
 	function<void()> Interact;

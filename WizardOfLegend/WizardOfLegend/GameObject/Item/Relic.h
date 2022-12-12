@@ -21,7 +21,8 @@ public:
 		Condition condition;
 		float conditionValue;
 		float duration;
-		int price;
+		int goldPrice;
+		int platinumPrice;
 		string iconDir;
 		string intro;
 	};

@@ -160,6 +160,7 @@
     <ClCompile Include="GameObject\Interactive\GoodsHood.cpp" />
     <ClCompile Include="GameObject\Interactive\GoodsRelic.cpp" />
     <ClCompile Include="GameObject\Interactive\GoodsSkill.cpp" />
+    <ClCompile Include="GameObject\Store.cpp" />
     <ClCompile Include="Ui\ItemBoxUi.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="Ui\Portal.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="GameObject\Interactive\GoodsHood.h" />
     <ClInclude Include="GameObject\Interactive\GoodsRelic.h" />
     <ClInclude Include="GameObject\Interactive\GoodsSkill.h" />
+    <ClInclude Include="GameObject\Store.h" />
     <ClInclude Include="Ui\ItemBoxUi.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="Ui\Portal.h" />
