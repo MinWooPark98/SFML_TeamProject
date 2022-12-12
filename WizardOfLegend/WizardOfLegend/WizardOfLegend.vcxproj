@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject\Effect.cpp" />
     <ClCompile Include="GameObject\Interactive\Wardrobe.cpp" />
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
     <ClCompile Include="GameObject\Dummy.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="GameObject\Interactive\GoodsHood.cpp" />
     <ClCompile Include="GameObject\Interactive\GoodsRelic.cpp" />
     <ClCompile Include="GameObject\Interactive\GoodsSkill.cpp" />
+    <ClCompile Include="GameObject\PortalEffect.cpp" />
     <ClCompile Include="Ui\ItemBoxUi.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="GameObject\ChaosFragments.cpp" />
@@ -256,6 +258,7 @@
     <ClInclude Include="3rd\OBB.h" />
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="GameObject\Effect.h" />
     <ClInclude Include="GameObject\Interactive\Wardrobe.h" />
     <ClInclude Include="DataTable\PlatinumTable.h" />
     <ClInclude Include="GameObject\Dummy.h" />
@@ -278,6 +281,7 @@
     <ClInclude Include="GameObject\Interactive\GoodsHood.h" />
     <ClInclude Include="GameObject\Interactive\GoodsRelic.h" />
     <ClInclude Include="GameObject\Interactive\GoodsSkill.h" />
+    <ClInclude Include="GameObject\PortalEffect.h" />
     <ClInclude Include="Ui\ItemBoxUi.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="GameObject\ChaosFragments.h" />

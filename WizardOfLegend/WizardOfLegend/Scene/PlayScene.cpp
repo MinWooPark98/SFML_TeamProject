@@ -26,6 +26,7 @@
 #include "../GameObject/Heal.h"
 #include "../GameObject/Turret.h"
 #include "../GameObject/Summoner.h"
+#include "../GameObject/PortalEffect.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -339,6 +340,9 @@ void PlayScene::Init()
 	}
 	if (fireBoss != nullptr)
 		fireBoss->SetPlayerLastPos(player->GetPos());
+
+	portalEffect = new PortalEffect();
+	portalEffect->Init();
 }
 
 void PlayScene::Update(float dt)
@@ -381,6 +385,7 @@ void PlayScene::Update(float dt)
 	golds->Update(dt);
 	platinums->Update(dt);
 	hitSparks->Update(dt);
+	portalEffect->Update(dt);
 
 	//�÷��̾� �� ��ġ 
 	for (int i = 0; i < room.size(); i++)
@@ -534,6 +539,8 @@ void PlayScene::Draw(RenderWindow& window)
 	{
 		hitSpark->Draw(window);
 	}
+	if (portalEffect != nullptr && portalEffect->GetActive())
+		portalEffect->Draw(window);
 	//glassTube->Draw(window);
 
 	if (uiMgr != nullptr && uiMgr->GetActive())
@@ -615,6 +622,7 @@ void PlayScene::Enter()
 	Release();
 	Init();
 	player->LoadPlatinum();
+	portalEffect->ShowPortalEffect({ player->GetPos().x, player->GetPos().y + (player->GetSize().y * 0.5f)});
 }
 
 void PlayScene::Exit()

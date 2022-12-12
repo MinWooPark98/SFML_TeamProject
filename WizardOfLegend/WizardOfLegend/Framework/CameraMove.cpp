@@ -63,3 +63,8 @@ void CameraMove::CameraShake(float dt)
 		}
 	}
 }
+
+void CameraMove::SetCameraShakeTime(int shakeTime)
+{
+	shakeCount = shakeTime;
+}

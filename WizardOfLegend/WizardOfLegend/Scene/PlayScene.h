@@ -14,7 +14,7 @@ class Portal;
 class Heal;
 class HitSpark;
 class GlassTube;
-
+class PortalEffect;
 class PlayScene : public Scene
 {
 protected:
@@ -43,6 +43,7 @@ protected:
 
 	Portal* portal;
 	GlassTube* glassTube;
+	PortalEffect* portalEffect;
 
 public:
 	PlayScene();
@@ -68,6 +69,7 @@ public:
 	ObjectPool<Gold>* GetGold() { return golds; }
 	ObjectPool<ChaosFragments>* GetPlatinum() { return platinums; }
 	ObjectPool<HitSpark>* GetHitSpark() { return hitSparks; }
+	PortalEffect* GetPortalEffect() { return portalEffect; };
 
 	void SetMapName(const string& name) { mapName = name; }
 	string GetMapName() { return mapName; };

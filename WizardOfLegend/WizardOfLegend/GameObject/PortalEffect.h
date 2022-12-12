@@ -1,14 +1,14 @@
 #pragma once
 #include "Effect.h"
 
-class HitSpark : public Effect
+class PortalEffect : public Effect
 {
 protected:
-	bool showing=false;
+	bool showing = false;
 
 public:
-	HitSpark();
-	virtual ~HitSpark();
+	PortalEffect();
+	virtual ~PortalEffect();
 
 	virtual void Init() override;
 
@@ -16,7 +16,6 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
-	void EnemyHitSparkFire(Vector2f hitpoint);
-	void PlayerHitSparkFire(Vector2f hitpoint);
+	void ShowPortalEffect(Vector2f playerPos);
 };
 

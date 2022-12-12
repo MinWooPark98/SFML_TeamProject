@@ -99,6 +99,8 @@
     <ClCompile Include="GameObject\Interactive\GoodsHood.cpp" />
     <ClCompile Include="GameObject\Interactive\GoodsRelic.cpp" />
     <ClCompile Include="GameObject\Interactive\GoodsSkill.cpp" />
+    <ClCompile Include="GameObject\Effect.cpp" />
+    <ClCompile Include="GameObject\PortalEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -203,6 +205,8 @@
     <ClInclude Include="GameObject\Interactive\GoodsHood.h" />
     <ClInclude Include="GameObject\Interactive\GoodsRelic.h" />
     <ClInclude Include="GameObject\Interactive\GoodsSkill.h" />
+    <ClInclude Include="GameObject\Effect.h" />
+    <ClInclude Include="GameObject\PortalEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
