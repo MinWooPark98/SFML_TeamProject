@@ -34,7 +34,8 @@ void Cliff::Draw(RenderWindow& window)
 
 void Cliff::UpdateNowDraw(float dt, DrawObj* nowDraw)
 {
-
+	if (nowDraw == nullptr)
+		return;
 	if (InputMgr::GetMouseButtonDown(Mouse::Left))
 	{
 		SetType(nowDraw->GetType());

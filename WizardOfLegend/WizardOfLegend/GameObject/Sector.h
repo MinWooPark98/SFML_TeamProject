@@ -19,8 +19,13 @@ protected:
 
 	DrawObj* nowDraw;
 
+	bool isSpawn = false;
+
 	int aliveEnemyCount;
 	bool allEnemyDead = false;
+
+	float currSpownDelay = 2.f;
+	float maxSpownDelay = 2.f;
 
 public:
 	Sector();
@@ -53,5 +58,12 @@ public:
 
 	bool GetAllEnemyDead() { return allEnemyDead; }
 	void SetAllEnemyDead(bool alldead) { allEnemyDead = alldead; }
+
+	float GetCurrSpownDelay() { return currSpownDelay; }
+
+	void ResetCurrSpownDelay() { currSpownDelay = maxSpownDelay; }
+
+	bool GetIsSpawn() { return isSpawn; }
+	void SetIsSpawn(bool isSpawn) { this->isSpawn = isSpawn; }
 };
 

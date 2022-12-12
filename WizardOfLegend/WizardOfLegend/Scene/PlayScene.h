@@ -29,9 +29,6 @@ protected:
 
 	list<int> playerRooms;
 
-	float currSpownDelay = 5.f;
-	float maxSpownDelay = 5.f;
-
 	bool hpBarSet = true;
 
 	string mapName;
@@ -39,7 +36,8 @@ protected:
 	ObjectPool<ShowDamage>* showDamages;
 	ObjectPool<Gold>* golds;
 	ObjectPool<ChaosFragments>* platinums;
-	ObjectPool<HitSpark>* hitSparks;
+	ObjectPool<HitSpark>* enemyHitSparks;
+	ObjectPool<HitSpark>* playerHitSparks;
 
 	Portal* portal;
 	GlassTube* glassTube;
@@ -67,7 +65,8 @@ public:
 	ObjectPool<ShowDamage>* GetShowDamage() { return showDamages; }
 	ObjectPool<Gold>* GetGold() { return golds; }
 	ObjectPool<ChaosFragments>* GetPlatinum() { return platinums; }
-	ObjectPool<HitSpark>* GetHitSpark() { return hitSparks; }
+	ObjectPool<HitSpark>* GetEnemyHitSpark() { return enemyHitSparks; }
+	ObjectPool<HitSpark>* GetPlayerHitSpark() { return playerHitSparks; }
 
 	void SetMapName(const string& name) { mapName = name; }
 	string GetMapName() { return mapName; };

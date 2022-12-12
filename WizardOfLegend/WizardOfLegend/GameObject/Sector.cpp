@@ -27,6 +27,7 @@ Sector::~Sector()
 void Sector::Update(float dt)
 {
 	Object::Update(dt);
+	currSpownDelay -= dt;
 
 }
 

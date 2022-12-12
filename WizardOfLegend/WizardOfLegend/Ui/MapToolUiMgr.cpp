@@ -50,9 +50,9 @@ void MapToolUiMgr::Init()
 	loadBtn->SetPos({ 50,120 });
 	uiObjList[0].push_back(loadBtn);
 
-	selects = { "TILE","WALL","OBJECT","PLAYER","ENEMY","SECTOR","CLIFF"};
-	selectTextSize = { 40,40,40,40,40,40,40 };
-	selectPosY = { 54,54,54,54,54,54,54 };
+	selects = { "TILE","WALL","OBJECT","PLAYER","ENEMY","SECTOR","CLIFF","SPAWNAREA"};
+	selectTextSize = { 40,40,40,40,40,40,40,40 };
+	selectPosY = { 54,54,54,54,54,54,54,54 };
 
 	selIdx = 0;
 	selectBtn = new Button(this);

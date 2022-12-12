@@ -15,6 +15,9 @@
 #include "SkillCoolDownUi.h"
 #include "../Scene/PlayScene.h"
 #include "MessageUi.h"
+#include "SkillBookUi.h"
+#include "ItemBoxUi.h"
+#include "WardrobeUi.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -385,6 +388,22 @@ void PlayUiMgr::Init()
 
 	messageUi = new MessageUi();
 	messageUi->Init();
+
+	auto skillBook = new SkillBookUi();
+	skillBook->SetName("SKILLBOOKUI");
+	skillBook->Init();
+	uiObjList[0].push_back(skillBook);
+
+	auto itemBox = new ItemBoxUi();
+	itemBox->SetName("ITEMBOXUI");
+	itemBox->Init();
+	uiObjList[0].push_back(itemBox);
+
+	auto wardrobeUi = new WardrobeUi();
+	wardrobeUi->SetName("WARDROBEUI");
+	wardrobeUi->Init();
+	uiObjList[0].push_back(wardrobeUi);
+
 }
 
 void PlayUiMgr::Release()
@@ -492,7 +511,8 @@ void PlayUiMgr::Draw(RenderWindow& window)
 			{
 				for (auto& obj : uiObjs.second)
 				{
-					obj->Draw(window);
+					if(obj->GetActive())
+						obj->Draw(window);
 				}
 			}
 		}
@@ -502,7 +522,10 @@ void PlayUiMgr::Draw(RenderWindow& window)
 		for (auto& uiObjs : uiObjList)
 		{
 			for (auto& obj : uiObjs.second)
-				obj->Draw(window);
+			{
+				if (obj->GetActive())
+					obj->Draw(window);
+			}
 		}
 		window.draw(*menuRec);
 	}

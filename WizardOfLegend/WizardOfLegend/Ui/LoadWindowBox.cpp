@@ -154,9 +154,9 @@ void LoadWindowBox::Update(float dt)
 			btn->Update(dt);
 	}
 
-	if (IsStay())
+	if (sprite->GetActive())
 	{
-		if (InputMgr::GetMouseWheelUp())
+		if (InputMgr::GetMouseWheelMoved() > 0)
 		{
 			idx = min(idx + 1, (int)allMaps.size());
 			float y = 0;
@@ -174,7 +174,7 @@ void LoadWindowBox::Update(float dt)
 				}
 			}
 		}
-		if (InputMgr::GetMouseWheelDown())
+		if (InputMgr::GetMouseWheelMoved() < 0)
 		{
 			idx = max(idx - 1, 0); float y = 0;
 			for (int i = 0; i < allMaps.size(); i++)

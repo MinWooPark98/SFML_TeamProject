@@ -26,6 +26,13 @@
 #include "../GameObject/Heal.h"
 #include "../GameObject/Turret.h"
 #include "../GameObject/Summoner.h"
+#include "../GameObject/SpawnArea.h"
+#include "../GameObject/Interactive/SkillBook.h"
+#include "../GameObject/Interactive/Wardrobe.h"
+#include "../GameObject/Interactive/ItemBox.h"
+#include "../Ui/SkillBookUi.h"
+#include "../Ui/ItemBoxUi.h"
+#include "../Ui/WardrobeUi.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -39,11 +46,12 @@ PlayScene::~PlayScene()
 void PlayScene::Init()
 {
 	Scene::Init();
-
+	auto& windowSize = FRAMEWORK->GetWindowSize();
 	showDamages = new ObjectPool<ShowDamage>;
 	golds = new ObjectPool<Gold>;
 	platinums = new ObjectPool<ChaosFragments>;
-	hitSparks = new ObjectPool<HitSpark>;
+	enemyHitSparks = new ObjectPool<HitSpark>;
+	playerHitSparks = new ObjectPool<HitSpark>;
 
 	uiMgr = new PlayUiMgr();
 	uiMgr->Init();
@@ -160,6 +168,39 @@ void PlayScene::Init()
 				glassTube->SetPlayer(player);
 
 				objList[LayerType::Object][0].push_back(glassTube);
+			}
+			else if (obj.path == "graphics/TreasureChestClosed.png")
+			{
+				ItemBox* itemBox = new ItemBox();
+				itemBox->Init();
+				itemBox->SetName(obj.type);
+				itemBox->SetPos(obj.position);
+				itemBox->SetPlayer(player);
+				itemBox->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Object][0].push_back(itemBox);
+				itemBox->Interact = bind(&ItemBox::SetActive, (ItemBoxUi*)uiMgr->FindUiObj("ITEMBOXUI"), true);
+			}
+			else if (obj.path == "graphics/SpellBookIdle.png")
+			{
+				SkillBook* book = new SkillBook();
+				book->Init();
+				book->SetName(obj.type);
+				book->SetPos(obj.position);
+				book->SetPlayer(player);
+				book->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Object][0].push_back(book);
+				book->Interact = bind(&SkillBookUi::SetActive, (SkillBookUi*)uiMgr->FindUiObj("SKILLBOOKUI"), true);
+			}
+			else if (obj.path == "graphics/Map/Object/WardrobeIdle.png")
+			{
+				Wardrobe* wardrobe = new Wardrobe();
+				wardrobe->Init();
+				wardrobe->SetName(obj.type);
+				wardrobe->SetPos(obj.position);
+				wardrobe->SetPlayer(player);
+				wardrobe->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Object][0].push_back(wardrobe);
+				wardrobe->Interact = bind(&WardrobeUi::SetActive, (WardrobeUi*)uiMgr->FindUiObj("WARDROBEUI"), true);
 			}
 			else
 			{
@@ -297,7 +338,20 @@ void PlayScene::Init()
 			cliff->SetOutlineColor({ 0, 0, 0, 0 });
 			cliff->SetObjType(Object::ObjTypes::Cliff);
 			objList[LayerType::Object][3].push_back(cliff);
-			collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
+			//collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
+		}
+		else if (obj.type == "SPAWNAREA")
+		{
+			SpawnArea* spawnArea= new SpawnArea();
+			spawnArea->Init();
+			spawnArea->SetName(obj.type);
+			spawnArea->SetPos(obj.position);
+			spawnArea->SetSize({ obj.size.x - 8, obj.size.y - 8 });
+			spawnArea->SetHitBox({ (FloatRect)spawnArea->GetSpawnAreaShape()->getGlobalBounds() });
+			spawnArea->SetOutlineColor({ 0, 0, 0, 0 });
+			spawnArea->SetObjType(Object::ObjTypes::SpawnArea);
+			objList[LayerType::Object][3].push_back(spawnArea);
+			//collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
 		}
 	}
 
@@ -380,7 +434,9 @@ void PlayScene::Update(float dt)
 	showDamages->Update(dt);
 	golds->Update(dt);
 	platinums->Update(dt);
-	hitSparks->Update(dt);
+	enemyHitSparks->Update(dt);
+	playerHitSparks->Update(dt);
+
 
 	//�÷��̾� �� ��ġ 
 	for (int i = 0; i < room.size(); i++)
@@ -530,9 +586,13 @@ void PlayScene::Draw(RenderWindow& window)
 	{
 		platinum->Draw(window);
 	}
-	for (auto hitSpark : hitSparks->GetUseList())
+	for (auto enemyHitSpark : enemyHitSparks->GetUseList())
 	{
-		hitSpark->Draw(window);
+		enemyHitSpark->Draw(window);
+	}
+	for (auto playerHitSpark : playerHitSparks->GetUseList())
+	{
+		playerHitSpark->Draw(window);
 	}
 	//glassTube->Draw(window);
 
@@ -565,7 +625,6 @@ void PlayScene::Release()
 	room.clear();
 	playerRooms.clear();
 	collisionList.clear();
-	currSpownDelay = 5.f;
 	fireBoss = nullptr;
 	finalBoss = nullptr;
 	heavyBombingArcher = nullptr;
@@ -624,37 +683,51 @@ void PlayScene::Exit()
 
 void PlayScene::SpawnEnemy(int i, float dt)
 {
-	currSpownDelay -= dt;
-	if (currSpownDelay <= 0)
+	
+	for (auto& c_list : collisionList[i])
+	{
+		for (auto& obj : c_list.second)
+		{
+			if (obj->GetObjType() == Object::ObjTypes::SpawnArea)
+			{
+				if (!obj->GetHitBounds().intersects(player->GetHitBounds()))
+				{
+					room[i].SetIsSpawn(false);
+					return;
+				}
+				else
+				{
+					room[i].SetIsSpawn(true);
+				}
+			}
+		}
+	}
+	if (room[i].GetIsSpawn())
 	{
 		for (auto& c_list : collisionList[i])
 		{
 			for (auto& obj : c_list.second)
 			{
-				if ((obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive()) ||
-					((obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((FinalBoss*)obj)->GetState() != FinalBoss::States::Die))
-				{
-					obj->SetActive(true);
-				}
-			}
-		}
-		for (auto& c_list : collisionList[i])
-		{
-			for (auto& obj : c_list.second)
-			{
-				if (obj->GetObjType() == Object::ObjTypes::ETC)
-				{
-					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
-						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-						obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+
+					if ((obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive()) ||
+						((obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((FinalBoss*)obj)->GetState() != FinalBoss::States::Die))
 					{
 						obj->SetActive(true);
 					}
-				}
+					if (obj->GetObjType() == Object::ObjTypes::ETC)
+					{
+						if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
+							obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
+							obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+						{
+							obj->SetActive(true);
+						}
+					}
 			}
 		}
-		currSpownDelay = maxSpownDelay;
+		room[i].SetIsSpawn(false);
 	}
+	
 }
 
 void PlayScene::AllDieEnemy(int i)

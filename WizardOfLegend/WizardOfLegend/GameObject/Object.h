@@ -22,6 +22,7 @@ public:
         FinalBoss,
         Cliff,
         Sector,
+        SpawnArea,
         Dummy,
         BrokenObject,
         ETC,

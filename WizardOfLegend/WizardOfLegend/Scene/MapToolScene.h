@@ -8,6 +8,7 @@ class UiMgr;
 class DrawObj;
 class Sector;
 class Cliff;
+class SpawnArea;
 
 class MapToolScene : public Scene
 {
@@ -23,6 +24,7 @@ private:
 	DrawObj* nowDraw;
 	bool isNowSectorDraw = false;
 	bool isNowCliffDraw = false;
+	bool isNowSpawnAreaDraw = false;
 	bool isNowObjDraw = false;
 	bool isNowEraseDraw = false;
 
@@ -33,8 +35,10 @@ private:
 	//vector<RectangleShape*> sectors;
 	Sector* sector;
 	Cliff* cliff;
+	SpawnArea* spawnArea;
 	map<LayerType, map<int, map<int, Sector*>>> sectors;
 	map<LayerType, map<int, map<int, Cliff*>>> cliffs;
+	map<LayerType, map<int, map<int, SpawnArea*>>> spawnAreas;
 	int sectorI;
 	int sectorJ;
 

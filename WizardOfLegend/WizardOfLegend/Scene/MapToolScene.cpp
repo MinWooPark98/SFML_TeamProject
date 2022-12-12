@@ -9,6 +9,7 @@
 #include "../Framework/Framework.h"
 #include "../GameObject/Sector.h"
 #include "../GameObject/Cliff.h"
+#include "../GameObject/SpawnArea.h"
 #include "../GameObject/TextBox.h"
 
 MapToolScene::MapToolScene()
@@ -169,6 +170,24 @@ void MapToolScene::Update(float dt)
 		cliffs.clear();
 		cliff = nullptr;
 	}
+	if (InputMgr::GetKeyDown(Keyboard::F8))
+	{
+		for (auto& objs : objList[LayerType::SpawnArea])
+		{
+			for (auto it = objs.second.begin(); it != objs.second.end();)
+			{
+				auto del = *it;
+				it = objs.second.erase(it);
+				if (del != nullptr)
+				{
+					delete del;
+				}
+			}
+			objs.second.clear();
+		}
+		spawnAreas.clear();
+		spawnArea = nullptr;
+	}
 
 
 	Vector2f v = objMousePos;
@@ -265,7 +284,23 @@ void MapToolScene::Update(float dt)
 						cliff->SetSize({ grids[j][i]->GetPos().x - cliff->GetPos().x + 16,grids[j][i]->GetPos().y - cliff->GetPos().y + 16 });
 					}
 				}
-				else if (nowDraw->GetType() != "SECTOR" && nowDraw->GetType() != "CLIFF" && nowDraw != nullptr)
+				else if (nowDraw->GetType() == "SPAWNAREA" && nowDraw != nullptr)
+				{
+					if (InputMgr::GetMouseButtonDown(Mouse::Left))
+					{
+						spawnArea = new SpawnArea();
+						spawnArea->SetPos(grids[j][i]->GetPos());
+						isNowSpawnAreaDraw = true;
+						sectorJ = j;
+						sectorI = i;
+					}
+					if (spawnArea != nullptr)
+					{
+						spawnArea->UpdateNowDraw(dt, nowDraw);
+						spawnArea->SetSize({ grids[j][i]->GetPos().x - spawnArea->GetPos().x + 16,grids[j][i]->GetPos().y - spawnArea->GetPos().y + 16 });
+					}
+				}
+				else if (nowDraw->GetType() != "SECTOR" && nowDraw->GetType() != "CLIFF" && nowDraw->GetType() != "SPAWNAREA" && nowDraw != nullptr)
 				{
 					if (InputMgr::GetMouseButtonDown(Mouse::Left))
 					{
@@ -310,6 +345,21 @@ void MapToolScene::Update(float dt)
 				if (cliff != nullptr)
 				{
 					cliff = nullptr;
+				}
+			}
+		}
+		if (nowDraw != nullptr && isNowSpawnAreaDraw)
+		{
+			if (nowDraw->GetType() == "SPAWNAREA" && InputMgr::GetMouseButtonUp(Mouse::Left))
+			{
+				isNowSpawnAreaDraw = false;
+
+				objList[nowType][sectorJ].push_back(spawnArea);
+				spawnAreas[nowType][sectorJ][sectorI] = spawnArea;
+
+				if (spawnArea != nullptr)
+				{
+					spawnArea = nullptr;
 				}
 			}
 		}
@@ -470,6 +520,11 @@ void MapToolScene::Draw(RenderWindow& window)
 		window.setView(worldView);
 		cliff->Draw(window);
 	}
+	if (spawnArea != nullptr)
+	{
+		window.setView(worldView);
+		spawnArea->Draw(window);
+	}
 }
 
 
@@ -561,15 +616,31 @@ void MapToolScene::Release()
 		objs.second.clear();
 	}
 	cliffs.clear();
+	for (auto& objs : objList[LayerType::SpawnArea])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
+	spawnAreas.clear();
 
 	objList[LayerType::Tile].clear();
 	objList[LayerType::Wall].clear();
 	objList[LayerType::Object].clear();
 	objList[LayerType::Sector].clear();
 	objList[LayerType::Cliff].clear();
+	objList[LayerType::SpawnArea].clear();
 	gridObjs.clear();
 	sectors.clear();
 	cliffs.clear();
+	spawnAreas.clear();
 
 	player = nullptr;
 
@@ -585,6 +656,10 @@ void MapToolScene::SetType(string t)
 	if (t == "CLIFF")
 	{
 		nowType = LayerType::Cliff;
+	}
+	if (t == "SPAWNAREA")
+	{
+		nowType = LayerType::SpawnArea;
 	}
 	if (t == "OBJECT" || t == "ENEMY" || t == "PLAYER")
 	{
@@ -637,6 +712,22 @@ void MapToolScene::Save()
 		}
 	}
 	for (auto& layer : cliffs)
+	{
+		for (auto& objs : layer.second)
+		{
+			for (auto& obj : objs.second)
+			{
+				auto& nowObject = obj.second;
+				ObjectData data;
+				data.type = nowObject->GetType();
+				data.path = nowObject->GetPath();
+				data.position = nowObject->GetPos();
+				data.size = nowObject->GetSize();
+				saveObjs.push_back(data);
+			}
+		}
+	}
+	for (auto& layer : spawnAreas)
 	{
 		for (auto& objs : layer.second)
 		{
@@ -729,14 +820,29 @@ void MapToolScene::Load(string path)
 		}
 		objs.second.clear();
 	}
+	for (auto& objs : objList[LayerType::SpawnArea])
+	{
+		for (auto it = objs.second.begin(); it != objs.second.end();)
+		{
+			auto del = *it;
+			it = objs.second.erase(it);
+			if (del != nullptr)
+			{
+				delete del;
+			}
+		}
+		objs.second.clear();
+	}
 	objList[LayerType::Tile].clear();
 	objList[LayerType::Wall].clear();
 	objList[LayerType::Object].clear();
 	objList[LayerType::Sector].clear();
 	objList[LayerType::Cliff].clear();
+	objList[LayerType::SpawnArea].clear();
 	gridObjs.clear();
 	sectors.clear();
 	cliffs.clear();
+	spawnAreas.clear();
 	//로드 파일 그리드에 적용
 	player = nullptr;
 	auto& data = FILE_MGR->GetMap(path);
@@ -761,6 +867,12 @@ void MapToolScene::Load(string path)
 		cliff->SetPath(obj.path);
 		cliff->SetPos(obj.position);
 		cliff->SetSize(obj.size);
+
+		SpawnArea* spawnArea = new SpawnArea();
+		spawnArea->SetType(obj.type);
+		spawnArea->SetPath(obj.path);
+		spawnArea->SetPos(obj.position);
+		spawnArea->SetSize(obj.size);
 
 		int i = ((int)obj.position.x - 8) / 16;
 		int j = (int)obj.position.y / 16 - 1;
@@ -794,6 +906,11 @@ void MapToolScene::Load(string path)
 		{
 			objList[LayerType::Cliff][j].push_back(cliff);
 			cliffs[LayerType::Cliff][j][i] = cliff;
+		}
+		else if (obj.type == "SPAWNAREA")
+		{
+			objList[LayerType::SpawnArea][j].push_back(spawnArea);
+			spawnAreas[LayerType::SpawnArea][j][i] = spawnArea;
 		}
 	}
 

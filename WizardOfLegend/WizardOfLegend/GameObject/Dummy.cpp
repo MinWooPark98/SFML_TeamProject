@@ -66,7 +66,7 @@ void Dummy::OnHit(const Vector2f& atkDir, int dmg)
 	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
-	auto hitSpark = playScene->GetHitSpark()->Get();
+	auto hitSpark = playScene->GetEnemyHitSpark()->Get();
 	hitSpark->EnemyHitSparkFire(position);
 	direction = -atkDir;
 	lastDir = direction;

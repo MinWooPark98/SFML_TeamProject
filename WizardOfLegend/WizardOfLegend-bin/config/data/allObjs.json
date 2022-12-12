@@ -262,6 +262,30 @@
     {
       "texPath": "graphics/Map/Object/Portal.png",
       "uiPath": "graphics/Map/Palette/Portal.png"
+    },
+    {
+      "texPath": "graphics/TreasureChestClosed.png",
+      "uiPath": "graphics/Map/Palette/TreasureChestClosed.png"
+    },
+    {
+      "texPath": "graphics/SpellBookIdle.png",
+      "uiPath": "graphics/Map/Palette/SpellBookIdle.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/WardrobeIdle.png",
+      "uiPath": "graphics/Map/Palette/WardrobeIdle.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/HoodTarp.png",
+      "uiPath": "graphics/Map/Palette/HoodTarp.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/ItemTarp.png",
+      "uiPath": "graphics/Map/Palette/ItemTarp.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/SkillTarp.png",
+      "uiPath": "graphics/Map/Palette/SkillTarp.png"
     }
   ],
   "PLAYER": [
@@ -314,6 +338,12 @@
     {
       "texPath": "graphics/Map/Palette/Cliff.png",
       "uiPath": "graphics/Map/Palette/Cliff.png"
+    }
+  ],
+  "SPAWNAREA": [
+    {
+      "texPath": "graphics/Map/Palette/Spawner.png",
+      "uiPath": "graphics/Map/Palette/Spawner.png"
     }
   ]
 }

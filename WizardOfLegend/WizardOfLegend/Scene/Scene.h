@@ -33,6 +33,7 @@ public:
 		Object,
 		Sector,
 		Cliff,
+		SpawnArea,
 		Count,
 	};
 

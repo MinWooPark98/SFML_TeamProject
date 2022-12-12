@@ -696,7 +696,7 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
-	auto hitSpark = playScene->GetHitSpark()->Get();
+	auto hitSpark = playScene->GetPlayerHitSpark()->Get();
 	hitSpark->PlayerHitSparkFire(position);
 	curHp -= dmg;
 	CameraMove::SetShakeSpeed(1000.f);
