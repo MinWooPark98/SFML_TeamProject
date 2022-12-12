@@ -131,4 +131,5 @@ public:
 	bool GetIsStart() { return isStart; };
 
 	void TuturialMoveKeyboardUiControl(float dt);
+	virtual Object* FindUiObj(const string& name) override;
 };

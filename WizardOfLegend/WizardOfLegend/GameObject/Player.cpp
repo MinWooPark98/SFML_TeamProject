@@ -298,8 +298,7 @@ void Player::Update(float dt)
 	{
 		direction.x = 0.f;
 		direction.y = 0.f;
-		auto stackedOrder = InputMgr::GetStackedOrder();
-		if (stackedOrder.empty())
+		if (InputMgr::GetStackedOrder().empty())
 		{
 			direction.x += Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D) ? 1 : 0;
 			direction.x += Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A) ? -1 : 0;

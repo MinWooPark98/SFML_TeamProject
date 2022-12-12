@@ -23,6 +23,7 @@ Vector2f InputMgr::mousePosDisplacement;
 Vector2f InputMgr::prevMousePos;
 
 list<Object*> InputMgr::objStackedOrder;
+bool InputMgr::escapable;
 
 void InputMgr::Init()
 {
@@ -88,6 +89,12 @@ void InputMgr::Update(float dt)
 	mousePos = (Vector2f)Mouse::getPosition(FRAMEWORK->GetWindow());
 	mousePosDisplacement = prevMousePos - mousePos;
 	prevMousePos = mousePos;
+
+	if (!escapable)
+	{
+		if (objStackedOrder.empty())
+			escapable = true;
+	}
 }
 
 void InputMgr::ProcessInput(Event& ev)

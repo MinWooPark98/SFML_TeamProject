@@ -453,6 +453,19 @@ void PlayUiMgr::Update(float dt)
 	platinumText->SetOrigin(Origins::ML);
 	platinumText->SetText(to_string(player->GetCurPlatinum()));
 
+	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
+	{
+		if (isOption)
+		{
+			if(InputMgr::GetEscapable())
+				isOption = false;
+		}
+		else if (InputMgr::GetStackedOrder().empty())
+			isOption = true;
+
+		player->SavePlatinum(player->GetCurPlatinum());
+	}
+
 	for (auto& uiObjs : uiObjList)
 	{
 		for (auto& obj : uiObjs.second)
@@ -460,16 +473,6 @@ void PlayUiMgr::Update(float dt)
 			if (obj->GetActive())
 				obj->Update(dt);
 		}
-	}
-
-	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
-	{
-		if (isOption)
-			isOption = false;
-		else
-			isOption = true;
-
-		player->SavePlatinum(player->GetCurPlatinum());
 	}
 
 	if (isOption)
@@ -728,4 +731,17 @@ void PlayUiMgr::TuturialMoveKeyboardUiControl(float dt)
 
 	if (keyboardBright <= 0)
 		isTutorial = false;
+}
+
+Object* PlayUiMgr::FindUiObj(const string& name)
+{
+	for (auto& uiObjs : uiObjList)
+	{
+		for (auto& obj : uiObjs.second)
+		{
+			if (obj->GetName() == name)
+				return obj;
+		}
+	}
+	return nullptr;
 }

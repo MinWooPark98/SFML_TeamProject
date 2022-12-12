@@ -417,10 +417,10 @@ void PlayScene::Update(float dt)
 	{
 		if (GetPause())
 		{
-			if (!((PlayUiMgr*)uiMgr)->IsOption())
+			if (InputMgr::GetStackedOrder().empty() && !((PlayUiMgr*)uiMgr)->IsOption())
 				SetPause(false);
 		}
-		else
+		else if (InputMgr::GetEscapable() && ((PlayUiMgr*)uiMgr)->IsOption())
 			SetPause(true);
 	}
 

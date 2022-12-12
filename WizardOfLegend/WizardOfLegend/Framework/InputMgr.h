@@ -46,6 +46,7 @@ private:
 	static bool wheelDown;
 
 	static list<Object*> objStackedOrder;
+	static bool escapable;
 
 public:
 	static void Init();
@@ -81,6 +82,7 @@ public:
 	static bool GetKeyDown();
 	
 	static list<Object*> GetStackedOrder() { return objStackedOrder; }
+	static bool GetEscapable() { return escapable; }
 	static void StackedOrderAdd(Object* obj);
 	static void StackedOrderRemove(Object* obj);
 };
