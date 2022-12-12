@@ -48,9 +48,9 @@ public:
     void SetSpriteColorTable(string table) { spriteColorTable.loadFromFile(table); };
     void SetPaletteColor(int index)
     {
-        float spritePaletteIndex = index % spritePaletteSize;
+        float spritePaletteIndex = index;
         spriteShader->setUniform("colorTable", spriteColorTable);
-        spriteShader->setUniform("paletteIndex", spritePaletteIndex / spritePaletteSize);
+        spriteShader->setUniform("paletteIndex", (float)spritePaletteIndex / spritePaletteSize);
     }
     void SetSpritePalette(int size, string table)
     {

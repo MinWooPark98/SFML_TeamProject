@@ -4,7 +4,7 @@
 StatTable::StatTable()
 	:DataTable(DataTable::Types::Stat)
 {
-	fileName = "tables/statTable.csv";
+	fileName = "tables/StatTable.csv";
 }
 
 StatTable::~StatTable()
@@ -15,7 +15,7 @@ const StatTable::Stat& StatTable::Get(const string& objType)
 {
 	auto find = table.find(objType);
 	if (find == table.end())
-		throw "Wrong skillName";
+		throw invalid_argument("wrong value");
 	return find->second;
 }
 
@@ -33,9 +33,13 @@ bool StatTable::Load()
 	auto rowCount = doc.GetRowCount();
 	vector<string> objType = doc.GetColumn<string>(0);
 	keys = objType;
-	vector<int> attackDmg = doc.GetColumn<int>(1);
-	vector<int> maxHp = doc.GetColumn<int>(2);
-	vector<float> speed = doc.GetColumn<float>(3);
+	vector<float> speed = doc.GetColumn<float>(1);
+	vector<int> attackDmg = doc.GetColumn<int>(2);
+	vector<float> damageTake = doc.GetColumn<float>(3);
+	vector<int> maxHp = doc.GetColumn<int>(4);
+	vector<float> evasionRate = doc.GetColumn<float>(5);
+	vector<float> criticalRate = doc.GetColumn<float>(6);
+	vector<float> criticalRatio = doc.GetColumn<float>(7);
 	for (int j = 0; j < rowCount; ++j)
 	{
 		if (table.find(objType[j]) != table.end())
@@ -43,7 +47,7 @@ bool StatTable::Load()
 			cout << "duplicate values exist" << endl;
 			return false;
 		}
-		table.insert({ objType[j], {attackDmg[j], maxHp[j], speed[j]}});
+		table.insert({ objType[j], { speed[j], attackDmg[j], damageTake[j], maxHp[j], evasionRate[j], criticalRate[j], criticalRatio[j] }});
 	}
 	return true;
 }

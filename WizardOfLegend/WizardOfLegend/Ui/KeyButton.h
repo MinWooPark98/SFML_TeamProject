@@ -4,7 +4,7 @@
 class SpriteObj;
 class TextObj;
 
-class SkillBookButton : public Object
+class KeyButton : public Object
 {
 public:
 	enum class TextPlace
@@ -23,14 +23,16 @@ protected:
 	TextPlace textPlace;
 
 public:
-	SkillBookButton();
-	~SkillBookButton();
+	KeyButton();
+	~KeyButton();
 
 	virtual void Init() override;
 	virtual void Reset() override;
 	virtual void Release() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
+
+	virtual void SetDevMode(bool isDevMode) override;
 
 	bool GetHighLightOn() { return highLightOn; }
 

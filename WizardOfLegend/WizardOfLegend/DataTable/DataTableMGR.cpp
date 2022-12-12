@@ -7,6 +7,8 @@
 #include "MapNameTable.h"
 #include "PlatinumTable.h"
 #include "PropertyTable.h"
+#include "RelicTable.h"
+#include "HoodTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -60,6 +62,14 @@ void DataTableMgr::Init()
     table = new PropertyTable();
     table->Load();
     tables.insert({DataTable::Types::MonsterProperty, table});
+
+    table = new RelicTable();
+    table->Load();
+    tables.insert({ DataTable::Types::Relic, table });
+
+    table = new HoodTable();
+    table->Load();
+    tables.insert({ DataTable::Types::Hood, table });
 }
 
 void DataTableMgr::Release()

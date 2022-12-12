@@ -4,6 +4,7 @@
 class Animator;
 class SkillSet;
 class Skill;
+class ItemMgr;
 
 class Player : public SpriteObj
 {
@@ -38,9 +39,6 @@ protected:
 	States currState;
 
 	Animator* animator;
-	Shader playerShader;
-	int paletteIdx;
-	int paletteSize;
 	
 	int attackDmg;
 
@@ -66,6 +64,9 @@ protected:
 
 	vector<SkillSet*> skillSets;
 	SkillSet* currSkillSet;
+	SkillSet* extraSkillSet;
+
+	CircleShape shadow;
 
 	bool skillToolMode;
 
@@ -74,9 +75,15 @@ protected:
 	float hitDuration;
 	float hitTimer;
 	FloatRect hitboxSize;
+	float damageTake;
+	float evasionRate;
+	float criticalRate;
+	float criticalRatio;
 
 	float moveSoundTimer = 0.f;
 	bool isRunning = true;
+
+	ItemMgr* itemMgr;
 
 	int gold;
 	int platinum;
@@ -101,9 +108,17 @@ public:
 	void UpdateHit(float dt);
 	void UpdateFall(float dt);
 
+	void SetSpeed(float speed);
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }
-	void SetSpeed(float speed);
+	void SetDamageTake(float take) { damageTake = take; }
+	float GetDamageTake() { return damageTake; }
+	void SetEvasionRate(float ratio) { evasionRate = ratio; }
+	float GetEvasionRate() { return evasionRate; }
+	void SetCriticalRate(float ratio) { criticalRate = ratio; }
+	float GetCriticalRate() { return criticalRate; }
+	void SetCriticalRatio(float dmg) { criticalRatio = dmg; }
+	float GetCriticalRatio() { return criticalRatio; }
 
 	bool GetBackHand() const { return isBackHand; }
 
@@ -126,6 +141,10 @@ public:
 	void SetCurHp(int hp) { curHp = hp; };
 
 	vector<SkillSet*>& GetSkillSets() { return skillSets; }
+	void SetExtraSkillSet(const string& skillSetName);
+	SkillSet* GetExtraSkillSet() { return extraSkillSet; }
+
+	ItemMgr* GetItemMgr() { return itemMgr; }
 
 	int GetCurGold() { return gold; };
 	void AddGold(int gold) { this->gold += gold; };

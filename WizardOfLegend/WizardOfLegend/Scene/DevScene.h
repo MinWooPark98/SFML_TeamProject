@@ -1,8 +1,13 @@
 #pragma once
 #include "Scene.h"
 
+class ItemMgr;
+
 class DevScene : public Scene
 {
+protected:
+	ItemMgr* itemMgr;
+
 public:
 	DevScene();
 	virtual ~DevScene();

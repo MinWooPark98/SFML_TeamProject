@@ -19,6 +19,7 @@ void Interactive::Init()
 	interactKey = new SpriteObj();
 	interactKey->Init();
 	interactKey->SetTexture(*RESOURCE_MGR->GetTexture("graphics/F.png"));
+	interactKey->SetScale({ 0.6f, 0.6f });
 	interactKey->SetOrigin(Origins::MC);
 	interactKey->SetActive(false);
 }

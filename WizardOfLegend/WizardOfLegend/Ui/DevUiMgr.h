@@ -7,7 +7,6 @@ class Player;
 class DevUiMgr : public UiMgr
 {
 protected:
-	SkillBookUi* skillBook;
 	map<int, vector<Object*>> uiObjList;
 
 public:

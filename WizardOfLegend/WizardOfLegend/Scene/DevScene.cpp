@@ -7,9 +7,16 @@
 #include "../GameObject/Skill.h"
 #include "../GameObject/Interactive/SkillBook.h"
 #include "../Ui/SkillBookUi.h"
+#include "../GameObject/Item/ItemMgr.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/RelicTable.h"
+#include "../GameObject/Interactive/Wardrobe.h"
+#include "../GameObject/Interactive/ItemBox.h"
+#include "../Ui/ItemBoxUi.h"
+#include "../Ui/WardrobeUi.h"
 
 DevScene::DevScene()
-	:Scene(Scenes::Dev)
+	:Scene(Scenes::Dev), itemMgr(nullptr)
 {
 }
 
@@ -21,6 +28,8 @@ void DevScene::Init()
 {
 	Scene::Init();
 	auto& windowSize = FRAMEWORK->GetWindowSize();
+
+	itemMgr = new ItemMgr();
 
 	Player* player = new Player();
 	player->Init();
@@ -34,14 +43,31 @@ void DevScene::Init()
 
 	SkillBook* book = new SkillBook();
 	book->Init();
+	book->SetName("SKILLBOOK");
 	book->SetPos((Vector2f)windowSize * 0.125f);
 	book->SetPlayer(player);
 	objList[LayerType::Object][0].push_back(book);
+
+	Wardrobe* wardrobe = new Wardrobe();
+	wardrobe->Init();
+	wardrobe->SetName("WARDROBE");
+	wardrobe->SetPos((Vector2f)windowSize * 0.125f + Vector2f(50.f, 0.f));
+	wardrobe->SetPlayer(player);
+	objList[LayerType::Object][0].push_back(wardrobe);
+
+	ItemBox* itemBox = new ItemBox();
+	itemBox->Init();
+	itemBox->SetName("ITEMBOX");
+	itemBox->SetPos((Vector2f)windowSize * 0.125f + Vector2f(-50.f, 0.f));
+	itemBox->SetPlayer(player);
+	objList[LayerType::Object][0].push_back(itemBox);
 
 	uiMgr = new DevUiMgr();
 	uiMgr->Init();
 
 	book->Interact = bind(&SkillBookUi::SetActive, (SkillBookUi*)uiMgr->FindUiObj("SKILLBOOKUI"), true);
+	wardrobe->Interact = bind(&WardrobeUi::SetActive, (WardrobeUi*)uiMgr->FindUiObj("WARDROBEUI"), true);
+	itemBox->Interact = bind(&ItemBox::SetActive, (ItemBoxUi*)uiMgr->FindUiObj("ITEMBOXUI"), true);
 }
 
 void DevScene::Release()

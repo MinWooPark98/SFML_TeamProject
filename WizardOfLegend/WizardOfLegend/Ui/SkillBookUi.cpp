@@ -1,6 +1,6 @@
 #include "SkillBookUi.h"
 #include "../GameObject/SpriteObj.h"
-#include "SkillBookButton.h"
+#include "KeyButton.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/FrameWork.h"
 #include "../GameObject/TextObj.h"
@@ -9,6 +9,7 @@
 #include "../Scene/SceneMgr.h"
 #include "../GameObject/SkillSet.h"
 #include "SkillBookCardInfo.h"
+#include "../GameObject/Interactive/SkillBook.h"
 
 SkillBookUi::SkillBookUi()
 	:collection(nullptr), skillVecIdx(0), skillInfo(nullptr), isMoving(true), moveSpeed(5400.f), state(States::SkillOption)
@@ -33,7 +34,7 @@ void SkillBookUi::Init()
 
 	for (int i = 0; i < 4; ++i)
 	{
-		SkillBookButton* button = new SkillBookButton();
+		KeyButton* button = new KeyButton();
 		button->Init();
 		button->SetOption("graphics/ArcanaLargeFront.png");
 		button->SetHighLight("graphics/ArcanaLargeHighlight.png");
@@ -52,13 +53,13 @@ void SkillBookUi::Init()
 	options[2].first->SetButtonName("표준");
 	options[3].first->SetButtonName("시그니처");
 
-	collection = new SkillBookButton();
+	collection = new KeyButton();
 	collection->Init();
 	collection->SetOption("graphics/SpellBookOpen2_2.png");
 	collection->SetButtonName("모든 아르카나");
-	collection->SetTextPlace(SkillBookButton::TextPlace::Aside);
-	collection->HighLightOnFunc = bind(&SkillBookButton::SetOption, collection, "graphics/ArcanaAllSkillsFocused.png");
-	collection->HighLightOffFunc = bind(&SkillBookButton::SetOption, collection, "graphics/SpellBookOpen2_2.png");
+	collection->SetTextPlace(KeyButton::TextPlace::Aside);
+	collection->HighLightOnFunc = bind(&KeyButton::SetOption, collection, "graphics/ArcanaAllSkillsFocused.png");
+	collection->HighLightOffFunc = bind(&KeyButton::SetOption, collection, "graphics/SpellBookOpen2_2.png");
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -69,19 +70,19 @@ void SkillBookUi::Init()
 		text->Init();
 		text->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 		text->SetSize(22);
-		text->SetFillColor(Color::White);
-		infos.push_back({ icon, text });
+		text->SetFillColor(Color(155, 155, 155, 255));
+		keyInfos.push_back({ icon, text });
 	}
-	infos[0].first->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Space.png"));
-	infos[0].first->SetOrigin(Origins::MC);
-	infos[0].second->SetString("선택");
-	infos[0].second->AsciiToUnicode();
-	infos[0].second->SetOrigin(Origins::ML);
-	infos[1].first->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Escape.png"));
-	infos[1].first->SetOrigin(Origins::MC);
-	infos[1].second->SetString("나가기");
-	infos[1].second->AsciiToUnicode();
-	infos[1].second->SetOrigin(Origins::ML);
+	keyInfos[0].first->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Space.png"));
+	keyInfos[0].first->SetOrigin(Origins::MC);
+	keyInfos[0].second->SetString("선택");
+	keyInfos[0].second->AsciiToUnicode();
+	keyInfos[0].second->SetOrigin(Origins::ML);
+	keyInfos[1].first->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Escape.png"));
+	keyInfos[1].first->SetOrigin(Origins::MC);
+	keyInfos[1].second->SetString("나가기");
+	keyInfos[1].second->AsciiToUnicode();
+	keyInfos[1].second->SetOrigin(Origins::ML);
 
 	skillInfo = new SkillBookCardInfo();
 	skillInfo->Init();
@@ -106,12 +107,6 @@ void SkillBookUi::Release()
 void SkillBookUi::Update(float dt)
 {
 	Object::Update(dt);
-
-	for (int i = 0; i < options.size(); ++i)
-	{
-		if (options[i].first->GetHighLightOn())
-			cout << i << endl;
-	}
 
 	if (skillInfo != nullptr && skillInfo->GetActive())
 	{
@@ -201,7 +196,7 @@ void SkillBookUi::Draw(RenderWindow& window)
 		option.second->Draw(window);
 	}
 	collection->Draw(window);
-	for (auto& pair : infos)
+	for (auto& pair : keyInfos)
 	{
 		pair.first->Draw(window);
 		pair.second->Draw(window);
@@ -223,11 +218,11 @@ void SkillBookUi::Reposition()
 		options[i].second->SetPos(options[i].first->GetPos());
 	}
 	collection->SetPos({ collectionPanelBnd.left + collectionPanelBnd.width * 0.15f, collectionPanelBnd.top + collectionPanelBnd.height * 0.5f });
-	for (int i = 0; i < infos.size(); ++i)
+	for (int i = 0; i < keyInfos.size(); ++i)
 	{
-		infos[i].first->SetPos({ collectionPanelBnd.left + collectionPanelBnd.width * 0.7f, collectionPanelBnd.top + collectionPanelBnd.height * (0.3f + 0.4f * i) });
-		auto infoIconBnd = infos[i].first->GetGlobalBounds();
-		infos[i].second->SetPos({ infoIconBnd.left + infoIconBnd.width + 20.f, infos[i].first->GetPos().y });
+		keyInfos[i].first->SetPos({ collectionPanelBnd.left + collectionPanelBnd.width * 0.7f, collectionPanelBnd.top + collectionPanelBnd.height * (0.3f + 0.4f * i) });
+		auto infoIconBnd = keyInfos[i].first->GetGlobalBounds();
+		keyInfos[i].second->SetPos({ infoIconBnd.left + infoIconBnd.width + 20.f, keyInfos[i].first->GetPos().y });
 	}
 }
 
@@ -246,6 +241,7 @@ void SkillBookUi::Translate(const Vector2f& delta)
 void SkillBookUi::SetActive(bool active)
 {
 	Object::SetActive(active);
+	auto currScene = SCENE_MGR->GetCurrentScene();
 	if (active)
 	{
 		InputMgr::StackedOrderAdd(this);
@@ -253,7 +249,7 @@ void SkillBookUi::SetActive(bool active)
 		options[skillVecIdx].first->HighLightOn();
 		collection->HighLightOff();
 		state = States::SkillOption;
-		auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+		auto player = (Player*)currScene->FindGameObj("PLAYER");
 		auto& skillSets = player->GetSkillSets();
 		playerSkillSets.push_back(skillSets[0]);
 		playerSkillSets.push_back(skillSets[1]);
@@ -268,6 +264,7 @@ void SkillBookUi::SetActive(bool active)
 			option.second->SetOrigin(Origins::MC);
 		}
 		Reappear();
+		((SkillBook*)currScene->FindGameObj("SKILLBOOK"))->SetState(SkillBook::States::OpenReady);
 	}
 	else
 	{
@@ -279,6 +276,9 @@ void SkillBookUi::SetActive(bool active)
 		}
 		if(collection->GetHighLightOn())
 			collection->HighLightOff();
+		auto skillBook = ((SkillBook*)currScene->FindGameObj("SKILLBOOK"));
+		if(skillBook != nullptr)
+			skillBook->SetState(SkillBook::States::Close);
 	}
 }
 

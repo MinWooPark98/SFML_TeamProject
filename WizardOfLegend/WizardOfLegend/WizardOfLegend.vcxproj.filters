@@ -70,7 +70,7 @@
     <ClCompile Include="GameObject\Dummy.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="Ui\SkillBookUi.cpp" />
-    <ClCompile Include="Ui\SkillBookButton.cpp" />
+    <ClCompile Include="Ui\KeyButton.cpp" />
     <ClCompile Include="Scene\DevScene.cpp" />
     <ClCompile Include="Ui\DevUiMgr.cpp" />
     <ClCompile Include="Ui\SkillBookCardInfo.cpp" />
@@ -85,6 +85,20 @@
     <ClCompile Include="GameObject\Heal.cpp" />
     <ClCompile Include="GameObject\Portal.cpp" />
     <ClCompile Include="DataTable\PropertyTable.cpp" />
+    <ClCompile Include="GameObject\Item\ItemMgr.cpp" />
+    <ClCompile Include="GameObject\Item\Item.cpp" />
+    <ClCompile Include="DataTable\RelicTable.cpp" />
+    <ClCompile Include="GameObject\Interactive\Wardrobe.cpp" />
+    <ClCompile Include="GameObject\Interactive\ItemBox.cpp" />
+    <ClCompile Include="Ui\ItemBoxUi.cpp" />
+    <ClCompile Include="Ui\WardrobeUi.cpp" />
+    <ClCompile Include="GameObject\Item\Relic.cpp" />
+    <ClCompile Include="GameObject\Item\Hood.cpp" />
+    <ClCompile Include="DataTable\HoodTable.cpp" />
+    <ClCompile Include="GameObject\Interactive\Goods.cpp" />
+    <ClCompile Include="GameObject\Interactive\GoodsHood.cpp" />
+    <ClCompile Include="GameObject\Interactive\GoodsRelic.cpp" />
+    <ClCompile Include="GameObject\Interactive\GoodsSkill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -160,7 +174,7 @@
     <ClInclude Include="GameObject\Dummy.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="Ui\SkillBookUi.h" />
-    <ClInclude Include="Ui\SkillBookButton.h" />
+    <ClInclude Include="Ui\KeyButton.h" />
     <ClInclude Include="Scene\DevScene.h" />
     <ClInclude Include="Ui\DevUiMgr.h" />
     <ClInclude Include="Ui\SkillBookCardInfo.h" />
@@ -175,6 +189,20 @@
     <ClInclude Include="GameObject\Heal.h" />
     <ClInclude Include="GameObject\Portal.h" />
     <ClInclude Include="DataTable\PropertyTable.h" />
+    <ClInclude Include="GameObject\Item\ItemMgr.h" />
+    <ClInclude Include="GameObject\Item\Item.h" />
+    <ClInclude Include="DataTable\RelicTable.h" />
+    <ClInclude Include="GameObject\Interactive\Wardrobe.h" />
+    <ClInclude Include="GameObject\Interactive\ItemBox.h" />
+    <ClInclude Include="Ui\ItemBoxUi.h" />
+    <ClInclude Include="Ui\WardrobeUi.h" />
+    <ClInclude Include="GameObject\Item\Relic.h" />
+    <ClInclude Include="GameObject\Item\Hood.h" />
+    <ClInclude Include="DataTable\HoodTable.h" />
+    <ClInclude Include="GameObject\Interactive\Goods.h" />
+    <ClInclude Include="GameObject\Interactive\GoodsHood.h" />
+    <ClInclude Include="GameObject\Interactive\GoodsRelic.h" />
+    <ClInclude Include="GameObject\Interactive\GoodsSkill.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,0 +1,7 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+ItemBoxOpen,0,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/TreasureChestOpening0.png,0,0,39,45,19.5,45,0,0
+graphics/TreasureChestOpening1.png,0,0,39,49,19.5,49,0,0
+graphics/TreasureChestOpening2.png,0,0,39,47,19.5,47,0,0

@@ -1,18 +1,18 @@
-#include "SkillBookButton.h"
+#include "KeyButton.h"
 #include "../GameObject/SpriteObj.h"
 #include "../GameObject/TextObj.h"
 #include "../Framework/ResourceMgr.h"
 
-SkillBookButton::SkillBookButton()
+KeyButton::KeyButton()
 	:highLightOn(false), option(nullptr), highLight(nullptr), buttonName(nullptr), textPlace(TextPlace::Down)
 {
 }
 
-SkillBookButton::~SkillBookButton()
+KeyButton::~KeyButton()
 {
 }
 
-void SkillBookButton::Init()
+void KeyButton::Init()
 {
 	Object::Init();
 	option = new SpriteObj();
@@ -31,13 +31,13 @@ void SkillBookButton::Init()
 	buttonName->SetUI(true);
 }
 
-void SkillBookButton::Reset()
+void KeyButton::Reset()
 {
 	highLightOn = false;
 	HighLightOff();
 }
 
-void SkillBookButton::Release()
+void KeyButton::Release()
 {
 	if (option != nullptr)
 		delete option;
@@ -47,12 +47,12 @@ void SkillBookButton::Release()
 		delete buttonName;
 }
 
-void SkillBookButton::Update(float dt)
+void KeyButton::Update(float dt)
 {
 	Object::Update(dt);
 }
 
-void SkillBookButton::Draw(RenderWindow& window)
+void KeyButton::Draw(RenderWindow& window)
 {
 	Object::Draw(window);
 	if (highLightOn && highLight != nullptr)
@@ -63,63 +63,85 @@ void SkillBookButton::Draw(RenderWindow& window)
 		buttonName->Draw(window);
 }
 
-void SkillBookButton::SetOption(const string& texDir)
+void KeyButton::SetDevMode(bool isDevMode)
+{
+	Object::SetDevMode(isDevMode);
+	if (option != nullptr)
+		option->SetDevMode(isDevMode);
+	if (highLight != nullptr)
+		highLight->SetDevMode(isDevMode);
+	if (buttonName != nullptr)
+		buttonName->SetDevMode(isDevMode);
+}
+
+void KeyButton::SetOption(const string& texDir)
 {
 	option->SetTexture(*RESOURCE_MGR->GetTexture(texDir));
 	option->SetOrigin(Origins::MC);
 }
 
-void SkillBookButton::SetHighLight(const string& texDir)
+void KeyButton::SetHighLight(const string& texDir)
 {
 	highLight->SetTexture(*RESOURCE_MGR->GetTexture(texDir));
 	highLight->SetOrigin(Origins::MC);
 }
 
-void SkillBookButton::SetButtonName(const string& name)
+void KeyButton::SetButtonName(const string& name)
 {
 	buttonName->SetString(name);
 	buttonName->AsciiToUnicode();
 	buttonName->SetOrigin(Origins::MC);
 }
 
-void SkillBookButton::HighLightOn()
+void KeyButton::HighLightOn()
 {
 	highLightOn = true;
 	if (HighLightOnFunc != nullptr)
 		HighLightOnFunc();
 }
 
-void SkillBookButton::HighLightOff()
+void KeyButton::HighLightOff()
 {
 	highLightOn = false;
 	if (HighLightOffFunc != nullptr)
 		HighLightOffFunc();
 }
 
-void SkillBookButton::Reposition()
+void KeyButton::Reposition()
 {
-	option->SetPos(position);
-	highLight->SetPos(position);
-	switch (textPlace)
+	if (option != nullptr)
 	{
-	case SkillBookButton::TextPlace::Aside:
-		buttonName->SetPos(position + Vector2f(option->GetGlobalBounds().width * 0.5f + 100.f, 0.f));
-		break;
-	case SkillBookButton::TextPlace::Down:
-		buttonName->SetPos(position + Vector2f(0.f, option->GetGlobalBounds().height * 0.5f + 35.f));
-		break;
-	default:
-		break;
+		option->SetPos(position);
+		option->GetHitBox().setPosition(position);
+	}
+	if (highLight != nullptr)
+	{
+		highLight->SetPos(position);
+		highLight->SetPos(position);
+	}
+	if (buttonName != nullptr)
+	{
+		switch (textPlace)
+		{
+		case KeyButton::TextPlace::Aside:
+			buttonName->SetPos(position + Vector2f(option->GetGlobalBounds().width * 0.5f + 100.f, 0.f));
+			break;
+		case KeyButton::TextPlace::Down:
+			buttonName->SetPos(position + Vector2f(0.f, option->GetGlobalBounds().height * 0.5f + 35.f));
+			break;
+		default:
+			break;
+		}
 	}
 }
 
-void SkillBookButton::SetPos(const Vector2f& pos)
+void KeyButton::SetPos(const Vector2f& pos)
 {
 	Object::SetPos(pos);
 	Reposition();
 }
 
-void SkillBookButton::Translate(const Vector2f& pos)
+void KeyButton::Translate(const Vector2f& pos)
 {
 	Object::Translate(pos);
 	Reposition();

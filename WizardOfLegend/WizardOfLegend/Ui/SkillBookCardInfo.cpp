@@ -8,8 +8,9 @@
 #include "../DataTable/SkillSetTable.h"
 #include "../Scene/SceneMgr.h"
 #include "../DataTable/SkillTable.h"
-#include "SkillBookButton.h"
+#include "KeyButton.h"
 #include "../DataTable/SkillSetIntroTable.h"
+#include "../GameObject/Interactive/SkillBook.h"
 
 SkillBookCardInfo::SkillBookCardInfo()
 	:frame(nullptr), element(0), skillIdx(0), currPlayerSkillSetIdx(0), isMoving(true), moveSpeed(7200.f), skillName(nullptr), skillIntro(nullptr)
@@ -51,13 +52,13 @@ void SkillBookCardInfo::Init()
 	vector<string> elemPageDirs = { "graphics/SpellbookUIFirePage.png", "graphics/SpellbookUIAirPage.png", "graphics/SpellbookUIEarthPage.png", "graphics/SpellbookUILightningPage.png", "graphics/SpellbookUIWaterPage.png" };
 	for (int i = 0; i < 6; ++i)
 	{
-		SkillBookButton* newButton = new SkillBookButton();
+		KeyButton* newButton = new KeyButton();
 		newButton->Init();
 		newButton->GetOption()->SetScale({ 4.f, 4.f });
 		newButton->GetHighLight()->SetScale({ 4.f, 4.f });
 		newButton->SetOption(elementBtns[i].first);
-		newButton->HighLightOnFunc = bind(&SkillBookButton::SetOption, newButton, elementBtns[i].second);
-		newButton->HighLightOffFunc = bind(&SkillBookButton::SetOption, newButton, elementBtns[i].first);
+		newButton->HighLightOnFunc = bind(&KeyButton::SetOption, newButton, elementBtns[i].second);
+		newButton->HighLightOffFunc = bind(&KeyButton::SetOption, newButton, elementBtns[i].first);
 		showElements.push_back(newButton);
 
 		SpriteObj* elemIcon = new SpriteObj();
@@ -315,10 +316,14 @@ void SkillBookCardInfo::ChangeSkill()
 void SkillBookCardInfo::SetActive(bool active)
 {
 	Object::SetActive(active);
+	auto currScene = SCENE_MGR->GetCurrentScene();
 	if (!active)
 	{
 		if (Deactivate != nullptr)
 			Deactivate();
+		auto skillBook = ((SkillBook*)currScene->FindGameObj("SKILLBOOK"));
+		if(skillBook != nullptr)
+			skillBook->SetState(SkillBook::States::CloseReady);
 		return;
 	}
 	element = 0;
@@ -329,7 +334,7 @@ void SkillBookCardInfo::SetActive(bool active)
 
 	auto skillSetData = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	auto skillData = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
-	auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+	auto player = (Player*)currScene->FindGameObj("PLAYER");
 	auto& skillSets = player->GetSkillSets();
 	playerSkillSets.push_back(skillSets[0]);
 	playerSkillSets.push_back(skillSets[1]);
@@ -338,7 +343,15 @@ void SkillBookCardInfo::SetActive(bool active)
 	for (int i = 0; i < (int)Skill::Element::Count; ++i)
 	{
 		skillInfos.push_back(vector<pair<string, string>>());
-		auto data_elem = skillSetData->Get((Skill::Element)i);
+		map<string, SkillSetTable::SetInfo> data_elem;
+		try
+		{
+			data_elem = skillSetData->Get(SkillSetTable::Locked::Unlocked, (Skill::Element)i);
+		}
+		catch (exception& expn)
+		{
+			continue;
+		}
 		for (auto& data : data_elem)
 		{
 			bool isExist = false;
@@ -368,4 +381,5 @@ void SkillBookCardInfo::SetActive(bool active)
 	SetDrawinCards();
 	SetSkillIntro();
 	Reappear();
+	((SkillBook*)currScene->FindGameObj("SKILLBOOK"))->SetState(SkillBook::States::Open);
 }

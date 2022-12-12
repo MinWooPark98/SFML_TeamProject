@@ -13,10 +13,11 @@
 #include "../Framework/CameraMove.h"
 #include "../DataTable/PlatinumTable.h"
 #include "../GameObject/HitSpark.h"
+#include "Item/ItemMgr.h"
 
 Player::Player()
-	:currState(States::None), isBackHand(false), animator(nullptr), paletteIdx(64), paletteSize(64), attackDmg(20),
-	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f })
+	:currState(States::None), isBackHand(false), animator(nullptr), attackDmg(20),
+	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), extraSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), damageTake(0.f), evasionRate(0.f), criticalRate(0.f), criticalRatio(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f }), itemMgr(nullptr)
 {
 }
 
@@ -253,9 +254,13 @@ void Player::Init()
 		skillSets.push_back(newSkillSet);
 	}
 
-	playerShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
-	playerShader.setUniform("colorTable", *RESOURCE_MGR->GetTexture("graphics/WizardPalette.png"));
-	playerShader.setUniform("paletteIndex", (float)paletteIdx / paletteSize);	// index �ٲ��־� �� ���� -> �Ӽ� ���� ���� �߰�
+	extraSkillSet = new SkillSet();
+	extraSkillSet->SetSubject(this, Skill::SubjectType::Player);
+
+	UseShader();
+	SetSpriteShader();
+	SetSpritePalette(64, "graphics/WizardPalette.png");
+	SetPaletteColor(63);	// index �ٲ��־� �� ���� -> �Ӽ� ���� ���� �߰�
 
 	hitboxSize = FloatRect(0.f, 0.f, 10.f, 25.f);
 	SetHitBox(hitboxSize);
@@ -263,11 +268,15 @@ void Player::Init()
 	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
 
-	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
-	auto& stat = statTable->Get("Player");
-	SetAtkDmg(stat.attackDmg);
-	SetMaxHp(stat.maxHp);
-	SetSpeed(stat.speed);
+	shadow.setFillColor({ 0, 0, 0, 100 });
+	shadow.setRadius(7.5f);
+	Utils::SetOrigin(shadow, Origins::MC);
+	shadow.setScale({ 1.f, 0.6f });
+
+	itemMgr = new ItemMgr();
+	itemMgr->SetPlayer(this);
+	itemMgr->Apply();
+
 	SetCurHp(maxHp);
 }
 
@@ -276,7 +285,9 @@ void Player::Update(float dt)
 	SetLastPosition(GetPos());
 
 	SpriteObj::Update(dt);
+	shadow.setPosition(lowhitbox.getPosition());
 	animator->Update(dt);
+	itemMgr->Update(dt);
 
 	if (currState == States::Die)
 		return;
@@ -407,12 +418,12 @@ void Player::Update(float dt)
 
 void Player::Draw(RenderWindow& window)
 {
+	window.draw(shadow);
 	for (auto skill : skillSets)
 	{
 		skill->Draw(window);
 	}
-	Object::Draw(window);
-	window.draw(sprite, &playerShader);
+	SpriteObj::Draw(window);
 }
 
 void Player::UpdateIdle(float dt)
@@ -702,6 +713,15 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	dashDir = direction;
 	SOUND_MGR->Play("sounds/ImpactPhysicalLight.wav");
 	SetState(States::Hit);
+}
+
+void Player::SetExtraSkillSet(const string& skillSetName)
+{
+	if (!extraSkillSet->GetSkillSetName().empty())
+	{
+		// 밖으로 카드 소환되도록
+	}
+	extraSkillSet->Set(skillSetName);
 }
 
 void Player::SavePlatinum(int platinum)

@@ -1,7 +1,7 @@
 #pragma once
 #include "../GameObject/Object.h"
 
-class SkillBookButton;
+class KeyButton;
 class SpriteObj;
 class TextObj;
 class SkillSet;
@@ -17,11 +17,11 @@ public:
 	};
 protected:
 	vector<SpriteObj*> panels;
-	vector<pair<SkillBookButton*, SpriteObj*>> options;
+	vector<pair<KeyButton*, SpriteObj*>> options;
 	SkillBookCardInfo* skillInfo;
 	vector<SkillSet*> playerSkillSets;
-	SkillBookButton* collection;
-	vector<pair<SpriteObj*, TextObj*>> infos;
+	KeyButton* collection;
+	vector<pair<SpriteObj*, TextObj*>> keyInfos;
 	int skillVecIdx;
 
 	bool isMoving;

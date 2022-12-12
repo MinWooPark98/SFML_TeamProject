@@ -3,9 +3,11 @@
 #include "../Scene/SceneMgr.h"
 #include "SkillBookUi.h"
 #include "../Framework/InputMgr.h"
+#include "ItemBoxUi.h"
+#include "WardrobeUi.h"
 
 DevUiMgr::DevUiMgr()
-	:UiMgr(SCENE_MGR->GetScene(Scenes::Dev)), skillBook(nullptr)
+	:UiMgr(SCENE_MGR->GetScene(Scenes::Dev))
 {
 }
 
@@ -16,11 +18,21 @@ DevUiMgr::~DevUiMgr()
 void DevUiMgr::Init()
 {
 	UiMgr::Init();
-	skillBook = new SkillBookUi();
+
+	auto skillBook = new SkillBookUi();
 	skillBook->SetName("SKILLBOOKUI");
 	skillBook->Init();
-	skillBook->SetActive(false);
 	uiObjList[0].push_back(skillBook);
+
+	auto itemBox = new ItemBoxUi();
+	itemBox->SetName("ITEMBOXUI");
+	itemBox->Init();
+	uiObjList[0].push_back(itemBox);
+
+	auto wardrobeUi = new WardrobeUi();
+	wardrobeUi->SetName("WARDROBEUI");
+	wardrobeUi->Init();
+	uiObjList[0].push_back(wardrobeUi);
 }
 
 void DevUiMgr::Release()

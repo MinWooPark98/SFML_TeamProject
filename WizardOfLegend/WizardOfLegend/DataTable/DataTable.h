@@ -18,6 +18,8 @@ public:
 		FinalBossSkill,
 		MonsterProperty,
 		MapName,
+		Relic,
+		Hood,
 	};
 protected:
 	Types type;

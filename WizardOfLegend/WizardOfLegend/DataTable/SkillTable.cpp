@@ -4,7 +4,7 @@
 SkillTable::SkillTable()
 	:DataTable(Types::Skill)
 {
-	fileName = "tables/skilltable.csv";
+	fileName = "tables/SkillTable.csv";
 }
 
 SkillTable::~SkillTable()
@@ -15,7 +15,7 @@ const Skill::Set& SkillTable::Get(const string& skillName)
 {
 	auto find = table.find(skillName);
 	if (find == table.end())
-		throw "Wrong skillName";
+		throw invalid_argument("wrong value");
 	return find->second;
 }
 
