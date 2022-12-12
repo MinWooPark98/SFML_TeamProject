@@ -67,7 +67,7 @@ void Archer::Init()
 	SetCardColor(2);
 	SetHitBox({ 20.f, 20.f, 10.f, 30.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
-	SetLowHitBox({ 20.f, 20.f, 10.f, 5.f }, Color::White);
+	SetLowHitBox({ 20.f, 20.f, 5.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
 
 	auto statTable = DATATABLE_MGR->Get<StatTable>(DataTable::Types::Stat);
@@ -143,7 +143,7 @@ void Archer::Update(float dt)
 	}
 
 	Scene* currScene = SCENE_MGR->GetCurrentScene();
-	if (currScene->GetType() != Scenes::Play)
+	if (currScene->GetType() != Scenes::Play || curState == States::Fall || curState == States::Hit)
 		return;
 	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
 	for (int i = 0; i < collisionList.size(); ++i)

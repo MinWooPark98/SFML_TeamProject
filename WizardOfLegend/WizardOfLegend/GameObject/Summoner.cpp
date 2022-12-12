@@ -52,7 +52,7 @@ void Summoner::Init()
 
 	SetHitBox({ 20.f, 20.f, 20.f, 30.f }, Color::Red);
 	hitbox.setOrigin(GetHitBox().getSize().x * 0.5f, GetHitBox().getSize().y * 0.5f);
-	SetLowHitBox({ 20.f, 20.f, 20.f, 5.f }, Color::White);
+	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
 
 	for (int i = 0; i < 5; i++)
@@ -286,7 +286,7 @@ void Summoner::UpdateAttack(float dt)
 void Summoner::UpdateCollision(float dt)
 {
 	Scene* currScene = SCENE_MGR->GetCurrentScene();
-	if (currScene->GetType() != Scenes::Play)
+	if (currScene->GetType() != Scenes::Play || curState == States::Fall || curState == States::Hit)
 		return;
 	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
 	for (int i = 0; i < collisionList.size(); ++i)

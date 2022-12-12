@@ -26,6 +26,8 @@ void Enemy::Init()
 	spawnAnimation.AddClip(*RESOURCE_MGR->GetAnimationClip("MonsterCard"));
 	cardShader.loadFromFile("shaders/palette.frag", Shader::Fragment);
 	SetCardPalette(19, 2, "graphics/CardColorIndex.png");
+
+	fallingScale = { 1.f, 1.f };
 }
 
 void Enemy::Update(float dt)
@@ -51,6 +53,9 @@ void Enemy::Update(float dt)
 				break;
 			case States::Hit:
 				UpdateHit(dt);
+				break;
+			case States::Fall:
+				UpdateFall(dt);
 				break;
 			case States::Die:
 				SetState(States::Die);
@@ -129,7 +134,7 @@ void Enemy::SetColor(int index)
 
 void Enemy::NormalMonsterMove(float dt)
 {
-	if (curState != States::Hit)
+	if (curState != States::Hit && curState != States::Fall)
 	{
 		if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale())
 		{
@@ -209,9 +214,12 @@ void Enemy::UpdateMove(int attackDelay)
 {
 	if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale() && type == MonsterType::Normal)
 	{
-		SetState(States::Attack);
-		this->attackDelay = attackDelay;
-		return;
+		if (curState != States::Fall)
+		{
+			SetState(States::Attack);
+			this->attackDelay = attackDelay;
+			return;
+		}
 	}
 
 	if (type == MonsterType::StageBoss)	
@@ -302,10 +310,13 @@ void Enemy::UpdateHit(float dt)
 		{
 			hitTimer = 0.f;
 
-			if (lastDir.x > 0.f)
-				SetState(States::LeftIdle);
-			if (lastDir.x < 0.f)
-				SetState(States::RightIdle);
+			if (IsStanding())
+			{
+				if (lastDir.x > 0.f)
+					SetState(States::LeftIdle);
+				if (lastDir.x < 0.f)
+					SetState(States::RightIdle);
+			}
 		}
 	}
 	if (type == MonsterType::MiddleBoss)
@@ -320,6 +331,9 @@ void Enemy::UpdateHit(float dt)
 
 void Enemy::OnHit(const Vector2f& atkDir, int dmg)
 {
+	if (curState == States::Fall)
+		return;
+
 	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
@@ -400,4 +414,40 @@ void Enemy::Drop(PlayScene* scene)
 	}
 
 	SOUND_MGR->Play("sounds/GoldSpawn.wav");
+}
+
+void Enemy::UpdateFall(float dt)
+{
+	fallingScale.x -= dt * 0.7f;
+	fallingScale.y -= dt * 0.7f;
+	sprite.setScale(fallingScale);
+	fallTimer += dt;
+	if (fallTimer >= 1.f)
+	{
+		fallTimer = 0.f;
+		curHp -= curHp;
+		return;
+	}
+}
+
+bool Enemy::IsStanding()
+{
+	auto currScene = SCENE_MGR->GetCurrentScene();
+	if (currScene->GetType() != Scenes::Play)
+		return true;
+	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+	for (int i = 0; i < collisionList.size(); ++i)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
+		{
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			{
+				SetState(States::Fall);
+				return false;
+			}
+		}
+	}
+	return true;
 }
