@@ -1,19 +1,15 @@
 #pragma once
-#include "SpriteObj.h"
+#include "../GameObject/Interactive/Interactive.h"
 
 class Scene;
-class Player;
 class SpriteObj;
-
-class GlassTube : public SpriteObj
+class MessageUi;
+class GlassTube : public Interactive
 {
 protected:
 	bool isPlayerAdjacent;
 
-	Scene* currScene;
-	Player* player;
-
-	SpriteObj* FKey;
+	MessageUi* msgUi;
 
 public:
 	GlassTube();
@@ -23,8 +19,6 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
-	void SetPlayer(Player* player) { this->player = player; };
-
-	void SetIsPlayerAdjacent(bool ad);
+	virtual void Release() override;
 };
 

@@ -43,6 +43,7 @@ protected:
 
 	Portal* portal;
 	GlassTube* glassTube;
+	vector<GlassTube*> glassTubes;
 	PortalEffect* portalEffect;
 
 public:

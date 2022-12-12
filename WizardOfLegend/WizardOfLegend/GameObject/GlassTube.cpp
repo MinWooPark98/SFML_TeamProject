@@ -1,7 +1,9 @@
 #include "GlassTube.h"
 #include "../Framework/ResourceMgr.h"
 #include "../GameObject/SpriteObj.h"
-
+#include "../GameObject/Player.h"
+#include "../Ui/MessageUi.h"
+#include "../Framework/InputMgr.h"
 
 GlassTube::GlassTube()
 	:isPlayerAdjacent(false)
@@ -14,6 +16,7 @@ GlassTube::~GlassTube()
 
 void GlassTube::Init()
 {
+	Interactive::Init();
 
 	if (GetFileName() == "graphics/Map/Object/tutorial_skill_1.png")
 	{
@@ -32,36 +35,25 @@ void GlassTube::Init()
 		SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/Object/tutorial_skill_4.png"));
 	}
 	SetOrigin(Origins::BC);
-	FKey=new SpriteObj();
-	FKey->SetTexture(*RESOURCE_MGR->GetTexture("graphics/F.png"));
-	FKey->SetOrigin(Origins::MC);
-	FKey->SetPos({ GetPos().x-GetGlobalBounds().height-5.f, GetPos().y});
-	FKey->SetActive(false);
 
+	interactKey->SetPos({ GetPos().x, GetPos().y - GetGlobalBounds().height - 5.f });
+
+	msgUi = new MessageUi();
+	msgUi->Init();
 }
 
 void GlassTube::Update(float dt)
 {
-	SpriteObj::Update(dt);
-	FKey->Update(dt);
-	if (isPlayerAdjacent)
-	{
-		FKey->SetActive(true);
-	}
-	else
-	{
-		FKey->SetActive(false);
-	}
+	Interactive::Update(dt);
 }
 
 void GlassTube::Draw(RenderWindow& window)
 {
-	SpriteObj::Draw(window);
-	FKey->Draw(window);
+	Interactive::Draw(window);
+	msgUi->Draw(window);
 }
 
-void GlassTube::SetIsPlayerAdjacent(bool ad)
+void GlassTube::Release()
 {
-	isPlayerAdjacent = ad;
+	msgUi->Release();
 }
-

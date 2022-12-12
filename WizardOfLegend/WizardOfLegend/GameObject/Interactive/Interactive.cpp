@@ -29,6 +29,7 @@ void Interactive::Update(float dt)
 	SpriteObj::Update(dt);
 	if (animator != nullptr)
 		animator->Update(dt);
+
 	if (player != nullptr)
 	{
 		if (!approached)

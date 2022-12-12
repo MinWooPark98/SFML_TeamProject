@@ -151,16 +151,16 @@ void PlayScene::Init()
 					obj.path == "graphics/Map/Object/tutorial_skill_3.png" ||
 					obj.path == "graphics/Map/Object/tutorial_skill_4.png")
 			{
-				glassTube= new GlassTube();
+				glassTube = new GlassTube();
 				glassTube->SetFileName(obj.path);
-				glassTube->Init();
 				glassTube->SetName(obj.type);
 				glassTube->SetPos(obj.position);
+				glassTube->Init();
 				glassTube->SetHitBox(obj.path);
 				glassTube->SetObjType(Object::ObjTypes::ETC);
-				glassTube->SetPlayer(player);
 
 				objList[LayerType::Object][0].push_back(glassTube);
+				glassTubes.push_back(glassTube);
 			}
 			else
 			{
@@ -341,6 +341,12 @@ void PlayScene::Init()
 	if (fireBoss != nullptr)
 		fireBoss->SetPlayerLastPos(player->GetPos());
 
+	if (glassTubes.size() != 0)
+	{
+		for (int i = 0; i < glassTubes.size(); i++)
+			glassTubes[i]->SetPlayer(player);
+	}
+
 	portalEffect = new PortalEffect();
 	portalEffect->Init();
 }
@@ -356,19 +362,11 @@ void PlayScene::Update(float dt)
 		if (player->GetHitBounds().intersects(portal->GetHitBounds()))
 			portal->ChangeMap();
 	}
-	//if (glassTube != nullptr)
-	//{
-	//	glassTube->Update(dt);
-	//	if (player->GetHitBounds().intersects(glassTube->GetHitBounds()))
-	//	{
-	//		glassTube->SetIsPlayerAdjacent(true);
-	//	}
-	//	else
-	//	{
-	//		glassTube->SetIsPlayerAdjacent(true);
-	//	}
-	//}
-
+	if (glassTubes.size() != 0)
+	{
+		for (int i = 0; i < glassTubes.size(); i++)
+			glassTubes[i]->Update(dt);
+	}
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
@@ -541,7 +539,12 @@ void PlayScene::Draw(RenderWindow& window)
 	}
 	if (portalEffect != nullptr && portalEffect->GetActive())
 		portalEffect->Draw(window);
-	//glassTube->Draw(window);
+
+	if (glassTubes.size() != 0)
+	{
+		for (int i = 0; i < glassTubes.size(); i++)
+			glassTubes[i]->Draw(window);
+	}
 
 	if (uiMgr != nullptr && uiMgr->GetActive())
 	{
@@ -553,6 +556,11 @@ void PlayScene::Draw(RenderWindow& window)
 
 void PlayScene::Release()
 {
+	for (int i = 0; i < glassTubes.size(); i++)
+		glassTubes[i]->Release();
+	glassTubes.clear();
+	glassTube = nullptr;
+
 	Scene::Release();
 
 	for (auto& layer : objList)
@@ -567,6 +575,7 @@ void PlayScene::Release()
 			}
 		}
 	}
+
 	portal = nullptr;
 	objList.clear();
 	room.clear();

@@ -9,6 +9,7 @@
 #include "PropertyTable.h"
 #include "RelicTable.h"
 #include "HoodTable.h"
+#include "NpcTalkTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -70,6 +71,10 @@ void DataTableMgr::Init()
     table = new HoodTable();
     table->Load();
     tables.insert({ DataTable::Types::Hood, table });
+
+    table = new NpcTalkTable();
+    table->Load();
+    tables.insert({ DataTable::Types::NpcTalk, table });
 }
 
 void DataTableMgr::Release()

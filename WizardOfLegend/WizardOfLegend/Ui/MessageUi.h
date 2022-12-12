@@ -6,7 +6,7 @@ class MessageUi : public SpriteObj
 {
 protected:
 	vector<SpriteObj*> massageImages;
-	vector<TextObj*> texts;
+	TextObj* text;
 	TextObj* npcName;
 
 	SpriteObj* spaceBarImage;
@@ -16,9 +16,10 @@ protected:
 	bool isTalk = false;
 
 	Vector2f windowSize;
-	Vector2f textXY;
 	RectangleShape playerShader;
-	// 텍스트 줄 수 받아와서 int로 사이즈 지정, 대화 할 때마다 --, 0 되면 대화 안 되게
+
+	vector<string> names;
+	vector<string> tables;
 
 public:
 	MessageUi();
@@ -30,10 +31,16 @@ public:
 	virtual void Release() override;
 
 	void UiEnabled(bool set);
-	void SetTexts(vector<string> strings);
-	void SetNpcName(string name);
-	void SetNpcImage(string imageName); // 여기서 npc 이미지 크기 적용
+	void SetTexts(const string& string);
+	void SetNpcName(const string& name);
+	void SetNpcImage(const string& imageName); // 여기서 npc 이미지 크기 적용
 	void SetPlayerImage(int playerPaletteColor);
 
 	void SetIsTalk(bool set) { isTalk = set; UiEnabled(set); };
+	bool GetisTalk() const { return isTalk; };
+
+	void MessageUiOn();
+	void Talk();
+
+	void SetTalkTable(string npcName ,vector<string> npcTalk);
 };
