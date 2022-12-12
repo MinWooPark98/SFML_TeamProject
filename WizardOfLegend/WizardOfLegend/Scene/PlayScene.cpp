@@ -174,7 +174,7 @@ void PlayScene::Init()
 			{
 				ItemBox* itemBox = new ItemBox();
 				itemBox->Init();
-				itemBox->SetName(obj.type);
+				itemBox->SetName("ITEMBOX");
 				itemBox->SetPos(obj.position);
 				itemBox->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Object][0].push_back(itemBox);
@@ -184,7 +184,7 @@ void PlayScene::Init()
 			{
 				SkillBook* book = new SkillBook();
 				book->Init();
-				book->SetName(obj.type);
+				book->SetName("SKILLBOOK");
 				book->SetPos(obj.position);
 				book->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Object][0].push_back(book);
@@ -194,7 +194,7 @@ void PlayScene::Init()
 			{
 				Wardrobe* wardrobe = new Wardrobe();
 				wardrobe->Init();
-				wardrobe->SetName(obj.type);
+				wardrobe->SetName("WARDROBE");
 				wardrobe->SetPos(obj.position);
 				wardrobe->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Object][0].push_back(wardrobe);
