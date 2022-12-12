@@ -100,6 +100,13 @@ void PlayScene::Init()
 				draw->SetObjType(Object::ObjTypes::Tile);
 				objList[LayerType::Tile][0].push_back(draw);
 			}
+			else if (obj.path == "graphics/Map/Wall/AirWallTop.png" ||
+				obj.path == "graphics/Map/Wall/FireWallTop.png" ||
+				obj.path == "graphics/Map/Palette/IceWallTop.png")
+			{
+				draw->SetObjType(Object::ObjTypes::Wall);
+				objList[LayerType::Middle][0].push_back(draw);
+			}
 			else
 			{
 				draw->SetObjType(Object::ObjTypes::Wall);
@@ -238,7 +245,7 @@ void PlayScene::Init()
 				store->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Middle][0].push_back(store);
 			}
-			else if (obj.path == "graphics/Map/Object/HoodTarp.png")
+			else if (obj.path == "graphics/Map/Object/SquareHoodTarp.png")
 			{
 				Store* store = new Store(Goods::Payment::Platinum, Goods::Types::Hood);
 				store->Init();
@@ -247,7 +254,7 @@ void PlayScene::Init()
 				store->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Middle][0].push_back(store);
 			}
-			else if (obj.path == "graphics/Map/Object/ItemTarp.png")
+			else if (obj.path == "graphics/Map/Object/SquareItemTarp.png")
 			{
 				Store* store = new Store(Goods::Payment::Platinum, Goods::Types::Relic);
 				store->Init();
@@ -256,7 +263,7 @@ void PlayScene::Init()
 				store->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Middle][0].push_back(store);
 			}
-			else if (obj.path == "graphics/Map/Object/SkillTarp.png")
+			else if (obj.path == "graphics/Map/Object/SquareSkillTarp.png")
 			{
 				Store* store = new Store(Goods::Payment::Platinum, Goods::Types::Skill);
 				store->Init();
@@ -293,6 +300,7 @@ void PlayScene::Init()
 					obj.path == "graphics/Map/Palette/LeftGate.png" ||
 					obj.path == "graphics/Map/Palette/RightGate.png")
 				{
+					draw->SetPos({ obj.position.x,obj.position.y});
 					draw->SetActive(false);
 				}
 				objList[LayerType::Object][0].push_back(draw);
