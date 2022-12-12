@@ -4,9 +4,11 @@
 #include "../Framework/InputMgr.h"
 #include "../Framework/Framework.h"
 #include "../GameObject/TextObj.h"
+#include "../DataTable/NpcTalkTable.h"
+#include "../DataTable/DataTableMGR.h"
 
 MessageUi::MessageUi()
-	: windowSize(FRAMEWORK->GetWindowSize()), textXY(0.f, 0.f)
+	: windowSize(FRAMEWORK->GetWindowSize())
 {
 }
 
@@ -69,19 +71,15 @@ void MessageUi::Init()
 		massageImages[i]->SetActive(false);
 	}
 
-	for (int i = 0; i < 150; i++)
-	{
-		texts.push_back(new TextObj());
-	}
-	for (int i = 0; i < texts.size(); i++)
-	{
-		texts[i]->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-		texts[i]->SetFillColor(Color::White);
-		texts[i]->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"), 30, Color::White, "");
-		texts[i]->SetOutlineColor(Color::Black);
-		texts[i]->SetOutlineThickness(1.f);
-		texts[i]->SetActive(false);
-	}
+	text = new TextObj();
+	text->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	text->SetFillColor(Color::White);
+	text->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"), 30, Color::White, "");
+	text->SetOutlineColor(Color::Black);
+	text->SetOutlineThickness(1.f);
+	text->SetActive(false);
+
+
 	npcName = new TextObj();
 	npcName->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	npcName->SetFillColor(Color::White);
@@ -102,57 +100,25 @@ void MessageUi::Init()
 	playerShader.setSize(massageImages[5]->GetSize() * 4.3f);
 	playerShader.setPosition(massageImages[5]->GetPos());
 	playerShader.setOrigin(playerShader.getSize() * 0.5f);
+
+	auto npcTalkTable = DATATABLE_MGR->Get<NpcTalkTable>(DataTable::Types::MonsterProperty);
+	auto& npc = npcTalkTable->GetTable();
+
+	//for (auto& table : npc)
+	//{
+	//	SetTalkTable(table.second.npcName, table.second.talks);
+	//}
 }
 
 void MessageUi::Update(float dt)
 {
 	SpriteObj::Update(dt);
 
-	// 상호작용이랑 연결
-	//if (InputMgr::GetKeyDown(Keyboard::F))
-	//{
-	//	// 설정할 곳에서 사용할 코드
-	//	{
-	//		// 임시 테스트용 string
-	//		vector<string> str;
-	//		for (int i = 0; i < 20; i++)
-	//			str.push_back("");
-
-	//		SetTexts(str);
-
-	//		string devName = "박민우의  볼케이노  순삭  쇼";
-	//		SetNpcName(devName);
-	//		SetPlayerImage(63);
-	//		SetNpcImage("graphics/HumanKnightPortrait.png");
-
-	//		UiEnabled(true);
-	//		SetIsTalk(true);
-	//	}
-	//}
-
 	if (isTalk)
 	{
 		InputMgr::StackedOrderAdd(this);
 
 		enabledTime -= dt;
-
-		if (InputMgr::GetKeyDown(Keyboard::Space))
-		{
-			UiEnabled(false);
-
-			// 설정할 곳에서 사용할 코드
-			{
-				// 임시 테스트용 string
-				vector<string> string;
-				for (int i = 0; i < 100; i++)
-					string.push_back("냠");
-
-				SetTexts(string);
-			}
-
-			enabledTime = 0.1f;
-			spaceBright = 0;
-		}
 
 		if (enabledTime <= 0.f)
 		{
@@ -173,10 +139,9 @@ void MessageUi::Draw(RenderWindow& window)
 		{
 			massageImages[i]->Draw(window);
 		}
+
 		spaceBarImage->Draw(window);
-		
-		for (int i = 0; i < texts.size(); i++)
-			texts[i]->Draw(window);
+		text->Draw(window);
 
 		npcName->Draw(window);
 		window.draw(playerShader);
@@ -194,13 +159,9 @@ void MessageUi::Release()
 	}
 	massageImages.clear();
 
-	for (auto& text : texts)
-	{
-		if (text != nullptr)
-			delete text;
-		text = nullptr;
-	}
-	texts.clear();
+	if (text != nullptr)
+		delete text;
+	text = nullptr;
 
 	if (npcName != nullptr)
 		delete npcName;
@@ -231,43 +192,22 @@ void MessageUi::UiEnabled(bool set)
 	}
 }
 
-void MessageUi::SetTexts(vector<string> strings)
+void MessageUi::SetTexts(const string& string)
 {
-	for (int i = 0; i < texts.size(); i++)
-	{
-		texts[i]->SetText("");
-	}
-
-	for (int i = 0; i < strings.size(); i++)
-	{
-		if ((windowSize.x * 0.25 + (textXY.x * 30.f)) <= windowSize.x * 0.68 && i != 0)
-		{
-			textXY.x += 1.f;
-		}
-		else
-		{
-			textXY.x = 0.f;
-			textXY.y += 35.f;
-		}
-
-		texts[i]->SetString(strings[i]);
-		texts[i]->SetPos({ windowSize.x * 0.25f + (textXY.x * 30.f), windowSize.y * 0.73f + textXY.y });
-	}
-
-	textXY = { 0, 0 };
-
-	for (int i = 0; i < texts.size(); i++)
-		texts[i]->AsciiToUnicode();
+	text->SetText("");
+	text->SetString(string);
+	text->SetPos({ windowSize.x * 0.25f, windowSize.y * 0.73f });
+	text->AsciiToUnicode();
 }
 
-void MessageUi::SetNpcName(string name)
+void MessageUi::SetNpcName(const string& name)
 {
 	npcName->SetText(name);
 	npcName->AsciiToUnicode();
 	npcName->SetOrigin(Origins::TC);
 }
 
-void MessageUi::SetNpcImage(string imageName)
+void MessageUi::SetNpcImage(const string& imageName)
 {
 	if (massageImages[4] != nullptr)
 		massageImages[4]->SetTexture(*RESOURCE_MGR->GetTexture(imageName));
@@ -278,4 +218,33 @@ void MessageUi::SetNpcImage(string imageName)
 void MessageUi::SetPlayerImage(int playerPaletteColor)
 {
 	massageImages[5]->SetPaletteColor(playerPaletteColor);
+}
+
+void MessageUi::MessageUiOn()
+{
+	//SetTexts(str); Text String Setting
+	//SetNpcName(npcName); Npc name Setting
+	//SetPlayerImage(playerColorIndex); Player Palette Index Setting
+	//SetNpcImage(npcImage); Npc Image string
+	UiEnabled(true);
+	SetIsTalk(true);
+}
+
+void MessageUi::Talk()
+{
+	if (InputMgr::GetKeyDown(Keyboard::Space))
+	{
+		UiEnabled(false);
+		//SetTexts(str); string setting
+		enabledTime = 0.1f;
+		spaceBright = 0;
+	}
+}
+
+void MessageUi::SetTalkTable(string npcName, vector<string> npcTalk)
+{
+	names.push_back(npcName);
+
+	for (int i = 0; i < npcTalk.size(); i++)
+		tables.push_back(npcTalk[i]);
 }

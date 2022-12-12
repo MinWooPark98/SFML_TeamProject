@@ -24,5 +24,6 @@ public:
 	static void SetViewShake(bool set) { viewShake = set; };
 	static void SetShakeSpeed(float speed) { shakeSpeed = speed; };
 	static void SetShakeViewX(float shakeX) { shakeXPos = shakeX; };
+	static void SetCameraShakeTime(int shakeTime);
 };
 

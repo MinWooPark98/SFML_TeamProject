@@ -13,7 +13,7 @@ HitSpark::~HitSpark()
 
 void HitSpark::Init()
 {
-	SpriteObj::Init();
+	Effect::Init();
 	animation = new Animator();
 	animation->AddClip(*RESOURCE_MGR->GetAnimationClip("HitEffect"));
 	animation->SetTarget(&sprite);
@@ -21,13 +21,12 @@ void HitSpark::Init()
 
 void HitSpark::Reset()
 {
-	SpriteObj::Reset();
+	Effect::Reset();
 }
 
 void HitSpark::Update(float dt)
 {
-	SpriteObj::Update(dt);
-	animation->Update(dt);
+	Effect::Update(dt);
 	if (showing == false)
 	{
 		animation->Play("HitEffect");
@@ -43,8 +42,7 @@ void HitSpark::Update(float dt)
 
 void HitSpark::Draw(RenderWindow& window)
 {
-	SpriteObj::Draw(window);
-	
+	Effect::Draw(window);
 }
 
 void HitSpark::EnemyHitSparkFire(Vector2f hitPoint)

@@ -17,6 +17,7 @@ public:
 		SkillSetIntro,
 		FinalBossSkill,
 		MonsterProperty,
+		NpcTalk,
 		MapName,
 		Relic,
 		Hood,

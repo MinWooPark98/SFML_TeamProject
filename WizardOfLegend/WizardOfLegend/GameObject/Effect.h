@@ -1,22 +1,20 @@
 #pragma once
-#include "Effect.h"
+#include "SpriteObj.h"
+#include "../Framework/Animator.h"
 
-class HitSpark : public Effect
+class Effect : public SpriteObj
 {
 protected:
-	bool showing=false;
+	Animator* animation;
 
 public:
-	HitSpark();
-	virtual ~HitSpark();
+	Effect();
+	virtual ~Effect();
 
 	virtual void Init() override;
 
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
-
-	void EnemyHitSparkFire(Vector2f hitpoint);
-	void PlayerHitSparkFire(Vector2f hitpoint);
 };
 

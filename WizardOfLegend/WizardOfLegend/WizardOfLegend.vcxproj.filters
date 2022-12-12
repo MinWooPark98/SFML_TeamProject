@@ -100,6 +100,9 @@
     <ClCompile Include="GameObject\Interactive\GoodsRelic.cpp" />
     <ClCompile Include="GameObject\Interactive\GoodsSkill.cpp" />
     <ClCompile Include="GameObject\SpawnArea.cpp" />
+    <ClCompile Include="GameObject\Effect.cpp" />
+    <ClCompile Include="GameObject\PortalEffect.cpp" />
+    <ClCompile Include="DataTable\NpcTalkTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -205,6 +208,9 @@
     <ClInclude Include="GameObject\Interactive\GoodsRelic.h" />
     <ClInclude Include="GameObject\Interactive\GoodsSkill.h" />
     <ClInclude Include="GameObject\SpawnArea.h" />
+    <ClInclude Include="GameObject\Effect.h" />
+    <ClInclude Include="GameObject\PortalEffect.h" />
+    <ClInclude Include="DataTable\NpcTalkTable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

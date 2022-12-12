@@ -30,6 +30,7 @@ public:
 		Attack,
 		MoveAttack,
 		Hit,
+		Fall,
 		Die,
 	};
 
@@ -108,6 +109,9 @@ protected:
 	int maxGold;
 	float platinumProbability;
 	int platinumDropNumber;
+
+	Vector2f fallingScale;
+	float fallTimer = 0.f;
 
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
@@ -215,4 +219,6 @@ public:
 	int GetPlatinumDropNum() { return platinumDropNumber; };
 
 	 void Drop(PlayScene* scene);
+	 void UpdateFall(float dt);
+	 bool IsStanding();
 };
