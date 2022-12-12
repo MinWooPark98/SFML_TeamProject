@@ -109,27 +109,26 @@ void MessageUi::Update(float dt)
 	SpriteObj::Update(dt);
 
 	// 상호작용이랑 연결
-	if (InputMgr::GetKeyDown(Keyboard::F))
-	{
-		// 설정할 곳에서 사용할 코드
-		{
-			// 임시 테스트용 string
-			vector<string> str;
-			for (int i = 0; i < 20; i++)
-				str.push_back("");
+	//if (InputMgr::GetKeyDown(Keyboard::F))
+	//{
+	//	// 설정할 곳에서 사용할 코드
+	//	{
+	//		// 임시 테스트용 string
+	//		vector<string> str;
+	//		for (int i = 0; i < 20; i++)
+	//			str.push_back("");
 
-			SetTexts(str);
+	//		SetTexts(str);
 
-			string devName = "박민우의  볼케이노  순삭  쇼";
-			SetNpcName(devName);
-			SetPlayerImage(63);
-			SetNpcImage("graphics/HumanKnightPortrait.png");
-		}
+	//		string devName = "박민우의  볼케이노  순삭  쇼";
+	//		SetNpcName(devName);
+	//		SetPlayerImage(63);
+	//		SetNpcImage("graphics/HumanKnightPortrait.png");
 
-		UiEnabled(true);
-		isTalk = true;
-		//SetIsTalk(true);
-	}
+	//		UiEnabled(true);
+	//		SetIsTalk(true);
+	//	}
+	//}
 
 	if (isTalk)
 	{
@@ -216,12 +215,10 @@ void MessageUi::UiEnabled(bool set)
 {
 	if (massageImages.size() != 0)
 	{
-		if (massageImages[0]->GetActive() != set)
+		for (int i = 0; i < massageImages.size(); i++)
 		{
-			for (int i = 0; i < massageImages.size(); i++)
-			{
+			if (massageImages[i]->GetActive() != set)
 				massageImages[i]->SetActive(set);
-			}
 		}
 	}
 
