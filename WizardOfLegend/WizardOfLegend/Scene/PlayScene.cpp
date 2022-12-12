@@ -34,6 +34,7 @@
 #include "../Ui/ItemBoxUi.h"
 #include "../Ui/WardrobeUi.h"
 #include "../GameObject/PortalEffect.h"
+#include "../GameObject/Store.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -92,9 +93,18 @@ void PlayScene::Init()
 			draw->SetOrigin(Origins::BC);
 			draw->SetPos(obj.position);
 			draw->SetHitBox(obj.path);
-			draw->SetObjType(Object::ObjTypes::Wall);
-
-			objList[LayerType::Wall][0].push_back(draw);
+			if(obj.path=="graphics/Map/Palette/AirWallFoundation.png"||
+				obj.path == "graphics/Map/Palette/FireWallFoundation.png" || 
+				obj.path == "graphics/Map/Palette/IceWallFoundation.png")
+			{
+				draw->SetObjType(Object::ObjTypes::Tile);
+				objList[LayerType::Tile][0].push_back(draw);
+			}
+			else
+			{
+				draw->SetObjType(Object::ObjTypes::Wall);
+				objList[LayerType::Wall][0].push_back(draw);
+			}
 		}
 		else if (obj.type == "TILE")
 		{
@@ -140,7 +150,7 @@ void PlayScene::Init()
 				else if (mapName == "TUTORIALFIGHT")
 					portal->SetChanegeMap("TUTORIAL");
 
-				objList[LayerType::Object][0].push_back(portal);
+				objList[LayerType::Middle][0].push_back(portal);
 			}
 			else if (obj.path == "graphics/Map/Object/HealthCrystal.png")
 			{
@@ -199,6 +209,74 @@ void PlayScene::Init()
 				wardrobe->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Object][0].push_back(wardrobe);
 				wardrobe->Interact = bind(&WardrobeUi::SetActive, (WardrobeUi*)uiMgr->FindUiObj("WARDROBEUI"), true);
+			}
+			else if (obj.path == "graphics/Map/Object/HoodTarp.png")
+			{
+				Store* store = new Store(Goods::Payment::Gold, Goods::Types::Hood);
+				store->Init();
+				store->SetName(obj.path);
+				store->SetPos(obj.position);
+				store->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Middle][0].push_back(store);
+
+			}
+			else if (obj.path == "graphics/Map/Object/ItemTarp.png")
+			{
+				Store* store = new Store(Goods::Payment::Gold, Goods::Types::Relic);
+				store->Init();
+				store->SetName(obj.path);
+				store->SetPos(obj.position);
+				store->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Middle][0].push_back(store);
+			}
+			else if (obj.path == "graphics/Map/Object/SkillTarp.png")
+			{
+				Store* store = new Store(Goods::Payment::Gold, Goods::Types::Skill);
+				store->Init();
+				store->SetName(obj.path);
+				store->SetPos(obj.position);
+				store->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Middle][0].push_back(store);
+			}
+			else if (obj.path == "graphics/Map/Object/HoodTarp.png")
+			{
+				Store* store = new Store(Goods::Payment::Platinum, Goods::Types::Hood);
+				store->Init();
+				store->SetName(obj.path);
+				store->SetPos(obj.position);
+				store->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Middle][0].push_back(store);
+			}
+			else if (obj.path == "graphics/Map/Object/ItemTarp.png")
+			{
+				Store* store = new Store(Goods::Payment::Platinum, Goods::Types::Relic);
+				store->Init();
+				store->SetName(obj.path);
+				store->SetPos(obj.position);
+				store->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Middle][0].push_back(store);
+			}
+			else if (obj.path == "graphics/Map/Object/SkillTarp.png")
+			{
+				Store* store = new Store(Goods::Payment::Platinum, Goods::Types::Skill);
+				store->Init();
+				store->SetName(obj.path);
+				store->SetPos(obj.position);
+				store->SetObjType(Object::ObjTypes::ETC);
+				objList[LayerType::Middle][0].push_back(store);
+			}
+			else if (obj.path == "graphics/Map/Object/TeleportLandingPad.png")
+			{
+				SpriteObj* draw = new SpriteObj();
+				draw->Init();
+				draw->SetName(obj.type);
+				draw->SetFileName(obj.path);
+				draw->SetTexture(*RESOURCE_MGR->GetTexture(obj.path));
+				draw->SetOrigin(Origins::BC);
+				draw->SetPos(obj.position);
+				draw->SetHitBox(obj.path);
+				draw->SetObjType(Object::ObjTypes::Middle);
+				objList[LayerType::Middle][0].push_back(draw);
 			}
 			else
 			{
@@ -529,7 +607,7 @@ void PlayScene::Draw(RenderWindow& window)
 
 	window.setView(worldView);
 	drawSortObjs.clear();
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		drawSortObjs.push_back(vector<Object*>());
 
@@ -549,16 +627,20 @@ void PlayScene::Draw(RenderWindow& window)
 						{
 							drawSortObjs[0].push_back(obj);
 						}
-						else if (obj->GetObjType() == Object::ObjTypes::Wall || obj->GetObjType() == Object::ObjTypes::Player || obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss || obj->GetObjType() == Object::ObjTypes::ETC || obj->GetObjType() == Object::ObjTypes::Dummy || obj->GetObjType() == Object::ObjTypes::BrokenObject)
+						else if (obj->GetObjType() == Object::ObjTypes::Middle)
 						{
 							drawSortObjs[1].push_back(obj);
+						}
+						else if (obj->GetObjType() == Object::ObjTypes::Wall || obj->GetObjType() == Object::ObjTypes::Player || obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss || obj->GetObjType() == Object::ObjTypes::ETC || obj->GetObjType() == Object::ObjTypes::Dummy || obj->GetObjType() == Object::ObjTypes::BrokenObject)
+						{
+							drawSortObjs[2].push_back(obj);
 						}
 					}
 				}
 			}
 		}
 	}
-	DrawSort(drawSortObjs[1]);
+	DrawSort(drawSortObjs[2]);
 
 	for (auto& layer : drawSortObjs)
 	{

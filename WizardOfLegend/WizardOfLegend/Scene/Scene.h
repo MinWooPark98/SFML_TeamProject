@@ -29,6 +29,7 @@ public:
 		None = -1,
 		Back,
 		Tile,
+		Middle,
 		Wall,
 		Object,
 		Sector,

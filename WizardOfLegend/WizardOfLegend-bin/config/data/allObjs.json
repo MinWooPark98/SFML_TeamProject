@@ -286,6 +286,18 @@
     {
       "texPath": "graphics/Map/Object/SkillTarp.png",
       "uiPath": "graphics/Map/Palette/SkillTarp.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/SquareHoodTarp.png",
+      "uiPath": "graphics/Map/Palette/SquareHoodTarp.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/SquareItemTarp.png",
+      "uiPath": "graphics/Map/Palette/SquareItemTarp.png"
+    },
+    {
+      "texPath": "graphics/Map/Object/SquareSkillTarp.png",
+      "uiPath": "graphics/Map/Palette/SquareSkillTarp.png"
     }
   ],
   "PLAYER": [

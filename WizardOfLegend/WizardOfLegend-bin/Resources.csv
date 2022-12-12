@@ -908,6 +908,12 @@ graphics/WindBall2.png,0
 graphics/WindBall3.png,0
 graphics/WindBall4.png,0
 graphics/WindBall5.png,0
+graphics/Map/Object/SquareHoodTarp.png,0
+graphics/Map/Palette/SquareHoodTarp.png,0
+graphics/Map/Object/SquareItemTarp.png,0
+graphics/Map/Palette/SquareItemTarp.png,0
+graphics/Map/Object/SquareSkillTarp.png,0
+graphics/Map/Palette/SquareSkillTarp.png,0
 fonts/DS-DIGI.ttf,1
 fonts/NotoSansKR-Bold.otf,1
 fonts/MunroSmall.ttf,1

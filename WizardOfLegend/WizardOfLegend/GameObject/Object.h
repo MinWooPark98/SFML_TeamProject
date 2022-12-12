@@ -25,6 +25,7 @@ public:
         SpawnArea,
         Dummy,
         BrokenObject,
+        Middle,
         ETC,
         Count,
     };
