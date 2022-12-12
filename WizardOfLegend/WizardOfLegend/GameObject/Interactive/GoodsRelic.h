@@ -18,5 +18,7 @@ public:
 
 	void SetInfo(const Relic::RelicInfo& info);
 	virtual void Saled() override;
+
+	virtual void SetPos(const Vector2f& pos) override;
 };
 

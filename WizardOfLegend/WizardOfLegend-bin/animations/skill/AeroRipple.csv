@@ -1,0 +1,9 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+AeroRipple,1,7,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/AeroRipple.png,0,0,32,64,0,40,0,0
+graphics/AeroRippleDestroy0.png,0,0,32,64,0,40,0,0
+graphics/AeroRippleDestroy1.png,0,0,32,64,0,40,0,0
+graphics/AeroRippleDestroy2.png,0,0,32,64,0,40,0,0
+graphics/AeroRippleDestroy3.png,0,0,32,64,0,40,0,0

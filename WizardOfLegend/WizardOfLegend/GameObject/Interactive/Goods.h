@@ -21,12 +21,17 @@ public:
 protected:
 	bool forSale;
 
-	TextObj* price;
+	TextObj* priceText;
+	int price;
 
 	Payment payment;
 	Types type;
 
-	SpriteObj infoPanel;
+	SpriteObj* infoPanel;
+	TextObj* goodsNameText;
+	string goodsName;
+	TextObj* goodsInfoText;
+	string goodsInfo;
 
 public:
 	Goods(Payment payment, Types type);
@@ -39,5 +44,12 @@ public:
 	virtual void ApproachEnd() override;
 
 	void ForSale(bool sale);
+	virtual void Sale();
 	virtual void Saled() {}
+
+	void SetGoodsName(const string& name);
+	void SetGoodsInfo(const string& info);
+	void SetPrice(int price);
+
+	virtual void SetPos(const Vector2f& pos) override;
 };

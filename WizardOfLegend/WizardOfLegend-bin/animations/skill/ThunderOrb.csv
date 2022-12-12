@@ -1,0 +1,12 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+ThunderOrb,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/ThunderOrb0.png,0,0,24,24,30,40,0,0
+graphics/ThunderOrb1.png,0,0,24,24,30,40,0,0
+graphics/ThunderOrb2.png,0,0,24,24,30,40,0,0
+graphics/ThunderOrb3.png,0,0,24,24,30,40,0,0
+graphics/ThunderOrb4.png,0,0,24,24,30,40,0,0
+graphics/ThunderOrb5.png,0,0,24,24,30,40,0,0
+graphics/ThunderOrb41.png,0,0,24,24,30,40,0,0
+graphics/ThunderOrb42.png,0,0,24,24,30,40,0,0

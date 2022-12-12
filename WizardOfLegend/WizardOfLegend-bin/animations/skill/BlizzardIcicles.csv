@@ -1,0 +1,10 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+BlizzardIcicles,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/BlizzardIcicles_0.png,0,0,32,32,30,40,0,0
+graphics/BlizzardIcicles_1.png,0,0,32,32,30,40,0,0
+graphics/BlizzardIcicles_2.png,0,0,32,32,30,40,0,0
+graphics/BlizzardIcicles_3.png,0,0,32,32,30,40,0,0
+graphics/BlizzardIcicleCrack0.png,0,0,24,24,30,40,0,0
+graphics/BlizzardIcicleCrack1.png,0,0,24,16,30,40,0,0

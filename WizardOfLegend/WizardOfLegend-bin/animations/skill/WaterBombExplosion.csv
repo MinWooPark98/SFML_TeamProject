@@ -1,0 +1,11 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+WaterBombExplosion,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WaterBombExplosion_0.png,0,0,160,160,30,40,0,0
+graphics/WaterBombExplosion_1.png,0,0,160,160,30,40,0,0
+graphics/WaterBombExplosion_2.png,0,0,160,160,30,40,0,0
+graphics/WaterBombExplosion_3.png,0,0,160,160,30,40,0,0
+graphics/WaterBombExplosion_4.png,0,0,160,160,30,40,0,0
+graphics/WaterBombExplosion_5.png,0,0,160,160,30,40,0,0
+graphics/WaterBombExplosion_6.png,0,0,160,160,30,40,0,0

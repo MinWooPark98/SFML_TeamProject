@@ -1,0 +1,7 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+MegaEarthDrillLeft,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/MegaEarthDrillLeft0.png,0,0,88,64,70,40,0,0
+graphics/MegaEarthDrillLeft1.png,0,0,88,64,70,40,0,0
+graphics/MegaEarthDrillLeft2.png,0,0,88,64,70,40,0,0

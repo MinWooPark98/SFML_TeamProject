@@ -1,0 +1,10 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+LightningFistBasic,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/LightningFistBasic0.png,0,0,78,78,30,40,0,0
+graphics/LightningFistBasic1.png,0,0,78,78,30,40,0,0
+graphics/LightningFistBasic3.png,0,0,78,78,30,40,0,0
+graphics/LightningFistBasic4.png,0,0,78,78,30,40,0,0
+graphics/LightningFistBasic5.png,0,0,78,78,30,40,0,0
+graphics/LightningFistBasic6.png,0,0,78,78,30,40,0,0

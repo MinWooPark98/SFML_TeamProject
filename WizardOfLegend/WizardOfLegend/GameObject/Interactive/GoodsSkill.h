@@ -7,9 +7,6 @@ protected:
 	SpriteObj card;
 	SpriteObj skillIcon;
 
-	string skillName;
-	string skillIntro;
-
 public:
 	GoodsSkill(Payment payment);
 	virtual ~GoodsSkill();
@@ -19,5 +16,7 @@ public:
 
 	void SetInfo(const string& name);
 	virtual void Saled() override;
+
+	virtual void SetPos(const Vector2f& pos) override;
 };
 

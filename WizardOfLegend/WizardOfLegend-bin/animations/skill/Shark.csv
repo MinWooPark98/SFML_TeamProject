@@ -1,0 +1,14 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+Shark,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/Shark8.png,0,0,64,68,30,40,1,1
+graphics/Shark0.png,0,0,62,62,30,40,1,1
+graphics/Shark1.png,0,0,65,72,30,40,1,1
+graphics/Shark2.png,0,0,73,75,30,40,1,1
+graphics/Shark3.png,0,0,78,74,30,40,1,1
+graphics/Shark4.png,0,0,79,78,30,40,1,1
+graphics/Shark5.png,0,0,75,74,30,40,1,1
+graphics/Shark6.png,0,0,70,74,30,40,1,1
+graphics/Shark7.png,0,0,65,79,30,40,1,1
+graphics/Shark8.png,0,0,64,68,30,40,1,1

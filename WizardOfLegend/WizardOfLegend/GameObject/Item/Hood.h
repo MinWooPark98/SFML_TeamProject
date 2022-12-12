@@ -9,7 +9,8 @@ public:
 		string name;
 		int paletteIdx;
 		Values values;
-		int price;
+		int goldPrice;
+		int platinumPrice;
 		string intro;
 	};
 protected:

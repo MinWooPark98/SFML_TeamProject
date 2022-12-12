@@ -82,8 +82,9 @@ bool HoodTable::Load()
 	vector<float> evasionRate = doc.GetColumn<float>(7);
 	vector<float> criticalRate = doc.GetColumn<float>(8);
 	vector<float> criticalRatio = doc.GetColumn<float>(9);
-	vector<int> price = doc.GetColumn<int>(10);
-	vector<string> intro = doc.GetColumn<string>(11);
+	vector<int> goldPrice = doc.GetColumn<int>(10);
+	vector<int> platinumPrice = doc.GetColumn<int>(11);
+	vector<string> intro = doc.GetColumn<string>(12);
 	for (int j = 0; j < rowCount; ++j)
 	{
 		for (auto& outermost : table)
@@ -104,7 +105,7 @@ bool HoodTable::Load()
 		}
 		else
 			locked = lockedTable[id[j]];
-		table[locked].insert({ id[j], {id[j], name[j], paletteIdx[j], {speed[j], atkDmg[j], dmg[j], maxHp[j], evasionRate[j], criticalRate[j], criticalRatio[j]}, price[j], intro[j]}});
+		table[locked].insert({ id[j], {id[j], name[j], paletteIdx[j], {speed[j], atkDmg[j], dmg[j], maxHp[j], evasionRate[j], criticalRate[j], criticalRatio[j]}, goldPrice[j], platinumPrice[j], intro[j]}});
 	}
 	return true;
 }

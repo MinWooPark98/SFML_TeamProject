@@ -176,7 +176,6 @@ void PlayScene::Init()
 				itemBox->Init();
 				itemBox->SetName(obj.type);
 				itemBox->SetPos(obj.position);
-				itemBox->SetPlayer(player);
 				itemBox->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Object][0].push_back(itemBox);
 				itemBox->Interact = bind(&ItemBox::SetActive, (ItemBoxUi*)uiMgr->FindUiObj("ITEMBOXUI"), true);
@@ -187,7 +186,6 @@ void PlayScene::Init()
 				book->Init();
 				book->SetName(obj.type);
 				book->SetPos(obj.position);
-				book->SetPlayer(player);
 				book->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Object][0].push_back(book);
 				book->Interact = bind(&SkillBookUi::SetActive, (SkillBookUi*)uiMgr->FindUiObj("SKILLBOOKUI"), true);
@@ -198,7 +196,6 @@ void PlayScene::Init()
 				wardrobe->Init();
 				wardrobe->SetName(obj.type);
 				wardrobe->SetPos(obj.position);
-				wardrobe->SetPlayer(player);
 				wardrobe->SetObjType(Object::ObjTypes::ETC);
 				objList[LayerType::Object][0].push_back(wardrobe);
 				wardrobe->Interact = bind(&WardrobeUi::SetActive, (WardrobeUi*)uiMgr->FindUiObj("WARDROBEUI"), true);
@@ -394,12 +391,6 @@ void PlayScene::Init()
 	}
 	if (fireBoss != nullptr)
 		fireBoss->SetPlayerLastPos(player->GetPos());
-
-	if (glassTubes.size() != 0)
-	{
-		for (int i = 0; i < glassTubes.size(); i++)
-			glassTubes[i]->SetPlayer(player);
-	}
 
 	portalEffect = new PortalEffect();
 	portalEffect->Init();

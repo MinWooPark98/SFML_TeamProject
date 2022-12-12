@@ -1,0 +1,10 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+EarthShield,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/EarthShield_4.png,0,0,48,48,15,30,0,0
+graphics/EarthShield_3.png,0,0,48,48,15,30,0,0
+graphics/EarthShield_2.png,0,0,48,48,15,30,0,0
+graphics/EarthShield_1.png,0,0,48,48,15,30,0,0
+graphics/EarthShield_0.png,0,0,48,48,15,30,0,0
+graphics/EarthShield_6.png,0,0,48,53,15,30,0,0

@@ -1,0 +1,21 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+AirBoss,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/AirBossSpawn0.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn1.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn2.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn3.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn4.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn5.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn6.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn7.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn5.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn6.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn7.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn5.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn6.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn7.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn5.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn6.png,0,0,64,64,20,30,0,0
+graphics/AirBossSpawn7.png,0,0,64,64,20,30,0,0

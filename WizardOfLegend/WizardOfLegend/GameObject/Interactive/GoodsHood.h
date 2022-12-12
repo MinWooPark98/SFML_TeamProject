@@ -19,5 +19,7 @@ public:
 
 	void SetInfo(const Hood::HoodInfo& info);
 	virtual void Saled() override;
+
+	virtual void SetPos(const Vector2f& pos) override;
 };
 

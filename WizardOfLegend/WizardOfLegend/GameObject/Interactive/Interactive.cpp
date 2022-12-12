@@ -3,9 +3,10 @@
 #include "../Player.h"
 #include "../../Framework/InputMgr.h"
 #include "../../Framework/ResourceMgr.h"
+#include "../../Scene/SceneMgr.h"
 
 Interactive::Interactive()
-	:animator(nullptr), player(nullptr), approached(false), interactKey(nullptr)
+	:animator(nullptr), approached(false), interactKey(nullptr)
 {
 }
 
@@ -30,6 +31,7 @@ void Interactive::Update(float dt)
 	if (animator != nullptr)
 		animator->Update(dt);
 
+	auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 	if (player != nullptr)
 	{
 		if (!approached)

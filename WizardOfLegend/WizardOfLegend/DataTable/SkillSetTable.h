@@ -16,6 +16,8 @@ public:
 	struct SetInfo
 	{
 		float newCoolDown;
+		int goldPrice;
+		int platinumPrice;
 		string iconDir;
 		list<string> skillNames;
 	};

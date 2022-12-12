@@ -1,0 +1,14 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+SharkLeft,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/SharkLeft8.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft0.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft1.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft2.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft3.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft4.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft5.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft6.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft7.png,0,0,94,132,30,40,1,1
+graphics/SharkLeft8.png,0,0,94,132,30,40,1,1

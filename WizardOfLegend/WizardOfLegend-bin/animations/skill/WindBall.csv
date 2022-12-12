@@ -1,0 +1,10 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+WindBall,1,10,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/WindBall0.png,0,0,48,48,30,35,0,0
+graphics/WindBall1.png,0,0,48,48,30,35,0,0
+graphics/WindBall2.png,0,0,48,48,30,35,0,0
+graphics/WindBall3.png,0,0,48,48,30,35,0,0
+graphics/WindBall4.png,0,0,48,48,30,35,0,0
+graphics/WindBall5.png,0,0,48,48,30,35,0,0
