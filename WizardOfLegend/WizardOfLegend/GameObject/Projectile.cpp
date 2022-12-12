@@ -4,7 +4,7 @@
 #include "../Scene/PlayScene.h"
 #include "../Scene/SceneMgr.h"
 #include "FinalBoss.h"
-#include "../Ui/Heal.h"
+#include "../GameObject/Heal.h"
 #include "Dummy.h"
 
 Projectile::Projectile()

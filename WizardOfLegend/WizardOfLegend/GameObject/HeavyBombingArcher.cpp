@@ -3,6 +3,7 @@
 #include "../Scene/PlayScene.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/StatTable.h"
+#include "../DataTable/PropertyTable.h"
 
 void HeavyBombingArcher::Init()
 {

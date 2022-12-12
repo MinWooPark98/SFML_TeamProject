@@ -20,7 +20,10 @@ void SpriteObj::Update(float dt)
 
 void SpriteObj::Draw(RenderWindow& window)
 {
-    window.draw(sprite, &spriteShader);
+    if (spriteShader != nullptr)
+        window.draw(sprite, &(*spriteShader));
+    else
+        window.draw(sprite);
     Object::Draw(window);
 }
 
@@ -96,4 +99,9 @@ FloatRect SpriteObj::GetGlobalBounds() const
 FloatRect SpriteObj::GetLocalBounds() const
 {
     return sprite.getLocalBounds();
+}
+
+void SpriteObj::UseShader()
+{
+    spriteShader = new Shader();
 }

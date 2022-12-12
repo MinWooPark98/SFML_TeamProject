@@ -17,13 +17,15 @@
 #include "../GameObject/FinalBoss.h"
 #include "../Ui/ShowDamage.h"
 #include "../Framework/CameraMove.h"
-#include "../Ui/Gold.h"
-#include "../Ui/ChaosFragments.h"
+#include "../GameObject/Gold.h"
+#include "../GameObject/ChaosFragments.h"
 #include "../GameObject/Dummy.h"
-#include "../Ui/Portal.h"
-#include "../Ui/Heal.h"
 #include "../GameObject/HitSpark.h"
 #include "../GameObject/GlassTube.h"
+#include "../GameObject/Portal.h"
+#include "../GameObject/Heal.h"
+#include "../GameObject/Turret.h"
+#include "../GameObject/Summoner.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -123,8 +125,7 @@ void PlayScene::Init()
 				portal->SetName(obj.type);
 				portal->SetPos(obj.position);
 				portal->SetObjType(Object::ObjTypes::ETC);
-				portal->SetPlayer(player);
-
+				
 				if (mapName == "TUTORIALMAP")
 					portal->SetChanegeMap("TUTORIALFIGHT");
 				else if (mapName == "TUTORIALFIGHT")
@@ -247,6 +248,31 @@ void PlayScene::Init()
 				finalBoss->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][0].push_back(finalBoss);
 			}
+			else if (obj.path == "graphics/TurretMerged.png")
+			{
+				Turret* turret = new Turret();
+				turret->Init();
+				turret->SetName(obj.type);
+				turret->SetPos(obj.position);
+				turret->EyePos(obj.position);
+				turret->SetObjType(Object::ObjTypes::Enemy);
+				turret->SetLastPosition({ 0,0 });
+				turret->SetActive(true);
+				objList[LayerType::Object][1].push_back(turret);
+			}
+			else if (obj.path == "graphics/SummonerIdleDown.png")
+			{
+				Summoner* summoner = new Summoner();
+				summoner->Init();
+				summoner->SetName(obj.type);
+				summoner->SetPos(obj.position);
+				summoner->SetCardPos(summoner->GetPos());
+				summoner->SetObjType(Object::ObjTypes::Enemy);
+				summoner->SetColor(2);
+				summoner->SetActive(false);
+				summoner->SetLastPosition({ 0,0 });
+				objList[LayerType::Object][1].push_back(summoner);
+			}
 			else if (obj.path == "graphics/TrainingDummy.png")
 			{
 				Dummy* trainingDummy = new Dummy();
@@ -326,18 +352,18 @@ void PlayScene::Update(float dt)
 		if (player->GetHitBounds().intersects(portal->GetHitBounds()))
 			portal->ChangeMap();
 	}
-	if (glassTube != nullptr)
-	{
-		glassTube->Update(dt);
-		if (player->GetHitBounds().intersects(glassTube->GetHitBounds()))
-		{
-			glassTube->SetIsPlayerAdjacent(true);
-		}
-		else
-		{
-			glassTube->SetIsPlayerAdjacent(true);
-		}
-	}
+	//if (glassTube != nullptr)
+	//{
+	//	glassTube->Update(dt);
+	//	if (player->GetHitBounds().intersects(glassTube->GetHitBounds()))
+	//	{
+	//		glassTube->SetIsPlayerAdjacent(true);
+	//	}
+	//	else
+	//	{
+	//		glassTube->SetIsPlayerAdjacent(true);
+	//	}
+	//}
 
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
@@ -508,7 +534,7 @@ void PlayScene::Draw(RenderWindow& window)
 	{
 		hitSpark->Draw(window);
 	}
-	glassTube->Draw(window);
+	//glassTube->Draw(window);
 
 	if (uiMgr != nullptr && uiMgr->GetActive())
 	{

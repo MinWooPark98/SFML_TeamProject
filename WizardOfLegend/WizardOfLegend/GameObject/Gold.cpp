@@ -64,8 +64,7 @@ void Gold::Drop(float dt)
 
 void Gold::GetGold(Player* player)
 {
-	int addGold = Utils::RandomRange(4, 7);
-	player->AddGold(addGold);
+	player->AddGold(gold);
 }
 
 void Gold::SetGoldPos(Vector2f pos)

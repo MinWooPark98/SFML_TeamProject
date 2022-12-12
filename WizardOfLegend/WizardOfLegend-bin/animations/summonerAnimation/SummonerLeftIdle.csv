@@ -1,0 +1,5 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+SummonerLeftIdle,0,1,,,,,,
+,,,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
+graphics/SummonerIdleDown.png,0,0,48,48,24,24,1,0

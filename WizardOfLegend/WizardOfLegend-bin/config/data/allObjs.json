@@ -294,6 +294,14 @@
     {
       "texPath": "graphics/TrainingDummy.png",
       "uiPath": "graphics/Map/Palette/TrainingDummy.png"
+    },
+    {
+      "texPath": "graphics/TurretMerged.png",
+      "uiPath": "graphics/Map/Palette/TurretMerged.png"
+    },
+    {
+      "texPath": "graphics/SummonerIdleDown.png",
+      "uiPath": "graphics/Map/Palette/SummonerPainting.png"
     }
   ],
   "SECTOR": [

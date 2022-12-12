@@ -6,7 +6,7 @@
 #include "../GameObject/Player.h"
 #include "../Framework/ResourceMgr.h"
 #include "../Framework/SoundMgr.h"
-#include "ShowDamage.h"
+#include "../Ui/ShowDamage.h"
 
 void Heal::Init()
 {

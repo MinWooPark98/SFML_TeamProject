@@ -7,9 +7,8 @@ class SpriteObj : public Object
 protected:
     Sprite sprite;
 
-    Shader spriteShader;
+    Shader* spriteShader;
     Texture texColorTable;
-    int spritePaletteIndex;
     int spritePaletteSize;
     Texture spriteColorTable;
 
@@ -45,22 +44,25 @@ public:
     FloatRect GetGlobalBounds() const;
     FloatRect GetLocalBounds() const;
 
-    void SetSpritePaletteIndex(int index) { spritePaletteIndex = index; };
     void SetSpritePaletteSize(int size) { spritePaletteSize = size; };
     void SetSpriteColorTable(string table) { spriteColorTable.loadFromFile(table); };
-    void SetSpriteColor(int index)
+    void SetPaletteColor(int index)
     {
-        spritePaletteIndex = (spritePaletteIndex - index) % spritePaletteSize;
-        spriteShader.setUniform("colorTable", spriteColorTable);
-        spriteShader.setUniform("paletteIndex", (float)spritePaletteIndex / spritePaletteSize);
+        float spritePaletteIndex = index % spritePaletteSize;
+        spriteShader->setUniform("colorTable", spriteColorTable);
+        spriteShader->setUniform("paletteIndex", spritePaletteIndex / spritePaletteSize);
     }
-    void SetSpritePalette(int index, int size, string table)
+    void SetSpritePalette(int size, string table)
     {
-        SetSpritePaletteIndex(index);
         SetSpritePaletteSize(size);
         SetSpriteColorTable(table);
     };
 
-    void SetSpriteShader() { spriteShader.loadFromFile("shaders/palette.frag", Shader::Fragment); };
+    void SetSpriteShader() 
+    { 
+        if (spriteShader != nullptr)
+            spriteShader->loadFromFile("shaders/palette.frag", Shader::Fragment); 
+    };
+    void UseShader();
 };
 

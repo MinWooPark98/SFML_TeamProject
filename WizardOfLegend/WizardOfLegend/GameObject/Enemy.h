@@ -6,6 +6,7 @@
 #include "../Framework/SoundMgr.h"
 #include "Player.h"
 
+class PlayScene;
 class Enemy : public SpriteObj
 {
 public:
@@ -16,6 +17,7 @@ public:
 		StageBoss,
 		MiddleBoss,
 		LastBoss,
+		ETC,
 	};
 
 	enum class States
@@ -98,6 +100,14 @@ protected:
 	Vector2f monsterLastPosition;
 
 	float hitTimer = 0.f;
+
+	// property
+	float goldProbability;
+	int goldDropNumber;
+	int minGold;
+	int maxGold;
+	float platinumProbability;
+	int platinumDropNumber;
 
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
@@ -195,4 +205,14 @@ public:
 
 	void UpdateHit(float dt);
 	void OnHit(const Vector2f& atkDir, int dmg);
+
+	void SetProperty(float goldPer, int goldDropNum, int minG, int maxG, float platinumPer, int platinumDropNum);
+	float GetGoldPer() { return goldProbability; };
+	int GetGoldDropNum() { return goldDropNumber; };
+	int GetMinGold() { return minGold; };
+	int GetMaxGold() { return maxGold; };
+	float GetPlatinumPer() { return platinumProbability; };
+	int GetPlatinumDropNum() { return platinumDropNumber; };
+
+	 void Drop(PlayScene* scene);
 };

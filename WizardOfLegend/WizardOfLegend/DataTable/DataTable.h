@@ -16,6 +16,7 @@ public:
 		SkillSet,
 		SkillSetIntro,
 		FinalBossSkill,
+		MonsterProperty,
 		MapName,
 	};
 protected:
