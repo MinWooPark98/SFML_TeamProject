@@ -1,6 +1,8 @@
 #pragma once
 #include "Interactive.h"
 
+class TextObj;
+
 class Goods : public Interactive
 {
 public:
@@ -19,6 +21,8 @@ public:
 protected:
 	bool forSale;
 
+	TextObj* price;
+
 	Payment payment;
 	Types type;
 
@@ -29,6 +33,10 @@ public:
 	virtual ~Goods();
 
 	virtual void Init() override;
+	virtual void Draw(RenderWindow& window) override;
+
+	virtual void Approach() override;
+	virtual void ApproachEnd() override;
 
 	void ForSale(bool sale);
 	virtual void Saled() {}
