@@ -60,7 +60,7 @@ void DevScene::Init()
 	itemBox->SetPos(Vector2f(windowSize.x * 0.05f, windowSize.y * 0.2f));
 	objList[LayerType::Object][0].push_back(itemBox);
 
-	Store* store = new Store(Goods::Payment::Gold, Goods::Types::Relic);
+	Store* store = new Store(Goods::Payment::Gold, Goods::Types::Hood);
 	store->Init();
 	store->SetPos(Vector2f(windowSize.x * 0.05f + 150.f, windowSize.y * 0.2f));
 	objList[LayerType::Object][0].push_back(store);

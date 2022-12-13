@@ -43,6 +43,7 @@ void Store::Init()
 					((GoodsHood*)newGoods)->SetInfo(table[toShuffle[i]]);
 				goodsList.push_back(newGoods);
 			}
+			sprite.setTexture(*RESOURCE_MGR->GetTexture("graphics/StoreTarp.png"));
 		}
 		break;
 	case Goods::Types::Relic:
