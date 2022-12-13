@@ -52,9 +52,15 @@ void GlassTube::Update(float dt)
 	if (player != nullptr)
 	{
 		if (GetHitBounds().intersects(player->GetHitBounds()))
+		{
 			isPlayerAdjacent = true;
+			interactKey->SetActive(true);
+		}
 		else
+		{
 			isPlayerAdjacent = false;
+			interactKey->SetActive(false);
+		}
 	}
 }
 
