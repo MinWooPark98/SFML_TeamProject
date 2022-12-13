@@ -187,6 +187,7 @@ void PlayScene::Init()
 
 				objList[LayerType::Object][0].push_back(glassTube);
 				glassTubes.push_back(glassTube);
+				((PlayUiMgr*)uiMgr)->NewGlassTubes(glassTube);
 			}
 			else if (obj.path == "graphics/TreasureChestClosed.png")
 			{
@@ -497,7 +498,12 @@ void PlayScene::Update(float dt)
 	if (glassTubes.size() != 0)
 	{
 		for (int i = 0; i < glassTubes.size(); i++)
+		{
 			glassTubes[i]->Update(dt);
+
+			if (glassTubes[i]->GetIsPlayerAdjacent())
+				((PlayUiMgr*)uiMgr)->GlassTubeSet(i, true);
+		}
 	}
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))

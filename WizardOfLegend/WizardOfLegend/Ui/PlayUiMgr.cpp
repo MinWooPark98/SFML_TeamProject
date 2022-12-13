@@ -18,6 +18,8 @@
 #include "SkillBookUi.h"
 #include "ItemBoxUi.h"
 #include "WardrobeUi.h"
+#include "../Ui/MessageUi.h"
+#include "../GameObject/GlassTube.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -386,9 +388,6 @@ void PlayUiMgr::Init()
 	fps->SetPos({ windowSize.x * 0.8f, windowSize.y * 0.07f });
 	uiObjList[0].push_back(fps);
 
-	messageUi = new MessageUi();
-	messageUi->Init();
-
 	auto skillBook = new SkillBookUi();
 	skillBook->SetName("SKILLBOOKUI");
 	skillBook->Init();
@@ -404,11 +403,13 @@ void PlayUiMgr::Init()
 	wardrobeUi->Init();
 	uiObjList[0].push_back(wardrobeUi);
 
+	msgUi = new MessageUi();
+	msgUi->Init();
+	uiObjList[0].push_back(msgUi);
 }
 
 void PlayUiMgr::Release()
 {
-	messageUi->Release();
 	UiMgr::Release();
 	for (auto& uiObjs : uiObjList)
 	{
@@ -420,6 +421,14 @@ void PlayUiMgr::Release()
 		}
 	}
 	uiObjList.clear();
+
+	for (auto& glass : glassTubes)
+	{
+		if (glass != nullptr)
+			delete glass;
+		glass = nullptr;
+	}
+	glassTubes.clear();
 }
 
 void PlayUiMgr::SetPos(const Vector2f& pos)
@@ -442,8 +451,6 @@ void PlayUiMgr::Update(float dt)
 		options->Update(dt);
 		return;
 	}
-
-	messageUi->Update(dt);
 
 	if (isTutorial && !moveKeyboard.empty())
 		TuturialMoveKeyboardUiControl(dt);
@@ -501,11 +508,52 @@ void PlayUiMgr::Update(float dt)
 			fps->SetSize(100.f);
 		fps->SetString(to_string(fpsi));
 	}
+
+	if (glassTubes.size() != 0) 
+	{
+		for (int i = 0; i < glassTubes.size(); i++)
+		{
+			if (glassTubes[i]->GetIsPlayerAdjacent())
+			{
+				if (InputMgr::GetKeyDown(Keyboard::F))
+				{
+					msgUi->SetNpcName(glassTubes[i]->GetName());
+					msgUi->SetTexts(glassTubes[i]->GetMessages()[0]);
+					msgUi->SetNpcImage("graphics/HumanKnightPortrait.png");
+					msgUi->SetPlayerImage(63);
+					msgUi->MessageUiOn();
+				}
+
+				if (msgUi->GetisTalk())
+				{
+					if (InputMgr::GetKeyDown(Keyboard::Space))
+						messageIndex++;
+
+					if (messageIndex < glassTubes[i]->GetMessages().size())
+					{
+						msgUi->SetTexts(glassTubes[i]->GetMessages()[messageIndex]);
+						msgUi->Talk();
+					}
+				}
+
+				if (messageIndex == glassTubes[i]->GetMessages().size())
+				{
+					if (InputMgr::GetKeyDown(Keyboard::Space))
+					{
+						msgUi->UiEnabled(false);
+						msgUi->SetIsTalk(false);
+						messageIndex = 0;
+					}
+				}
+			}
+		}
+	}
 }
 
 void PlayUiMgr::Draw(RenderWindow& window)
 {
 	UiMgr::Draw(window);
+
 	if (!isOption)
 	{
 		for (auto& uiObjs : uiObjList)
@@ -537,8 +585,6 @@ void PlayUiMgr::Draw(RenderWindow& window)
 
 	if (isDevMode)
 		fps->Draw(window);
-
-	messageUi->Draw(window);
 }
 
 void PlayUiMgr::HpBarSizeControl(float dt)
@@ -744,4 +790,14 @@ Object* PlayUiMgr::FindUiObj(const string& name)
 		}
 	}
 	return nullptr;
+}
+
+void PlayUiMgr::NewGlassTubes(GlassTube* tube)
+{
+	glassTubes.push_back(tube);
+}
+
+void PlayUiMgr::GlassTubeSet(int index, bool set)
+{
+	glassTubes[index]->SetIsPlayerAdjacent(set);
 }

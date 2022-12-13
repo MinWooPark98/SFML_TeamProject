@@ -27,6 +27,8 @@ void MessageUi::Init()
 
 	for (int i = 0; i < massageImages.size(); i++)
 	{
+		massageImages[i]->Init();
+
 		switch (i)
 		{
 		case 0:
@@ -74,7 +76,7 @@ void MessageUi::Init()
 	text = new TextObj();
 	text->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	text->SetFillColor(Color::White);
-	text->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"), 30, Color::White, "");
+	text->SetText(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"), 25, Color::White, "");
 	text->SetOutlineColor(Color::Black);
 	text->SetOutlineThickness(1.f);
 	text->SetActive(false);
@@ -103,11 +105,6 @@ void MessageUi::Init()
 
 	auto npcTalkTable = DATATABLE_MGR->Get<NpcTalkTable>(DataTable::Types::MonsterProperty);
 	auto& npc = npcTalkTable->GetTable();
-
-	//for (auto& table : npc)
-	//{
-	//	SetTalkTable(table.second.npcName, table.second.talks);
-	//}
 }
 
 void MessageUi::Update(float dt)
@@ -194,9 +191,8 @@ void MessageUi::UiEnabled(bool set)
 
 void MessageUi::SetTexts(const string& string)
 {
-	text->SetText("");
 	text->SetString(string);
-	text->SetPos({ windowSize.x * 0.25f, windowSize.y * 0.73f });
+	text->SetPos({ windowSize.x * 0.25f, windowSize.y * 0.76f });
 	text->AsciiToUnicode();
 }
 
@@ -222,10 +218,6 @@ void MessageUi::SetPlayerImage(int playerPaletteColor)
 
 void MessageUi::MessageUiOn()
 {
-	//SetTexts(str); Text String Setting
-	//SetNpcName(npcName); Npc name Setting
-	//SetPlayerImage(playerColorIndex); Player Palette Index Setting
-	//SetNpcImage(npcImage); Npc Image string
 	UiEnabled(true);
 	SetIsTalk(true);
 }
@@ -235,8 +227,7 @@ void MessageUi::Talk()
 	if (InputMgr::GetKeyDown(Keyboard::Space))
 	{
 		UiEnabled(false);
-		//SetTexts(str); string setting
-		enabledTime = 0.1f;
+		enabledTime = 0.05f;
 		spaceBright = 0;
 	}
 }

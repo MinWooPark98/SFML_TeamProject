@@ -4,19 +4,27 @@
 NpcTalkTable::NpcTalkTable()
 	: DataTable(DataTable::Types::NpcTalk)
 {
+	fileName = "tables/tutorialSkillMessage.csv";
 }
 
 NpcTalkTable::~NpcTalkTable()
 {
-	fileName = "tables/npcTalkTable.csv";
 }
 
-const NpcTalkTable::NpcType& NpcTalkTable::Get(const string& objType)
+const vector<string>& NpcTalkTable::Get(const string& objType)
 {
 	auto find = table.find(objType);
 	if (find == table.end())
-		throw "Wrong skillName";
+		throw "empty";
 	return find->second;
+}
+
+const string& NpcTalkTable::GetNpcName(const string& objType)
+{
+	auto find = table.find(objType);
+	if (find == table.end())
+		throw "empty";
+	return find->first;
 }
 
 void NpcTalkTable::Release()
@@ -34,23 +42,23 @@ bool NpcTalkTable::Load()
 	vector<string> objType = doc.GetColumn<string>(0);
 	keys = objType;
 
-	vector<vector<string>> talks;
-	for (int i = 0; i < columnCount; i++)
+	for (int i = 0; i < rowCount; i++)
 	{
-		vector<string> talk = doc.GetColumn<string>(i);
-		talks.push_back(talk);
-	}
-
-	for (int j = 0; j < rowCount; ++j)
-	{
-		if (table.find(objType[j]) != table.end())
+		if (table.find(objType[i]) != table.end())
 		{
 			cout << "duplicate values exist" << endl;
 			return false;
 		}
 
-		for (int i = 0; i < talks.size(); i++)
-			table.insert({ objType[j], { talks[j][i] } });
+		vector<string> talk;
+		for (int j = 1; j < columnCount; ++j)
+		{
+			talk.push_back(doc.GetCell<string>(j, i));
+			if (talk.empty())
+				break;
+		}
+
+		table[objType[i]] = talk;
 	}
 
 	return true;
