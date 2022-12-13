@@ -9,6 +9,7 @@
 #include "../DataTable/SkillSetTable.h"
 #include "../DataTable/FinalBossSkillTable.h"
 #include "../DataTable/MapNameTable.h"
+#include "../Scene/SceneMgr.h"
 
 DataTableList::DataTableList()
 	:buttons(nullptr), dataType(DataTable::Types::None)
@@ -92,6 +93,8 @@ void DataTableList::Update(float dt)
 		button->SetMousePos(mousePos);
 	}
 	buttons->Update(dt);
+	if (buttons->GetButtons().empty())
+		return;
 	auto lastBtn = buttons->GetButtons().back();
 	auto btnBottom = lastBtn->GetPos().y + lastBtn->GetHitBounds().height;
 	auto& originalCenter = view.getCenter();
@@ -154,4 +157,32 @@ void DataTableList::EndSelection(const string& str)
 	if (Selected != nullptr)
 		Selected(str);
 	SetActive(false);
+}
+
+void DataTableList::LoadExtraSkillSetList(int idx)
+{
+	buttons->Clear();
+	Vector2i windowSize = FRAMEWORK->GetWindowSize() / 2;
+	auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+	vector<string> keys;
+	for (auto skillSet : player->GetExtraSkillSet())
+	{
+		if (idx == 1)
+		{
+			if (skillSet->GetUsingSkills().size() > 1 || skillSet->GetUsingSkills().front()->GetSetting()->playerAction != Player::SkillAction::Dash)
+				continue;
+		}
+		else if (skillSet->GetUsingSkills().size() == 1 && skillSet->GetUsingSkills().front()->GetSetting()->playerAction == Player::SkillAction::Dash)
+			continue;
+		keys.push_back(skillSet->GetSkillSetName());
+	}
+	for (int j = 0; j < keys.size(); ++j)
+	{
+		Button2* newButton = new Button2();
+		buttons->AddButton(newButton, keys[j], { 0.f, 0.f, (float)windowSize.x, 30.f });
+		newButton->IsOtherView(true);
+		newButton->MousePointerOn = bind(&Button2::DefaultMouseOn, newButton);
+		newButton->MousePointerOff = bind(&Button2::DefaultMouseOff, newButton);
+		newButton->ClickOn = bind(&DataTableList::EndSelection, this, keys[j]);
+	}
 }

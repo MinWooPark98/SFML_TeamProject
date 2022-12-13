@@ -103,5 +103,6 @@ FloatRect SpriteObj::GetLocalBounds() const
 
 void SpriteObj::UseShader()
 {
-    spriteShader = new Shader();
+    if(spriteShader == nullptr)
+        spriteShader = new Shader();
 }

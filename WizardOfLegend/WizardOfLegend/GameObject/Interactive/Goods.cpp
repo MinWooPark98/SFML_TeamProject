@@ -33,6 +33,8 @@ void Goods::Init()
 	priceText->GetSFMLText().setScale({ 0.25f, 0.25f });
 	priceText->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	priceText->SetFillColor(Color::Black);
+	priceText->SetString("X");
+	priceText->SetOrigin(Origins::MC);
 
 	infoPanel = new SpriteObj();
 	infoPanel->Init();
@@ -64,6 +66,12 @@ void Goods::Init()
 
 	Interact = bind(&Goods::Sale, this);
 	//interactKey->SetActive(false);
+}
+
+void Goods::Update(float dt)
+{
+	if (forSale)
+		Interactive::Update(dt);
 }
 
 void Goods::Draw(RenderWindow& window)

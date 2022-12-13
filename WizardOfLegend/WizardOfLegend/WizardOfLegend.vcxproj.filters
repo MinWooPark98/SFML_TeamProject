@@ -103,6 +103,8 @@
     <ClCompile Include="GameObject\PortalEffect.cpp" />
     <ClCompile Include="DataTable\NpcTalkTable.cpp" />
     <ClCompile Include="GameObject\Store.cpp" />
+    <ClCompile Include="Scene\PlaySceneDataMgr.cpp" />
+    <ClCompile Include="DataTable\SavedDataTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -211,6 +213,8 @@
     <ClInclude Include="GameObject\PortalEffect.h" />
     <ClInclude Include="DataTable\NpcTalkTable.h" />
     <ClInclude Include="GameObject\Store.h" />
+    <ClInclude Include="Scene\PlaySceneDataMgr.h" />
+    <ClInclude Include="DataTable\SavedDataTable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

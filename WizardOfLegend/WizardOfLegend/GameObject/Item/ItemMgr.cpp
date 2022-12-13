@@ -7,6 +7,7 @@
 #include "../../DataTable/StatTable.h"
 #include "Relic.h"
 #include "Hood.h"
+#include "../../Ui/UiMgr.h"
 
 ItemMgr::ItemMgr()
 	:hood(nullptr), player(nullptr)
@@ -25,10 +26,13 @@ void ItemMgr::SetHood(int id)
 	const auto& hoodInfo = table->Get(id);
 	hood->SetHoodInfo(hoodInfo);
 	player->SetPaletteColor(hoodInfo.paletteIdx);
+	((SpriteObj*)SCENE_MGR->GetCurrentScene()->GetUiMgr()->FindUiObj("PLAYERSTATUSPORTRAIT"))->SetPaletteColor(hoodInfo.paletteIdx);
 }
 
 void ItemMgr::AddRelic(int id)
 {
+	if (id == -1)
+		return;
 	auto table = DATATABLE_MGR->Get<RelicTable>(DataTable::Types::Relic);
 	const auto& relicInfo = table->Get(id);
 	Relic* newItem = new Relic();

@@ -38,6 +38,7 @@ public:
 	virtual ~Goods();
 
 	virtual void Init() override;
+	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
 	virtual void Approach() override;

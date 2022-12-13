@@ -17,7 +17,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), attackDmg(20),
-	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), extraSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), damageTake(0.f), evasionRate(0.f), criticalRate(0.f), criticalRatio(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f }), itemMgr(nullptr)
+	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), damageTake(0.f), evasionRate(0.f), criticalRate(0.f), criticalRatio(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f }), itemMgr(nullptr)
 {
 }
 
@@ -254,9 +254,6 @@ void Player::Init()
 		skillSets.push_back(newSkillSet);
 	}
 
-	extraSkillSet = new SkillSet();
-	extraSkillSet->SetSubject(this, Skill::SubjectType::Player);
-
 	UseShader();
 	SetSpriteShader();
 	SetSpritePalette(64, "graphics/WizardPalette.png");
@@ -277,7 +274,7 @@ void Player::Init()
 	itemMgr->SetPlayer(this);
 	itemMgr->Apply();
 
-	SetCurHp(maxHp);
+	//SetCurHp(maxHp);
 }
 
 void Player::Update(float dt)
@@ -545,6 +542,11 @@ void Player::Reset()
 	hitTimer = 0.f;
 	fallTimer = 0.f;
 	fallingScale = { 1.f, 1.f };
+	for (auto extraSkillSet : extraSkillSets)
+	{
+		delete extraSkillSet;
+	}
+	extraSkillSets.clear();
 }
 
 void Player::UpdateHit(float dt)
@@ -717,16 +719,32 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	SetState(States::Hit);
 }
 
-void Player::SetExtraSkillSet(const string& skillSetName)
+void Player::AddExtraSkillSet(const string& skillSetName)
 {
-	if (!extraSkillSet->GetSkillSetName().empty())
-	{
-		// 밖으로 카드 소환되도록
-	}
-	extraSkillSet->Set(skillSetName);
+	SkillSet* newSkillSet = new SkillSet();
+	newSkillSet->SetSubject(this, Skill::SubjectType::Player);
+	newSkillSet->Set(skillSetName);
+	extraSkillSets.push_back(newSkillSet);
 }
 
-void Player::SavePlatinum(int platinum)
+void Player::ExchangeSkillSet(int idx, const string& skillSetName, bool isPlayScene)
+{
+	for (auto skillSet : extraSkillSets)
+	{
+		if (skillSet->GetSkillSetName() == skillSetName)
+		{
+			SkillSet* temp = skillSet;
+			skillSet = skillSets[idx];
+			skillSets[idx] = temp;
+		}
+	}
+
+	auto currScene = SCENE_MGR->GetCurrentScene();
+	if (isPlayScene || currScene->GetType() == Scenes::Play)
+		((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr())->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+}
+
+void Player::SavePlatinum()
 {
 	rapidcsv::Document doc("tables/platinumTable.csv", rapidcsv::LabelParams(0, -1));
 

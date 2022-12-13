@@ -10,6 +10,8 @@
 #include "../GameObject/SkillSet.h"
 #include "SkillBookCardInfo.h"
 #include "../GameObject/Interactive/SkillBook.h"
+#include "../DataTable/SavedDataTable.h"
+#include "../DataTable/DataTableMGR.h"
 
 SkillBookUi::SkillBookUi()
 	:collection(nullptr), skillVecIdx(0), skillInfo(nullptr), isMoving(true), moveSpeed(5400.f), state(States::SkillOption)
@@ -257,7 +259,8 @@ void SkillBookUi::SetActive(bool active)
 		playerSkillSets.push_back(skillSets[5]);
 		for (int i = 0; i < options.size(); ++i)
 		{
-			options[i].second->SetTexture(*RESOURCE_MGR->GetTexture(playerSkillSets[i]->GetIconDir()));
+			if(!playerSkillSets[i]->GetSkillSetName().empty())
+				options[i].second->SetTexture(*RESOURCE_MGR->GetTexture(playerSkillSets[i]->GetIconDir()));
 		}
 		for (auto& option : options)
 		{
@@ -279,6 +282,12 @@ void SkillBookUi::SetActive(bool active)
 		auto skillBook = ((SkillBook*)currScene->FindGameObj("SKILLBOOK"));
 		if(skillBook != nullptr)
 			skillBook->SetState(SkillBook::States::Close);
+		vector<string> skillSetNames;
+		for (auto skillSet : playerSkillSets)
+		{
+			skillSetNames.push_back(skillSet->GetSkillSetName());
+		}
+		DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->ChangeSkills(skillSetNames);
 	}
 }
 
@@ -312,4 +321,5 @@ void SkillBookUi::OptionHighLightOff(int idx)
 void SkillBookUi::ResetCurrOptionIcon()
 {
 	options[skillVecIdx].second->SetTexture(*RESOURCE_MGR->GetTexture(playerSkillSets[skillVecIdx]->GetIconDir()));
+	options[skillVecIdx].second->SetOrigin(Origins::MC);
 }

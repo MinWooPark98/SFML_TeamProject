@@ -21,6 +21,7 @@ public:
 		MapName,
 		Relic,
 		Hood,
+		SavedData,
 	};
 protected:
 	Types type;

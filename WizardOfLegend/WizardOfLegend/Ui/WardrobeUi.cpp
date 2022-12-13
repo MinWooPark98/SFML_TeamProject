@@ -10,6 +10,7 @@
 #include "../GameObject/Interactive/Wardrobe.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/HoodTable.h"
+#include "../DataTable/SavedDataTable.h"
 
 WardrobeUi::WardrobeUi()
 	:frame(nullptr), display(nullptr), actionIdx(0), angle(0.f), currAngle(0.f), panel(nullptr), vecIdx(0), lastIdx(0), itemName(nullptr), itemIntro(nullptr), isMoving(true), moveSpeed(7200.f)
@@ -34,6 +35,7 @@ void WardrobeUi::Init()
 	actions = { "graphics/WizardPBAoEDown3.png", "graphics/WizardKickRight2.png", "graphics/WizardGroundSlamDown5.png", "graphics/WizardBackHandRight2.png", "graphics/WizardDashDown.png" };
 	auto& name = actions[Utils::RandomRange(0, actions.size())];
 	display->SetTexture(*RESOURCE_MGR->GetTexture(name));
+	display->UseShader();
 	display->SetSpriteShader();
 	display->SetSpritePalette(64, "graphics/WizardPalette.png");
 	display->SetOrigin(Origins::MC);
@@ -260,6 +262,27 @@ void WardrobeUi::SetActive(bool active)
 			}
 			collections.push_back({ newBack, newItem, unlocked,info.second.second });
 		}
+		auto itemMgr = ((Player*)currScene->FindGameObj("PLAYER"))->GetItemMgr();
+		for (int i = 0; i < collections.size(); ++i)
+		{
+			if (collections[i].info.id == DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->Get().hoodId)
+			{
+				vector<Collection> temp;
+				for (int j = i; j < collections.size(); ++j)
+				{
+					temp.push_back(collections[j]);
+				}
+				for (int j = 0; j < i; ++j)
+				{
+					temp.push_back(collections[j]);
+				}
+				collections = temp;
+				display->SetPaletteColor(collections[0].info.paletteIdx);
+				SetItemInfo();
+				break;
+			}
+		}
+		vecIdx = 0;
 		((Wardrobe*)currScene->FindGameObj("WARDROBE"))->SetState(Wardrobe::States::Open);
 		Reappear();
 	}
@@ -305,17 +328,6 @@ void WardrobeUi::SetItemInfo()
 	itemIntro->SetOrigin(Origins::MC);
 }
 
-void WardrobeUi::SelectItem()
-{
-	auto& currItem = collections[vecIdx];
-	if (currItem.unlocked)
-	{
-		auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
-		auto itemMgr = player->GetItemMgr();
-		itemMgr->SetHood(currItem.info.id);
-	}
-}
-
 void WardrobeUi::FinishRoate()
 {
 	currAngle = 0.f;
@@ -330,8 +342,6 @@ void WardrobeUi::FinishRoate()
 		}
 	}
 	display->SetTexture(*RESOURCE_MGR->GetTexture(actions[actionIdx]));
-	display->UseShader();
-	display->SetSpriteShader();
 	display->SetPaletteColor(collections[vecIdx].info.paletteIdx);
 	Utils::RandomRange(0, 2) < 1 ? display->SetScale({ 4.f, 4.f }) : display->SetScale({ -4.f, 4.f });
 	display->SetOrigin(Origins::MC);
@@ -347,6 +357,7 @@ void WardrobeUi::ChangeHood()
 		player->GetItemMgr()->SetHood(collections[vecIdx].info.id);
 		collections[lastIdx].backImg->SetColor(Color::White);
 		collections[vecIdx].backImg->SetColor({ 0, 255, 0, 255 });
+		DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->ChangeHood(collections[vecIdx].info.id);
 		lastIdx = vecIdx;
 	}
 }

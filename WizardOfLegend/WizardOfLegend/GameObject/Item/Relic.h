@@ -40,6 +40,7 @@ public:
 
 	const Values& GetValues() { return relicInfo.values; }
 	void SetRelicInfo(const RelicInfo& info);
+	const RelicInfo& GetRelicInfo() { return relicInfo; }
 
 	virtual void Update(float dt) override;
 
