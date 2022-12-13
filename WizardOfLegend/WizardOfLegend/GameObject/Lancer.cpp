@@ -39,7 +39,7 @@ void Lancer::Init()
 	SetpaletteSize(9);
 	SetColorTable("graphics/LancerColorIndex.png");
 	SetColor(3);
-	SetMoveScale(200.f);
+	SetMoveScale(500.f);
 	SetAttackScale(100.f);
 	SetMonsterType(MonsterType::Normal);
 	weapon->SetOrigin(Origins::MC);

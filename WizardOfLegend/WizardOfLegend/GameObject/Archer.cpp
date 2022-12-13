@@ -58,8 +58,8 @@ void Archer::Init()
 	SetpaletteSize(9);
 	SetColorTable("graphics/ArcherColorIndex.png");
 
-	SetMoveScale(200.f);
-	SetAttackScale(100.f);
+	SetMoveScale(500.f);
+	SetAttackScale(400.f);
 	SetAttackStartDelay(1.f);
 	SetMonsterType(MonsterType::Normal);
 	weapon->SetOrigin(Origins::MC);

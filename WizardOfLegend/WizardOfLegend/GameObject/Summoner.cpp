@@ -36,8 +36,8 @@ void Summoner::Init()
 	SetpaletteSize(9);
 	SetColorTable("graphics/SummonerColorIndex.png");
 
-	SetMoveScale(200.f);
-	SetAttackScale(100.f);
+	SetMoveScale(500.f);
+	SetAttackScale(400.f);
 	SetMonsterType(MonsterType::Normal);
 
 	spawn->SetPos(GetPos());
