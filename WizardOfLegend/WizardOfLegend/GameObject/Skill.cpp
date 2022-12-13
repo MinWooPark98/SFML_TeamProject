@@ -111,7 +111,10 @@ void Skill::Do()
 					auto currScene = SCENE_MGR->GetCurrentScene();
 					auto mouseVec = currScene->GetObjMousePos() - subject->GetPos();
 					auto mouseDistance = Utils::Magnitude(mouseVec);
-					skillDir = Utils::Normalize(mouseVec);
+					if (setting->playerAction == Player::SkillAction::Dash)
+						skillDir = ((Player*)subject)->GetDashDir();
+					else
+						skillDir = Utils::Normalize(mouseVec);
 					distance = mouseDistance <= setting->distance ? mouseDistance : setting->distance;
 					startPos = subject->GetPos() + skillDir * distance;
 					if (currScene->GetType() == Scenes::Play)
@@ -171,7 +174,10 @@ void Skill::Do()
 		case AttackShape::Wave:
 			if (!(setting->attackType == AttackType::Multiple && isDoing))
 			{
-				skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
+				if (setting->playerAction == Player::SkillAction::Dash)
+					skillDir = ((Player*)subject)->GetDashDir();
+				else
+					skillDir = Utils::Normalize(SCENE_MGR->GetCurrentScene()->GetObjMousePos() - subject->GetPos());
 				startPos = subject->GetPos();
 			}
 			if (((Player*)subject)->GetBackHand())

@@ -6,6 +6,7 @@
 #include "Interactive/GoodsHood.h"
 #include "Interactive/GoodsRelic.h"
 #include "Interactive/GoodsSkill.h"
+#include "../Scene/SceneMgr.h"
 
 Store::Store(Goods::Payment payment, Goods::Types goodsType)
 	:payment(payment), goodsType(goodsType)
@@ -20,6 +21,7 @@ void Store::Init()
 {
 	SpriteObj::Init();
 	sprite.setScale({ 1.25f, 1.25f });
+	auto& objList = SCENE_MGR->GetCurrentScene()->GetObjList();
 
 	switch (goodsType)
 	{
@@ -103,6 +105,11 @@ void Store::Init()
 	default:
 		break;
 	}
+
+	for (auto goods : goodsList)
+	{
+		objList[Scene::LayerType::Object][0].push_back(goods);
+	}
 }
 
 void Store::Update(float dt)
@@ -118,11 +125,6 @@ void Store::Update(float dt)
 void Store::Draw(RenderWindow& window)
 {
 	SpriteObj::Draw(window);
-	for (auto goods : goodsList)
-	{
-		if(goods->GetActive())
-			goods->Draw(window);
-	}
 }
 
 void Store::SetPos(const Vector2f& pos)
