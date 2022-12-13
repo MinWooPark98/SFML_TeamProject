@@ -108,6 +108,7 @@ void Store::Init()
 
 	for (auto goods : goodsList)
 	{
+		goods->SetObjType(Object::ObjTypes::ETC);
 		objList[Scene::LayerType::Object][0].push_back(goods);
 	}
 }

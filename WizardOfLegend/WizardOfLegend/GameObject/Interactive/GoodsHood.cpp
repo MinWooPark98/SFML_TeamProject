@@ -28,6 +28,9 @@ void GoodsHood::Init()
 	hoodDisplay.SetSpriteShader();
 	hoodDisplay.SetSpritePalette(64, "graphics/WizardPalette.png");
 	hoodDisplay.SetOrigin(Origins::BC);
+
+	SetHitBox(FloatRect(0.f, 0.f, 14.f, 20.f));
+	SetHitBoxOrigin(Origins::BC);
 }
 
 void GoodsHood::Draw(RenderWindow& window)
