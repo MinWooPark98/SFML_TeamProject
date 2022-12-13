@@ -262,10 +262,10 @@ void Player::Init()
 	SetSpritePalette(64, "graphics/WizardPalette.png");
 	SetPaletteColor(63);	// index �ٲ��־� �� ���� -> �Ӽ� ���� ���� �߰�
 
-	hitboxSize = FloatRect(0.f, 0.f, 10.f, 25.f);
+	hitboxSize = FloatRect(0.f, 0.f, 13.f, 25.f);
 	SetHitBox(hitboxSize);
 	SetHitBoxOrigin(Origins::MC);
-	SetLowHitBox({ 20.f, 20.f, 15.f, 5.f }, Color::White);
+	SetLowHitBox({ 0.f, 0.f, 8.f, 5.f }, Color::White);
 	SetLowHitBoxOrigin(Origins::MC);
 
 	shadow.setFillColor({ 0, 0, 0, 100 });

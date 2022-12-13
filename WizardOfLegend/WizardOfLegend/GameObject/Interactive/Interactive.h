@@ -23,6 +23,7 @@ public:
 	virtual void SetPos(const Vector2f& pos);
 	void SetInteractKeyPos(const Vector2f& pos) { interactKeyPos = pos; }
 
+	bool CheckApproach();
 	virtual void Approach();
 	virtual void ApproachEnd();
 	void DefaultApproach();

@@ -2,10 +2,10 @@ ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
 SkillBookBigChomp,0,8,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
-graphics/SpellBookBigChomp0.png,0,0,38,32,19,16,0,0
-graphics/SpellBookBigChomp1.png,0,0,37,33,18.5,16.5,0,0
-graphics/SpellBookBigChomp2.png,0,0,37,41,18.5,20.5,0,0
-graphics/SpellBookBigChomp1.png,0,0,37,33,18.5,16.5,0,0
-graphics/SpellBookBigChomp0.png,0,0,38,32,19,16,0,0
-graphics/SpellBookBigChomp1.png,0,0,37,33,18.5,16.5,0,0
-graphics/SpellBookBigChomp0.png,0,0,38,32,19,16,0,0
+graphics/SpellBookBigChomp0.png,0,0,38,32,19,32,0,0
+graphics/SpellBookBigChomp1.png,0,0,37,33,18.5,33,0,0
+graphics/SpellBookBigChomp2.png,0,0,37,41,18.5,41,0,0
+graphics/SpellBookBigChomp1.png,0,0,37,33,18.5,33,0,0
+graphics/SpellBookBigChomp0.png,0,0,38,32,19,32,0,0
+graphics/SpellBookBigChomp1.png,0,0,37,33,18.5,33,0,0
+graphics/SpellBookBigChomp0.png,0,0,38,32,19,32,0,0

@@ -36,7 +36,7 @@ void Interactive::Update(float dt)
 	{
 		if (!approached)
 		{
-			if (GetHitBounds().intersects(player->GetHitBounds()))
+			if (GetHitBounds().intersects(player->GetHitBounds()) || GetHitBounds().intersects(player->GetLowHitBounds()))
 			{
 				approached = true;
 				Approach();
@@ -44,7 +44,7 @@ void Interactive::Update(float dt)
 		}
 		else
 		{
-			if (!GetHitBounds().intersects(player->GetHitBounds()))
+			if (!(GetHitBounds().intersects(player->GetHitBounds()) || GetHitBounds().intersects(player->GetLowHitBounds())))
 			{
 				approached = false;
 				ApproachEnd();

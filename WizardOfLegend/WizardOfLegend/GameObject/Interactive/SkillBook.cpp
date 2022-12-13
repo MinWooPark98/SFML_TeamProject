@@ -35,8 +35,8 @@ void SkillBook::Init()
 		}
 	}
 	SetHitBox(FloatRect(0.f, 0.f, 36.f, 24.f));
-	SetHitBoxOrigin(Origins::TC);
-	SetInteractKeyPos({ 0.f, -30.f });
+	SetHitBoxOrigin(Origins::BC);
+	SetInteractKeyPos({ 0.f, -45.f });
 
 	SetState(States::Idle);
 }

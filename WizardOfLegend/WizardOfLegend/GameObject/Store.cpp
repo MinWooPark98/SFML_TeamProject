@@ -44,6 +44,7 @@ void Store::Init()
 				goodsList.push_back(newGoods);
 			}
 			sprite.setTexture(*RESOURCE_MGR->GetTexture("graphics/StoreTarp.png"));
+			SetOrigin(Origins::BC);
 		}
 		break;
 	case Goods::Types::Relic:
@@ -58,7 +59,7 @@ void Store::Init()
 			random_device rd;
 			mt19937 g(rd());
 			std::shuffle(toShuffle.begin(), toShuffle.end(), g);
-			for (int i = 0; i < 4; ++i)
+			for (int i = 0; i < 1; ++i)
 			{
 				if (i >= toShuffle.size() - 1)
 					break;
@@ -68,6 +69,7 @@ void Store::Init()
 				goodsList.push_back(newGoods);
 			}
 			sprite.setTexture(*RESOURCE_MGR->GetTexture("graphics/RelicStoreTarp.png"));
+			SetOrigin(Origins::BC);
 		}
 		break;
 	case Goods::Types::Skill:
@@ -85,7 +87,7 @@ void Store::Init()
 			random_device rd;
 			mt19937 g(rd());
 			std::shuffle(toShuffle.begin(), toShuffle.end(), g);
-			for (int i = 0; i < 5; ++i)
+			for (int i = 0; i < 2; ++i)
 			{
 				if (i >= toShuffle.size() - 1)
 					break;
@@ -95,6 +97,7 @@ void Store::Init()
 				goodsList.push_back(newGoods);
 			}
 			sprite.setTexture(*RESOURCE_MGR->GetTexture("graphics/StoreTarp.png"));
+			SetOrigin(Origins::BC);
 		}
 		break;
 	default:

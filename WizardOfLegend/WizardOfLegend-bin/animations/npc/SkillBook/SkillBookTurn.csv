@@ -2,12 +2,12 @@ ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
 SkillBookTurn,0,9,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
-graphics/SpellBookTurn0.png,0,0,35,29,17.5,14.5,0,0
-graphics/SpellBookTurn1.png,0,0,36,28,18,14,0,0
-graphics/SpellBookTurn2.png,0,0,35,29,17.5,14.5,0,0
-graphics/SpellBookTurn3.png,0,0,31,32,15.5,16,0,0
-graphics/SpellBookTurn4.png,0,0,34,32,17,16,0,0
-graphics/SpellBookTurn3.png,0,0,31,32,15.5,16,0,0
-graphics/SpellBookTurn2.png,0,0,35,29,17.5,14.5,0,0
-graphics/SpellBookTurn1.png,0,0,36,28,18,14,0,0
-graphics/SpellBookTurn0.png,0,0,35,29,17.5,14.5,0,0
+graphics/SpellBookTurn0.png,0,0,35,29,17.5,29,0,0
+graphics/SpellBookTurn1.png,0,0,36,28,18,28,0,0
+graphics/SpellBookTurn2.png,0,0,35,29,17.5,29,0,0
+graphics/SpellBookTurn3.png,0,0,31,32,15.5,32,0,0
+graphics/SpellBookTurn4.png,0,0,34,32,17,32,0,0
+graphics/SpellBookTurn3.png,0,0,31,32,15.5,32,0,0
+graphics/SpellBookTurn2.png,0,0,35,29,17.5,29,0,0
+graphics/SpellBookTurn1.png,0,0,36,28,18,28,0,0
+graphics/SpellBookTurn0.png,0,0,35,29,17.5,29,0,0
