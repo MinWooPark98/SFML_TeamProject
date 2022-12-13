@@ -30,6 +30,7 @@ protected:
 	RelicInfo relicInfo;
 
 	bool applyValues;
+	float timer;
 
 public:
 	Relic();
@@ -38,14 +39,14 @@ public:
 	bool GetApplyValues() { return applyValues; }
 
 	const Values& GetValues() { return relicInfo.values; }
-	void SetRelicInfo(const RelicInfo& info) { relicInfo = info; }
+	void SetRelicInfo(const RelicInfo& info);
 
 	virtual void Update(float dt) override;
 
 	void CheckHpLower();
 	void CheckHpUpper();
 	void CheckNumOfItems();
-	void CheckOnHit();
+	void CheckOnHit(float dt);
 	void CheckWhileDashing();
 };
 

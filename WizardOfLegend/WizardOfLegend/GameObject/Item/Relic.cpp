@@ -10,6 +10,12 @@ Relic::Relic()
 {
 }
 
+void Relic::SetRelicInfo(const RelicInfo& info)
+{
+	relicInfo = info;
+	timer = info.duration;
+}
+
 void Relic::Update(float dt)
 {
 	if (player != nullptr)
@@ -26,7 +32,7 @@ void Relic::Update(float dt)
 		CheckNumOfItems();
 		break;
 	case Condition::OnHit:
-		CheckOnHit();
+		CheckOnHit(dt);
 		break;
 	case Condition::WhileDashing:
 		CheckWhileDashing();
@@ -60,11 +66,15 @@ void Relic::CheckNumOfItems()
 	relicInfo.values = itemInfo.values * itemMgr->GetRelicList().size();
 }
 
-void Relic::CheckOnHit()
+void Relic::CheckOnHit(float dt)
 {
 	if (player->GetState() == Player::States::Hit)
+	{
 		applyValues = true;
-	else
+		timer = 0.f;
+	}
+	timer += dt;
+	if (timer >= relicInfo.duration)
 		applyValues = false;
 }
 

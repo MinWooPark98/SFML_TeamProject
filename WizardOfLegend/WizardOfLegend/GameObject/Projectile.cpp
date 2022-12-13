@@ -139,6 +139,7 @@ void Projectile::Update(float dt)
 		switch (subType)
 		{
 		case Skill::SubjectType::Player:
+			auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 			for (int i = 0; i < collisionList.size(); ++i)
 			{
 				if (collisionList[i][Object::ObjTypes::Player].empty())
@@ -149,7 +150,7 @@ void Projectile::Update(float dt)
 						continue;
 					if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
 					{
-						((Enemy*)enemy)->OnHit(direction, attackDmg);
+						((Enemy*)enemy)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						damagedObjs.push_back(enemy);
 					}
 				}
@@ -159,7 +160,7 @@ void Projectile::Update(float dt)
 						continue;
 					if (GetHitBounds().intersects(boss->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), boss) == damagedObjs.end())
 					{
-						((FinalBoss*)boss)->OnHit(direction, attackDmg);
+						((FinalBoss*)boss)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						damagedObjs.push_back(boss);
 					}
 				}
@@ -167,7 +168,7 @@ void Projectile::Update(float dt)
 				{
 					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
 					{
-						((Dummy*)etc)->OnHit(direction, attackDmg);
+						((Dummy*)etc)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						damagedObjs.push_back(etc);
 					}
 				}
