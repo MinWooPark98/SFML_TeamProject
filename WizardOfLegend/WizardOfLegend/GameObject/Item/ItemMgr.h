@@ -24,7 +24,8 @@ public:
 
 	void AddRelic(int id);
 	void ChangeRelic(int id, int idx);
-	vector<Relic*> GetRelicList() { return relicList; }
+	const vector<Relic*>& GetRelicList() { return relicList; }
+	void ClearRelicList() { relicList.clear(); }
 
 	void Update(float dt);
 

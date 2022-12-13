@@ -10,6 +10,7 @@
 #include "RelicTable.h"
 #include "HoodTable.h"
 #include "NpcTalkTable.h"
+#include "SavedDataTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -75,6 +76,10 @@ void DataTableMgr::Init()
     table = new NpcTalkTable();
     table->Load();
     tables.insert({ DataTable::Types::NpcTalk, table });
+
+    table = new SavedDataTable();
+    table->Load();
+    tables.insert({ DataTable::Types::SavedData, table });
 }
 
 void DataTableMgr::Release()

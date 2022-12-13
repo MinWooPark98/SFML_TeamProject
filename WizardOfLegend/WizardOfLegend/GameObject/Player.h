@@ -64,7 +64,7 @@ protected:
 
 	vector<SkillSet*> skillSets;
 	SkillSet* currSkillSet;
-	SkillSet* extraSkillSet;
+	list<SkillSet*> extraSkillSets;
 
 	CircleShape shadow;
 
@@ -142,11 +142,13 @@ public:
 	void SetCurHp(int hp) { curHp = hp; };
 
 	vector<SkillSet*>& GetSkillSets() { return skillSets; }
-	void SetExtraSkillSet(const string& skillSetName);
-	SkillSet* GetExtraSkillSet() { return extraSkillSet; }
+	void AddExtraSkillSet(const string& skillSetName);
+	list<SkillSet*>& GetExtraSkillSet() { return extraSkillSets; }
+	void ExchangeSkillSet(int idx, const string& skillSetName, bool isPlayScene = false);
 
 	ItemMgr* GetItemMgr() { return itemMgr; }
 
+	void SetCurGold(int gold) { this->gold = gold; }
 	int GetCurGold() { return gold; };
 	void AddGold(int gold) { this->gold += gold; };
 	void SubGold(int gold) { this->gold -= gold; };
@@ -156,7 +158,7 @@ public:
 	void SetPlatinum(int platinum) { this->platinum = platinum; };
 	void AddPlatinum(int platinum) { this->platinum += platinum; };
 	void SubPlatinum(int platinum) { this->platinum -= platinum; };
-	void SavePlatinum(int platinum);
+	void SavePlatinum();
 	void LoadPlatinum();
 };
 

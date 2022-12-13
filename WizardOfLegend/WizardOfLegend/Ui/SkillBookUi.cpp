@@ -257,7 +257,8 @@ void SkillBookUi::SetActive(bool active)
 		playerSkillSets.push_back(skillSets[5]);
 		for (int i = 0; i < options.size(); ++i)
 		{
-			options[i].second->SetTexture(*RESOURCE_MGR->GetTexture(playerSkillSets[i]->GetIconDir()));
+			if(!playerSkillSets[i]->GetSkillSetName().empty())
+				options[i].second->SetTexture(*RESOURCE_MGR->GetTexture(playerSkillSets[i]->GetIconDir()));
 		}
 		for (auto& option : options)
 		{
@@ -312,4 +313,5 @@ void SkillBookUi::OptionHighLightOff(int idx)
 void SkillBookUi::ResetCurrOptionIcon()
 {
 	options[skillVecIdx].second->SetTexture(*RESOURCE_MGR->GetTexture(playerSkillSets[skillVecIdx]->GetIconDir()));
+	options[skillVecIdx].second->SetOrigin(Origins::MC);
 }

@@ -174,6 +174,8 @@
     <ClCompile Include="GameObject\PortalEffect.cpp" />
     <ClCompile Include="DataTable\NpcTalkTable.cpp" />
     <ClCompile Include="GameObject\Store.cpp" />
+    <ClCompile Include="DataTable\SavedDataTable.cpp" />
+    <ClCompile Include="Scene\PlaySceneDataMgr.cpp" />
     <ClCompile Include="Ui\ItemBoxUi.cpp" />
     <ClCompile Include="Ui\MessageUi.cpp" />
     <ClCompile Include="GameObject\ChaosFragments.cpp" />
@@ -287,6 +289,8 @@
     <ClInclude Include="GameObject\PortalEffect.h" />
     <ClInclude Include="DataTable\NpcTalkTable.h" />
     <ClInclude Include="GameObject\Store.h" />
+    <ClInclude Include="DataTable\SavedDataTable.h" />
+    <ClInclude Include="Scene\PlaySceneDataMgr.h" />
     <ClInclude Include="Ui\ItemBoxUi.h" />
     <ClInclude Include="Ui\MessageUi.h" />
     <ClInclude Include="GameObject\ChaosFragments.h" />

@@ -29,4 +29,6 @@ public:
 	void SetDataTable(DataTable::Types dataType);
 	void EndSelection(const string& str);
 	function<void(string)> Selected;
+
+	void LoadExtraSkillSetList(int idx);
 };

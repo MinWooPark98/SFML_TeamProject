@@ -36,6 +36,8 @@
 #include "../GameObject/PortalEffect.h"
 #include "../GameObject/Store.h"
 #include "../GameObject/Skill.h"
+#include "PlaySceneDataMgr.h"
+#include "../GameObject/Item/ItemMgr.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -136,11 +138,16 @@ void PlayScene::Init()
 			player->SetLastPosition({ 0,0 });
 			objList[LayerType::Object][5].push_back(player);
 			auto& skillSet = player->GetSkillSets();
-			player->SetSkillSet(0, "FireBall", true);
+			/*auto& skillNames = PLAYSCENE_DATAMGR->GetSkillSetNames();
+			for (int i = 0; i < 6; ++i)
+			{
+				player->SetSkillSet(i, skillNames[i], true);
+			}*/
+			/*player->SetSkillSet(0, "FireBall", true);
 			player->SetSkillSet(1, "FireDash", true);
 			player->SetSkillSet(2, "JumpMeteor", true);
 			player->SetSkillSet(4, "DragonArc", true);
-			player->SetSkillSet(5, "FireFull", true);
+			player->SetSkillSet(5, "FireFull", true);*/
 			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 		}
 		else if (obj.type == "OBJECT")
@@ -152,12 +159,6 @@ void PlayScene::Init()
 				portal->SetName(obj.type);
 				portal->SetPos(obj.position);
 				portal->SetObjType(Object::ObjTypes::ETC);
-				
-				if (mapName == "TUTORIALMAP")
-					portal->SetChanegeMap("TUTORIALFIGHT");
-				else if (mapName == "TUTORIALFIGHT")
-					portal->SetChanegeMap("TEST");
-
 				objList[LayerType::Middle][0].push_back(portal);
 			}
 			else if (obj.path == "graphics/Map/Object/HealthCrystal.png")
@@ -859,6 +860,7 @@ void PlayScene::Enter()
 
 	Release();
 	Init();
+	PLAYSCENE_DATAMGR->Load();
 	player->LoadPlatinum();
 	portalEffect->ShowPortalEffect({ player->GetPos().x, player->GetPos().y + (player->GetSize().y * 0.5f)});
 }
@@ -866,6 +868,13 @@ void PlayScene::Enter()
 void PlayScene::Exit()
 {
 	Scene::Exit();
+	PLAYSCENE_DATAMGR->Save();
+	player->SavePlatinum();
+
+	if (mapName == "TUTORIALMAP")
+		SetMapName("TUTORIALFIGHT");
+	else if (mapName == "TUTORIALFIGHT")
+		SetMapName("TEST");
 }
 
 void PlayScene::SpawnEnemy(int i, float dt)

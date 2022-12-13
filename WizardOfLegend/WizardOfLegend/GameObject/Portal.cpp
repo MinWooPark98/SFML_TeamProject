@@ -44,5 +44,6 @@ void Portal::SetChanegeMap(string mapName)
 void Portal::ChangeMap()
 {
 	currScene = SCENE_MGR->GetCurrentScene();
+	((PlayScene*)currScene)->Exit();
 	((PlayScene*)currScene)->Enter();
 }

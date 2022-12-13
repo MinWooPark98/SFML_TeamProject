@@ -308,7 +308,8 @@ void SkillBookCardInfo::ChangeSkill()
 	if (skillIdx > (int)skillInfos[element].size() - 1)
 		return;
 	Disappear();
-	playerSkillSets[currPlayerSkillSetIdx]->Set(skillInfos[element][skillIdx].first);
+	auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+	player->SetSkillSet(currPlayerSkillSetIdx < 2 ? currPlayerSkillSetIdx : currPlayerSkillSetIdx + 2, skillInfos[element][skillIdx].first, true);
 	if (ChangeSkillBookUi != nullptr)
 		ChangeSkillBookUi();
 }

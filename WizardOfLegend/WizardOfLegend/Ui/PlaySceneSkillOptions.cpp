@@ -94,7 +94,6 @@ void PlaySceneSkillOptions::Init()
 
 		DataTableList* skillSets = new DataTableList();
 		skillSets->Init();
-		skillSets->SetDataTable(DataTable::Types::SkillSet);
 		skillSets->Selected = bind(&PlaySceneSkillOptions::SetPlayerSkillSet, this, placeholders::_1);
 		skillSetLists.push_back(skillSets);
 	}
@@ -164,6 +163,7 @@ void PlaySceneSkillOptions::Draw(RenderWindow& window)
 void PlaySceneSkillOptions::SelectSkillSet(int idx)
 {
 	vecIdx = idx;
+	skillSetLists[idx]->LoadExtraSkillSetList(idx);
 	skillSetLists[idx]->SetActive(true);
 }
 
@@ -171,5 +171,6 @@ void PlaySceneSkillOptions::SetPlayerSkillSet(const string& skillSetName)
 {
 	auto currScene = SCENE_MGR->GetCurrentScene();
 	Player* player = (Player*)currScene->FindGameObj("PLAYER");
-	player->SetSkillSet(vecIdx, skillSetName, true);
+	//player->SetSkillSet(vecIdx, skillSetName, true);
+	player->ExchangeSkillSet(vecIdx, skillSetName, true);
 }

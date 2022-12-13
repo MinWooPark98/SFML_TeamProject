@@ -22,6 +22,7 @@ public:
 
 	const Values& GetValues() { return hoodInfo.values; }
 	void SetHoodInfo(const HoodInfo& info) { hoodInfo = info; }
+	const HoodInfo& GetHoodInfo() { return hoodInfo; }
 
 	void SetPaletteIdx(int idx) { hoodInfo.paletteIdx = idx; }
 	int GetPaletteIdx() { return hoodInfo.paletteIdx; }

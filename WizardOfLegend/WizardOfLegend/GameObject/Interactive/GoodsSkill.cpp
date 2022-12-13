@@ -64,16 +64,16 @@ void GoodsSkill::Saled()
 		{
 			auto player = ((Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER"));
 			auto& skillSets = player->GetSkillSets();
-			for (auto skillSet : skillSets)
+			for (int i = 0; i < skillSets.size(); ++i)
 			{
-				if (skillSet->GetSkillSetName().empty())
+				if (skillSets[i]->GetSkillSetName().empty())
 				{
-					skillSet->Set(goodsName);
+					player->SetSkillSet(i, goodsName, true);
 					SetActive(false);
 					return;
 				}
 			}
-			player->SetExtraSkillSet(goodsName);
+			player->AddExtraSkillSet(goodsName);
 		}
 		break;
 	case Goods::Payment::Platinum:
