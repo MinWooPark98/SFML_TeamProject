@@ -31,8 +31,11 @@ void ItemBox::Init()
 		}
 	}
 	SetHitBox(FloatRect(0.f, 0.f, 46.f, 25.f));
-	hitbox.setOrigin({ 23.f, 25.f });
+	SetHitBoxOrigin(Origins::BC);
 	SetInteractKeyPos({ 0.f, -50.f });
+
+	SetInteractBox({ 56.f, 30.f });
+	SetInteractBoxOrigin(Origins::BC);
 
 	SetState(States::Idle);
 }

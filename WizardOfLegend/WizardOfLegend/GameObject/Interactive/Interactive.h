@@ -11,6 +11,7 @@ protected:
 	SpriteObj* interactKey;
 	Vector2f interactKeyScale;
 	Vector2f interactKeyPos;
+	RectangleShape interactBox;
 
 public:
 	Interactive();
@@ -23,7 +24,9 @@ public:
 	virtual void SetPos(const Vector2f& pos);
 	void SetInteractKeyPos(const Vector2f& pos) { interactKeyPos = pos; }
 
-	bool CheckApproach();
+	void SetInteractBox(const Vector2f& size);
+	void SetInteractBoxOrigin(Origins origin);
+
 	virtual void Approach();
 	virtual void ApproachEnd();
 	void DefaultApproach();

@@ -130,3 +130,70 @@ bool Utils::OBB(const RectangleShape& obb1, const RectangleShape& obb2)
 	Vector2f MTV;
 	return testCollision(obb1, obb2, MTV);
 }
+
+FloatRect Utils::GetHitArea(const FloatRect& bnd1, const FloatRect& bnd2)
+{
+	FloatRect f;
+	if (bnd1.top < bnd2.top)
+	{
+		f.top = bnd2.top;
+		f.height = bnd1.top + bnd1.height - bnd2.top;
+	}
+	else
+	{
+		f.top = bnd1.top;
+		f.height = bnd2.top + bnd2.height - bnd1.top;
+	}
+
+	if (bnd1.left < bnd2.left)
+	{
+		f.left = bnd2.left;
+		f.height = bnd1.left + bnd1.width - bnd2.left;
+	}
+	else
+	{
+		f.left = bnd1.left; 
+		f.height = bnd2.left + bnd2.width - bnd2.left;
+	}
+	return f;
+}
+
+Vector2f Utils::RectCenter(const FloatRect& rect)
+{
+	return Vector2f(rect.left + rect.width * 0.5f, rect.top + rect.height * 0.5f);
+}
+
+Vector2f Utils::GetHitPoint(const FloatRect& moved, const FloatRect& collided)
+{
+	Vector2f point;
+	if (moved.top < collided.top)
+	{
+		if (moved.top + moved.height < collided.top + collided.height)
+			point.y = moved.top + moved.height;
+		else
+			point.y = collided.top + collided.height * 0.5f;
+	}
+	else
+	{
+		if (moved.top + moved.height < collided.top + collided.height)
+			point.y = moved.top + moved.height * 0.5f;
+		else
+			point.y = moved.top;
+	}
+
+	if (moved.left < collided.left)
+	{
+		if (moved.left + moved.width < collided.left + collided.width)
+			point.x = moved.left + moved.width;
+		else
+			point.x = collided.left + collided.width * 0.5f;
+	}
+	else
+	{
+		if (moved.left + moved.width < collided.left + collided.width)
+			point.x = moved.left + moved.width * 0.5f;
+		else
+			point.x = moved.left;
+	}
+	return point;
+}

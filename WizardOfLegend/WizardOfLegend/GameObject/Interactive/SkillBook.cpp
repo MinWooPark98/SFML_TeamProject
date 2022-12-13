@@ -34,8 +34,8 @@ void SkillBook::Init()
 			animator->AddEvent(ev);
 		}
 	}
-	SetHitBox(FloatRect(0.f, 0.f, 36.f, 24.f));
-	SetHitBoxOrigin(Origins::BC);
+	SetInteractBox({ 36.f, 24.f });
+	SetInteractBoxOrigin(Origins::BC);
 	SetInteractKeyPos({ 0.f, -45.f });
 
 	SetState(States::Idle);

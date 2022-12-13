@@ -44,6 +44,8 @@ protected:
 	float amplitude;
 
 	Skill::SubjectType subType;
+	bool drawable;
+	float undrawTimer;
 
 public:
 	Projectile();
@@ -52,6 +54,7 @@ public:
 	virtual void Init() override;
 	virtual void Reset() override;
 	virtual void Update(float dt) override;
+	virtual void Draw(RenderWindow& window) override;
 
 	void SetAtkShape(Skill::AttackShape shape) { atkShape = shape; }
 	Skill::AttackShape GetAtkShape() { return atkShape; }
@@ -77,5 +80,8 @@ public:
 	void SetReverse(bool reverse) { this->reverse = reverse; }
 	void SetFrequency(float f) { frequency = f; }
 	void SetSubjectType(Skill::SubjectType type) { subType = type; }
+	Skill::SubjectType GetSubjectType() { return subType; }
+	void SetDrawable(bool able);
+	float GetUndrawTimer() { return undrawTimer; }
 };
 

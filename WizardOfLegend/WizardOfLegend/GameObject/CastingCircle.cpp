@@ -118,7 +118,7 @@ void CastingCircle::Update(float dt)
 							continue;
 						for (auto& player : collisionList[i][Object::ObjTypes::Player])
 						{
-							if (!player->GetActive() || ((Player*)player)->GetState() == Player::States::Die)
+							if (!player->GetActive() || ((Player*)player)->GetState() == Player::States::Die || ((Player*)player)->GetState() == Player::States::Fall)
 								continue;
 							if (GetHitBounds().intersects(player->GetHitBounds()))
 								((Player*)player)->OnHit(direction, attackDmg);
@@ -192,7 +192,7 @@ void CastingCircle::Update(float dt)
 					continue;
 				for (auto& player : collisionList[i][Object::ObjTypes::Player])
 				{
-					if (!player->GetActive() ||((Player*)player)->GetState() == Player::States::Die)
+					if (!player->GetActive() ||((Player*)player)->GetState() == Player::States::Die || ((Player*)player)->GetState() == Player::States::Fall)
 						continue;
 					if (GetHitBounds().intersects(player->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), player) == damagedObjs.end())
 					{

@@ -39,7 +39,7 @@ void Store::Init()
 			{
 				Goods* newGoods = new GoodsHood(payment);
 				newGoods->Init();
-				if (i < toShuffle.size() - 1)
+				if (i < toShuffle.size())
 					((GoodsHood*)newGoods)->SetInfo(table[toShuffle[i]]);
 				goodsList.push_back(newGoods);
 			}
@@ -61,7 +61,7 @@ void Store::Init()
 			std::shuffle(toShuffle.begin(), toShuffle.end(), g);
 			for (int i = 0; i < 1; ++i)
 			{
-				if (i >= toShuffle.size() - 1)
+				if (i >= toShuffle.size())
 					break;
 				Goods* newGoods = new GoodsRelic(payment);
 				newGoods->Init();
@@ -89,7 +89,7 @@ void Store::Init()
 			std::shuffle(toShuffle.begin(), toShuffle.end(), g);
 			for (int i = 0; i < 2; ++i)
 			{
-				if (i >= toShuffle.size() - 1)
+				if (i >= toShuffle.size())
 					break;
 				Goods* newGoods = new GoodsSkill(payment);
 				newGoods->Init();
