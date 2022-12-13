@@ -298,6 +298,14 @@
     {
       "texPath": "graphics/Map/Object/SquareSkillTarp.png",
       "uiPath": "graphics/Map/Palette/SquareSkillTarp.png"
+    },
+    {
+      "texPath": "graphics/Space.png",
+      "uiPath": "graphics/Space.png"
+    },
+    {
+      "texPath": "graphics/Map/Palette/invisibleGate.png",
+      "uiPath": "graphics/Map/Palette/invisibleGate.png"
     }
   ],
   "PLAYER": [

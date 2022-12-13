@@ -300,10 +300,14 @@ void PlayScene::Init()
 				draw->SetObjType(Object::ObjTypes::ETC);
 				if (obj.path == "graphics/Map/Object/GateFull.png" ||
 					obj.path == "graphics/Map/Palette/LeftGate.png" ||
-					obj.path == "graphics/Map/Palette/RightGate.png")
+					obj.path == "graphics/Map/Palette/RightGate.png"||
+					obj.path == "graphics/Map/Palette/invisibleGate.png")
 				{
-					draw->SetPos({ obj.position.x,obj.position.y});
 					draw->SetActive(false);
+					objList[LayerType::High][0].push_back(draw);
+				}
+				else if(obj.path == "graphics/Space.png")
+				{
 					objList[LayerType::High][0].push_back(draw);
 				}
 				else
