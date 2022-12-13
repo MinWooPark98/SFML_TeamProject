@@ -32,6 +32,7 @@ public:
 		Middle,
 		Wall,
 		Object,
+		High,
 		Sector,
 		Cliff,
 		SpawnArea,
