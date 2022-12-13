@@ -74,6 +74,7 @@ void CastingCircle::Update(float dt)
 				switch (subType)
 				{
 				case Skill::SubjectType::Player:
+					auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 					for (int i = 0; i < collisionList.size(); ++i)
 					{
 						if (collisionList[i][Object::ObjTypes::Player].empty())
@@ -83,20 +84,20 @@ void CastingCircle::Update(float dt)
 							if (!enemy->GetActive() || !((Enemy*)enemy)->GetIsAlive())
 								continue;
 							if (GetHitBounds().intersects(enemy->GetHitBounds()))
-								((Enemy*)enemy)->OnHit(direction, attackDmg);
+								((Enemy*)enemy)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						}
 						for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
 						{
 							if (!boss->GetActive() || ((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
 								continue;
 							if (GetHitBounds().intersects(boss->GetHitBounds()))
-								((FinalBoss*)boss)->OnHit(direction, attackDmg);
+								((FinalBoss*)boss)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						}
 						for (auto& etc : collisionList[i][Object::ObjTypes::Dummy])
 						{
 							if (GetHitBounds().intersects(((Dummy*)etc)->GetHitBounds()))
 							{
-								((Dummy*)etc)->OnHit(direction, attackDmg);
+								((Dummy*)etc)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 								damagedObjs.push_back(etc);
 							}
 						}
@@ -118,7 +119,7 @@ void CastingCircle::Update(float dt)
 							continue;
 						for (auto& player : collisionList[i][Object::ObjTypes::Player])
 						{
-							if (!player->GetActive() || ((Player*)player)->GetState() == Player::States::Die)
+							if (!player->GetActive() || ((Player*)player)->GetState() == Player::States::Die || ((Player*)player)->GetState() == Player::States::Fall)
 								continue;
 							if (GetHitBounds().intersects(player->GetHitBounds()))
 								((Player*)player)->OnHit(direction, attackDmg);
@@ -142,6 +143,7 @@ void CastingCircle::Update(float dt)
 		switch (subType)
 		{
 		case Skill::SubjectType::Player:
+			auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 			for (int i = 0; i < collisionList.size(); ++i)
 			{
 				if (collisionList[i][Object::ObjTypes::Player].empty())
@@ -152,7 +154,7 @@ void CastingCircle::Update(float dt)
 						continue;
 					if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
 					{
-						((Enemy*)enemy)->OnHit(direction, attackDmg);
+						((Enemy*)enemy)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						damagedObjs.push_back(enemy);
 					}
 				}
@@ -162,7 +164,7 @@ void CastingCircle::Update(float dt)
 						continue;
 					if (GetHitBounds().intersects(boss->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), boss) == damagedObjs.end())
 					{
-						((FinalBoss*)boss)->OnHit(direction, attackDmg);
+						((FinalBoss*)boss)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);;
 						damagedObjs.push_back(boss);
 					}
 				}
@@ -170,7 +172,7 @@ void CastingCircle::Update(float dt)
 				{
 					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
 					{
-						((Dummy*)etc)->OnHit(direction, attackDmg);
+						((Dummy*)etc)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						damagedObjs.push_back(etc);
 					}
 				}
@@ -192,7 +194,7 @@ void CastingCircle::Update(float dt)
 					continue;
 				for (auto& player : collisionList[i][Object::ObjTypes::Player])
 				{
-					if (!player->GetActive() ||((Player*)player)->GetState() == Player::States::Die)
+					if (!player->GetActive() ||((Player*)player)->GetState() == Player::States::Die || ((Player*)player)->GetState() == Player::States::Fall)
 						continue;
 					if (GetHitBounds().intersects(player->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), player) == damagedObjs.end())
 					{

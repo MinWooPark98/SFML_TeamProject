@@ -77,7 +77,9 @@ void GoodsSkill::Saled()
 		}
 		break;
 	case Goods::Payment::Platinum:
-		DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet)->Unlock(goodsName);
+		auto table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
+		table->Unlock(goodsName);
+		table->Load();
 		break;
 	default:
 		break;

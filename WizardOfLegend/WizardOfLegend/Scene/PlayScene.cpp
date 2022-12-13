@@ -35,6 +35,7 @@
 #include "../Ui/WardrobeUi.h"
 #include "../GameObject/PortalEffect.h"
 #include "../GameObject/Store.h"
+#include "../GameObject/Skill.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -590,17 +591,33 @@ void PlayScene::Update(float dt)
 				continue;
 			for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
 			{
+				auto projectileBnd = projectile->GetHitBounds();
 				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
-					projectile->SetMoving(false);
-					break;
+					projectile->SetDrawable(false);
+					if (coll->GetHitBounds().contains(Vector2f(projectileBnd.left + projectileBnd.width * 0.5f, projectileBnd.top + projectileBnd.height * 0.5f)) ||
+						projectile->GetUndrawTimer() >= 0.2f)
+					{
+						projectile->SetMoving(false);
+						if (projectile->GetSubjectType() == Skill::SubjectType::Player)
+							enemyHitSparks->Get()->SetPos(projectile->GetPos());
+						else
+							playerHitSparks->Get()->SetPos(projectile->GetPos());
+						break;
+					}
 				}
+				else
+					projectile->SetDrawable(true);
 			}
 			for (auto& coll : collisionList[i][Object::ObjTypes::ETC])
 			{
 				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
 					projectile->SetMoving(false);
+					if (projectile->GetSubjectType() == Skill::SubjectType::Player)
+						enemyHitSparks->Get()->SetPos(projectile->GetPos());
+					else
+						playerHitSparks->Get()->SetPos(projectile->GetPos());
 					break;
 				}
 			}

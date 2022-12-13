@@ -58,9 +58,9 @@ void Goods::Init()
 
 	SetOrigin(Origins::BC);
 
-	SetHitBox(FloatRect(0.f, 0.f, 14.f, 12.f));
-	SetHitBoxOrigin(Origins::BC);
-	SetInteractKeyPos({ 0.f, -40.f });
+	SetInteractBox({ 14.f, 12.f });
+	SetInteractBoxOrigin(Origins::BC);
+	SetInteractKeyPos({ 0.f, -60.f });
 
 	Interact = bind(&Goods::Sale, this);
 	//interactKey->SetActive(false);
@@ -68,7 +68,6 @@ void Goods::Init()
 
 void Goods::Draw(RenderWindow& window)
 {
-	SpriteObj::Draw(window);
 	priceText->Draw(window);
 	if (infoPanel->GetActive())
 		infoPanel->Draw(window);
@@ -76,6 +75,7 @@ void Goods::Draw(RenderWindow& window)
 		goodsNameText->Draw(window);
 	if (goodsInfoText->GetActive())
 		goodsInfoText->Draw(window);
+	Interactive::Draw(window);
 }
 
 void Goods::Approach()
@@ -97,10 +97,6 @@ void Goods::ApproachEnd()
 void Goods::ForSale(bool sale)
 {
 	forSale = sale;
-	if (sale)
-		interactKey->SetActive(true);
-	else
-		interactKey->SetActive(false);
 }
 
 void Goods::Sale()
@@ -111,18 +107,18 @@ void Goods::Sale()
 	switch (payment)
 	{
 	case Goods::Payment::Gold:
-		//if (player->GetCurGold() > price)
-		//{
+		if (player->GetCurGold() > price)
+		{
 			player->SubGold(price);
 			Saled();
-		//}
+		}
 		break;
 	case Goods::Payment::Platinum:
-		//if (player->GetCurPlatinum() > price)
-		//{
+		if (player->GetCurPlatinum() > price)
+		{
 			player->SubPlatinum(price);
 			Saled();
-		//}
+		}
 		break;
 	default:
 		break;

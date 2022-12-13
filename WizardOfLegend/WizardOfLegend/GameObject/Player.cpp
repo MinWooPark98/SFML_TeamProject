@@ -692,6 +692,9 @@ void Player::SetSkillSet(int idx, const string& skillSetName, bool isPlayScene)
 
 void Player::OnHit(const Vector2f& atkDir, int dmg)
 {
+	if (Utils::RandomRange(0.f, 1.f) < evasionRate)
+		return;
+	dmg = dmg * damageTake;
 	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);

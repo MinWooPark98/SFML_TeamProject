@@ -64,11 +64,11 @@ void ItemMgr::Apply()
 	auto& stat = statTable->Get("Player");
 	player->SetSpeed(stat.speed * (1 + totalValues.speed));
 	player->SetAtkDmg(stat.attackDmg * (1 + totalValues.atkDmg));
-	player->SetDamageTake(stat.damageTake * (1 - totalValues.dmg));
+	player->SetDamageTake(stat.damageTake + totalValues.dmg);
 	player->SetMaxHp(stat.maxHp * (1 + totalValues.maxHp));
-	player->SetEvasionRate(stat.evasionRate * (1 + totalValues.evasionRate));
-	player->SetCriticalRate(stat.criticalRate * (1 + totalValues.criticalRate));
-	player->SetCriticalRatio(stat.criticalRatio * (1 + totalValues.criticalRatio));
+	player->SetEvasionRate(stat.evasionRate + totalValues.evasionRate);
+	player->SetCriticalRate(stat.criticalRate + totalValues.criticalRate);
+	player->SetCriticalRatio(stat.criticalRatio + totalValues.criticalRatio);
 }
 
 void ItemMgr::Clear()

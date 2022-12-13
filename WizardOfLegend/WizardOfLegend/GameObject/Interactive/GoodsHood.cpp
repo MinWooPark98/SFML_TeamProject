@@ -71,12 +71,14 @@ void GoodsHood::Saled()
 		((Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER"))->GetItemMgr()->SetHood(info.id);
 		break;
 	case Goods::Payment::Platinum:
-		DATATABLE_MGR->Get<HoodTable>(DataTable::Types::Hood)->Unlock(info.id);
-		SetActive(false);
+		auto table = DATATABLE_MGR->Get<HoodTable>(DataTable::Types::Hood);
+		table->Unlock(info.id);
+		table->Load();
 		break;
 	default:
 		break;
 	}
+	SetActive(false);
 }
 
 void GoodsHood::SetPos(const Vector2f& pos)

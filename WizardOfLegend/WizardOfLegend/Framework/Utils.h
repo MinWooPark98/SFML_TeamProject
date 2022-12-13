@@ -54,5 +54,8 @@ public:
 	static wstring StrToWstr(const string& var);
 
 	static bool OBB(const RectangleShape& obb1, const RectangleShape& obb2);
+	static FloatRect GetHitArea(const FloatRect& bnd1, const FloatRect& bnd2);
+	static Vector2f RectCenter(const FloatRect& rect);
+	static Vector2f GetHitPoint(const FloatRect& moved, const FloatRect& collided);
 };
 

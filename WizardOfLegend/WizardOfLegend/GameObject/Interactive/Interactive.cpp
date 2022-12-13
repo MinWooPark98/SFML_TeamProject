@@ -36,7 +36,7 @@ void Interactive::Update(float dt)
 	{
 		if (!approached)
 		{
-			if (GetHitBounds().intersects(player->GetHitBounds()) || GetHitBounds().intersects(player->GetLowHitBounds()))
+			if (interactBox.getGlobalBounds().intersects(player->GetHitBounds()) || interactBox.getGlobalBounds().intersects(player->GetLowHitBounds()))
 			{
 				approached = true;
 				Approach();
@@ -44,14 +44,14 @@ void Interactive::Update(float dt)
 		}
 		else
 		{
-			if (!(GetHitBounds().intersects(player->GetHitBounds()) || GetHitBounds().intersects(player->GetLowHitBounds())))
+			if (!(interactBox.getGlobalBounds().intersects(player->GetHitBounds()) || interactBox.getGlobalBounds().intersects(player->GetLowHitBounds())))
 			{
 				approached = false;
 				ApproachEnd();
 				return;
 			}
 
-			if (InputMgr::GetEscapable() && InputMgr::GetKeyDown(Keyboard::F) && Interact != nullptr)
+			if (InputMgr::GetStackedOrder().empty() && InputMgr::GetKeyDown(Keyboard::F) && Interact != nullptr)
 				Interact();
 		}
 	}
@@ -67,8 +67,19 @@ void Interactive::Draw(RenderWindow& window)
 void Interactive::SetPos(const Vector2f& pos)
 {
 	SpriteObj::SetPos(pos);
+	interactBox.setPosition(pos);
 	if (interactKey != nullptr)
 		interactKey->SetPos(pos + interactKeyPos);
+}
+
+void Interactive::SetInteractBox(const Vector2f& size)
+{
+	interactBox.setSize(size);
+}
+
+void Interactive::SetInteractBoxOrigin(Origins origin)
+{
+	Utils::SetOrigin(interactBox, origin);
 }
 
 void Interactive::Approach()

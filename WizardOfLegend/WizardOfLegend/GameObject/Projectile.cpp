@@ -8,7 +8,7 @@
 #include "Dummy.h"
 
 Projectile::Projectile()
-	:atkShape(Skill::AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(Skill::WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(Skill::RangeType::None), isComingBack(false),  attackDmg(0), dmgType(Skill::DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0), subType(Skill::SubjectType::None)
+	:atkShape(Skill::AttackShape::None), animator(nullptr), isMoving(false), movingDuration(0.f), movingTimer(0.f), speed(0.f), waveType(Skill::WaveType::None), fallingHeight(0.f), cumulativeFallingHeight(0.f), rangeType(Skill::RangeType::None), isComingBack(false),  attackDmg(0), dmgType(Skill::DamageType::Once), isOnDelay(true), delay(0.f), timer(0.f), atkDelay(0.f), atkTimer(0.f), distance(0.f), angle(0.f), amplitude(0.f), frequency(0.f), reverse(false),vecIdx(0), subType(Skill::SubjectType::None), drawable(true), undrawTimer(0.f)
 {
 }
 
@@ -43,6 +43,8 @@ void Projectile::Reset()
 	subType = Skill::SubjectType::None;
 	damagedObjs.clear();
 	sprite.setRotation(0.f);
+	drawable = true;
+	undrawTimer = 0.f;
 }
 
 void Projectile::Update(float dt)
@@ -61,6 +63,9 @@ void Projectile::Update(float dt)
 		else
 			return;
 	}
+	
+	if (!drawable)
+		undrawTimer += dt;
 
 	animator->Update(dt);
 	auto spriteBnd = sprite.getGlobalBounds();
@@ -134,6 +139,7 @@ void Projectile::Update(float dt)
 		switch (subType)
 		{
 		case Skill::SubjectType::Player:
+			auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
 			for (int i = 0; i < collisionList.size(); ++i)
 			{
 				if (collisionList[i][Object::ObjTypes::Player].empty())
@@ -144,7 +150,7 @@ void Projectile::Update(float dt)
 						continue;
 					if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
 					{
-						((Enemy*)enemy)->OnHit(direction, attackDmg);
+						((Enemy*)enemy)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						damagedObjs.push_back(enemy);
 					}
 				}
@@ -154,7 +160,7 @@ void Projectile::Update(float dt)
 						continue;
 					if (GetHitBounds().intersects(boss->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), boss) == damagedObjs.end())
 					{
-						((FinalBoss*)boss)->OnHit(direction, attackDmg);
+						((FinalBoss*)boss)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						damagedObjs.push_back(boss);
 					}
 				}
@@ -162,7 +168,7 @@ void Projectile::Update(float dt)
 				{
 					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
 					{
-						((Dummy*)etc)->OnHit(direction, attackDmg);
+						((Dummy*)etc)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
 						damagedObjs.push_back(etc);
 					}
 				}
@@ -184,7 +190,7 @@ void Projectile::Update(float dt)
 					continue;
 				for (auto& player : collisionList[i][Object::ObjTypes::Player])
 				{
-					if (!player->GetActive() || ((Player*)player)->GetState() == Player::States::Die)
+					if (!player->GetActive() || ((Player*)player)->GetState() == Player::States::Die || ((Player*)player)->GetState() == Player::States::Fall)
 						continue;
 					if (GetHitBounds().intersects(player->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), player) == damagedObjs.end())
 					{
@@ -209,6 +215,12 @@ void Projectile::Update(float dt)
 	}
 }
 
+void Projectile::Draw(RenderWindow& window)
+{
+	if (drawable)
+		SpriteObj::Draw(window);
+}
+
 void Projectile::SetAnimClip(const vector<string>& clipName)
 {
 	for (auto& name : clipName)
@@ -225,4 +237,11 @@ void Projectile::Fire()
 	else
 		vecIdx = direction.x < 0.f ? 0 : 1;
 	animator->Play(clipName[vecIdx]);
+}
+
+void Projectile::SetDrawable(bool able)
+{
+	drawable = able;
+	if (able)
+		undrawTimer = 0.f;
 }
