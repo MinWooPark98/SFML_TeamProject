@@ -11,6 +11,7 @@ class FinalBoss;
 class PlaySceneSkillOptions;
 class SkillCoolDownUi;
 class MessageUi;
+class GlassTube;
 class PlayUiMgr : public UiMgr
 {
 public:
@@ -94,7 +95,10 @@ protected:
 	float keyboardEnabledTimer = 5.f;
 	int keyboardBright = 255;
 
-	MessageUi* messageUi;
+	MessageUi* msgUi;
+	vector<GlassTube*> glassTubes;
+
+	int messageIndex = 0;
 
 public:
 	PlayUiMgr();
@@ -131,4 +135,7 @@ public:
 	bool GetIsStart() { return isStart; };
 
 	void TuturialMoveKeyboardUiControl(float dt);
+
+	void NewGlassTubes(GlassTube* tube);
+	void GlassTubeSet(int index, bool set);
 };

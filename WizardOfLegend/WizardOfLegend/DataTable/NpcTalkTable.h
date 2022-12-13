@@ -5,19 +5,15 @@
 class NpcTalkTable : public DataTable
 {
 protected:
-	struct NpcType
-	{
-		string npcName;
-		vector<string> talks;
-	};
-	map<string, NpcType> table;
+	map<string, vector<string>> table;
 
 public:
 	NpcTalkTable();
 	virtual ~NpcTalkTable();
 
-	const NpcType& Get(const string& objType);
-	const map<string, NpcType>& GetTable() { return table; };
+	const vector<string>& Get(const string& objType);
+	const string& GetNpcName(const string& objType);
+	const map<string, vector<string>>& GetTable() { return table; };
 	virtual void Release() override;
 	virtual bool Load() override;
 
