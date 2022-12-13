@@ -68,7 +68,6 @@ void Goods::Init()
 
 void Goods::Draw(RenderWindow& window)
 {
-	priceText->Draw(window);
 	if (infoPanel->GetActive())
 		infoPanel->Draw(window);
 	if (goodsNameText->GetActive())
@@ -76,6 +75,7 @@ void Goods::Draw(RenderWindow& window)
 	if (goodsInfoText->GetActive())
 		goodsInfoText->Draw(window);
 	Interactive::Draw(window);
+	priceText->Draw(window);
 }
 
 void Goods::Approach()

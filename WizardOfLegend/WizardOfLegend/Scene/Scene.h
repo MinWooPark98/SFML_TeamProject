@@ -95,6 +95,8 @@ public:
 
 	Scenes GetType() { return type; }
 
+	map<LayerType, map<int, vector<Object*>>>& GetObjList() { return objList; }
+
 	Vector2f GetWorldViewCenter() const { return worldView.getCenter(); }
 	Vector2f GetUiViewCenter() const { return uiView.getCenter(); }
 	void SetWorldViewCenter(float x, float y) { worldView.setCenter({x, y}); }
