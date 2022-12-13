@@ -41,12 +41,14 @@ void SavedDataTable::ChangeHood(int hoodId)
 {
 	savedData.SetCell(0, 0, hoodId);
 	savedData.Save(fileName);
+	Load();
 }
 
 void SavedDataTable::ChangeRelic(int relicID)
 {
 	savedData.SetCell(1, 0, relicID);
 	savedData.Save(fileName);
+	Load();
 }
 
 void SavedDataTable::ChangeSkills(const vector<string>& skillIds)
@@ -56,4 +58,5 @@ void SavedDataTable::ChangeSkills(const vector<string>& skillIds)
 		savedData.SetCell(i + 2, 0, skillIds[i]);
 	}
 	savedData.Save(fileName);
+	Load();
 }

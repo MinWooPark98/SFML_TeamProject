@@ -10,6 +10,8 @@
 #include "../GameObject/SkillSet.h"
 #include "SkillBookCardInfo.h"
 #include "../GameObject/Interactive/SkillBook.h"
+#include "../DataTable/SavedDataTable.h"
+#include "../DataTable/DataTableMGR.h"
 
 SkillBookUi::SkillBookUi()
 	:collection(nullptr), skillVecIdx(0), skillInfo(nullptr), isMoving(true), moveSpeed(5400.f), state(States::SkillOption)
@@ -280,6 +282,12 @@ void SkillBookUi::SetActive(bool active)
 		auto skillBook = ((SkillBook*)currScene->FindGameObj("SKILLBOOK"));
 		if(skillBook != nullptr)
 			skillBook->SetState(SkillBook::States::Close);
+		vector<string> skillSetNames;
+		for (auto skillSet : playerSkillSets)
+		{
+			skillSetNames.push_back(skillSet->GetSkillSetName());
+		}
+		DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->ChangeSkills(skillSetNames);
 	}
 }
 

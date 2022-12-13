@@ -10,6 +10,7 @@
 #include "../GameObject/Interactive/ItemBox.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/RelicTable.h"
+#include "../../DataTable/SavedDataTable.h"
 
 ItemBoxUi::ItemBoxUi()
 	:frame(nullptr), panel(nullptr), currPage(0), currRow(0), currColumn(0), indexChanged(false), currPlayerItem(nullptr), itemName(nullptr), itemIntro(nullptr), isMoving(true), moveSpeed(7200.f)
@@ -285,13 +286,33 @@ void ItemBoxUi::SetActive(bool active)
 				}
 			}
 		}
+		SetItemInfo();
+		((ItemBox*)currScene->FindGameObj("ITEMBOX"))->SetState(ItemBox::States::Open);
+		Reappear();
+		auto itemMgr = ((Player*)currScene->FindGameObj("PLAYER"))->GetItemMgr();
+		for (int i = 0; i < collections.size(); ++i)
+		{
+			for (int j = 0; j < collections[i].size(); ++j)
+			{
+				for (int k = 0; k < collections[i][j].size(); ++k)
+				{
+					if (collections[i][j][k].info.id == DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->Get().relicId)
+					{
+						currPage = i;
+						currRow = j;
+						currColumn = k;
+						currPlayerItem = collections[i][j][k].image;
+						currPlayerItem->GetHitBox().setOutlineColor(Color::Red);
+						CollectionHighLightOn();
+						return;
+					}
+				}
+			}
+		}
 		currPage = 0;
 		currRow = 0;
 		currColumn = 0;
 		CollectionHighLightOn();
-		SetItemInfo();
-		((ItemBox*)currScene->FindGameObj("ITEMBOX"))->SetState(ItemBox::States::Open);
-		Reappear();
 	}
 	else
 	{
@@ -350,6 +371,7 @@ void ItemBoxUi::SelectItem()
 			itemMgr->ChangeRelic(currItem.info.id, 0);
 		currPlayerItem = currItem.image;
 		currPlayerItem->GetHitBox().setOutlineColor(Color::Red);
+		DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->ChangeRelic(currItem.info.id);
 	}
 }
 

@@ -55,7 +55,6 @@ public:
 	void Disappear();
 
 	void SetItemInfo();
-	void SelectItem();
 	void FinishRoate();
 	void ChangeHood();
 

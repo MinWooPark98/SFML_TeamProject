@@ -631,6 +631,11 @@ void PlayScene::Update(float dt)
 			}
 		}
 	}
+
+	if (InputMgr::GetKeyDown(Keyboard::F4))
+		player->AddGold(100);
+	if (InputMgr::GetKeyDown(Keyboard::F5))
+		player->AddPlatinum(100);
 }
 
 void PlayScene::Draw(RenderWindow& window)
@@ -861,7 +866,6 @@ void PlayScene::Enter()
 	Release();
 	Init();
 	PLAYSCENE_DATAMGR->Load();
-	player->LoadPlatinum();
 	portalEffect->ShowPortalEffect({ player->GetPos().x, player->GetPos().y + (player->GetSize().y * 0.5f)});
 }
 
@@ -869,7 +873,6 @@ void PlayScene::Exit()
 {
 	Scene::Exit();
 	PLAYSCENE_DATAMGR->Save();
-	player->SavePlatinum();
 
 	if (mapName == "TUTORIALMAP")
 		SetMapName("TUTORIALFIGHT");

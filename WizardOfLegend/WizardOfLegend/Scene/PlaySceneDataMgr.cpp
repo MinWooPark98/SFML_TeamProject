@@ -35,6 +35,7 @@ void PlaySceneDataMgr::Save()
 	}
 	data.currHp = player->GetCurHp();
 	data.gold = player->GetCurGold();
+	player->SavePlatinum();
 }
 
 void PlaySceneDataMgr::Load()
@@ -90,4 +91,8 @@ void PlaySceneDataMgr::Load()
 	else
 		player->SetCurHp(data.currHp);
 	player->SetCurGold(data.gold);
+	if (currScene->GetMapName() == "TUTORIALMAP")
+		player->SetPlatinum(0);
+	else
+		player->LoadPlatinum();
 }
