@@ -20,6 +20,8 @@
 #include "WardrobeUi.h"
 #include "../Ui/MessageUi.h"
 #include "../GameObject/GlassTube.h"
+#include "DataTableList.h"
+#include "../GameObject/SkillSet.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -502,45 +504,7 @@ void PlayUiMgr::Update(float dt)
 		fps->SetString(to_string(fpsi));
 	}
 
-	if (glassTubes.size() != 0) 
-	{
-		for (int i = 0; i < glassTubes.size(); i++)
-		{
-			if (glassTubes[i]->GetIsPlayerAdjacent())
-			{
-				if (InputMgr::GetKeyDown(Keyboard::F))
-				{
-					msgUi->SetNpcName(glassTubes[i]->GetName());
-					msgUi->SetTexts(glassTubes[i]->GetMessages()[0]);
-					msgUi->SetNpcImage("graphics/HumanKnightPortrait.png");
-					msgUi->SetPlayerImage(63);
-					msgUi->MessageUiOn();
-				}
-
-				if (msgUi->GetisTalk())
-				{
-					if (InputMgr::GetKeyDown(Keyboard::Space))
-						messageIndex++;
-
-					if (messageIndex < glassTubes[i]->GetMessages().size())
-					{
-						msgUi->SetTexts(glassTubes[i]->GetMessages()[messageIndex]);
-						msgUi->Talk();
-					}
-				}
-
-				if (messageIndex == glassTubes[i]->GetMessages().size())
-				{
-					if (InputMgr::GetKeyDown(Keyboard::Space))
-					{
-						msgUi->UiEnabled(false);
-						msgUi->SetIsTalk(false);
-						messageIndex = 0;
-					}
-				}
-			}
-		}
-	}
+	GlassControl();
 }
 
 void PlayUiMgr::Draw(RenderWindow& window)
@@ -793,4 +757,74 @@ void PlayUiMgr::NewGlassTubes(GlassTube* tube)
 void PlayUiMgr::GlassTubeSet(int index, bool set)
 {
 	glassTubes[index]->SetIsPlayerAdjacent(set);
+}
+
+void PlayUiMgr::SetPlayerSkillSet(const string& skillSetName, int index)
+{
+	auto currScene = SCENE_MGR->GetCurrentScene();
+	Player* player = (Player*)currScene->FindGameObj("PLAYER");
+	player->SetSkillSet(index, skillSetName, true);
+}
+
+void PlayUiMgr::GlassControl()
+{
+	if (glassTubes.size() != 0)
+	{
+		for (int i = 0; i < glassTubes.size(); i++)
+		{
+			if (glassTubes[i]->GetIsPlayerAdjacent())
+			{
+				if (InputMgr::GetKeyDown(Keyboard::F))
+				{
+					msgUi->SetNpcName(glassTubes[i]->GetName());
+					msgUi->SetTexts(glassTubes[i]->GetMessages()[0]);
+					msgUi->SetNpcImage("graphics/BankerPortrait.png");
+					msgUi->SetPlayerImage(63);
+					msgUi->MessageUiOn();
+				}
+
+				if (msgUi->GetisTalk())
+				{
+					if (InputMgr::GetKeyDown(Keyboard::Space))
+						messageIndex++;
+
+					if (messageIndex < glassTubes[i]->GetMessages().size())
+					{
+						msgUi->SetTexts(glassTubes[i]->GetMessages()[messageIndex]);
+						msgUi->Talk();
+					}
+				}
+
+				if (messageIndex == glassTubes[i]->GetMessages().size())
+				{
+					if (InputMgr::GetKeyDown(Keyboard::Space))
+					{
+						msgUi->UiEnabled(false);
+						msgUi->SetIsTalk(false);
+						messageIndex = 0;
+
+						switch (i)
+						{
+						case 0:
+							SetPlayerSkillSet("FireBall", 0);
+							SetSkillIcon(0, "graphics/UseFireBlast.png");
+							break;
+						case 1:
+							SetPlayerSkillSet("DragonArc", 2);
+							SetSkillIcon(2, "graphics/ShootFireArc.png");
+							break;
+						case 2:
+							SetPlayerSkillSet("Temp9", 3);
+							SetSkillIcon(3, "graphics/ShootFireArc.png");
+							break;
+						case 3:
+							SetPlayerSkillSet("JumpMeteor", 4);
+							SetSkillIcon(4, "graphics/SummonMeteorStrike.png");
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
 }
