@@ -538,6 +538,12 @@ void PlayScene::Update(float dt)
 			}
 			SpawnEnemy(i, dt);
 			AllDieEnemy(i);
+
+			if (InputMgr::GetKeyDown(Keyboard::F2))
+			{
+				for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+					((Enemy*)enemy)->SetCurHp(0);
+			}
 		}
 		else
 		{
