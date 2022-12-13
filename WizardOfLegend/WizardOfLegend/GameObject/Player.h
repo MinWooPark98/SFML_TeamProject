@@ -108,6 +108,7 @@ public:
 	void UpdateHit(float dt);
 	void UpdateFall(float dt);
 
+	const Vector2f& GetDashDir() { return dashDir; }
 	void SetSpeed(float speed);
 	void SetAtkDmg(int dmg) { attackDmg = dmg; }
 	int GetAtkDmg() const { return attackDmg; }

@@ -34,7 +34,7 @@ void Wardrobe::Init()
 	}
 	SetHitBox(FloatRect(0.f, 0.f, 46.f, 20.f));
 	SetHitBoxOrigin(Origins::BC);
-	SetInteractKeyPos({ 0.f, -60.f });
+	SetInteractKeyPos({ 0.f, -70.f });
 
 	SetInteractBox({ 56.f, 25.f });
 	SetInteractBoxOrigin(Origins::BC);
