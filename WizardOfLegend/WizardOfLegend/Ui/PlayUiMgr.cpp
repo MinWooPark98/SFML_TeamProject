@@ -421,13 +421,6 @@ void PlayUiMgr::Release()
 		}
 	}
 	uiObjList.clear();
-
-	for (auto& glass : glassTubes)
-	{
-		if (glass != nullptr)
-			delete glass;
-		glass = nullptr;
-	}
 	glassTubes.clear();
 }
 

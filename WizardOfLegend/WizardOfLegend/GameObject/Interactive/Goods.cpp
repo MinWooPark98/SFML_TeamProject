@@ -63,6 +63,9 @@ void Goods::Init()
 	SetInteractKeyPos({ 0.f, -60.f });
 
 	Interact = bind(&Goods::Sale, this);
+
+	SetHitBox(FloatRect(0.f, 0.f, 40.f, 40.f));
+	Utils::SetOrigin(hitbox, Origins::BC);
 	//interactKey->SetActive(false);
 }
 

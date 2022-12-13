@@ -185,7 +185,6 @@
     <ClCompile Include="GameObject\Interactive\SkillBook.cpp" />
     <ClCompile Include="Ui\SkillBookCardInfo.cpp" />
     <ClCompile Include="Ui\DevUiMgr.cpp" />
-    <ClCompile Include="Scene\DevScene.cpp" />
     <ClCompile Include="Scene\EndingScene.cpp" />
     <ClCompile Include="GameObject\Cliff.cpp" />
     <ClCompile Include="GameObject\Door.cpp" />
@@ -299,7 +298,6 @@
     <ClInclude Include="GameObject\Interactive\SkillBook.h" />
     <ClInclude Include="Ui\SkillBookCardInfo.h" />
     <ClInclude Include="Ui\DevUiMgr.h" />
-    <ClInclude Include="Scene\DevScene.h" />
     <ClInclude Include="Scene\EndingScene.h" />
     <ClInclude Include="GameObject\Cliff.h" />
     <ClInclude Include="GameObject\Door.h" />

@@ -496,7 +496,7 @@ void PlayScene::Update(float dt)
 		if (player->GetHitBounds().intersects(portal->GetHitBounds()))
 			portal->ChangeMap();
 	}
-	if (glassTubes.size() != 0)
+	/*if (glassTubes.size() != 0)
 	{
 		for (int i = 0; i < glassTubes.size(); i++)
 		{
@@ -505,7 +505,7 @@ void PlayScene::Update(float dt)
 			if (glassTubes[i]->GetIsPlayerAdjacent())
 				((PlayUiMgr*)uiMgr)->GlassTubeSet(i, true);
 		}
-	}
+	}*/
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
@@ -791,11 +791,6 @@ void PlayScene::Draw(RenderWindow& window)
 
 void PlayScene::Release()
 {
-	for (int i = 0; i < glassTubes.size(); i++)
-		glassTubes[i]->Release();
-	glassTubes.clear();
-	glassTube = nullptr;
-
 	Scene::Release();
 
 	for (auto& layer : objList)
@@ -810,7 +805,7 @@ void PlayScene::Release()
 			}
 		}
 	}
-
+	glassTubes.clear();
 	portal = nullptr;
 	objList.clear();
 	room.clear();

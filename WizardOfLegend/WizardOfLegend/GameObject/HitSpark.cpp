@@ -17,27 +17,25 @@ void HitSpark::Init()
 	animation = new Animator();
 	animation->AddClip(*RESOURCE_MGR->GetAnimationClip("HitEffect"));
 	animation->SetTarget(&sprite);
+	
+	{
+		AnimationEvent ev;
+		ev.clipId = "HitEffect";
+		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
+		ev.onEvent = bind(&HitSpark::SetActive, this, false);
+		animation->AddEvent(ev);
+	}
 }
 
 void HitSpark::Reset()
 {
 	Effect::Reset();
+	animation->Play("HitEffect");
 }
 
 void HitSpark::Update(float dt)
 {
 	Effect::Update(dt);
-	if (showing == false)
-	{
-		animation->Play("HitEffect");
-		showing = true;
-	}
-
-	if (animation->GetCurrentFrame() == 6)
-	{
-		SetActive(false);
-		showing = false;
-	}
 }
 
 void HitSpark::Draw(RenderWindow& window)

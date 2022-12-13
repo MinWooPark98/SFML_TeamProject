@@ -3,9 +3,6 @@
 
 class HitSpark : public Effect
 {
-protected:
-	bool showing=false;
-
 public:
 	HitSpark();
 	virtual ~HitSpark();
