@@ -91,6 +91,14 @@ void TextObj::Translate(const Vector2f& pos)
 
 void TextObj::AsciiToUnicode()
 {
+	string str = text.getString();
+	string toFind = "\\n";
+	string toChange = "\u000A";
+	while (str.find(toFind) != string::npos)
+	{
+		str.replace(str.find(toFind), toFind.length(), toChange);
+	}
+	text.setString(str);
 	static locale loc("");
 	auto& facet = use_facet<std::codecvt<wchar_t, char, mbstate_t>>(loc);
 	text.setString(wstring_convert<remove_reference<decltype(facet)>::type, wchar_t>(&facet).from_bytes(text.getString()));

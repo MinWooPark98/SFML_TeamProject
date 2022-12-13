@@ -56,9 +56,11 @@ void GoodsRelic::Saled()
 		((Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER"))->GetItemMgr()->AddRelic(info.id);
 		break;
 	case Goods::Payment::Platinum:
-		auto table = DATATABLE_MGR->Get<RelicTable>(DataTable::Types::Relic);
-		table->Unlock(info.id);
-		table->Load();
+		{
+			auto table = DATATABLE_MGR->Get<RelicTable>(DataTable::Types::Relic);
+			table->Unlock(info.id);
+			table->Load();
+		}
 		break;
 	default:
 		break;

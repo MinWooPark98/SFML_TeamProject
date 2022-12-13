@@ -1,5 +1,5 @@
 Id,Name,Speed,AtkDmg,Dmg,MaxHp,EvasionRate,CriticalRate,CriticalRatio,Condition,ConditionValue,Duration,GoldPrice,PlatinumPrice,Icon,Intro
-100,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+100,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,이동 속도 8% 증가 \n 공격력 7% 증가 \n dfdfd
 101,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
 102,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
 103,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"

@@ -71,9 +71,11 @@ void GoodsHood::Saled()
 		((Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER"))->GetItemMgr()->SetHood(info.id);
 		break;
 	case Goods::Payment::Platinum:
-		auto table = DATATABLE_MGR->Get<HoodTable>(DataTable::Types::Hood);
-		table->Unlock(info.id);
-		table->Load();
+		{
+			auto table = DATATABLE_MGR->Get<HoodTable>(DataTable::Types::Hood);
+			table->Unlock(info.id);
+			table->Load();
+		}
 		break;
 	default:
 		break;

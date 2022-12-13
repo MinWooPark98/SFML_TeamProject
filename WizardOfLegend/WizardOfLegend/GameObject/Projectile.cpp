@@ -139,45 +139,47 @@ void Projectile::Update(float dt)
 		switch (subType)
 		{
 		case Skill::SubjectType::Player:
-			auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
-			for (int i = 0; i < collisionList.size(); ++i)
 			{
-				if (collisionList[i][Object::ObjTypes::Player].empty())
-					continue;
-				for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+				auto player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+				for (int i = 0; i < collisionList.size(); ++i)
 				{
-					if (!enemy->GetActive() || !((Enemy*)enemy)->GetIsAlive())
+					if (collisionList[i][Object::ObjTypes::Player].empty())
 						continue;
-					if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
+					for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 					{
-						((Enemy*)enemy)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
-						damagedObjs.push_back(enemy);
+						if (!enemy->GetActive() || !((Enemy*)enemy)->GetIsAlive())
+							continue;
+						if (GetHitBounds().intersects(enemy->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), enemy) == damagedObjs.end())
+						{
+							((Enemy*)enemy)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
+							damagedObjs.push_back(enemy);
+						}
 					}
-				}
-				for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
-				{
-					if (!boss->GetActive() || ((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
-						continue;
-					if (GetHitBounds().intersects(boss->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), boss) == damagedObjs.end())
+					for (auto& boss : collisionList[i][Object::ObjTypes::FinalBoss])
 					{
-						((FinalBoss*)boss)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
-						damagedObjs.push_back(boss);
+						if (!boss->GetActive() || ((FinalBoss*)boss)->GetState() == FinalBoss::States::Die)
+							continue;
+						if (GetHitBounds().intersects(boss->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), boss) == damagedObjs.end())
+						{
+							((FinalBoss*)boss)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
+							damagedObjs.push_back(boss);
+						}
 					}
-				}
-				for (auto& etc : collisionList[i][Object::ObjTypes::Dummy])
-				{
-					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
+					for (auto& etc : collisionList[i][Object::ObjTypes::Dummy])
 					{
-						((Dummy*)etc)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
-						damagedObjs.push_back(etc);
+						if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
+						{
+							((Dummy*)etc)->OnHit(direction, Utils::RandomRange(0.f, 1.f) < player->GetCriticalRate() ? attackDmg * player->GetCriticalRatio() : attackDmg);
+							damagedObjs.push_back(etc);
+						}
 					}
-				}
-				for (auto& etc : collisionList[i][Object::ObjTypes::BrokenObject])
-				{
-					if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
+					for (auto& etc : collisionList[i][Object::ObjTypes::BrokenObject])
 					{
-						((Heal*)etc)->OnHit(attackDmg, 60);
-						damagedObjs.push_back(etc);
+						if (GetHitBounds().intersects(etc->GetHitBounds()) && find(damagedObjs.begin(), damagedObjs.end(), etc) == damagedObjs.end())
+						{
+							((Heal*)etc)->OnHit(attackDmg, 60);
+							damagedObjs.push_back(etc);
+						}
 					}
 				}
 			}
