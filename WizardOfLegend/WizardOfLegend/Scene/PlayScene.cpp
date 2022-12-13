@@ -155,7 +155,7 @@ void PlayScene::Init()
 				if (mapName == "TUTORIALMAP")
 					portal->SetChanegeMap("TUTORIALFIGHT");
 				else if (mapName == "TUTORIALFIGHT")
-					portal->SetChanegeMap("TUTORIAL");
+					portal->SetChanegeMap("TEST");
 
 				objList[LayerType::Middle][0].push_back(portal);
 			}
