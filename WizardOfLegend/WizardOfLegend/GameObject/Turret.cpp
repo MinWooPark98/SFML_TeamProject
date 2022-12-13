@@ -21,7 +21,7 @@ void Turret::Init()
 {
 	Enemy::Init();
 	SetTexture(*RESOURCE_MGR->GetTexture("graphics/TurretBase.png"));
-	SetOrigin(Origins::MC);
+	SetOrigin(Origins::BC);
 
 	turretEye = new SpriteObj();
 	turretEye->SetTexture(*RESOURCE_MGR->GetTexture("graphics/TurretEyeOpenInner.png"));
@@ -149,9 +149,9 @@ void Turret::UpdateAttack(float dt)
 
 void Turret::EyePos(const Vector2f& pos)
 {
-	turretEye->SetPos({ pos.x, pos.y - 8.f });
-	turretIris->SetPos({ pos.x, pos.y - 8.f });
-	turretEyeWary->SetPos({ pos.x, pos.y - 8.f });
+	turretEye->SetPos({ pos.x, pos.y - (GetSize().y * 0.5f) - 8.f });
+	turretIris->SetPos({ pos.x, pos.y - (GetSize().y * 0.5f) - 8.f });
+	turretEyeWary->SetPos({ pos.x, pos.y - (GetSize().y * 0.5f) - 8.f });
 }
 
 void Turret::EyeMove(float dt)
