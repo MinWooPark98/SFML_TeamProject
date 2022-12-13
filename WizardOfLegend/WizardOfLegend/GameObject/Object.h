@@ -121,5 +121,5 @@ public:
     Vector2f GetLastPosition() const { return lastPosition; }
     void SetLastPosition(Vector2f pos) { lastPosition = pos; }
 
-    float GetSortHitBoxPostion();
+    Vector2f GetSortHitBoxPostion();
 };

@@ -105,7 +105,7 @@ void PlayScene::Init()
 				obj.path == "graphics/Map/Palette/IceWallTop.png")
 			{
 				draw->SetObjType(Object::ObjTypes::Wall);
-				objList[LayerType::Middle][0].push_back(draw);
+				objList[LayerType::Wall][0].push_back(draw);
 			}
 			else
 			{
@@ -302,8 +302,12 @@ void PlayScene::Init()
 				{
 					draw->SetPos({ obj.position.x,obj.position.y});
 					draw->SetActive(false);
+					objList[LayerType::High][0].push_back(draw);
 				}
-				objList[LayerType::Object][0].push_back(draw);
+				else
+				{
+					objList[LayerType::Object][0].push_back(draw);
+				}
 			}
 		}
 		else if (obj.type == "ENEMY")
@@ -319,7 +323,6 @@ void PlayScene::Init()
 				lancer->SetActive(false);
 				lancer->SetLastPosition({ 0,0 });
 				objList[LayerType::Object][0].push_back(lancer);
-				//cout << obj.position.x <<","<<obj.position.y<< endl;
 
 			}
 			else if (obj.path == "graphics/Map/ArcherNormal.png")
@@ -422,7 +425,6 @@ void PlayScene::Init()
 			cliff->SetOutlineColor({ 0, 0, 0, 0 });
 			cliff->SetObjType(Object::ObjTypes::Cliff);
 			objList[LayerType::Object][3].push_back(cliff);
-			//collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
 		}
 		else if (obj.type == "SPAWNAREA")
 		{
@@ -435,7 +437,6 @@ void PlayScene::Init()
 			spawnArea->SetOutlineColor({ 0, 0, 0, 0 });
 			spawnArea->SetObjType(Object::ObjTypes::SpawnArea);
 			objList[LayerType::Object][3].push_back(spawnArea);
-			//collisionList[0][Object::ObjTypes::Cliff].push_back(cliff);
 		}
 	}
 
@@ -615,31 +616,57 @@ void PlayScene::Draw(RenderWindow& window)
 
 	window.setView(worldView);
 	drawSortObjs.clear();
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		drawSortObjs.push_back(vector<Object*>());
 
 	}
 	for (auto& layer : objList)
 	{
-		for (auto& obj_pair : layer.second)
+		if (layer.first == Scene::LayerType::Tile)
 		{
-			auto& objs = obj_pair.second;
-			for (auto& obj : objs)
+			for (auto& obj_pair : layer.second)
 			{
-				if (obj->GetPos().x<max.x + 80 && obj->GetPos().y < max.y + 80 && obj->GetPos().x > min.x - 80 && obj->GetPos().y > min.y - 80)
+				auto& objs = obj_pair.second;
+				for (auto& obj : objs)
 				{
-					if (obj->GetActive())
+					if (obj->GetPos().x<max.x + 80 && obj->GetPos().y < max.y + 80 && obj->GetPos().x > min.x - 80 && obj->GetPos().y > min.y - 80)
 					{
-						if (obj->GetObjType() == Object::ObjTypes::Tile)
+						if (obj->GetActive())
 						{
 							drawSortObjs[0].push_back(obj);
 						}
-						else if (obj->GetObjType() == Object::ObjTypes::Middle)
+					}
+				}
+			}
+		}
+		else if (layer.first == Scene::LayerType::Middle)
+		{
+			for (auto& obj_pair : layer.second)
+			{
+				auto& objs = obj_pair.second;
+				for (auto& obj : objs)
+				{
+					if (obj->GetPos().x<max.x + 80 && obj->GetPos().y < max.y + 80 && obj->GetPos().x > min.x - 80 && obj->GetPos().y > min.y - 80)
+					{
+						if (obj->GetActive())
 						{
 							drawSortObjs[1].push_back(obj);
 						}
-						else if (obj->GetObjType() == Object::ObjTypes::Wall || obj->GetObjType() == Object::ObjTypes::Player || obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss || obj->GetObjType() == Object::ObjTypes::ETC || obj->GetObjType() == Object::ObjTypes::Dummy || obj->GetObjType() == Object::ObjTypes::BrokenObject)
+					}
+				}
+			}
+		}
+		else if (layer.first == Scene::LayerType::Wall || layer.first == Scene::LayerType::Object)
+		{
+			for (auto& obj_pair : layer.second)
+			{
+				auto& objs = obj_pair.second;
+				for (auto& obj : objs)
+				{
+					if (obj->GetPos().x<max.x + 80 && obj->GetPos().y < max.y + 80 && obj->GetPos().x > min.x - 80 && obj->GetPos().y > min.y - 80)
+					{
+						if (obj->GetActive())
 						{
 							drawSortObjs[2].push_back(obj);
 						}
@@ -647,7 +674,52 @@ void PlayScene::Draw(RenderWindow& window)
 				}
 			}
 		}
+		else if (layer.first == Scene::LayerType::High)
+		{
+			for (auto& obj_pair : layer.second)
+			{
+				auto& objs = obj_pair.second;
+				for (auto& obj : objs)
+				{
+					if (obj->GetPos().x<max.x + 80 && obj->GetPos().y < max.y + 80 && obj->GetPos().x > min.x - 80 && obj->GetPos().y > min.y - 80)
+					{
+						if (obj->GetActive())
+						{
+							drawSortObjs[3].push_back(obj);
+						}
+					}
+				}
+			}
+		}
 	}
+	//for (auto& layer : objList)
+	//{
+	//		for (auto& obj_pair : layer.second)
+	//		{
+	//			auto& objs = obj_pair.second;
+	//			for (auto& obj : objs)
+	//			{
+	//				if (obj->GetPos().x<max.x + 80 && obj->GetPos().y < max.y + 80 && obj->GetPos().x > min.x - 80 && obj->GetPos().y > min.y - 80)
+	//				{
+	//					if (obj->GetActive())
+	//					{
+	//						if (obj->GetObjType() == Object::ObjTypes::Tile)
+	//						{
+	//							drawSortObjs[0].push_back(obj);
+	//						}
+	//						else if (obj->GetObjType() == Object::ObjTypes::Middle)
+	//						{
+	//							drawSortObjs[1].push_back(obj);
+	//						}
+	//						else if (obj->GetObjType() == Object::ObjTypes::Wall || obj->GetObjType() == Object::ObjTypes::Player || obj->GetObjType() == Object::ObjTypes::Enemy || obj->GetObjType() == Object::ObjTypes::FinalBoss || obj->GetObjType() == Object::ObjTypes::ETC || obj->GetObjType() == Object::ObjTypes::Dummy || obj->GetObjType() == Object::ObjTypes::BrokenObject)
+	//						{
+	//							drawSortObjs[2].push_back(obj);
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//}
 	DrawSort(drawSortObjs[2]);
 
 	for (auto& layer : drawSortObjs)

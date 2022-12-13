@@ -171,7 +171,37 @@ Object* Scene::FindGameObj(string name)
 void Scene::DrawSort(vector<Object*>& drawSortObjs)
 {
 	sort(drawSortObjs.begin(), drawSortObjs.end(), [](Object* a, Object* b) {
-		return a->GetSortHitBoxPostion() < b->GetSortHitBoxPostion(); });
+		const Vector2f aPos = a->GetSortHitBoxPostion();
+		const Vector2f bPos = b->GetSortHitBoxPostion();
+		//if (a->GetObjType() == b->GetObjType())
+		//{
+		//	if (aPos.y == bPos.y)
+		//	{
+		//		if (aPos.x == bPos.x)
+		//		{`
+		//		}
+		//		return aPos.x < bPos.x;
+		//	}
+		//	return aPos.y < bPos.y;wadsasawawdawdaaawdddda
+		//}
+		//return a->GetObjType() < b->GetObjType();
+		if (aPos.y == bPos.y)
+		{
+			if (a->GetObjType() != b->GetObjType())
+			{
+				return a->GetObjType()<b->GetObjType();
+			}
+			else
+			{
+				if (aPos.x == bPos.x)
+				{
+				}
+				return aPos.x < bPos.x;
+			}
+			
+		}
+		return aPos.y < bPos.y;
+		});
 
 }
 

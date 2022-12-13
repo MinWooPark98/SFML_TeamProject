@@ -101,29 +101,29 @@ void Object::SetHitBox(string path)
     }
 }
 
-float Object::GetSortHitBoxPostion()
+Vector2f Object::GetSortHitBoxPostion()
 {
     switch (GetObjType())
     {
         case ObjTypes::Player:
         {
-            return GetLowHitBox().getPosition().y;
+            return { GetLowHitBox().getPosition().x,GetLowHitBox().getPosition().y+ GetLowHitBox().getSize().y*0.5f};
         }
         case ObjTypes::Enemy:
         {
-            return GetLowHitBox().getPosition().y;
+            return { GetLowHitBox().getPosition().x,GetLowHitBox().getPosition().y + GetLowHitBox().getSize().y * 0.5f };
         }
         case ObjTypes::FinalBoss:
         {
-            return GetLowHitBox().getPosition().y;
+            return { GetLowHitBox().getPosition().x,GetLowHitBox().getPosition().y + GetLowHitBox().getSize().y * 0.5f };
         }
         case ObjTypes::Wall:
         {
-            return GetHitBox().getPosition().y;
+            return GetHitBox().getPosition();
         }
         case ObjTypes::ETC:
         {
-            return GetHitBox().getPosition().y;
+            return GetHitBox().getPosition();
         }
     }
 }
