@@ -481,6 +481,9 @@ void PlayScene::Init()
 	if (fireBoss != nullptr)
 		fireBoss->SetPlayerLastPos(player->GetPos());
 
+	if (portal != nullptr)
+		portal->SetPlayer(player);
+
 	portalEffect = new PortalEffect();
 	portalEffect->Init();
 }
@@ -489,23 +492,6 @@ void PlayScene::Update(float dt)
 {
 	CameraMove::CameraShake(dt);
 	Scene::Update(dt);
-
-	if (portal != nullptr)
-	{
-		portal->Update(dt);
-		if (player->GetHitBounds().intersects(portal->GetHitBounds()))
-			portal->ChangeMap();
-	}
-	/*if (glassTubes.size() != 0)
-	{
-		for (int i = 0; i < glassTubes.size(); i++)
-		{
-			glassTubes[i]->Update(dt);
-
-			if (glassTubes[i]->GetIsPlayerAdjacent())
-				((PlayUiMgr*)uiMgr)->GlassTubeSet(i, true);
-		}
-	}*/
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
@@ -517,6 +503,9 @@ void PlayScene::Update(float dt)
 		else if (InputMgr::GetEscapable() && ((PlayUiMgr*)uiMgr)->IsOption())
 			SetPause(true);
 	}
+
+	if (portal != nullptr)
+		portal->Update(dt);
 
 	showDamages->Update(dt);
 	golds->Update(dt);
@@ -945,6 +934,10 @@ void PlayScene::AllDieEnemy(int i)
 				}
 			}
 		}
+
+		if (portal != nullptr)
+			portal->PortalCreat();
+
 		return;
 	}
 	for (auto& c_list : collisionList[i])
@@ -1035,6 +1028,9 @@ void PlayScene::AllDieEnemy(int i)
 				}
 			}
 		}
+
+		if (portal != nullptr)
+			portal->PortalCreat();
 	}
 }
 

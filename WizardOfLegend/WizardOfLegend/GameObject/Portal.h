@@ -28,6 +28,8 @@ protected:
 	Player* player;
 	PortalName portalName;
 
+	bool isPortalCreat = false;
+
 public:
 	Portal();
 	virtual ~Portal();
@@ -40,7 +42,9 @@ public:
 	void SetChanegeMap(string mapName);
 
 	void ChangeMap();
-	void SetPlayer(Player* player) { this->player = player; };
 	void SetPortalName(PortalName name) { portalName = name; };
+	void SetPlayer(Player* player);
+
+	void PortalCreat() { isPortalCreat = true; };
 };
 
