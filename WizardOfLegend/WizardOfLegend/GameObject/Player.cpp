@@ -17,7 +17,7 @@
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), attackDmg(20),
-	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.3f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), damageTake(0.f), evasionRate(0.f), criticalRate(0.f), criticalRatio(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f }), itemMgr(nullptr)
+	walkingSpeed(0.f), runningSpeed(0.f), accelTime(2.f), accelTimer(0.f), dashDuration(0.35f), dashTimer(0.f), jumpDuration(0.5f), jumpTimer(0.f), jumpDistance(0.f), jumpOriginY(0.f), lastDir(1.f, 0.f), dashDir(1.f, 0.f), currSkillSet(nullptr), skillToolMode(false), maxHp(525), curHp(525), hitDuration(0.2f), hitTimer(0.f), damageTake(0.f), evasionRate(0.f), criticalRate(0.f), criticalRatio(0.f), fallDuration(1.f), fallTimer(0.f), fallingScale({ 1.f, 1.f }), itemMgr(nullptr)
 {
 }
 
@@ -32,7 +32,6 @@ void Player::SetState(States state)
 	switch (state)
 	{
 	case States::Idle:
-		currSkillSet = nullptr;
 		{
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle < -45.f)
@@ -241,7 +240,7 @@ void Player::Init()
 		AnimationEvent ev;
 		ev.clipId = "Die";
 		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
-		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
+		//ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
 		animator->AddEvent(ev);
 	}
 	animator->SetTarget(&sprite);
