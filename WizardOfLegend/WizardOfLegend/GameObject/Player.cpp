@@ -32,7 +32,6 @@ void Player::SetState(States state)
 	switch (state)
 	{
 	case States::Idle:
-		currSkillSet = nullptr;
 		{
 			auto angle = Utils::Angle(lastDir);
 			if (angle > -135.f && angle < -45.f)
@@ -241,7 +240,7 @@ void Player::Init()
 		AnimationEvent ev;
 		ev.clipId = "Die";
 		ev.frame = RESOURCE_MGR->GetAnimationClip(ev.clipId)->GetFrameCount() - 1;
-		ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
+		//ev.onEvent = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Title);
 		animator->AddEvent(ev);
 	}
 	animator->SetTarget(&sprite);

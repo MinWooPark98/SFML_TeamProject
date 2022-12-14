@@ -19,19 +19,30 @@ void Portal::Init()
 	SetHitBox({20, 20, 10, 20}, Color::Red);
 	SetHitBoxOrigin(Origins::MC);
 	SetActive(false);
+	currScene = SCENE_MGR->GetCurrentScene();
 }
 
 void Portal::Update(float dt)
 {
 	SpriteObj::Update(dt);
-	
+	if (player != nullptr && player->GetState() == Player::States::Die)
+	{
+		ChangeMap();
+	}
 	if (isPortalCreat)
 	{
 		SetActive(true);
 		if (player != nullptr)
 		{
 			if (player->GetHitBounds().intersects(GetHitBounds()))
+			{
+				if (((PlayScene*)currScene)->GetMapName()=="TUTORIALFIGHT")
+				{
+					player->SetPlatinum(0);
+					player->AddPlatinum(22);
+				}
 				ChangeMap();
+			}				
 		}
 	}
 	else

@@ -88,6 +88,7 @@ protected:
 	int gold;
 	int platinum;
 
+
 public:
 	Player();
 	virtual ~Player();

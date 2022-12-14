@@ -96,8 +96,8 @@ void PlayScene::Init()
 			draw->SetOrigin(Origins::BC);
 			draw->SetPos(obj.position);
 			draw->SetHitBox(obj.path);
-			if(obj.path=="graphics/Map/Palette/AirWallFoundation.png"||
-				obj.path == "graphics/Map/Palette/FireWallFoundation.png" || 
+			if (obj.path == "graphics/Map/Palette/AirWallFoundation.png" ||
+				obj.path == "graphics/Map/Palette/FireWallFoundation.png" ||
 				obj.path == "graphics/Map/Palette/IceWallFoundation.png")
 			{
 				draw->SetObjType(Object::ObjTypes::Tile);
@@ -164,9 +164,9 @@ void PlayScene::Init()
 				objList[LayerType::Object][0].push_back(heal);
 			}
 			else if (obj.path == "graphics/Map/Object/tutorial_skill_1.png" ||
-					obj.path == "graphics/Map/Object/tutorial_skill_2.png" ||
-					obj.path == "graphics/Map/Object/tutorial_skill_3.png" ||
-					obj.path == "graphics/Map/Object/tutorial_skill_4.png")
+				obj.path == "graphics/Map/Object/tutorial_skill_2.png" ||
+				obj.path == "graphics/Map/Object/tutorial_skill_3.png" ||
+				obj.path == "graphics/Map/Object/tutorial_skill_4.png")
 			{
 				glassTube = new GlassTube();
 				glassTube->SetFileName(obj.path);
@@ -289,8 +289,12 @@ void PlayScene::Init()
 				draw->SetPos(obj.position);
 				draw->SetHitBox(obj.path);
 				draw->SetObjType(Object::ObjTypes::ETC);
-				if (obj.path == "graphics/Map/Object/GateFull.png" ||
-					obj.path == "graphics/Map/Palette/LeftGate.png" ||
+				if (obj.path == "graphics/Map/Object/GateFull.png")
+				{
+					draw->SetActive(false);
+					objList[LayerType::Object][0].push_back(draw);
+				}
+				else if (obj.path == "graphics/Map/Palette/LeftGate.png" ||
 					obj.path == "graphics/Map/Palette/RightGate.png")
 				{
 					draw->SetActive(false);
@@ -302,7 +306,7 @@ void PlayScene::Init()
 					draw->SetColor({ 0,0,0,0 });
 					objList[LayerType::High][0].push_back(draw);
 				}
-				else if(obj.path == "graphics/Space.png")
+				else if (obj.path == "graphics/Space.png")
 				{
 					objList[LayerType::High][0].push_back(draw);
 				}
@@ -422,7 +426,7 @@ void PlayScene::Init()
 			cliff->Init();
 			cliff->SetName(obj.type);
 			cliff->SetPos(obj.position);
-			cliff->SetSize({obj.size.x-8, obj.size.y-8});
+			cliff->SetSize({ obj.size.x - 8, obj.size.y - 8 });
 			cliff->SetHitBox({ (FloatRect)cliff->GetCliffShape()->getGlobalBounds() }, Color::Red);
 			cliff->SetOutlineColor({ 0, 0, 0, 0 });
 			cliff->SetObjType(Object::ObjTypes::Cliff);
@@ -430,7 +434,7 @@ void PlayScene::Init()
 		}
 		else if (obj.type == "SPAWNAREA")
 		{
-			SpawnArea* spawnArea= new SpawnArea();
+			SpawnArea* spawnArea = new SpawnArea();
 			spawnArea->Init();
 			spawnArea->SetName(obj.type);
 			spawnArea->SetPos(obj.position);
@@ -549,37 +553,37 @@ void PlayScene::Update(float dt)
 	{
 		switch ((Object::ObjTypes)i)
 		{
-		case Object::ObjTypes::Enemy:
-		case Object::ObjTypes::FinalBoss:
-		case Object::ObjTypes::Player:
-			for (int j = 0; j < collisionList.size(); ++j)
-			{
-				if (collisionList[j][Object::ObjTypes::Player].empty())
-					continue;
-				for (auto& obj : collisionList[j][(Object::ObjTypes)i])
+			case Object::ObjTypes::Enemy:
+			case Object::ObjTypes::FinalBoss:
+			case Object::ObjTypes::Player:
+				for (int j = 0; j < collisionList.size(); ++j)
 				{
-					OnCollisionWall(j, obj);
-					OnCollisionETC(j, obj);
-				}
-			}
-			break;
-		case Object::ObjTypes::BrokenObject:
-			for (int j = 0; j < collisionList.size(); ++j)
-			{
-				if (collisionList[j][Object::ObjTypes::Player].empty())
-					continue;
-				for (auto& obj : collisionList[j][Object::ObjTypes::Dummy])
-				{
-					if ((Dummy*)obj->GetActive())
+					if (collisionList[j][Object::ObjTypes::Player].empty())
+						continue;
+					for (auto& obj : collisionList[j][(Object::ObjTypes)i])
 					{
-						OnCollisionWall(j, (Dummy*)obj);
-						OnCollisionETC(j, (Dummy*)obj);
+						OnCollisionWall(j, obj);
+						OnCollisionETC(j, obj);
 					}
 				}
-			}
-			break;
-		default:
-			break;
+				break;
+			case Object::ObjTypes::BrokenObject:
+				for (int j = 0; j < collisionList.size(); ++j)
+				{
+					if (collisionList[j][Object::ObjTypes::Player].empty())
+						continue;
+					for (auto& obj : collisionList[j][Object::ObjTypes::Dummy])
+					{
+						if ((Dummy*)obj->GetActive())
+						{
+							OnCollisionWall(j, (Dummy*)obj);
+							OnCollisionETC(j, (Dummy*)obj);
+						}
+					}
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -861,7 +865,7 @@ void PlayScene::Enter()
 	Release();
 	Init();
 	PLAYSCENE_DATAMGR->Load();
-	portalEffect->ShowPortalEffect({ player->GetPos().x, player->GetPos().y + (player->GetSize().y * 0.5f)});
+	portalEffect->ShowPortalEffect({ player->GetPos().x, player->GetPos().y + (player->GetSize().y * 0.5f) });
 }
 
 void PlayScene::Exit()
@@ -879,15 +883,33 @@ void PlayScene::Exit()
 		SetMapName("STAGEONE");
 
 	else if (mapName == "STAGEONE")
-		SetMapName("STAGETWO");
+	{
+		if (player->GetState() == Player::States::Die)
+		{
+			SetMapName("SQURE");
+		}
+		else
+		{
+			SetMapName("STAGETWO");
+		}
+	}
 
 	else if (mapName == "STAGETWO")
-		SetMapName("FINALBOSS");
+	{
+		if (player->GetState() == Player::States::Die)
+		{
+			SetMapName("SQURE");
+		}
+		else
+		{
+			SetMapName("FINALBOSS");
+		}
+	}
 }
 
 void PlayScene::SpawnEnemy(int i, float dt)
 {
-	
+
 	for (auto& c_list : collisionList[i])
 	{
 		for (auto& obj : c_list.second)
@@ -913,26 +935,26 @@ void PlayScene::SpawnEnemy(int i, float dt)
 			for (auto& obj : c_list.second)
 			{
 
-					if ((obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive()) ||
-						((obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((FinalBoss*)obj)->GetState() != FinalBoss::States::Die))
+				if ((obj->GetObjType() == Object::ObjTypes::Enemy && ((Enemy*)obj)->GetIsAlive()) ||
+					((obj->GetObjType() == Object::ObjTypes::FinalBoss) && ((FinalBoss*)obj)->GetState() != FinalBoss::States::Die))
+				{
+					obj->SetActive(true);
+				}
+				if (obj->GetObjType() == Object::ObjTypes::ETC)
+				{
+					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/RightGate.png" ||
+						obj->GetFileName() == "graphics/Map/Palette/invisibleGate.png")
 					{
 						obj->SetActive(true);
 					}
-					if (obj->GetObjType() == Object::ObjTypes::ETC)
-					{
-						if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
-							obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-							obj->GetFileName() == "graphics/Map/Palette/RightGate.png"||
-							obj->GetFileName() == "graphics/Map/Palette/invisibleGate.png")
-						{
-							obj->SetActive(true);
-						}
-					}
+				}
 			}
 		}
 		room[i].SetIsSpawn(false);
 	}
-	
+
 }
 
 void PlayScene::AllDieEnemy(int i)
@@ -949,7 +971,7 @@ void PlayScene::AllDieEnemy(int i)
 					{
 						if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
 							obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-							obj->GetFileName() == "graphics/Map/Palette/RightGate.png"||
+							obj->GetFileName() == "graphics/Map/Palette/RightGate.png" ||
 							obj->GetFileName() == "graphics/Map/Palette/invisibleGate.png")
 						{
 							obj->SetActive(false);
@@ -1066,7 +1088,7 @@ void PlayScene::AllDieEnemy(int i)
 				{
 					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
 						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-						obj->GetFileName() == "graphics/Map/Palette/RightGate.png"||
+						obj->GetFileName() == "graphics/Map/Palette/RightGate.png" ||
 						obj->GetFileName() == "graphics/Map/Palette/invisibleGate.png")
 					{
 						obj->SetActive(false);

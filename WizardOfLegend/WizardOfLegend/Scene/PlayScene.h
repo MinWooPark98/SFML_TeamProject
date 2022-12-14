@@ -74,6 +74,6 @@ public:
 	PortalEffect* GetPortalEffect() { return portalEffect; };
 
 	void SetMapName(const string& name) { mapName = name; }
-	string GetMapName() { return mapName; };
+	const string& GetMapName() { return mapName; };
 };
 
