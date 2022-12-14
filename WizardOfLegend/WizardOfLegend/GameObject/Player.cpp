@@ -735,7 +735,7 @@ void Player::AddExtraSkillSet(const string& skillSetName)
 
 void Player::ExchangeSkillSet(int idx, const string& skillSetName, bool isPlayScene)
 {
-	for (auto skillSet : extraSkillSets)
+	for (auto& skillSet : extraSkillSets)
 	{
 		if (skillSet->GetSkillSetName() == skillSetName)
 		{
