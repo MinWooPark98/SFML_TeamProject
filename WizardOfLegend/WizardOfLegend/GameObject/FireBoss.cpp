@@ -134,8 +134,8 @@ void FireBoss::Update(float dt)
 			if (attackType == AttackType::ThirdAttack && curBossState == BossStates::Attack && thirdAttackCount > 0 && patternDelay <= 0.f)
 			{
 				auto kick = Utils::Normalize(playerLastPos - lastPos);
-				firebossKick->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
-				firebossKick->GetHitBox().setRotation(Utils::Angle(lastPos, playerLastPos) + 90);
+				firebossKick->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos));
+				firebossKick->GetHitBox().setRotation(Utils::Angle(lastPos, playerLastPos));
 				fireWing->GetSprite().setRotation(Utils::Angle(lastPos, playerLastPos) - 90);
 				Translate({ (dt * speed * kick) / 5.f });
 			}
