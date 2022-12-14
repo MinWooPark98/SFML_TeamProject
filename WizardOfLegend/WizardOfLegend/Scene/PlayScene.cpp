@@ -301,10 +301,15 @@ void PlayScene::Init()
 				draw->SetObjType(Object::ObjTypes::ETC);
 				if (obj.path == "graphics/Map/Object/GateFull.png" ||
 					obj.path == "graphics/Map/Palette/LeftGate.png" ||
-					obj.path == "graphics/Map/Palette/RightGate.png"||
-					obj.path == "graphics/Map/Palette/invisibleGate.png")
+					obj.path == "graphics/Map/Palette/RightGate.png")
 				{
 					draw->SetActive(false);
+					objList[LayerType::High][0].push_back(draw);
+				}
+				else if (obj.path == "graphics/Map/Palette/invisibleGate.png")
+				{
+					draw->SetActive(false);
+					draw->SetColor({ 0,0,0,0 });
 					objList[LayerType::High][0].push_back(draw);
 				}
 				else if(obj.path == "graphics/Space.png")
@@ -921,7 +926,8 @@ void PlayScene::SpawnEnemy(int i, float dt)
 					{
 						if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
 							obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-							obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+							obj->GetFileName() == "graphics/Map/Palette/RightGate.png"||
+							obj->GetFileName() == "graphics/Map/Palette/invisibleGate.png")
 						{
 							obj->SetActive(true);
 						}
@@ -947,7 +953,8 @@ void PlayScene::AllDieEnemy(int i)
 					{
 						if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
 							obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-							obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+							obj->GetFileName() == "graphics/Map/Palette/RightGate.png"||
+							obj->GetFileName() == "graphics/Map/Palette/invisibleGate.png")
 						{
 							obj->SetActive(false);
 						}
@@ -1038,7 +1045,8 @@ void PlayScene::AllDieEnemy(int i)
 				{
 					if (obj->GetFileName() == "graphics/Map/Object/GateFull.png" ||
 						obj->GetFileName() == "graphics/Map/Palette/LeftGate.png" ||
-						obj->GetFileName() == "graphics/Map/Palette/RightGate.png")
+						obj->GetFileName() == "graphics/Map/Palette/RightGate.png"||
+						obj->GetFileName() == "graphics/Map/Palette/invisibleGate.png")
 					{
 						obj->SetActive(false);
 					}
