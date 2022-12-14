@@ -44,6 +44,8 @@ protected:
 	vector<GlassTube*> glassTubes;
 	PortalEffect* portalEffect;
 
+	bool isTutorial = false;
+
 public:
 	PlayScene();
 	virtual ~PlayScene();

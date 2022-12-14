@@ -90,7 +90,7 @@ protected:
 	SpriteObj* platinum;
 	TextObj* platinumText;
 
-	bool isTutorial;
+	bool isTutorial = false;
 	vector<SpriteObj*> moveKeyboard;
 	float keyboardEnabledTimer = 5.f;
 	int keyboardBright = 255;
@@ -99,6 +99,7 @@ protected:
 	vector<GlassTube*> glassTubes;
 
 	int messageIndex = 0;
+	int tutorialEnd = 0;
 
 public:
 	PlayUiMgr();
@@ -144,4 +145,7 @@ public:
 	void SetPlayerSkillSet(const string& skillSetName, int index);
 
 	void GlassControl();
+
+	bool GetisTutorial() const { return isTutorial; };
+	int GetTutorial() const { return tutorialEnd; };
 };

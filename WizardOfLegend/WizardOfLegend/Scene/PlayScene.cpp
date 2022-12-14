@@ -486,6 +486,7 @@ void PlayScene::Init()
 
 	portalEffect = new PortalEffect();
 	portalEffect->Init();
+	isTutorial = ((PlayUiMgr*)uiMgr)->GetisTutorial();
 }
 
 void PlayScene::Update(float dt)
@@ -936,7 +937,7 @@ void PlayScene::SpawnEnemy(int i, float dt)
 
 void PlayScene::AllDieEnemy(int i)
 {
-	if (collisionList[i][Object::ObjTypes::Enemy].empty() && collisionList[i][Object::ObjTypes::FinalBoss].empty())
+	if (collisionList[i][Object::ObjTypes::Enemy].empty() && collisionList[i][Object::ObjTypes::FinalBoss].empty() && !isTutorial)
 	{
 		if (room[i].GetAllEnemyDead())
 		{
@@ -1046,6 +1047,11 @@ void PlayScene::AllDieEnemy(int i)
 					return;
 			}
 
+			if (isTutorial)
+			{
+				if (((PlayUiMgr*)uiMgr)->GetTutorial() < 4)
+					return;
+			}
 		}
 		hpBarSet = true;
 		room[i].SetAllEnemyDead(true);

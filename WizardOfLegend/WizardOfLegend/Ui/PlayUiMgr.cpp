@@ -800,7 +800,7 @@ void PlayUiMgr::GlassControl()
 						msgUi->UiEnabled(false);
 						msgUi->SetIsTalk(false);
 						messageIndex = 0;
-
+						tutorialEnd++;
 						switch (i)
 						{
 						case 0:
