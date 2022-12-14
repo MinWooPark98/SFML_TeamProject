@@ -845,9 +845,9 @@ void PlayUiMgr::GlassControl()
 						switch (i)
 						{
 						case 0:
-							if (player->GetSkillSets()[0]->GetSkillSetName() != "FireBall")
+							if (player->GetSkillSets()[0]->GetSkillSetName() != "AeroRipple")
 							{
-								SetPlayerSkillSet("FireBall", 0);
+								SetPlayerSkillSet("AeroRipple", 0);
 								tutorialEnd++;
 							}
 							break;

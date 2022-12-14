@@ -4,15 +4,15 @@ FireFull,1
 FireBall,1
 FireDash,1
 JumpMeteor,1
-Temp0,1
-Temp1,1
+Temp0,0
+Temp1,0
 Temp2,1
-Temp3,1
-Temp4,1
-Temp5,1
-Temp6,1
+Temp3,0
+Temp4,0
+Temp5,0
+Temp6,0
 Temp7,1
-Temp8,1
+Temp8,0
 Temp9,1
 EarthDrill,0
 ThunderOrb,0
@@ -23,3 +23,4 @@ LightningFirstBasic,0
 ChaosWave,0
 ChaosCircle,0
 WindBall,0
+AeroRipple,0

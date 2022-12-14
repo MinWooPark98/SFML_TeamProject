@@ -19,6 +19,11 @@ void Enemy::Init()
 	type = MonsterType::None;
 	curState = States::RightIdle;
 
+	shadow.setFillColor({ 0, 0, 0, 100 });
+	shadow.setRadius(7.5f);
+	Utils::SetOrigin(shadow, Origins::MC);
+	shadow.setScale({ 1.f, 0.6f });
+
 	spawn = new SpriteObj();
 	spawn->SetOrigin(Origins::MC);
 	spawnAnimation.SetTarget(&spawn->GetSprite());
@@ -35,6 +40,7 @@ void Enemy::Update(float dt)
 	SpriteObj::Update(dt);
 
 	SetLastPosition(GetPos());
+	shadow.setPosition(lowhitbox.getPosition());
 
 	if (isActionStart)
 	{
@@ -263,6 +269,7 @@ void Enemy::SpawnScale(float scale, float dt)
 
 void Enemy::Draw(RenderWindow& window)
 { 
+	window.draw(shadow);
 	if (type != MonsterType::MiddleBoss)
 	{
 		Object::Draw(window);

@@ -874,11 +874,28 @@ void PlayScene::Exit()
 	PLAYSCENE_DATAMGR->Save();
 
 	if (mapName == "TUTORIALMAP")
-		SetMapName("TUTORIALFIGHT");
+	{
+		if (player->GetState() == Player::States::Die)
+		{
+			SetMapName("TUTORIALMAP");
+		}
+		else
+		{
+			SetMapName("TUTORIALFIGHT");
+		}
+	}
 
 	else if (mapName == "TUTORIALFIGHT")
-		SetMapName("SQURE");
-
+	{
+		if (player->GetState() == Player::States::Die)
+		{
+			SetMapName("TUTORIALFIGHT");
+		}
+		else
+		{
+			SetMapName("SQURE");
+		}
+	}
 	else if (mapName == "SQURE")
 		SetMapName("STAGEONE");
 
