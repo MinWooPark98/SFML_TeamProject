@@ -14,6 +14,7 @@
 #include "../DataTable/PlatinumTable.h"
 #include "../GameObject/HitSpark.h"
 #include "Item/ItemMgr.h"
+#include "../Ui/SkillCoolDownUi.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), attackDmg(20),
@@ -688,7 +689,11 @@ void Player::SetSkillSet(int idx, const string& skillSetName, bool isPlayScene)
 
 	auto currScene = SCENE_MGR->GetCurrentScene();
 	if (isPlayScene || currScene->GetType() == Scenes::Play)
-		((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr())->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+	{
+		auto uiMgr = ((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr());
+		uiMgr->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+		uiMgr->GetCoolDownUis()[idx]->SetSkillSet(skillSets[idx]);
+	}
 }
 
 void Player::OnHit(const Vector2f& atkDir, int dmg)
@@ -747,7 +752,11 @@ void Player::ExchangeSkillSet(int idx, const string& skillSetName, bool isPlaySc
 
 	auto currScene = SCENE_MGR->GetCurrentScene();
 	if (isPlayScene || currScene->GetType() == Scenes::Play)
-		((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr())->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+	{
+		auto uiMgr = ((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr());
+		uiMgr->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+		uiMgr->GetCoolDownUis()[idx]->SetSkillSet(skillSets[idx]);
+	}
 }
 
 void Player::SavePlatinum()

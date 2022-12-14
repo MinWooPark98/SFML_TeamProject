@@ -602,8 +602,7 @@ void PlayScene::Update(float dt)
 				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
 					projectile->SetDrawable(false);
-					if (coll->GetHitBounds().contains(Vector2f(projectileBnd.left + projectileBnd.width * 0.5f, projectileBnd.top + projectileBnd.height * 0.5f)) ||
-						projectile->GetUndrawTimer() >= 0.3f)
+					if (coll->GetHitBounds().contains(projectile->GetPos()))
 					{
 						projectile->SetMoving(false);
 						if (projectile->GetSubjectType() == Skill::SubjectType::Player)
@@ -618,14 +617,19 @@ void PlayScene::Update(float dt)
 			}
 			for (auto& coll : collisionList[i][Object::ObjTypes::ETC])
 			{
+				if (!coll->GetActive())
+					continue;
 				if (projectile->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
-					projectile->SetMoving(false);
-					if (projectile->GetSubjectType() == Skill::SubjectType::Player)
-						enemyHitSparks->Get()->SetPos(projectile->GetPos());
-					else
-						playerHitSparks->Get()->SetPos(projectile->GetPos());
-					break;
+					if (coll->GetHitBounds().contains(projectile->GetPos()))
+					{
+						projectile->SetMoving(false);
+						if (projectile->GetSubjectType() == Skill::SubjectType::Player)
+							enemyHitSparks->Get()->SetPos(projectile->GetPos());
+						else
+							playerHitSparks->Get()->SetPos(projectile->GetPos());
+						break;
+					}
 				}
 			}
 		}
