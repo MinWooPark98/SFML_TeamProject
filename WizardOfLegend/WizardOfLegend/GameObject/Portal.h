@@ -46,5 +46,6 @@ public:
 	void SetPlayer(Player* player);
 
 	void PortalCreat() { isPortalCreat = true; };
+	void PortalEnabled() { isPortalCreat = false; };
 };
 

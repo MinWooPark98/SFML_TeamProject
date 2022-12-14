@@ -870,8 +870,18 @@ void PlayScene::Exit()
 
 	if (mapName == "TUTORIALMAP")
 		SetMapName("TUTORIALFIGHT");
+
 	else if (mapName == "TUTORIALFIGHT")
 		SetMapName("SQURE");
+
+	else if (mapName == "SQURE")
+		SetMapName("STAGEONE");
+
+	else if (mapName == "STAGEONE")
+		SetMapName("STAGETWO");
+
+	else if (mapName == "STAGETWO")
+		SetMapName("FINALBOSS");
 }
 
 void PlayScene::SpawnEnemy(int i, float dt)
@@ -973,6 +983,12 @@ void PlayScene::AllDieEnemy(int i)
 								((PlayUiMgr*)uiMgr)->SetBossName("Final Boss");
 
 								hpBarSet = false;
+
+								if (portal != nullptr)
+								{
+									portal->PortalEnabled();
+									cout << "kk" << endl;
+								}
 							}
 						}
 					}
@@ -989,6 +1005,12 @@ void PlayScene::AllDieEnemy(int i)
 								((PlayUiMgr*)uiMgr)->SetBossMaxHp(fireBoss->GetMaxHp());
 								((PlayUiMgr*)uiMgr)->SetBossName("Flame Queen");
 								hpBarSet = false;
+
+								if (portal != nullptr)
+								{
+									portal->PortalEnabled();
+									cout << "kk" << endl;
+								}
 							}
 						}
 
@@ -1000,12 +1022,19 @@ void PlayScene::AllDieEnemy(int i)
 								((PlayUiMgr*)uiMgr)->SetBossMaxHp(heavyBombingArcher->GetMaxHp());
 								((PlayUiMgr*)uiMgr)->SetBossName("Heavy Bombing Archer");
 								hpBarSet = false;
+
+								if (portal != nullptr)
+								{
+									portal->PortalEnabled();
+									cout << "kk" << endl;
+								}
 							}
 						}
 
 					}
 				}
 			}
+
 			if (finalBoss != nullptr)
 			{
 				if (finalBoss->GetActive() && obj->GetObjType() == Object::ObjTypes::FinalBoss)
@@ -1044,7 +1073,10 @@ void PlayScene::AllDieEnemy(int i)
 		}
 
 		if (portal != nullptr)
+		{
 			portal->PortalCreat();
+			cout << "hi" << endl;
+		}
 	}
 }
 

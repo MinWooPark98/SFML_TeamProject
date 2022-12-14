@@ -34,6 +34,8 @@ void Portal::Update(float dt)
 				ChangeMap();
 		}
 	}
+	else
+		SetActive(false);
 }
 
 void Portal::Draw(RenderWindow& window)
