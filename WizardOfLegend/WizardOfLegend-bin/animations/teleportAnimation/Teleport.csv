@@ -1,10 +1,15 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-Teleport,0,15,,,,,,
+Teleport,0,30,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/Map/Object/TeleportEffect0.png,0,0,5,256,2.5,256,0,0
 graphics/Map/Object/TeleportEffect1.png,0,0,45,191,22.5,191,0,0
 graphics/Map/Object/TeleportEffect2.png,0,0,48,256,24,256,0,0
+graphics/Map/Object/TeleportEffect3.png,0,0,48,256,24,256,0,0
+graphics/Map/Object/TeleportEffect3.png,0,0,48,256,24,256,0,0
+graphics/Map/Object/TeleportEffect3.png,0,0,48,256,24,256,0,0
+graphics/Map/Object/TeleportEffect3.png,0,0,48,256,24,256,0,0
+graphics/Map/Object/TeleportEffect3.png,0,0,48,256,24,256,0,0
 graphics/Map/Object/TeleportEffect3.png,0,0,48,256,24,256,0,0
 graphics/Map/Object/TeleportEffect4.png,0,0,48,123,24,123,0,0
 graphics/Map/Object/TeleportEffect5.png,0,0,48,101,24,101,0,0

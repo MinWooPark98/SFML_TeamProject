@@ -25,7 +25,7 @@ void GlassTube::Init()
 
 	if (GetFileName() == "graphics/Map/Object/tutorial_skill_2.png")
 	{
-		SetGlass(messageTable, "graphics/Map/Object/tutorial_skill_2.png", "폭발 화염구");
+		SetGlass(messageTable, "graphics/Map/Object/tutorial_skill_2.png", "운석 충돌");
 	}
 	else if (GetFileName() == "graphics/Map/Object/tutorial_skill_1.png")
 	{
@@ -33,7 +33,7 @@ void GlassTube::Init()
 	}
 	else if (GetFileName() == "graphics/Map/Object/tutorial_skill_3.png")
 	{
-		SetGlass(messageTable, "graphics/Map/Object/tutorial_skill_3.png", "공중 폭발 돌진");
+		SetGlass(messageTable, "graphics/Map/Object/tutorial_skill_3.png", "파괴의 트위스터");
 	}
 	else if (GetFileName() == "graphics/Map/Object/tutorial_skill_4.png")
 	{
@@ -52,9 +52,15 @@ void GlassTube::Update(float dt)
 	if (player != nullptr)
 	{
 		if (GetHitBounds().intersects(player->GetHitBounds()))
+		{
 			isPlayerAdjacent = true;
+			interactKey->SetActive(true);
+		}
 		else
+		{
 			isPlayerAdjacent = false;
+			interactKey->SetActive(false);
+		}
 	}
 }
 

@@ -18,16 +18,28 @@ void Portal::Init()
 	SetOrigin(Origins::MC);
 	SetHitBox({20, 20, 10, 20}, Color::Red);
 	SetHitBoxOrigin(Origins::MC);
+	SetActive(false);
 }
 
 void Portal::Update(float dt)
 {
 	SpriteObj::Update(dt);
+	
+	if (isPortalCreat)
+	{
+		SetActive(true);
+		if (player != nullptr)
+		{
+			if (player->GetHitBounds().intersects(GetHitBounds()))
+				ChangeMap();
+		}
+	}
 }
 
 void Portal::Draw(RenderWindow& window)
 {
-	SpriteObj::Draw(window);
+	if (GetActive())
+		SpriteObj::Draw(window);
 }
 
 void Portal::ChanegePlayerPos(const Vector2f& pos)
@@ -46,4 +58,9 @@ void Portal::ChangeMap()
 	currScene = SCENE_MGR->GetCurrentScene();
 	((PlayScene*)currScene)->Exit();
 	((PlayScene*)currScene)->Enter();
+}
+
+void Portal::SetPlayer(Player* player)
+{
+	this->player = player;
 }

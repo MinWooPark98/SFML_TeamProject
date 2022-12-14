@@ -140,4 +140,8 @@ public:
 
 	void NewGlassTubes(GlassTube* tube);
 	void GlassTubeSet(int index, bool set);
+
+	void SetPlayerSkillSet(const string& skillSetName, int index);
+
+	void GlassControl();
 };

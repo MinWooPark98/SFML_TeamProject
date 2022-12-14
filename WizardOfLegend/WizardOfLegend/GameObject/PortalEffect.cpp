@@ -17,6 +17,7 @@ void PortalEffect::Init()
 	animation = new Animator();
 	animation->AddClip(*RESOURCE_MGR->GetAnimationClip("Teleport"));
 	animation->SetTarget(&sprite);
+	SetScale({1.5f, 1.5f});
 }
 
 void PortalEffect::Reset()
@@ -34,7 +35,7 @@ void PortalEffect::Update(float dt)
 		showing = true;
 	}
 
-	if (animation->GetCurrentFrame() == 9)
+	if (animation->GetCurrentFrame() == 14)
 	{
 		SetActive(false);
 		showing = false;
@@ -48,5 +49,5 @@ void PortalEffect::Draw(RenderWindow& window)
 
 void PortalEffect::ShowPortalEffect(Vector2f playerPos)
 {
-	SetPos(playerPos);
+	SetPos({ playerPos.x, playerPos.y + 10.f });
 }

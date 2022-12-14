@@ -138,16 +138,6 @@ void PlayScene::Init()
 			player->SetLastPosition({ 0,0 });
 			objList[LayerType::Object][5].push_back(player);
 			auto& skillSet = player->GetSkillSets();
-			/*auto& skillNames = PLAYSCENE_DATAMGR->GetSkillSetNames();
-			for (int i = 0; i < 6; ++i)
-			{
-				player->SetSkillSet(i, skillNames[i], true);
-			}*/
-			/*player->SetSkillSet(0, "FireBall", true);
-			player->SetSkillSet(1, "FireDash", true);
-			player->SetSkillSet(2, "JumpMeteor", true);
-			player->SetSkillSet(4, "DragonArc", true);
-			player->SetSkillSet(5, "FireFull", true);*/
 			((PlayUiMgr*)uiMgr)->SetPlayer(player);
 		}
 		else if (obj.type == "OBJECT")
@@ -491,6 +481,9 @@ void PlayScene::Init()
 	if (fireBoss != nullptr)
 		fireBoss->SetPlayerLastPos(player->GetPos());
 
+	if (portal != nullptr)
+		portal->SetPlayer(player);
+
 	portalEffect = new PortalEffect();
 	portalEffect->Init();
 }
@@ -499,23 +492,6 @@ void PlayScene::Update(float dt)
 {
 	CameraMove::CameraShake(dt);
 	Scene::Update(dt);
-
-	if (portal != nullptr)
-	{
-		portal->Update(dt);
-		if (player->GetHitBounds().intersects(portal->GetHitBounds()))
-			portal->ChangeMap();
-	}
-	/*if (glassTubes.size() != 0)
-	{
-		for (int i = 0; i < glassTubes.size(); i++)
-		{
-			glassTubes[i]->Update(dt);
-
-			if (glassTubes[i]->GetIsPlayerAdjacent())
-				((PlayUiMgr*)uiMgr)->GlassTubeSet(i, true);
-		}
-	}*/
 
 	if (InputMgr::GetKeyDown(Keyboard::Key::Escape))
 	{
@@ -527,6 +503,9 @@ void PlayScene::Update(float dt)
 		else if (InputMgr::GetEscapable() && ((PlayUiMgr*)uiMgr)->IsOption())
 			SetPause(true);
 	}
+
+	if (portal != nullptr)
+		portal->Update(dt);
 
 	showDamages->Update(dt);
 	golds->Update(dt);
@@ -548,6 +527,12 @@ void PlayScene::Update(float dt)
 			}
 			SpawnEnemy(i, dt);
 			AllDieEnemy(i);
+
+			if (InputMgr::GetKeyDown(Keyboard::F2))
+			{
+				for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
+					((Enemy*)enemy)->SetCurHp(0);
+			}
 		}
 		else
 		{
@@ -886,7 +871,7 @@ void PlayScene::Exit()
 	if (mapName == "TUTORIALMAP")
 		SetMapName("TUTORIALFIGHT");
 	else if (mapName == "TUTORIALFIGHT")
-		SetMapName("TEST");
+		SetMapName("SQURE");
 }
 
 void PlayScene::SpawnEnemy(int i, float dt)
@@ -962,6 +947,10 @@ void PlayScene::AllDieEnemy(int i)
 				}
 			}
 		}
+
+		if (portal != nullptr)
+			portal->PortalCreat();
+
 		return;
 	}
 	for (auto& c_list : collisionList[i])
@@ -1053,6 +1042,9 @@ void PlayScene::AllDieEnemy(int i)
 				}
 			}
 		}
+
+		if (portal != nullptr)
+			portal->PortalCreat();
 	}
 }
 
