@@ -408,6 +408,10 @@ void PlayUiMgr::Init()
 	msgUi = new MessageUi();
 	msgUi->Init();
 	uiObjList[0].push_back(msgUi);
+
+	string name = ((PlayScene*)currScene)->GetMapName();
+	if (name == "TUTORIALMAP" || name == "TUTORIALFIGHT")
+		tutorialMessageSet = true;
 }
 
 void PlayUiMgr::Release()
@@ -448,7 +452,7 @@ void PlayUiMgr::Update(float dt)
 	}
 
 	if (isTutorial && !moveKeyboard.empty())
-		TuturialMoveKeyboardUiControl(dt);
+		TutorialMoveKeyboardUiControl(dt);
 
 	goldText->SetOrigin(Origins::ML);
 	goldText->SetText(to_string(player->GetCurGold()));
@@ -503,6 +507,7 @@ void PlayUiMgr::Update(float dt)
 	}
 
 	GlassControl();
+	TutorialMessage();
 }
 
 void PlayUiMgr::Draw(RenderWindow& window)
@@ -715,7 +720,7 @@ void PlayUiMgr::SetSkillIcon(int idx, const string& texture)
 	skills[idx]->SetOrigin(Origins::MC);
 }
 
-void PlayUiMgr::TuturialMoveKeyboardUiControl(float dt)
+void PlayUiMgr::TutorialMoveKeyboardUiControl(float dt)
 {
 	keyboardEnabledTimer -= dt;
 
@@ -732,6 +737,43 @@ void PlayUiMgr::TuturialMoveKeyboardUiControl(float dt)
 
 	if (keyboardBright <= 0)
 		isTutorial = false;
+}
+
+void PlayUiMgr::TutorialMessage()
+{
+	if (tutorialMessageSet)
+	{
+		msgUi->SetNpcName("???");
+
+		//string message = "";
+		auto currScene = SCENE_MGR->GetCurrentScene();
+		if (((PlayScene*)currScene)->GetMapName() == "TUTORIALMAP")
+		{
+			//msgUi->SetTexts("오셨군요.\n이세계를 구하러 온 마법사.\\n당신을 성장시키기 위해 연습장을 준비했습니다.\n당신은 더 이상 혼자가 아닙니다.");
+			msgUi->SetTexts("Welcome, wizard,\nto save the world.\nI prepared a practice book to grow you up.\nYou are no longer alone.");
+		}
+		else if (((PlayScene*)currScene)->GetMapName() == "TUTORIALFIGHT")
+		{
+			//msgUi->SetTexts("당신의 자격을 시험해보기 위해 가상의 세계를 준비했습니다.\n이곳의 시련을 견디고 이 세계를 구해주세요.");
+			msgUi->SetTexts("I prepared a virtual world to test your qualifications.\nPlease endure the ordeal and save this world.");
+		}
+
+		msgUi->SetNpcImage("graphics/BankerPortrait.png");
+		msgUi->SetPlayerImage(63);
+		msgUi->MessageUiOn();
+
+		if (msgUi->GetisTalk())
+		{
+			msgUi->Talk();
+
+			if (InputMgr::GetKeyDown(Keyboard::Space))
+			{
+				msgUi->UiEnabled(false);
+				msgUi->SetIsTalk(false);
+				tutorialMessageSet = false;
+			}
+		}
+	}
 }
 
 Object* PlayUiMgr::FindUiObj(const string& name)
@@ -800,20 +842,35 @@ void PlayUiMgr::GlassControl()
 						msgUi->UiEnabled(false);
 						msgUi->SetIsTalk(false);
 						messageIndex = 0;
-						tutorialEnd++;
 						switch (i)
 						{
 						case 0:
-							SetPlayerSkillSet("FireBall", 0);
+							if (player->GetSkillSets()[0]->GetSkillSetName() != "FireBall")
+							{
+								SetPlayerSkillSet("FireBall", 0);
+								tutorialEnd++;
+							}
 							break;
 						case 1:
-							SetPlayerSkillSet("DragonArc", 2);
+							if (player->GetSkillSets()[2]->GetSkillSetName() != "DragonArc")
+							{
+								SetPlayerSkillSet("DragonArc", 2);
+								tutorialEnd++;
+							}
 							break;
 						case 2:
-							SetPlayerSkillSet("Temp9", 3);
+							if (player->GetSkillSets()[3]->GetSkillSetName() != "Temp9")
+							{
+								SetPlayerSkillSet("Temp9", 3);
+								tutorialEnd++;
+							}
 							break;
 						case 3:
-							SetPlayerSkillSet("JumpMeteor", 4);
+							if (player->GetSkillSets()[4]->GetSkillSetName() != "JumpMeteor")
+							{
+								SetPlayerSkillSet("JumpMeteor", 4);
+								tutorialEnd++;
+							}
 							break;
 						}
 					}

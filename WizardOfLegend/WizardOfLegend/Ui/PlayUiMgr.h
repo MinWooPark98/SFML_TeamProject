@@ -100,6 +100,7 @@ protected:
 
 	int messageIndex = 0;
 	int tutorialEnd = 0;
+	bool tutorialMessageSet = false;
 
 public:
 	PlayUiMgr();
@@ -135,7 +136,8 @@ public:
 
 	bool GetIsStart() { return isStart; };
 
-	void TuturialMoveKeyboardUiControl(float dt);
+	void TutorialMoveKeyboardUiControl(float dt);
+	void TutorialMessage();
 
 	virtual Object* FindUiObj(const string& name) override;
 
