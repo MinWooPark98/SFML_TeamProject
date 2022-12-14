@@ -27,6 +27,18 @@ void ItemMgr::SetHood(int id)
 	hood->SetHoodInfo(hoodInfo);
 	player->SetPaletteColor(hoodInfo.paletteIdx);
 	((SpriteObj*)SCENE_MGR->GetCurrentScene()->GetUiMgr()->FindUiObj("PLAYERSTATUSPORTRAIT"))->SetPaletteColor(hoodInfo.paletteIdx);
+	
+
+	totalValues.Reset();
+	totalValues += hood->GetValues();
+
+	for (auto relic : relicList)
+	{
+		if (relic->GetApplyValues())
+			totalValues += relic->GetValues();
+	}
+	Apply();
+	player->SetCurHp(player->GetMaxHp());
 }
 
 void ItemMgr::AddRelic(int id)
@@ -51,13 +63,15 @@ void ItemMgr::ChangeRelic(int id, int idx)
 void ItemMgr::Update(float dt)
 {
 	totalValues.Reset();
-	if(hood != nullptr)
+	if (hood != nullptr)
 		totalValues += hood->GetValues();
+
 	for (auto relic : relicList)
 	{
 		relic->Update(dt);
 		if (relic->GetApplyValues())
 			totalValues += relic->GetValues();
+
 	}
 	Apply();
 }

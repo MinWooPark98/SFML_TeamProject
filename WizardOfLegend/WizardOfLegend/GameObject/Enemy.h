@@ -113,6 +113,8 @@ protected:
 	Vector2f fallingScale;
 	float fallTimer = 0.f;
 
+	float unDrawTimer = 0.1f;
+	
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};
 	virtual ~Enemy() { Release(); };

@@ -1,27 +1,27 @@
 Id,Name,Speed,AtkDmg,Dmg,MaxHp,EvasionRate,CriticalRate,CriticalRatio,Condition,ConditionValue,Duration,GoldPrice,PlatinumPrice,Icon,Intro
-100,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,이동 속도 8% 증가 \n 공격력 7% 증가 \n dfdfd
-101,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-102,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-103,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-104,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-105,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-106,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-107,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-108,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-109,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-110,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-111,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-112,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-113,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-114,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-115,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-116,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-117,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-118,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-119,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-120,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-121,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-122,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-123,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-124,승마 모자,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
-125,ex2,0.08,0.07,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+100,승마 모자,0.07,0.08,0,0,0,0,0,-1,0,0,150,13,graphics/HorseHeadDown.png,"이동 속도 8%증가, 공격력 7% 증가"
+101,파열 부적,0.08,0,0,0,0,0,0,-1,0,0,150,13,graphics/DamageUp.png,모든 아르카나 공격력이 8%증가
+102,골칫거리,0,1,1,0,0,0,0,-1,0,0,150,13,graphics/DoubleTrouble.png,공격력 두 배 증가. 받는 데미지도 두 배 증가.
+103,낡은 다비,0,0,0,0,0.08,0,0,-1,0,0,100,10,graphics/EvadeUp.png,회피율 8%증가
+104,머큐리의 샌들,0.12,0,0,0,0,0,0,-1,0,0,120,11,graphics/MoveSpeedUp.png,이동속도 12%증가
+105,감사관의 부적,0,0,0,0,0,0.25,0,-1,0,0,120,11,graphics/CritUpAtLowHealth.png,생명력 25%이하일 때 치명타 확률 25%증가
+106,두툼한 여행용 자켓,0,0,0,0.02,0,0,0,-1,0,0,100,10,graphics/ArmorUpWithInventoryCount.png,보유한 유물 수 * 2 생명력 % 증가
+107,석회화된 뼈갑옷,0,0.12,0,0,0,0,0,-1,0,0.03,120,11,graphics/DefenseUpOnTakeDamage.png,공격을 받으면 3초간 공격력 12%증가
+108,날카로운 바람개비,0,0,0,0,1,0,0,-1,0,0,130,12,graphics/AirDamageUp.png,돌진하는 동안 모든 공격 회피
+109,결의의 갑옷,0.15,0,0,0,0,0,0,-1,0,0,120,11,graphics/ArmorUpAtLowHealth.png,생명력 20%이하일 때 이동속도 15% 증가
+110,승마 모자,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+111,ex2,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+112,승마 모자,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+113,ex2,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+114,승마 모자,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+115,ex2,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+116,승마 모자,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+117,ex2,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+118,승마 모자,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+119,ex2,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+120,승마 모자,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+121,ex2,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+122,승마 모자,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+123,ex2,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+124,승마 모자,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"
+125,ex2,0,0,0,0,0,0,0,-1,0,0,75,75,graphics/HorseHeadDown.png,"이동 속도 8% 증가, 공격력 7% 증가"

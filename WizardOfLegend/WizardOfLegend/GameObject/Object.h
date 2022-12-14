@@ -23,6 +23,7 @@ public:
         Cliff,
         Sector,
         SpawnArea,
+        Portal,
         Dummy,
         BrokenObject,
         Middle,

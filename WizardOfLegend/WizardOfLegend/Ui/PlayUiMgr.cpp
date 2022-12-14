@@ -805,19 +805,15 @@ void PlayUiMgr::GlassControl()
 						{
 						case 0:
 							SetPlayerSkillSet("FireBall", 0);
-							SetSkillIcon(0, "graphics/UseFireBlast.png");
 							break;
 						case 1:
 							SetPlayerSkillSet("DragonArc", 2);
-							SetSkillIcon(2, "graphics/ShootFireArc.png");
 							break;
 						case 2:
 							SetPlayerSkillSet("Temp9", 3);
-							SetSkillIcon(3, "graphics/ShootFireArc.png");
 							break;
 						case 3:
 							SetPlayerSkillSet("JumpMeteor", 4);
-							SetSkillIcon(4, "graphics/SummonMeteorStrike.png");
 							break;
 						}
 					}

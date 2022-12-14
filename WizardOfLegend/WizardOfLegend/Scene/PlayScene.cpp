@@ -148,7 +148,7 @@ void PlayScene::Init()
 				portal->Init();
 				portal->SetName(obj.type);
 				portal->SetPos(obj.position);
-				portal->SetObjType(Object::ObjTypes::ETC);
+				portal->SetObjType(Object::ObjTypes::Portal);
 				objList[LayerType::Middle][0].push_back(portal);
 			}
 			else if (obj.path == "graphics/Map/Object/HealthCrystal.png")
@@ -987,7 +987,6 @@ void PlayScene::AllDieEnemy(int i)
 								if (portal != nullptr)
 								{
 									portal->PortalEnabled();
-									cout << "kk" << endl;
 								}
 							}
 						}
@@ -1009,7 +1008,6 @@ void PlayScene::AllDieEnemy(int i)
 								if (portal != nullptr)
 								{
 									portal->PortalEnabled();
-									cout << "kk" << endl;
 								}
 							}
 						}
@@ -1026,7 +1024,6 @@ void PlayScene::AllDieEnemy(int i)
 								if (portal != nullptr)
 								{
 									portal->PortalEnabled();
-									cout << "kk" << endl;
 								}
 							}
 						}
@@ -1075,7 +1072,6 @@ void PlayScene::AllDieEnemy(int i)
 		if (portal != nullptr)
 		{
 			portal->PortalCreat();
-			cout << "hi" << endl;
 		}
 	}
 }

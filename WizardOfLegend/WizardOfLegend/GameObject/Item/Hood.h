@@ -27,4 +27,3 @@ public:
 	void SetPaletteIdx(int idx) { hoodInfo.paletteIdx = idx; }
 	int GetPaletteIdx() { return hoodInfo.paletteIdx; }
 };
-

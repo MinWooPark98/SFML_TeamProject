@@ -58,8 +58,8 @@ void Archer::Init()
 	SetpaletteSize(9);
 	SetColorTable("graphics/ArcherColorIndex.png");
 
-	SetMoveScale(500.f);
-	SetAttackScale(400.f);
+	SetMoveScale(700.f);
+	SetAttackScale(250.f);
 	SetAttackStartDelay(1.f);
 	SetMonsterType(MonsterType::Normal);
 	weapon->SetOrigin(Origins::MC);
@@ -274,6 +274,8 @@ void Archer::UpdateAttack(float dt)
 	}
 	else if (attackDelay <= attackStart)
 	{
+		unDrawTimer -= dt;
+
 		if (curState == States::Attack)
 		{
 			auto shot = Utils::Normalize(playerLastPos - GetPos());
@@ -286,6 +288,7 @@ void Archer::UpdateAttack(float dt)
 			{
 				if (isAttack)
 				{
+					unDrawTimer = 0.1f;
 					player->OnHit(Utils::Normalize(playerLastPos - GetPos()), GetDamage());
 					arrow->SetActive(false);
 					isAttack = false;
@@ -354,10 +357,11 @@ void Archer::UpdateAttack(float dt)
 
 		for (auto& coll : collisionList[i][Object::ObjTypes::Wall])
 		{
-			if (arrow->GetActive())
+			if (arrow->GetActive() && unDrawTimer <= 0.f)
 			{
 				if (arrow->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
+					unDrawTimer = 0.1f;
 					arrow->SetActive(false);
 				}
 			}

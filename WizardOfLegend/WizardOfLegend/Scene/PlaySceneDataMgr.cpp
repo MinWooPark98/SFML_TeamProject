@@ -41,6 +41,8 @@ void PlaySceneDataMgr::Save()
 void PlaySceneDataMgr::Load()
 {
 	auto currScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
+	auto player = (Player*)currScene->FindGameObj("PLAYER");
+
 	if (currScene->GetMapName() == "TUTORIALMAP")
 	{
 		data.hoodId = 200;
@@ -49,15 +51,22 @@ void PlaySceneDataMgr::Load()
 		{
 			skillSetName.clear();
 		}
-		data.currHp = 525;
+		data.currHp = 535;
 		data.gold = 0;
 	}
-	else if (currScene->GetMapName() == "TEST")	// ±¤Àå¸ÊÀ¸·Î ÀÌ¸§ ¹Ù²Ù¼À
+	else if (currScene->GetMapName() == "TUTORIALFIGHT")
+	{
+		data.currHp = 535;
+		data.gold = 0;
+	}
+	else if (currScene->GetMapName() == "SQURE")	// ±¤Àå¸ÊÀ¸·Î ÀÌ¸§ ¹Ù²Ù¼À
 	{
 		auto& savedData = DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->Get();
 		data.hoodId = savedData.hoodId;
 		data.relicIds.clear();
 		data.relicIds.push_back(savedData.relicId);
+		data.currHp = player->GetMaxHp();
+		data.gold = 0;
 		for (auto& skillSetName : data.skillSetNames)
 		{
 			skillSetName.clear();
@@ -67,7 +76,7 @@ void PlaySceneDataMgr::Load()
 			data.skillSetNames[i < 2 ? i : i + 2] = savedData.skillIds[i];
 		}
 	}
-	auto player = (Player*)currScene->FindGameObj("PLAYER");
+	
 	auto itemMgr = player->GetItemMgr();
 	itemMgr->SetHood(data.hoodId);
 	itemMgr->ClearRelicList();
@@ -83,7 +92,7 @@ void PlaySceneDataMgr::Load()
 		else
 			player->SetSkillSet(i, data.skillSetNames[i], true);
 	}
-	if (currScene->GetMapName() == "TEST")
+	if (currScene->GetMapName() == "SQURE")
 	{
 		itemMgr->Apply();
 		player->SetCurHp(player->GetMaxHp());

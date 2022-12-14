@@ -137,6 +137,7 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 				it->GetHitBox().setRotation(it->GetSprite().getRotation());
 				it->SetActive(true);
 			}
+			unDrawTimer = 0.1f;
 		}
 		else if (attackDelay <= attackStart)
 		{
@@ -174,11 +175,14 @@ void HeavyBombingArcher::UpdateAttack(float dt)
 			auto shot = Utils::Normalize(playerLastPos - lastPos);
 			for (int i = 0; i <= count; ++i)
 			{
+				if (i == 4)
+					unDrawTimer = 0.f;
+
 				smollArrow[i]->Translate({ dt * arrowSpeed * shot * 2.f });
 
 				if (Utils::OBB(player->GetHitBox(), smollArrow[i]->GetHitBox()))
 				{
-					if (smollArrow[i]->GetActive())
+					if (smollArrow[i]->GetActive() && unDrawTimer <= 0.f)
 					{
 						if (isAttack)
 						{
