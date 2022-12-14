@@ -693,14 +693,17 @@ void Player::SetSkillSet(int idx, const string& skillSetName, bool isPlayScene)
 
 void Player::OnHit(const Vector2f& atkDir, int dmg)
 {
+	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	if (Utils::RandomRange(0.f, 1.f) < evasionRate)
+	{
+		auto effect = playScene->GetShowDamage()->Get();
+		effect->ShowDamageFire(position, "회피");
 		return;
-
+	}
 	if (currState == States::Fall)
 		return;
 
 	dmg = dmg * damageTake;
-	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
 	auto hitSpark = playScene->GetPlayerHitSpark()->Get();

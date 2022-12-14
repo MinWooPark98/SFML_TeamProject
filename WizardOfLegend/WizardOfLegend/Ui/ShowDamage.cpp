@@ -53,3 +53,11 @@ void ShowDamage::ShowDamageFire(Vector2f objPos, int dmg)
 	SetString(to_string(dmg));
 	SetPos(objPos + Utils::RandAreaPoint() * 5.f);
 }
+
+void ShowDamage::ShowDamageFire(Vector2f objPos, string str, bool korean)
+{
+	SetString(str);
+	if (korean)
+		AsciiToUnicode();
+	SetPos(objPos + Utils::RandAreaPoint() * 5.f);
+}
