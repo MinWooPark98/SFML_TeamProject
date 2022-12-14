@@ -37,7 +37,8 @@ void HoodTable::Unlock(int id)
 		if (key[j] == id)
 		{
 			hoodLocked.SetCell(1, j, (int)Locked::Unlocked);
-			hoodLocked.Save("tables/ItemLocked.csv");
+			hoodLocked.Save("tables/HoodLocked.csv");
+			Load();
 			return;
 		}
 	}
@@ -50,8 +51,10 @@ void HoodTable::Release()
 
 bool HoodTable::Load()
 {
+	Release();
+
 	map<int, Locked> lockedTable;
-	string lockedFileName = "tables/ItemLocked.csv";
+	string lockedFileName = "tables/HoodLocked.csv";
 	hoodLocked.Load(lockedFileName, rapidcsv::LabelParams(0, -1));
 	{
 		auto columnCount = hoodLocked.GetColumnCount();

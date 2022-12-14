@@ -603,7 +603,7 @@ void PlayScene::Update(float dt)
 				{
 					projectile->SetDrawable(false);
 					if (coll->GetHitBounds().contains(Vector2f(projectileBnd.left + projectileBnd.width * 0.5f, projectileBnd.top + projectileBnd.height * 0.5f)) ||
-						projectile->GetUndrawTimer() >= 0.2f)
+						projectile->GetUndrawTimer() >= 0.3f)
 					{
 						projectile->SetMoving(false);
 						if (projectile->GetSubjectType() == Skill::SubjectType::Player)

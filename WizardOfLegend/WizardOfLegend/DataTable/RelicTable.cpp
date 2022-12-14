@@ -37,7 +37,8 @@ void RelicTable::Unlock(int id)
 		if (key[j] == id)
 		{
 			relicLocked.SetCell(1, j, (int)Locked::Unlocked);
-			relicLocked.Save("tables/ItemLocked.csv");
+			relicLocked.Save("tables/RelicLocked.csv");
+			Load();
 			return;
 		}
 	}
@@ -53,7 +54,7 @@ bool RelicTable::Load()
 	Release();
 
 	map<int, Locked> lockedTable;
-	string lockedFileName = "tables/ItemLocked.csv";
+	string lockedFileName = "tables/RelicLocked.csv";
 	relicLocked.Load(lockedFileName, rapidcsv::LabelParams(0, -1));
 	{
 		auto columnCount = relicLocked.GetColumnCount();
