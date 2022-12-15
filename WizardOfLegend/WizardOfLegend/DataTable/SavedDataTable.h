@@ -12,6 +12,7 @@ public:
 		vector<string> skillIds;
 	};
 protected:
+	int tutorialCleared;
 	Data data;
 	rapidcsv::Document savedData;
 
@@ -20,6 +21,7 @@ public:
 	virtual ~SavedDataTable();
 
 	Data& Get() { return data; }
+	int TutorialCleared() { return tutorialCleared; }
 
 	virtual void Release() override;
 	virtual bool Load() override;
@@ -27,6 +29,7 @@ public:
 	void ChangeHood(int hoodId);
 	void ChangeRelic(int relicID);
 	void ChangeSkills(const vector<string>& skillIds);
+	void ChangeTutorialCleared();
 
 	string fileName;
 };

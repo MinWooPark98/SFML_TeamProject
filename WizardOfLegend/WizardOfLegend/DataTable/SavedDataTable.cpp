@@ -34,6 +34,7 @@ bool SavedDataTable::Load()
 	{
 		data.skillIds.push_back(savedData.GetCell<string>(i, 0));
 	}
+	tutorialCleared = savedData.GetCell<int>(6, 0);
 	return true;
 }
 
@@ -57,6 +58,13 @@ void SavedDataTable::ChangeSkills(const vector<string>& skillIds)
 	{
 		savedData.SetCell(i + 2, 0, skillIds[i]);
 	}
+	savedData.Save(fileName);
+	Load();
+}
+
+void SavedDataTable::ChangeTutorialCleared()
+{
+	savedData.SetCell(6, 0, 1);
 	savedData.Save(fileName);
 	Load();
 }

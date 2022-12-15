@@ -4,6 +4,8 @@
 #include "MapToolScene.h"
 #include "SkillToolScene.h"
 #include "EndingScene.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/SavedDataTable.h"
 
 bool SceneMgr::Init()
 {
@@ -14,6 +16,10 @@ bool SceneMgr::Init()
     sceneMap[Scenes::Ending] = new EndingScene();
     currScene = Scenes::Title;
 
+    if (DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->TutorialCleared() == 0)
+        ((PlayScene*)sceneMap[Scenes::Play])->SetMapName("TUTORIALMAP");
+    else
+        ((PlayScene*)sceneMap[Scenes::Play])->SetMapName("SQURE");
     for (auto& pair : sceneMap)
     {
         if(pair.first != Scenes::Play)

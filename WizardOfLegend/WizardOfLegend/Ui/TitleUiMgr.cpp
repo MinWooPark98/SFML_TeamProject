@@ -65,7 +65,7 @@ void TitleUiMgr::Init()
 			button->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.6f});
 		
 		if(i == 0)
-			button->ClickOn = bind(&DataTableList::SetActive, mapList, true);
+			button->ClickOn = bind(&SceneMgr::ChangeScene, SCENE_MGR, Scenes::Play);
 		else if (i < 3)
 			button->ClickOn = bind(&SceneMgr::ChangeScene, SCENE_MGR, (Scenes)(i + 1));
 		else if (i == 3)
@@ -132,6 +132,9 @@ void TitleUiMgr::Update(float dt)
 
 	if (logoMove)
 	{
+		if (InputMgr::GetKeyDown(Keyboard::F2))
+			mapList->SetActive(true);
+
 		if (titleLogo->GetPos().y > windowSize.y * 0.3f)
 		{
 			titleLogo->Translate({ 0, titleLogo->GetPos().y * (dt * 2) * -1 });
