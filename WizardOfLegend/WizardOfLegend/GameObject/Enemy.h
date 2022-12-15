@@ -114,6 +114,8 @@ protected:
 	float fallTimer = 0.f;
 
 	float unDrawTimer = 0.1f;
+
+	CircleShape shadow;
 	
 public:
 	Enemy() : curState(States::None), lastDir(1.f, 0.f) {};

@@ -387,6 +387,7 @@ void PlayScene::Init()
 				Turret* turret = new Turret();
 				turret->Init();
 				turret->SetName(obj.type);
+				turret->SetFileName(obj.path);
 				turret->SetPos(obj.position);
 				turret->EyePos(obj.position);
 				turret->SetCardPos({ turret->GetPos().x, turret->GetPos().y - (turret->GetSize().y * 0.5f)});
@@ -879,11 +880,28 @@ void PlayScene::Exit()
 	PLAYSCENE_DATAMGR->Save();
 
 	if (mapName == "TUTORIALMAP")
-		SetMapName("TUTORIALFIGHT");
+	{
+		if (player->GetState() == Player::States::Die)
+		{
+			SetMapName("TUTORIALMAP");
+		}
+		else
+		{
+			SetMapName("TUTORIALFIGHT");
+		}
+	}
 
 	else if (mapName == "TUTORIALFIGHT")
-		SetMapName("SQURE");
-
+	{
+		if (player->GetState() == Player::States::Die)
+		{
+			SetMapName("TUTORIALFIGHT");
+		}
+		else
+		{
+			SetMapName("SQURE");
+		}
+	}
 	else if (mapName == "SQURE")
 		SetMapName("STAGEONE");
 
