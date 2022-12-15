@@ -24,6 +24,7 @@
 #include "../GameObject/SkillSet.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/NpcTalkTable.h"
+#include "RelicUi.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -410,6 +411,12 @@ void PlayUiMgr::Init()
 	msgUi = new MessageUi();
 	msgUi->Init();
 	uiObjList[0].push_back(msgUi);
+
+	RelicUi* relicUi = new RelicUi();
+	relicUi->SetName("RELICUI");
+	relicUi->Init();
+	relicUi->SetPos({ windowSize.x * 0.95f, windowSize.y * 0.95f });
+	uiObjList[0].push_back(relicUi);
 
 	string name = ((PlayScene*)currScene)->GetMapName();
 	if (name == "TUTORIALMAP" || name == "TUTORIALFIGHT")
