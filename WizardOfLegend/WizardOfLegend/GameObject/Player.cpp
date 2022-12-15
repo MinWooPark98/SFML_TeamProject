@@ -14,6 +14,7 @@
 #include "../DataTable/PlatinumTable.h"
 #include "../GameObject/HitSpark.h"
 #include "Item/ItemMgr.h"
+#include "../Ui/SkillCoolDownUi.h"
 
 Player::Player()
 	:currState(States::None), isBackHand(false), animator(nullptr), attackDmg(20),
@@ -688,19 +689,26 @@ void Player::SetSkillSet(int idx, const string& skillSetName, bool isPlayScene)
 
 	auto currScene = SCENE_MGR->GetCurrentScene();
 	if (isPlayScene || currScene->GetType() == Scenes::Play)
-		((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr())->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+	{
+		auto uiMgr = ((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr());
+		uiMgr->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+		uiMgr->GetCoolDownUis()[idx]->SetSkillSet(skillSets[idx]);
+	}
 }
 
 void Player::OnHit(const Vector2f& atkDir, int dmg)
 {
+	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	if (Utils::RandomRange(0.f, 1.f) < evasionRate)
+	{
+		auto effect = playScene->GetShowDamage()->Get();
+		effect->ShowDamageFire(position, "회피");
 		return;
-
+	}
 	if (currState == States::Fall)
 		return;
 
 	dmg = dmg * damageTake;
-	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
 	auto hitSpark = playScene->GetPlayerHitSpark()->Get();
@@ -732,7 +740,7 @@ void Player::AddExtraSkillSet(const string& skillSetName)
 
 void Player::ExchangeSkillSet(int idx, const string& skillSetName, bool isPlayScene)
 {
-	for (auto skillSet : extraSkillSets)
+	for (auto& skillSet : extraSkillSets)
 	{
 		if (skillSet->GetSkillSetName() == skillSetName)
 		{
@@ -744,7 +752,11 @@ void Player::ExchangeSkillSet(int idx, const string& skillSetName, bool isPlaySc
 
 	auto currScene = SCENE_MGR->GetCurrentScene();
 	if (isPlayScene || currScene->GetType() == Scenes::Play)
-		((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr())->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+	{
+		auto uiMgr = ((PlayUiMgr*)SCENE_MGR->GetScene(Scenes::Play)->GetUiMgr());
+		uiMgr->SetSkillIcon(idx, skillSets[idx]->GetIconDir());
+		uiMgr->GetCoolDownUis()[idx]->SetSkillSet(skillSets[idx]);
+	}
 }
 
 void Player::SavePlatinum()

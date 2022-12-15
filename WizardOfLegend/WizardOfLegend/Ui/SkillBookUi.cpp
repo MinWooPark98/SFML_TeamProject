@@ -253,6 +253,7 @@ void SkillBookUi::SetActive(bool active)
 		state = States::SkillOption;
 		auto player = (Player*)currScene->FindGameObj("PLAYER");
 		auto& skillSets = player->GetSkillSets();
+		playerSkillSets.clear();
 		playerSkillSets.push_back(skillSets[0]);
 		playerSkillSets.push_back(skillSets[1]);
 		playerSkillSets.push_back(skillSets[4]);

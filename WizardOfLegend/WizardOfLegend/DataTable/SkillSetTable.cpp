@@ -66,6 +66,7 @@ void SkillSetTable::Unlock(const string& name)
 		{
 			skillSetLocked.SetCell(1, j, (int)Locked::Unlocked);
 			skillSetLocked.Save("tables/SkillSetLocked.csv");
+			Load();
 			return;
 		}
 	}

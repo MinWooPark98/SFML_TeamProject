@@ -6,6 +6,7 @@
 #include "../../Scene/SceneMgr.h"
 #include "../Player.h"
 #include "../TextObj.h"
+#include "../../DataTable/SkillTable.h"
 
 GoodsSkill::GoodsSkill(Payment payment)
 	:Goods(payment, Types::Relic)
@@ -58,14 +59,21 @@ void GoodsSkill::SetInfo(const string& name)
 
 void GoodsSkill::Saled()
 {
+	auto table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	switch (payment)
 	{
 	case Goods::Payment::Gold:
 		{
 			auto player = ((Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER"));
 			auto& skillSets = player->GetSkillSets();
+			auto skillData = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
+			bool isDashSkill = table->Get(goodsName).skillNames.size() == 1 && skillData->Get(table->Get(goodsName).skillNames.front()).playerAction == Player::SkillAction::Dash;
 			for (int i = 0; i < skillSets.size(); ++i)
 			{
+				if (isDashSkill && i != 1)
+					continue;
+				if (!isDashSkill && i == 1)
+					continue;
 				if (skillSets[i]->GetSkillSetName().empty())
 				{
 					player->SetSkillSet(i, goodsName, true);
@@ -78,7 +86,6 @@ void GoodsSkill::Saled()
 		break;
 	case Goods::Payment::Platinum:
 		{
-			auto table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 			table->Unlock(goodsName);
 			table->Load();
 			break;

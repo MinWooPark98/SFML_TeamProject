@@ -150,4 +150,6 @@ public:
 
 	bool GetisTutorial() const { return isTutorial; };
 	int GetTutorial() const { return tutorialEnd; };
+
+	vector<SkillCoolDownUi*>& GetCoolDownUis() { return coolDownUis; }
 };
