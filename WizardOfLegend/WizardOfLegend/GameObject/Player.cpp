@@ -702,7 +702,7 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 	if (Utils::RandomRange(0.f, 1.f) < evasionRate)
 	{
 		auto effect = playScene->GetShowDamage()->Get();
-		effect->ShowDamageFire(position, "회피");
+		effect->ShowEvasion(position);
 		return;
 	}
 	if (currState == States::Fall)

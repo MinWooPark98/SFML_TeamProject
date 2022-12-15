@@ -62,3 +62,9 @@ void ShowDamage::ShowDamageFire(Vector2f objPos, const string& str, bool korean)
 		AsciiToUnicode();
 	SetPos(objPos + Utils::RandAreaPoint() * 5.f);
 }
+
+void ShowDamage::ShowEvasion(Vector2f objPos)
+{
+	text.setString(L"È¸ÇÇ");
+	SetPos(objPos + Utils::RandAreaPoint() * 5.f);
+}

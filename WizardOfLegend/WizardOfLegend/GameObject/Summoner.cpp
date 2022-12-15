@@ -318,13 +318,13 @@ void Summoner::UpdateCollision(float dt)
 
 				fires[i]->Translate(dt * fireSpeed * shot);
 				fires[i]->GetHitBox().setPosition(fires[i]->GetPos());
-			}
 
-			if (Utils::OBB(player->GetHitBox(), fires[i]->GetHitBox()))
-			{
-				player->OnHit(direction, GetDamage());
-				fires[i]->SetActive(false);
-			}
+				if (Utils::OBB(player->GetHitBox(), fires[i]->GetHitBox()))
+				{
+					player->OnHit(direction, GetDamage());
+					fires[i]->SetActive(false);
+				}
+			}			
 		}
 	}
 
