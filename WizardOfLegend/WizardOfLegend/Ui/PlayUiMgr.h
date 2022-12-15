@@ -102,6 +102,7 @@ protected:
 	int tutorialEnd = 0;
 	bool tutorialMessageSet = false;
 	bool setting = true;
+	bool isHealCristal = false;
 
 	TextObj* dieText;
 	TextObj* reStartText;
@@ -156,6 +157,11 @@ public:
 
 	bool GetisTutorial() const { return isTutorial; };
 	int GetTutorial() const { return tutorialEnd; };
+	bool GetTutorialMessageSet() const { return tutorialMessageSet; };
+
+	void SetIsTutorialCristal(bool set) { tutorialMessageSet = set; isHealCristal = set; setting = set; };
 
 	vector<SkillCoolDownUi*>& GetCoolDownUis() { return coolDownUis; }
+
+	void TutorialClearMessage();
 };

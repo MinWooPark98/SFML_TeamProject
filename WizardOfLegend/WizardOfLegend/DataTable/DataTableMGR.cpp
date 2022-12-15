@@ -11,6 +11,7 @@
 #include "HoodTable.h"
 #include "NpcTalkTable.h"
 #include "SavedDataTable.h"
+#include "TutorialClearTable.h"
 
 DataTableMgr::DataTableMgr(const DataTableMgr& ref)
 {
@@ -80,6 +81,10 @@ void DataTableMgr::Init()
     table = new SavedDataTable();
     table->Load();
     tables.insert({ DataTable::Types::SavedData, table });
+
+    table = new TutorialClearTable();
+    table->Load();
+    tables.insert({ DataTable::Types::TutorialClear, table });
 }
 
 void DataTableMgr::Release()

@@ -22,6 +22,7 @@ public:
 		Relic,
 		Hood,
 		SavedData,
+		TutorialClear,
 	};
 protected:
 	Types type;

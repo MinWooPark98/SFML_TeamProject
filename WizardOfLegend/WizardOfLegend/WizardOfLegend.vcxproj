@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataTable\TutorialClearTable.cpp" />
     <ClCompile Include="GameObject\Effect.cpp" />
     <ClCompile Include="GameObject\Interactive\Wardrobe.cpp" />
     <ClCompile Include="DataTable\PlatinumTable.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="3rd\OBB.h" />
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="DataTable\TutorialClearTable.h" />
     <ClInclude Include="GameObject\Effect.h" />
     <ClInclude Include="GameObject\Interactive\Wardrobe.h" />
     <ClInclude Include="DataTable\PlatinumTable.h" />

@@ -490,6 +490,7 @@ void PlayScene::Init()
 	portalEffect = new PortalEffect();
 	portalEffect->Init();
 	isTutorial = ((PlayUiMgr*)uiMgr)->GetisTutorial();
+	isTutorialMaps = ((PlayUiMgr*)uiMgr)->GetTutorialMessageSet();
 }
 
 void PlayScene::Update(float dt)
@@ -537,6 +538,12 @@ void PlayScene::Update(float dt)
 				for (auto& enemy : collisionList[i][Object::ObjTypes::Enemy])
 					((Enemy*)enemy)->SetCurHp(0);
 			}
+
+			if (isTutorialMaps && i == 7)
+			{
+				((PlayUiMgr*)uiMgr)->SetIsTutorialCristal(true);
+				isTutorialMaps = false;
+			}
 		}
 		else
 		{
@@ -552,37 +559,37 @@ void PlayScene::Update(float dt)
 	{
 		switch ((Object::ObjTypes)i)
 		{
-			case Object::ObjTypes::Enemy:
-			case Object::ObjTypes::FinalBoss:
-			case Object::ObjTypes::Player:
-				for (int j = 0; j < collisionList.size(); ++j)
+		case Object::ObjTypes::Enemy:
+		case Object::ObjTypes::FinalBoss:
+		case Object::ObjTypes::Player:
+			for (int j = 0; j < collisionList.size(); ++j)
+			{
+				if (collisionList[j][Object::ObjTypes::Player].empty())
+					continue;
+				for (auto& obj : collisionList[j][(Object::ObjTypes)i])
 				{
-					if (collisionList[j][Object::ObjTypes::Player].empty())
-						continue;
-					for (auto& obj : collisionList[j][(Object::ObjTypes)i])
+					OnCollisionWall(j, obj);
+					OnCollisionETC(j, obj);
+				}
+			}
+			break;
+		case Object::ObjTypes::BrokenObject:
+			for (int j = 0; j < collisionList.size(); ++j)
+			{
+				if (collisionList[j][Object::ObjTypes::Player].empty())
+					continue;
+				for (auto& obj : collisionList[j][Object::ObjTypes::Dummy])
+				{
+					if ((Dummy*)obj->GetActive())
 					{
-						OnCollisionWall(j, obj);
-						OnCollisionETC(j, obj);
+						OnCollisionWall(j, (Dummy*)obj);
+						OnCollisionETC(j, (Dummy*)obj);
 					}
 				}
-				break;
-			case Object::ObjTypes::BrokenObject:
-				for (int j = 0; j < collisionList.size(); ++j)
-				{
-					if (collisionList[j][Object::ObjTypes::Player].empty())
-						continue;
-					for (auto& obj : collisionList[j][Object::ObjTypes::Dummy])
-					{
-						if ((Dummy*)obj->GetActive())
-						{
-							OnCollisionWall(j, (Dummy*)obj);
-							OnCollisionETC(j, (Dummy*)obj);
-						}
-					}
-				}
-				break;
-			default:
-				break;
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -607,7 +614,9 @@ void PlayScene::Update(float dt)
 						if (projectile->GetSubjectType() == Skill::SubjectType::Player)
 							enemyHitSparks->Get()->EnemyHitSparkFire(projectile->GetPos());
 						else
+						{
 							playerHitSparks->Get()->PlayerHitSparkFire(projectile->GetPos());
+						}
 						break;
 					}
 				}
@@ -906,6 +915,7 @@ void PlayScene::Exit()
 		else
 		{
 			SetMapName("SQURE");
+			isTutorialClear = true;
 		}
 	}
 	else if (mapName == "SQURE")

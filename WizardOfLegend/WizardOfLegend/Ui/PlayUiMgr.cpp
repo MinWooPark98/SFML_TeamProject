@@ -24,6 +24,7 @@
 #include "../GameObject/SkillSet.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/NpcTalkTable.h"
+#include "../DataTable/TutorialClearTable.h"
 #include "RelicUi.h"
 
 PlayUiMgr::PlayUiMgr()
@@ -824,9 +825,15 @@ void PlayUiMgr::TutorialMessage()
 				string message = p[0];
 				msgUi->SetTexts(message);
 			}
-			else if (((PlayScene*)currScene)->GetMapName() == "TUTORIALFIGHT")
+			else if (((PlayScene*)currScene)->GetMapName() == "TUTORIALFIGHT" && !isHealCristal)
 			{
 				auto& p = messageTable->Get("Tutorial2");
+				string message = p[0];
+				msgUi->SetTexts(message);
+			}
+			else if (((PlayScene*)currScene)->GetMapName() == "TUTORIALFIGHT" && isHealCristal)
+			{
+				auto& p = messageTable->Get("Tutorial3");
 				string message = p[0];
 				msgUi->SetTexts(message);
 			}
@@ -954,4 +961,8 @@ void PlayUiMgr::GlassControl()
 			}
 		}
 	}
+}
+
+void PlayUiMgr::TutorialClearMessage()
+{
 }
