@@ -27,10 +27,6 @@ void Portal::Update(float dt)
 	SpriteObj::Update(dt);
 
 	Player* player = (Player*)currScene->FindGameObj("PLAYER");
-	if (player != nullptr && player->GetState() == Player::States::Die)
-	{
-		ChangeMap();
-	}
 	if (isPortalCreat)
 	{
 		if (player != nullptr)

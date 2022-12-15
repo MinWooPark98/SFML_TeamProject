@@ -414,6 +414,39 @@ void PlayUiMgr::Init()
 	string name = ((PlayScene*)currScene)->GetMapName();
 	if (name == "TUTORIALMAP" || name == "TUTORIALFIGHT")
 		tutorialMessageSet = true;
+
+	// Die
+	{
+		dieText = new TextObj();
+		auto& font = *RESOURCE_MGR->GetFont("fonts/MunroSmall.ttf");
+		dieText->SetText(font, 300, Color::White, "YOU  DIE");
+		dieText->SetOutlineColor(Color::Black);
+		dieText->SetOutlineThickness(2.f);
+		dieText->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.35f });
+		dieText->SetOrigin(Origins::MC);
+		dieText->SetActive(false);
+
+		reStartText = new TextObj();
+		reStartText->SetText(font, 50, Color::White, "Continue");
+		reStartText->SetOutlineColor(Color::Black);
+		reStartText->SetOutlineThickness(2.f);
+		reStartText->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.7f });
+		reStartText->SetOrigin(Origins::MC);
+		reStartText->SetActive(false);
+
+		reStartKey = new SpriteObj();
+		reStartKey->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Space.png"));
+		reStartKey->SetScale({ 4, 4 });
+		reStartKey->SetOrigin(Origins::MC);
+		reStartKey->SetPos({ windowSize.x * 0.5f, windowSize.y * 0.78f });
+		reStartKey->SetActive(false);
+
+		dieShader = new RectangleShape();
+		dieShader->setSize({ 2500.f, 2500.f });
+		dieShader->setPosition({ windowSize.x * 0.5f, windowSize.y * 0.5f });
+		dieShader->setOrigin({ dieShader->getSize().x * 0.5f, dieShader->getSize().y * 0.5f });
+		dieShader->setFillColor({ 0, 0, 0, 170 });
+	}
 }
 
 void PlayUiMgr::Release()
@@ -430,6 +463,18 @@ void PlayUiMgr::Release()
 	}
 	uiObjList.clear();
 	glassTubes.clear();
+
+	if (dieText != nullptr)
+		delete dieText;
+
+	if (reStartText != nullptr)
+		delete reStartText;
+
+	if (reStartKey != nullptr)
+		delete reStartKey;
+
+	if (dieShader != nullptr)
+		delete dieShader;
 }
 
 void PlayUiMgr::SetPos(const Vector2f& pos)
@@ -510,6 +555,13 @@ void PlayUiMgr::Update(float dt)
 
 	GlassControl();
 	TutorialMessage();
+
+	if (player->GetState() == Player::States::Die && !dieText->GetActive())
+	{
+		dieText->SetActive(true);
+		reStartText->SetActive(true);
+		reStartKey->SetActive(true);
+	}
 }
 
 void PlayUiMgr::Draw(RenderWindow& window)
@@ -547,6 +599,14 @@ void PlayUiMgr::Draw(RenderWindow& window)
 
 	if (isDevMode)
 		fps->Draw(window);
+
+	if (dieText->GetActive())
+	{
+		window.draw(*dieShader);
+		dieText->Draw(window);
+		reStartText->Draw(window);
+		reStartKey->Draw(window);
+	}
 }
 
 void PlayUiMgr::HpBarSizeControl(float dt)

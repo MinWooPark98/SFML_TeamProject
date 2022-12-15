@@ -705,7 +705,7 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 		effect->ShowEvasion(position);
 		return;
 	}
-	if (currState == States::Fall)
+	if (currState == States::Fall || currState == States::Die)
 		return;
 
 	dmg = dmg * damageTake;

@@ -638,6 +638,15 @@ void PlayScene::Update(float dt)
 		player->AddGold(100);
 	if (InputMgr::GetKeyDown(Keyboard::F5))
 		player->AddPlatinum(100);
+
+	if (player != nullptr && player->GetState() == Player::States::Die)
+	{
+		if (InputMgr::GetKeyDown(Keyboard::Space))
+		{
+			Exit();
+			Enter();
+		}
+	}
 }
 
 void PlayScene::Draw(RenderWindow& window)
@@ -923,6 +932,14 @@ void PlayScene::Exit()
 		else
 		{
 			SetMapName("FINALBOSS");
+		}
+	}
+
+	else if (mapName == "FINALBOSS")
+	{
+		if (player->GetState() == Player::States::Die)
+		{
+			SetMapName("SQURE");
 		}
 	}
 }

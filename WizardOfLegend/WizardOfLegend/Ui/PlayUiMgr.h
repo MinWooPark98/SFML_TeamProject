@@ -103,6 +103,11 @@ protected:
 	bool tutorialMessageSet = false;
 	bool setting = true;
 
+	TextObj* dieText;
+	TextObj* reStartText;
+	SpriteObj* reStartKey;
+	RectangleShape* dieShader;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();
