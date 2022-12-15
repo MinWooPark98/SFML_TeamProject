@@ -21,7 +21,8 @@ void ShowDamage::Init()
 	SetFillColor(Color::White);
 	SetOutlineColor(Color::Black);
 	SetOutlineThickness(0.75f);
-	SetSize(8);
+	SetSize(32);
+	text.setScale({ 0.25f, 0.25f });
 }
 
 void ShowDamage::Reset()
@@ -54,7 +55,7 @@ void ShowDamage::ShowDamageFire(Vector2f objPos, int dmg)
 	SetPos(objPos + Utils::RandAreaPoint() * 5.f);
 }
 
-void ShowDamage::ShowDamageFire(Vector2f objPos, string str, bool korean)
+void ShowDamage::ShowDamageFire(Vector2f objPos, const string& str, bool korean)
 {
 	SetString(str);
 	if (korean)

@@ -19,6 +19,6 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 
 	void ShowDamageFire(Vector2f objPos, int dmg);
-	void ShowDamageFire(Vector2f objPos, string str, bool korean = true);
+	void ShowDamageFire(Vector2f objPos, const string& str, bool korean = true);
 };
 
