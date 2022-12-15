@@ -612,13 +612,18 @@ void PlayScene::Update(float dt)
 					projectile->SetDrawable(false);
 					if (coll->GetHitBounds().contains(projectile->GetPos()))
 					{
-						projectile->SetMoving(false);
+						if (projectile->GetMoving())
+							projectile->SetMoving(false);
+						else
+						{
+							projectile->SetActive(false);
+							break;
+						}
+
 						if (projectile->GetSubjectType() == Skill::SubjectType::Player)
 							enemyHitSparks->Get()->EnemyHitSparkFire(projectile->GetPos());
 						else
-						{
 							playerHitSparks->Get()->PlayerHitSparkFire(projectile->GetPos());
-						}
 						break;
 					}
 				}
@@ -633,7 +638,14 @@ void PlayScene::Update(float dt)
 				{
 					if (coll->GetHitBounds().contains(projectile->GetPos()))
 					{
-						projectile->SetMoving(false);
+						if (projectile->GetMoving())
+							projectile->SetMoving(false);
+						else
+						{
+							projectile->SetActive(false);
+							break;
+						}
+
 						if (projectile->GetSubjectType() == Skill::SubjectType::Player)
 							enemyHitSparks->Get()->EnemyHitSparkFire(projectile->GetPos());
 						else
