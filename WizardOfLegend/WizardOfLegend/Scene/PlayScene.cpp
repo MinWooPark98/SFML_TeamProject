@@ -487,9 +487,6 @@ void PlayScene::Init()
 	if (fireBoss != nullptr)
 		fireBoss->SetPlayerLastPos(player->GetPos());
 
-	if (portal != nullptr)
-		portal->SetPlayer(player);
-
 	portalEffect = new PortalEffect();
 	portalEffect->Init();
 	isTutorial = ((PlayUiMgr*)uiMgr)->GetisTutorial();

@@ -25,15 +25,18 @@ void Portal::Init()
 void Portal::Update(float dt)
 {
 	SpriteObj::Update(dt);
+
+	Player* player = (Player*)currScene->FindGameObj("PLAYER");
 	if (player != nullptr && player->GetState() == Player::States::Die)
 	{
 		ChangeMap();
 	}
 	if (isPortalCreat)
 	{
-		SetActive(true);
 		if (player != nullptr)
 		{
+			SetActive(true);
+
 			if (player->GetHitBounds().intersects(GetHitBounds()))
 			{
 				if (((PlayScene*)currScene)->GetMapName()=="TUTORIALFIGHT")
@@ -46,7 +49,10 @@ void Portal::Update(float dt)
 		}
 	}
 	else
-		SetActive(false);
+	{
+		if (player != nullptr)
+			SetActive(false);
+	}
 }
 
 void Portal::Draw(RenderWindow& window)
@@ -71,9 +77,4 @@ void Portal::ChangeMap()
 	currScene = SCENE_MGR->GetCurrentScene();
 	((PlayScene*)currScene)->Exit();
 	((PlayScene*)currScene)->Enter();
-}
-
-void Portal::SetPlayer(Player* player)
-{
-	this->player = player;
 }

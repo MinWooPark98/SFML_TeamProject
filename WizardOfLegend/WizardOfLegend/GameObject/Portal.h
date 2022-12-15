@@ -2,7 +2,6 @@
 #include "../GameObject/SpriteObj.h"
 
 class Scene;
-class Player;
 class Portal : public SpriteObj
 {
 public:
@@ -25,7 +24,6 @@ public:
 protected:
 	Scene* currScene;
 	PortalType portalType;
-	Player* player;
 	PortalName portalName;
 
 	bool isPortalCreat = false;
@@ -43,7 +41,6 @@ public:
 
 	void ChangeMap();
 	void SetPortalName(PortalName name) { portalName = name; };
-	void SetPlayer(Player* player);
 
 	void PortalCreat() { isPortalCreat = true; };
 	void PortalEnabled() { isPortalCreat = false; };
