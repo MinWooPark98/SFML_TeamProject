@@ -6,7 +6,7 @@ class Relic : public Item
 public:
 	enum class Condition
 	{
-		None,
+		None = -1,
 		HpLower,
 		HpUpper,
 		NumOfItems,

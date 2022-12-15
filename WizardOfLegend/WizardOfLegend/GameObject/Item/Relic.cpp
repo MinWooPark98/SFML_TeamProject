@@ -18,7 +18,7 @@ void Relic::SetRelicInfo(const RelicInfo& info)
 
 void Relic::Update(float dt)
 {
-	if (player != nullptr)
+	if (player == nullptr)
 		return;
 	switch (relicInfo.condition)
 	{

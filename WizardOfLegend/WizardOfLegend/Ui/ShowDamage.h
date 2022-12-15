@@ -20,5 +20,6 @@ public:
 
 	void ShowDamageFire(Vector2f objPos, int dmg);
 	void ShowDamageFire(Vector2f objPos, const string& str, bool korean = true);
+	void ShowEvasion(Vector2f objPos);
 };
 
