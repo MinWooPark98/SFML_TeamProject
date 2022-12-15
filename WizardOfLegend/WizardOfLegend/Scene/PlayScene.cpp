@@ -387,6 +387,7 @@ void PlayScene::Init()
 				Turret* turret = new Turret();
 				turret->Init();
 				turret->SetName(obj.type);
+				turret->SetFileName(obj.path);
 				turret->SetPos(obj.position);
 				turret->EyePos(obj.position);
 				turret->SetObjType(Object::ObjTypes::Enemy);
