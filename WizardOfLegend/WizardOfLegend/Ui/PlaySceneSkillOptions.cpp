@@ -10,6 +10,7 @@
 #include "../GameObject/SkillSet.h"
 #include "../DataTable/DataTableMGR.h"
 #include "../DataTable/SkillSetIntroTable.h"
+#include "../Framework/CameraMove.h"
 
 PlaySceneSkillOptions::PlaySceneSkillOptions()
 	:vecIdx(-1)
@@ -167,8 +168,14 @@ void PlaySceneSkillOptions::Draw(RenderWindow& window)
 void PlaySceneSkillOptions::SelectSkillSet(int idx)
 {
 	vecIdx = idx;
-	skillSetLists[idx]->LoadExtraSkillSetList(idx);
-	skillSetLists[idx]->SetActive(true);
+	if (skillSetLists[idx]->LoadExtraSkillSetList(idx))
+		skillSetLists[idx]->SetActive(true);
+	else
+	{
+		CameraMove::SetShakeSpeed(1000.f);
+		CameraMove::SetShakeViewX(100.f);
+		CameraMove::SetViewShake(true);
+	}
 }
 
 void PlaySceneSkillOptions::SetPlayerSkillSet(const string& skillSetName)

@@ -160,7 +160,7 @@ void DataTableList::EndSelection(const string& str)
 	SetActive(false);
 }
 
-void DataTableList::LoadExtraSkillSetList(int idx)
+bool DataTableList::LoadExtraSkillSetList(int idx)
 {
 	buttons->Clear();
 	Vector2i windowSize = FRAMEWORK->GetWindowSize() / 2;
@@ -187,4 +187,7 @@ void DataTableList::LoadExtraSkillSetList(int idx)
 		newButton->MousePointerOff = bind(&Button2::DefaultMouseOff, newButton);
 		newButton->ClickOn = bind(&DataTableList::EndSelection, this, keys[j]);
 	}
+	if (buttons->GetButtons().empty())
+		return false;
+	return true;
 }

@@ -30,5 +30,5 @@ public:
 	void EndSelection(const string& str);
 	function<void(string)> Selected;
 
-	void LoadExtraSkillSetList(int idx);
+	bool LoadExtraSkillSetList(int idx);
 };
