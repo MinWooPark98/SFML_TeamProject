@@ -10,6 +10,7 @@
 #include "../DataTable/FinalBossSkillTable.h"
 #include "../DataTable/MapNameTable.h"
 #include "../Scene/SceneMgr.h"
+#include "../DataTable/SkillSetIntroTable.h"
 
 DataTableList::DataTableList()
 	:buttons(nullptr), dataType(DataTable::Types::None)
@@ -176,10 +177,11 @@ void DataTableList::LoadExtraSkillSetList(int idx)
 			continue;
 		keys.push_back(skillSet->GetSkillSetName());
 	}
+	auto introTable = DATATABLE_MGR->Get<SkillSetIntroTable>(DataTable::Types::SkillSetIntro);
 	for (int j = 0; j < keys.size(); ++j)
 	{
 		Button2* newButton = new Button2();
-		buttons->AddButton(newButton, keys[j], { 0.f, 0.f, (float)windowSize.x, 30.f });
+		buttons->AddButton(newButton, (introTable->Get(keys[j]).skillName_Kor), { 0.f, 0.f, (float)windowSize.x, 30.f });
 		newButton->IsOtherView(true);
 		newButton->MousePointerOn = bind(&Button2::DefaultMouseOn, newButton);
 		newButton->MousePointerOff = bind(&Button2::DefaultMouseOff, newButton);

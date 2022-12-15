@@ -7,6 +7,8 @@ protected:
 	SpriteObj card;
 	SpriteObj skillIcon;
 
+	string skillKey;
+
 public:
 	GoodsSkill(Payment payment);
 	virtual ~GoodsSkill();

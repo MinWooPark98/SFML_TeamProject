@@ -8,6 +8,8 @@
 #include "DataTableList.h"
 #include "../GameObject/Player.h"
 #include "../GameObject/SkillSet.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/SkillSetIntroTable.h"
 
 PlaySceneSkillOptions::PlaySceneSkillOptions()
 	:vecIdx(-1)
@@ -130,6 +132,7 @@ void PlaySceneSkillOptions::Update(float dt)
 		obj->Update(dt);
 	}
 	Player* player = (Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER");
+	auto introTable = DATATABLE_MGR->Get<SkillSetIntroTable>(DataTable::Types::SkillSetIntro);
 	for (int i = 0; i < currSkillSets.size(); ++i)
 	{
 		const string& str = player->GetSkillSets()[i]->GetSkillSetName();
@@ -140,7 +143,8 @@ void PlaySceneSkillOptions::Update(float dt)
 		}
 		else
 		{
-			currSkillSets[i]->GetText()->SetString(str);
+			currSkillSets[i]->GetText()->SetString(introTable->Get(str).skillName_Kor);
+			currSkillSets[i]->GetText()->AsciiToUnicode();
 			currSkillSets[i]->SetButtonBox(currSkillSets[i]->GetText()->GetSFMLText().getGlobalBounds(), Color::Transparent);
 		}
 	}
