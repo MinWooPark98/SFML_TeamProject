@@ -109,6 +109,9 @@ protected:
 	SpriteObj* reStartKey;
 	RectangleShape* dieShader;
 
+	int clearIndex = 0;
+	bool isTutorialAllClear = false;
+
 public:
 	PlayUiMgr();
 	virtual ~PlayUiMgr();
@@ -164,4 +167,6 @@ public:
 	vector<SkillCoolDownUi*>& GetCoolDownUis() { return coolDownUis; }
 
 	void TutorialClearMessage();
+
+	void SetIsTutorialAllClear(bool set) { isTutorialAllClear = set; };
 };

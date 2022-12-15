@@ -26,6 +26,7 @@
 #include "../DataTable/NpcTalkTable.h"
 #include "../DataTable/TutorialClearTable.h"
 #include "RelicUi.h"
+#include "../DataTable/SavedDataTable.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -563,6 +564,7 @@ void PlayUiMgr::Update(float dt)
 
 	GlassControl();
 	TutorialMessage();
+	TutorialClearMessage();
 
 	if (player->GetState() == Player::States::Die && !dieText->GetActive())
 	{
@@ -965,4 +967,42 @@ void PlayUiMgr::GlassControl()
 
 void PlayUiMgr::TutorialClearMessage()
 {
+	int asd = DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->TutorialCleared();
+	auto currScene = SCENE_MGR->GetCurrentScene();
+	if (((PlayScene*)currScene)->GetMapName() != "SQURE" || asd == 1 || isTutorialAllClear == true)
+		return;
+
+	auto messageTable = DATATABLE_MGR->Get<TutorialClearTable>(DataTable::Types::TutorialClear);
+	auto& p = messageTable->Get("???");
+	msgUi->SetNpcName("???");
+
+	string message = p[0];
+	msgUi->SetTexts(message);
+
+	msgUi->SetNpcImage("graphics/BankerPortrait.png");
+	msgUi->SetPlayerImage(63);
+	msgUi->MessageUiOn();
+
+	if (msgUi->GetisTalk() && !isTutorialAllClear)
+	{
+		msgUi->Talk();
+		msgUi->SetTexts(p[clearIndex]);
+		if (InputMgr::GetKeyDown(Keyboard::Space))
+		{
+			if (clearIndex == 3)
+			{
+				msgUi->UiEnabled(false);
+				msgUi->SetIsTalk(false);
+				DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->ChangeTutorialCleared();
+				isTutorialAllClear = true;
+				return;
+			}
+			else
+			{
+				clearIndex++;
+				msgUi->UiEnabled(false);
+				msgUi->SetIsTalk(false);
+			}
+		}
+	}
 }
