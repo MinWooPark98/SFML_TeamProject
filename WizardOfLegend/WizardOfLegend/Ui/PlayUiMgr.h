@@ -101,6 +101,7 @@ protected:
 	int messageIndex = 0;
 	int tutorialEnd = 0;
 	bool tutorialMessageSet = false;
+	bool setting = true;
 
 public:
 	PlayUiMgr();

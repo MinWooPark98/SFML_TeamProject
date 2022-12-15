@@ -22,6 +22,8 @@
 #include "../GameObject/GlassTube.h"
 #include "DataTableList.h"
 #include "../GameObject/SkillSet.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/NpcTalkTable.h"
 
 PlayUiMgr::PlayUiMgr()
 	: UiMgr(SCENE_MGR->GetScene(Scenes::Play)), options(nullptr)
@@ -743,24 +745,31 @@ void PlayUiMgr::TutorialMessage()
 {
 	if (tutorialMessageSet)
 	{
-		msgUi->SetNpcName("???");
-
-		//string message = "";
-		auto currScene = SCENE_MGR->GetCurrentScene();
-		if (((PlayScene*)currScene)->GetMapName() == "TUTORIALMAP")
+		if (setting)
 		{
-			//msgUi->SetTexts("오셨군요.\n이세계를 구하러 온 마법사.\\n당신을 성장시키기 위해 연습장을 준비했습니다.\n당신은 더 이상 혼자가 아닙니다.");
-			msgUi->SetTexts("Welcome, wizard,\nto save the world.\nI prepared a practice book to grow you up.\nYou are no longer alone.");
-		}
-		else if (((PlayScene*)currScene)->GetMapName() == "TUTORIALFIGHT")
-		{
-			//msgUi->SetTexts("당신의 자격을 시험해보기 위해 가상의 세계를 준비했습니다.\n이곳의 시련을 견디고 이 세계를 구해주세요.");
-			msgUi->SetTexts("I prepared a virtual world to test your qualifications.\nPlease endure the ordeal and save this world.");
-		}
+			msgUi->SetNpcName("???");
+			auto currScene = SCENE_MGR->GetCurrentScene();
 
-		msgUi->SetNpcImage("graphics/BankerPortrait.png");
-		msgUi->SetPlayerImage(63);
-		msgUi->MessageUiOn();
+			auto messageTable = DATATABLE_MGR->Get<NpcTalkTable>(DataTable::Types::NpcTalk);
+			if (((PlayScene*)currScene)->GetMapName() == "TUTORIALMAP")
+			{
+				auto& p = messageTable->Get("Tutorial1");
+				string message = p[0];
+				msgUi->SetTexts(message);
+			}
+			else if (((PlayScene*)currScene)->GetMapName() == "TUTORIALFIGHT")
+			{
+				auto& p = messageTable->Get("Tutorial2");
+				string message = p[0];
+				msgUi->SetTexts(message);
+			}
+
+			msgUi->SetNpcImage("graphics/BankerPortrait.png");
+			msgUi->SetPlayerImage(63);
+			msgUi->MessageUiOn();
+
+			setting = false;
+		}
 
 		if (msgUi->GetisTalk())
 		{
