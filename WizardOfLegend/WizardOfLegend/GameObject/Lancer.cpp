@@ -93,6 +93,8 @@ void Lancer::Update(float dt)
 				}
 
 				spearAnimation.Update(dt);
+				if (spearAnimation.GetCurrentFrame() == 6)
+					lancerAttackEffect->SetActive(false);
 			}
 			else
 			{
@@ -296,6 +298,7 @@ void Lancer::UpdateAttack(float dt)
 		playerLastPos = player->GetPos();
 		SOUND_MGR->Play("sounds/LancerAttackWindup.wav");
 		spearWait = true;
+		lancerAttackEffect->SetActive(true);
 	}
 
 

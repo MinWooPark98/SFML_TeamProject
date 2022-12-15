@@ -133,7 +133,6 @@ void Summoner::Update(float dt)
 		}
 	}
 	UpdateCollision(dt);
-
 	animation.Update(dt);
 	for (int i = 0; i < fireAnimations.size(); i++)
 		fireAnimations[i]->Update(dt);
@@ -191,7 +190,7 @@ void Summoner::SetState(States newState)
 		lastDir.x < 0.f ? animation.Play("SummonerLeftCast") : animation.Play("SummonerRightCast");
 		break;
 	case States::Hit:
-		if (!isAttack)
+		if (!isAttack && !isShot)
 		{
 			for (int i = 0; i < fires.size(); i++)
 			{
@@ -199,9 +198,9 @@ void Summoner::SetState(States newState)
 					fires[i]->SetActive(false);
 			}
 		}
-		isAttack = false;
 		attackTimer = -0.3f;
 		fireSet = true;
+		isAttack = false;
 		lastDir.x < 0.f ? animation.Play("SummonerLeftHurt") : animation.Play("SummonerRightHurt");
 		break;
 	case States::Die:
@@ -276,7 +275,7 @@ void Summoner::UpdateAttack(float dt)
 
 			return;
 		}
-
+		
 		attackTimer = 0.f;
 		isAttack = false;
 		fireSet = true;
@@ -286,23 +285,9 @@ void Summoner::UpdateAttack(float dt)
 void Summoner::UpdateCollision(float dt)
 {
 	Scene* currScene = SCENE_MGR->GetCurrentScene();
-	if (currScene->GetType() != Scenes::Play || curState == States::Fall || curState == States::Hit)
-		return;
-	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
-	for (int i = 0; i < collisionList.size(); ++i)
-	{
-		if (collisionList[i][Object::ObjTypes::Player].empty())
-			continue;
-		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
-		{
-			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
-			{
-				SetPos(lastPosition);
-			}
-		}
-	}
-
 	auto& collList = ((PlayScene*)SCENE_MGR->GetCurrentScene())->GetCollisionList();
+	vector<map<Object::ObjTypes, list<Object*>>>& collisionList = ((PlayScene*)currScene)->GetCollisionList();
+
 	for (int i = 0; i < collisionList.size(); i++)
 	{
 		if (collList[i][Object::ObjTypes::Player].empty())
@@ -314,21 +299,6 @@ void Summoner::UpdateCollision(float dt)
 			{
 				if (fires[i]->GetHitBounds().intersects(coll->GetHitBounds()))
 				{
-					fires[i]->SetActive(false);
-				}
-			}
-		}
-	}
-
-	if (attackTimer >= attackStartTimer)
-	{
-		for (int i = 0; i < fires.size(); i++)
-		{
-			if (fires[i]->GetActive())
-			{
-				if (Utils::OBB(player->GetHitBox(), fires[i]->GetHitBox()))
-				{
-					player->OnHit(direction, GetDamage());
 					fires[i]->SetActive(false);
 				}
 			}
@@ -348,6 +318,27 @@ void Summoner::UpdateCollision(float dt)
 
 				fires[i]->Translate(dt * fireSpeed * shot);
 				fires[i]->GetHitBox().setPosition(fires[i]->GetPos());
+			}
+
+			if (Utils::OBB(player->GetHitBox(), fires[i]->GetHitBox()))
+			{
+				player->OnHit(direction, GetDamage());
+				fires[i]->SetActive(false);
+			}
+		}
+	}
+
+	if (currScene->GetType() != Scenes::Play || curState == States::Fall || curState == States::Hit)
+		return;
+	for (int i = 0; i < collisionList.size(); ++i)
+	{
+		if (collisionList[i][Object::ObjTypes::Player].empty())
+			continue;
+		for (auto& cliff : collisionList[i][Object::ObjTypes::Cliff])
+		{
+			if (cliff->GetHitBounds().intersects(GetLowHitBounds()))
+			{
+				SetPos(lastPosition);
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
-SpearMotion,0,10,,,,,,
+SpearMotion,0,15,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
 graphics/LancerAttackEffect0.png,0,0,16,64,8,32,0,0
@@ -7,4 +7,5 @@ graphics/LancerAttackEffect1.png,0,0,16,64,8,32,0,0
 graphics/LancerAttackEffect2.png,0,0,16,64,8,32,0,0
 graphics/LancerAttackEffect3.png,0,0,16,64,8,32,0,0
 graphics/LancerAttackEffect4.png,0,0,16,64,8,32,0,0
+graphics/LancerAttackEffect5.png,0,0,16,64,8,32,0,0
 graphics/LancerAttackEffect5.png,0,0,16,64,8,32,0,0

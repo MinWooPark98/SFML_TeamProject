@@ -162,6 +162,10 @@ void FireBoss::Update(float dt)
 
 			patternDelay -= dt;
 			fireWingAnimation.Update(dt);
+
+			if (fireWingAnimation.GetCurrentFrame() == 8)
+				fireWing->SetActive(false);
+
 			kickAnimation.Update(dt);
 
 			if (curBossState != BossStates::Die)
@@ -308,8 +312,6 @@ void FireBoss::SetState(BossStates newState)
 					animation.Play(playerLastPos.y < lastPos.y ? "FireBossUpFireball" : "FireBossDownFireball");
 					break;
 				}
-
-				fireWing->SetActive(false);
 			}
 			break;
 		case FireBoss::AttackType::ThrowingKnife:
@@ -402,7 +404,6 @@ void FireBoss::UpdateAttack(float dt)
 		{
 			SetState(BossStates::Idle);
 			RandomPatternSet(AttackType::Meteor); // ó������ ���׿� ���� �� ������
-			fireWing->SetActive(false);
 			thirdAttackCount = 3;
 			patternCount = 3;
 			nextPatternDelay = 1.5f;
@@ -510,7 +511,6 @@ void FireBoss::UpdateThirdAttack(float dt)
 	{
 		RandomPatternSet(AttackType::ThirdAttack);
 		PatternOptionSet();
-		fireWing->SetActive(false);
 		firebossKick->SetActive(false);
 		SetState(BossStates::Move);
 	}
