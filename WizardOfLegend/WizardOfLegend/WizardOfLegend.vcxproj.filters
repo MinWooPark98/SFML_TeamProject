@@ -105,6 +105,7 @@
     <ClCompile Include="GameObject\Store.cpp" />
     <ClCompile Include="Scene\PlaySceneDataMgr.cpp" />
     <ClCompile Include="DataTable\SavedDataTable.cpp" />
+    <ClCompile Include="Ui\RelicUi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="GameObject\Store.h" />
     <ClInclude Include="Scene\PlaySceneDataMgr.h" />
     <ClInclude Include="DataTable\SavedDataTable.h" />
+    <ClInclude Include="Ui\RelicUi.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

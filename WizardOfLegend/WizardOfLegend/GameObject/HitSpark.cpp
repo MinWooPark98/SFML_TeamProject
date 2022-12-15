@@ -47,6 +47,7 @@ void HitSpark::EnemyHitSparkFire(Vector2f hitPoint)
 {
 	SetPos(hitPoint);
 	Rotate(Utils::RandomRange(0,100));
+	SetColor(Color::White);
 }
 
 void HitSpark::PlayerHitSparkFire(Vector2f hitPoint)

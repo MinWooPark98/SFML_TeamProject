@@ -7,6 +7,7 @@
 #include "Interactive/GoodsRelic.h"
 #include "Interactive/GoodsSkill.h"
 #include "../Scene/SceneMgr.h"
+#include "../Scene/PlaySceneDataMgr.h"
 
 Store::Store(Goods::Payment payment, Goods::Types goodsType)
 	:payment(payment), goodsType(goodsType)
@@ -34,6 +35,18 @@ void Store::Init()
 			{
 				toShuffle.push_back(data.first);
 			}
+			if (payment == Goods::Payment::Gold)
+			{
+				auto hoodId = PLAYSCENE_DATAMGR->GetHoodId();
+				for (auto it = toShuffle.begin(); it != toShuffle.end();)
+				{
+					if (hoodId == table[*it].id)
+						it = toShuffle.erase(it);
+					else
+						++it;
+				}
+			}
+
 			random_device rd;
 			mt19937 g(rd());
 			std::shuffle(toShuffle.begin(), toShuffle.end(), g);
@@ -58,6 +71,26 @@ void Store::Init()
 			{
 				toShuffle.push_back(data.first);
 			}
+			if (payment == Goods::Payment::Gold)
+			{
+				auto& currRelicIds = PLAYSCENE_DATAMGR->GetRelicIds();
+				for (auto it = toShuffle.begin(); it != toShuffle.end();)
+				{
+					bool isExist = false;
+					for (auto currRelicId : currRelicIds)
+					{
+						if (currRelicId == table[*it].id)
+						{
+							it = toShuffle.erase(it);
+							isExist = true;
+							break;
+						}
+					}
+					if (!isExist)
+						++it;
+				}
+			}
+
 			random_device rd;
 			mt19937 g(rd());
 			std::shuffle(toShuffle.begin(), toShuffle.end(), g);

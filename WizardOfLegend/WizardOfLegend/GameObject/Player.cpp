@@ -414,7 +414,8 @@ void Player::Update(float dt)
 
 void Player::Draw(RenderWindow& window)
 {
-	window.draw(shadow);
+	if(currState != States::Fall)
+		window.draw(shadow);
 	for (auto skill : skillSets)
 	{
 		skill->Draw(window);

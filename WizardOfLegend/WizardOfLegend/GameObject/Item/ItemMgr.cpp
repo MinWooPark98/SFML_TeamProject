@@ -8,6 +8,7 @@
 #include "Relic.h"
 #include "Hood.h"
 #include "../../Ui/UiMgr.h"
+#include "../../Ui/RelicUi.h"
 
 ItemMgr::ItemMgr()
 	:hood(nullptr), player(nullptr)
@@ -51,6 +52,9 @@ void ItemMgr::AddRelic(int id)
 	newItem->SetRelicInfo(relicInfo);
 	newItem->SetPlayer(player);
 	relicList.push_back(newItem);
+
+	RelicUi* relicUi = (RelicUi*)SCENE_MGR->GetCurrentScene()->GetUiMgr()->FindUiObj("RELICUI");
+	relicUi->AddRelicUi(relicInfo);
 }
 
 void ItemMgr::ChangeRelic(int id, int idx)
@@ -58,6 +62,9 @@ void ItemMgr::ChangeRelic(int id, int idx)
 	auto table = DATATABLE_MGR->Get<RelicTable>(DataTable::Types::Relic);
 	const auto& relicInfo = table->Get(id);
 	relicList[idx]->SetRelicInfo(relicInfo);
+
+	RelicUi* relicUi = (RelicUi*)SCENE_MGR->GetCurrentScene()->GetUiMgr()->FindUiObj("RELICUI");
+	relicUi->ChangeRelicUi(relicInfo, idx);
 }
 
 void ItemMgr::Update(float dt)
