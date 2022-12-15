@@ -286,7 +286,6 @@ void ItemBoxUi::SetActive(bool active)
 				}
 			}
 		}
-		SetItemInfo();
 		((ItemBox*)currScene->FindGameObj("ITEMBOX"))->SetState(ItemBox::States::Open);
 		Reappear();
 		auto itemMgr = ((Player*)currScene->FindGameObj("PLAYER"))->GetItemMgr();
@@ -304,6 +303,7 @@ void ItemBoxUi::SetActive(bool active)
 						currPlayerItem = collections[i][j][k].image;
 						currPlayerItem->GetHitBox().setOutlineColor(Color::Red);
 						CollectionHighLightOn();
+						SetItemInfo();
 						return;
 					}
 				}
@@ -313,6 +313,7 @@ void ItemBoxUi::SetActive(bool active)
 		currRow = 0;
 		currColumn = 0;
 		CollectionHighLightOn();
+		SetItemInfo();
 	}
 	else
 	{

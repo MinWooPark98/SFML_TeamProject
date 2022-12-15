@@ -100,7 +100,7 @@ void Button2::UseSprite()
 void Button2::SetSprite(const string& texName)
 {
     sprite->SetTexture(*RESOURCE_MGR->GetTexture(texName));
-    sprite->SetOrigin(Origins::BC);
+    sprite->SetOrigin(Origins::MC);
     Reposition();
 }
 
@@ -140,8 +140,8 @@ void Button2::Reposition()
 {
     if (sprite != nullptr)
     {
-        sprite->SetOrigin(Origins::BC);
-        sprite->SetPos({ btnBound.left + btnBound.width * 0.5f, btnBound.top + btnBound.height });
+        sprite->SetOrigin(Origins::MC);
+        sprite->SetPos({ btnBound.left + btnBound.width * 0.5f, btnBound.top + btnBound.height * 0.5f });
     }
     if (text != nullptr)
     {
