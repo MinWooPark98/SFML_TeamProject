@@ -38,6 +38,8 @@
 #include "../GameObject/Skill.h"
 #include "PlaySceneDataMgr.h"
 #include "../GameObject/Item/ItemMgr.h"
+#include "../DataTable/DataTableMGR.h"
+#include "../DataTable/SavedDataTable.h"
 
 PlayScene::PlayScene()
 	:Scene(Scenes::Play)
@@ -906,6 +908,7 @@ void PlayScene::Exit()
 		else
 		{
 			SetMapName("SQURE");
+			DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->ChangeTutorialCleared();
 		}
 	}
 	else if (mapName == "SQURE")
