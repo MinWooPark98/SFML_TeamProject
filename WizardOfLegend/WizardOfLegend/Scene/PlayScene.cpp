@@ -607,9 +607,9 @@ void PlayScene::Update(float dt)
 					{
 						projectile->SetMoving(false);
 						if (projectile->GetSubjectType() == Skill::SubjectType::Player)
-							enemyHitSparks->Get()->SetPos(projectile->GetPos());
+							enemyHitSparks->Get()->EnemyHitSparkFire(projectile->GetPos());
 						else
-							playerHitSparks->Get()->SetPos(projectile->GetPos());
+							playerHitSparks->Get()->PlayerHitSparkFire(projectile->GetPos());
 						break;
 					}
 				}
@@ -626,9 +626,9 @@ void PlayScene::Update(float dt)
 					{
 						projectile->SetMoving(false);
 						if (projectile->GetSubjectType() == Skill::SubjectType::Player)
-							enemyHitSparks->Get()->SetPos(projectile->GetPos());
+							enemyHitSparks->Get()->EnemyHitSparkFire(projectile->GetPos());
 						else
-							playerHitSparks->Get()->SetPos(projectile->GetPos());
+							playerHitSparks->Get()->PlayerHitSparkFire(projectile->GetPos());
 						break;
 					}
 				}
