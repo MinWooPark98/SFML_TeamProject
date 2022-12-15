@@ -146,7 +146,7 @@ void Goods::SetGoodsInfo(const string& info)
 	goodsInfo = info;
 	goodsInfoText->SetString(goodsInfo);
 	goodsInfoText->AsciiToUnicode();
-	goodsInfoText->SetOrigin(Origins::MC);
+	goodsInfoText->SetOrigin(Origins::TC);
 }
 
 void Goods::SetPrice(int price)
