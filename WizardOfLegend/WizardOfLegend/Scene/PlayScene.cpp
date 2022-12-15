@@ -389,9 +389,10 @@ void PlayScene::Init()
 				turret->SetName(obj.type);
 				turret->SetPos(obj.position);
 				turret->EyePos(obj.position);
+				turret->SetCardPos({ turret->GetPos().x, turret->GetPos().y - (turret->GetSize().y * 0.5f)});
 				turret->SetObjType(Object::ObjTypes::Enemy);
 				turret->SetLastPosition({ 0,0 });
-				turret->SetActive(true);
+				turret->SetActive(false);
 				objList[LayerType::Object][1].push_back(turret);
 			}
 			else if (obj.path == "graphics/SummonerIdleDown.png")

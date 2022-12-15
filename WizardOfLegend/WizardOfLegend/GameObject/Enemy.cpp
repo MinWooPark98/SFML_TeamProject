@@ -116,6 +116,7 @@ void Enemy::Update(float dt)
 			isShader = false;
 			deleteTimer -= dt;
 		}
+
 		spawnAnimation.Update(dt);
 	}
 }

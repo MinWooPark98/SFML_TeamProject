@@ -54,7 +54,8 @@ void Turret::Init()
 
 	SetState(States::LeftIdle);
 	SetMonsterType(MonsterType::Normal);
-	isActionStart = true;
+	spawn->SetPos({ GetPos().x, GetPos().y - (GetSize().y * 0.5f) });
+	SetCardColor(2);
 	sprite.setScale({1, 1});
 
 	auto propertyTable = DATATABLE_MGR->Get<PropertyTable>(DataTable::Types::MonsterProperty);
@@ -71,30 +72,41 @@ void Turret::Update(float dt)
 {
 	Enemy::Update(dt);
 
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
+	if (isAlive)
 	{
-		NormalMonsterMove(dt);
+		if (!isSpawn)
+		{
+			spawnAnimation.Play("MonsterSpawnCard");
+			isSpawn = true;
+		}
+		else if (isActionStart)
+		{
+			if (Utils::Distance(player->GetPos(), GetPos()) <= GetMoveScale() + 1.f && curState != States::Attack)
+			{
+				NormalMonsterMove(dt);
+			}
+
+			if (curHp <= 0 && isAlive)
+			{
+				dieTimer = 1.f;
+				SetState(States::Die);
+
+				PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
+				Drop(playScene);
+
+				SOUND_MGR->Play("sounds/EnemyDead.wav");
+
+				isAlive = false;
+			}
+
+			if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
+				EyeMove(dt);
+			else
+				EyeReset(dt);
+
+			newSkill->Update(dt);
+		}
 	}
-
-	if (curHp <= 0 && isAlive)
-	{
-		dieTimer = 1.f;
-		SetState(States::Die);
-
-		PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
-		Drop(playScene);
-
-		SOUND_MGR->Play("sounds/EnemyDead.wav");
-
-		isAlive = false;
-	}
-
-	if (Utils::Distance(player->GetPos(), GetPos()) <= GetAttackScale())
-		EyeMove(dt);
-	else
-		EyeReset(dt);
-
-	newSkill->Update(dt);
 }
 
 void Turret::Draw(RenderWindow& window)
