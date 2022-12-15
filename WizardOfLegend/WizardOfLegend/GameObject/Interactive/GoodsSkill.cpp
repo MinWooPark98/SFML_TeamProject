@@ -38,10 +38,11 @@ void GoodsSkill::SetInfo(const string& name)
 {
 	auto table = DATATABLE_MGR->Get<SkillSetTable>(DataTable::Types::SkillSet);
 	auto& data = table->Get(name);
+	skillKey = name;
 	skillIcon.SetTexture(*RESOURCE_MGR->GetTexture(data.iconDir));
 	skillIcon.SetOrigin(Origins::MC);
 	auto introTable = DATATABLE_MGR->Get<SkillSetIntroTable>(DataTable::Types::SkillSetIntro);
-	SetGoodsName(name);
+	SetGoodsName(introTable->Get(name).skillName_Kor);
 	SetGoodsInfo(introTable->Get(name).skillIntro_Kor);
 	ForSale(true);
 	switch (payment)
@@ -67,7 +68,7 @@ void GoodsSkill::Saled()
 			auto player = ((Player*)SCENE_MGR->GetCurrentScene()->FindGameObj("PLAYER"));
 			auto& skillSets = player->GetSkillSets();
 			auto skillData = DATATABLE_MGR->Get<SkillTable>(DataTable::Types::Skill);
-			bool isDashSkill = table->Get(goodsName).skillNames.size() == 1 && skillData->Get(table->Get(goodsName).skillNames.front()).playerAction == Player::SkillAction::Dash;
+			bool isDashSkill = table->Get(skillKey).skillNames.size() == 1 && skillData->Get(table->Get(skillKey).skillNames.front()).playerAction == Player::SkillAction::Dash;
 			for (int i = 0; i < skillSets.size(); ++i)
 			{
 				if (isDashSkill && i != 1)
@@ -76,17 +77,17 @@ void GoodsSkill::Saled()
 					continue;
 				if (skillSets[i]->GetSkillSetName().empty())
 				{
-					player->SetSkillSet(i, goodsName, true);
+					player->SetSkillSet(i, skillKey, true);
 					SetActive(false);
 					return;
 				}
 			}
-			player->AddExtraSkillSet(goodsName);
+			player->AddExtraSkillSet(skillKey);
 		}
 		break;
 	case Goods::Payment::Platinum:
 		{
-			table->Unlock(goodsName);
+			table->Unlock(skillKey);
 			table->Load();
 			break;
 		}

@@ -93,6 +93,7 @@ void OptionButtons::AddButton(Button2* button, const string& str, const FloatRec
 	button->Init();
 	button->UseText();
 	button->SetText("fonts/NotoSansKR-Bold.otf", 20, textColor, str);
+	button->GetText()->AsciiToUnicode();
 	button->SetHitBox(buttonSize, btnColor);
 	button->SetBoxInitColor(btnColor);
 	button->GetHitBox().setOutlineThickness(2.f);

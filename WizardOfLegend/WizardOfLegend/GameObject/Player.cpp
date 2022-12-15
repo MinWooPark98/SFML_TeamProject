@@ -709,7 +709,6 @@ void Player::OnHit(const Vector2f& atkDir, int dmg)
 		return;
 
 	dmg = dmg * damageTake;
-	PlayScene* playScene = (PlayScene*)SCENE_MGR->GetCurrentScene();
 	auto showDamage = playScene->GetShowDamage()->Get();
 	showDamage->ShowDamageFire(position, dmg);
 	auto hitSpark = playScene->GetPlayerHitSpark()->Get();

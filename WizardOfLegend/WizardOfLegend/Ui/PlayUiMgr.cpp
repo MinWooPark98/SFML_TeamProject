@@ -868,9 +868,9 @@ void PlayUiMgr::GlassControl()
 							}
 							break;
 						case 2:
-							if (player->GetSkillSets()[3]->GetSkillSetName() != "Temp9")
+							if (player->GetSkillSets()[3]->GetSkillSetName() != "DestructiveTwister")
 							{
-								SetPlayerSkillSet("Temp9", 3);
+								SetPlayerSkillSet("DestructiveTwister", 3);
 								tutorialEnd++;
 							}
 							break;
