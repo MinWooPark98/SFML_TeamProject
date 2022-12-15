@@ -46,7 +46,6 @@ protected:
 
 	bool isTutorial = false;
 	bool isTutorialMaps = false;
-	bool isTutorialClear = false;
 
 public:
 	PlayScene();

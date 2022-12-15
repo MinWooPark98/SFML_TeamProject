@@ -39,6 +39,15 @@ Scene* SceneMgr::GetScene(Scenes scene)
 void SceneMgr::ChangeScene(Scenes scene)
 {
     sceneMap[currScene]->Exit();
+
+    if (scene == Scenes::Title)
+    {
+        if (DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->TutorialCleared() == 0)
+            ((PlayScene*)sceneMap[Scenes::Play])->SetMapName("TUTORIALMAP");
+        else
+            ((PlayScene*)sceneMap[Scenes::Play])->SetMapName("SQURE");
+    }
+
     currScene = scene;
     sceneMap[currScene]->Enter();
 }

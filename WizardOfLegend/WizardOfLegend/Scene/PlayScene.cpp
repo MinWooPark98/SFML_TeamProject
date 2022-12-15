@@ -917,8 +917,6 @@ void PlayScene::Exit()
 		else
 		{
 			SetMapName("SQURE");
-			isTutorialClear = true;
-			DATATABLE_MGR->Get<SavedDataTable>(DataTable::Types::SavedData)->ChangeTutorialCleared();
 		}
 	}
 	else if (mapName == "SQURE")
