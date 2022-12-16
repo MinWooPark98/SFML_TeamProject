@@ -89,7 +89,7 @@ void RelicUi::AddRelicUi(const Relic::RelicInfo& info)
 	newButton->SetHitBoxOrigin(Origins::MC);
 	newButton->SetUI(true);
 	newButton->SetDevMode(true);
-	newButton->MousePointerOn = bind(&RelicUi::ShowInfo, this, newInfo);
+	newButton->MousePointerOn = bind(&RelicUi::ShowInfo, this, display.size());
 	newButton->MousePointerOff = bind(&RelicUi::HideInfo, this);
 	display.push_back({ newInfo, newButton });
 
@@ -128,8 +128,9 @@ void RelicUi::Translate(const Vector2f& delta)
 	Reposition();
 }
 
-void RelicUi::ShowInfo(const Relic::RelicInfo& info)
+void RelicUi::ShowInfo(int idx)
 {
+	auto& info = display[idx].first;
 	relicName->SetString(info.name);
 	relicName->AsciiToUnicode();
 	relicName->SetOrigin(Origins::TC);

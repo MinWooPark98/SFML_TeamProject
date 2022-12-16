@@ -32,7 +32,7 @@ public:
 	virtual void SetPos(const Vector2f& pos) override;
 	virtual void Translate(const Vector2f& delta) override;
 
-	void ShowInfo(const Relic::RelicInfo& info);
+	void ShowInfo(int idx);
 	void HideInfo();
 };
 
