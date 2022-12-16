@@ -1178,3 +1178,17 @@ graphics/ArmorUpWithInventoryCount.png,0
 graphics/DefenseUpOnTakeDamage.png,0
 graphics/AirDamageUp.png,0
 graphics/ArmorUpAtLowHealth.png,0
+sounds/SummonSharkExplosion.wav,2
+sounds/WaterArcBasic.wav,2
+sounds/WindAmbience.wav,2
+sounds/WindSlashBasic.wav,2
+sounds/WhipSwing.wav,2
+sounds/DrillLoop.wav,2
+sounds/RockForm.wav,2
+sounds/RockPunchImpact.wav,2
+sounds/LightningBurst.wav,2
+sounds/LightningPinball.wav,2
+sounds/IceBreak.wav,2
+sounds/IceForm2.wav,2
+sounds/ChaosStormEnd.wav,2
+sounds/ChaosStormStart.wav,2

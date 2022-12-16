@@ -2,8 +2,8 @@ ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
 FireHitLeft,1,10,,,,,,
 ,,,,,,,,
 TEXTURE ID,L,T,W,H,X,Y,FlipX,FlipY
-graphics/FireHitEffectLargeLeft0.png,0,0,64,48,30,20,0,0
-graphics/FireHitEffectLargeLeft1.png,0,0,64,48,30,20,0,0
-graphics/FireHitEffectLargeLeft2.png,0,0,64,48,30,20,0,0
-graphics/FireHitEffectLargeLeft3.png,0,0,64,48,30,20,0,0
-graphics/FireHitEffectLargeLeft4.png,0,0,64,21,30,20,0,0
+graphics/FireHitEffectLargeLeft0.png,0,0,48,64,32,24,0,0
+graphics/FireHitEffectLargeLeft1.png,0,0,48,64,32,24,0,0
+graphics/FireHitEffectLargeLeft2.png,0,0,48,64,32,24,0,0
+graphics/FireHitEffectLargeLeft3.png,0,0,48,64,32,24,0,0
+graphics/FireHitEffectLargeLeft4.png,0,0,21,64,32,10.5,0,0
